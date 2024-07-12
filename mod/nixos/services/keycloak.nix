@@ -37,6 +37,17 @@
               passwordFile = config.sops.secrets.keycloak.path;
             };
           };
+
+
+          services.postgresql = {
+            enable = true;
+            ensureDatabases = [ "keycloak" ];
+            package = pkgs.postgresql_16_jit;
+            authentication = pkgs.lib.mkOverride 10 ''
+              #type database  DBuser  auth-method
+              local all       all     trust
+            '';
+          };
           system.stateVersion = "23.11";
 
           networking = {
