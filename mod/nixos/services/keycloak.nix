@@ -22,6 +22,7 @@
       };
 
       containers.keycloak = {
+        ephemeral = true;
 
         autoStart = true;
         privateNetwork = true;
