@@ -17,6 +17,13 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
+  networking.nat = {
+    enable = true;
+    internalInterfaces = [ "ve-+" ];
+    externalInterface = "eno1";
+    # Lazy IPv6 connectivity for the container
+    enableIPv6 = true;
+  };
 
   teenix.nixconfig.enable = true;
   teenix.bootconfig.enable = true;

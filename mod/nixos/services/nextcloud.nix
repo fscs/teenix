@@ -20,13 +20,6 @@
         format = "binary";
         mode = "444";
       };
-      networking.nat = {
-        enable = true;
-        internalInterfaces = [ "ve-+" ];
-        externalInterface = "eno1";
-        # Lazy IPv6 connectivity for the container
-        enableIPv6 = true;
-      };
       containers.nextcloud = {
         autoStart = true;
         privateNetwork = true;
@@ -50,10 +43,10 @@
 
             database.createLocally = true;
 
+            settings.trusted_domains' = [ "192.168.100.11" ];
             config = {
               adminpassFile = config.sops.secrets.nextcloud_pass.path;
               dbtype = "pgsql";
-              trusted_domains' = [ "192.168.100.11" ];
             };
 
             phpOptions = {

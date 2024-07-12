@@ -7,6 +7,7 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    fscshhu.url = "git+ssh://git@git.hhu.de/fscs/website.git";
   };
 
   outputs =
