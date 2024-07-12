@@ -31,14 +31,22 @@
         privateNetwork = true;
         hostAddress = "192.168.100.10";
         localAddress = "192.168.100.11";
-        config = { pkgs, lib, ... }: {
+        bindMounts =
+          {
+            "secret" =
+              {
+                hostPath = config.sops.secrets.nextcloud_pass.path;
+                mountPoint = config.sops.secrets.nextcloud_pass.path;
+              };
+          };
 
+        config = { pkgs, lib, ... }: {
           services.nextcloud = {
             enable = true;
             package = pkgs.nextcloud29;
             hostName = "localhost";
-
             phpExtraExtensions = all: [ all.pdlib all.bz2 all.smbclient ];
+
             config = {
               adminpassFile = config.sops.secrets.nextcloud_pass.path;
               dbtype = "pgsql";
