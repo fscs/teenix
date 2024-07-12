@@ -36,10 +36,17 @@
 
   programs.fish.enable = true;
 
+  # Services
   teenix.services.nextcloud = {
     enable = true;
     secretsFile = ../secrets/nextcloud_pass;
   };
+
+  teenix.services.keycloak =
+    {
+      enable = true;
+      secretsFile = ../secrets/keycloak_pass;
+    };
 
   # Users
   sops.secrets.felix_pwd = {
