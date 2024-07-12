@@ -46,6 +46,7 @@
               hostname = "192.168.101.11";
               http-enabled = true;
               hostname-strict-https = false;
+              hostname-strict-backchannel = true;
             };
             database = {
               passwordFile = config.sops.secrets.keycloak_pass.path;
