@@ -21,8 +21,8 @@
         mode = "444";
       };
 
+      environment.noXlibs = false;
       containers.keycloak = {
-        environment.noXlibs = false;
 
         autoStart = true;
         privateNetwork = true;
