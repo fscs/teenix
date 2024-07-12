@@ -35,7 +35,7 @@
           services.keycloak = {
             enable = true;
             settings = {
-              hostname = "http://192.168.101.11";
+              hostname = "localhost";
               http-enabled = true;
               proxy = "passthrough";
               hostname-strict-https = false;
