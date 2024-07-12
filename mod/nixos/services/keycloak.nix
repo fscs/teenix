@@ -47,7 +47,7 @@
               hostname-strict-https = false;
             };
             database = {
-              passwordFile = config.sops.secrets.keycloak.path;
+              passwordFile = config.sops.secrets.keycloak_pass.path;
 
               type = "postgresql";
               createLocally = true;
