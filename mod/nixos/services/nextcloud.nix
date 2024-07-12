@@ -53,7 +53,7 @@
             config = {
               adminpassFile = config.sops.secrets.nextcloud_pass.path;
               dbtype = "pgsql";
-              extraTrustedDomains = [ "192.168.100.11" ];
+              trusted_domains' = [ "192.168.100.11" ];
             };
 
             phpOptions = {
