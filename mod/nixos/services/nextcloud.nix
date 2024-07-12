@@ -18,6 +18,7 @@
       sops.secrets.nextcloud_pass = {
         sopsFile = opts.secretsFile;
         format = "binary";
+        mode = 444;
       };
       networking.nat = {
         enable = true;
