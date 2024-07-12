@@ -2,6 +2,7 @@
 , config
 , ...
 }: {
+  options.teenix.user_control.enable = lib.mkEnableOption "just for testing on other machines";
   options.teenix.users =
     let
       t = lib.types;
@@ -28,16 +29,16 @@
     let
       opts = config.teenix.users;
     in
-    {
-      users.users =
-        lib.attrsets.mapAttrs
-          (_: value: {
-            isNormalUser = true;
-            shell = value.shell;
-            #hashedPasswordFile = value.hashedPasswordFile;
-	    initialPassword = "test";
-            extraGroups = value.extraGroups;
-          })
-          opts;
-    };
+    lib.mkIf config.teenix.user_control.enable
+      {
+        users.users =
+          lib.attrsets.mapAttrs
+            (_: value: {
+              isNormalUser = true;
+              shell = value.shell;
+              hashedPasswordFile = value.hashedPasswordFile;
+              extraGroups = value.extraGroups;
+            })
+            opts;
+      };
 }

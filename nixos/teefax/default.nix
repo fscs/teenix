@@ -49,6 +49,7 @@
     };
 
   # Users
+  teenix.user_control.enable = true;
   sops.secrets.felix_pwd = {
     format = "binary";
     sopsFile = ../secrets/felix_pwd;
