@@ -48,12 +48,11 @@
             hostName = "localhost";
             phpExtraExtensions = all: [ all.pdlib all.bz2 all.smbclient ];
 
+            database.createLocally = true;
+
             config = {
               adminpassFile = config.sops.secrets.nextcloud_pass.path;
               dbtype = "pgsql";
-              dbhost = "/var/run/postgresql";
-              dbuser = "postgres";
-              dbname = "nextcloud";
             };
 
             phpOptions = {
@@ -73,17 +72,6 @@
               "pm.min_spare_servers" = "50";
               "pm.start_servers" = "50";
             };
-
-
-          };
-          services.postgresql = {
-            enable = true;
-            ensureDatabases = [ "nextcloud" ];
-            package = pkgs.postgresql_16_jit;
-            authentication = pkgs.lib.mkOverride 10 ''
-              #type database  DBuser  auth-method
-              local all       all     trust
-            '';
           };
 
           system.stateVersion = "23.11";
