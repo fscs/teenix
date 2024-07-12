@@ -41,8 +41,6 @@
               };
           };
 
-        ephemeral = true;
-
         config = { pkgs, lib, ... }: {
           services.nextcloud = {
             enable = true;
