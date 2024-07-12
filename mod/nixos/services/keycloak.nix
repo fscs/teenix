@@ -30,7 +30,6 @@
         localAddress = "192.168.101.11";
 
         config = { pkgs, lib, ... }: {
-          services.postgresql.enable = true;
 
           services.keycloak = {
             enable = true;
