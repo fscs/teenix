@@ -1,0 +1,7 @@
+keys:
+  - &Felix-yubikey BF91E7F996966393DF5992FE15215F777DC602FC
+creation_rules:
+  - path_regex: nixos/secrets/.*
+    key_groups:
+    - pgp:
+        - *Felix-yubikey
