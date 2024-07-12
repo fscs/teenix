@@ -37,7 +37,6 @@
             settings = {
               hostname = "localhost";
               http-enabled = true;
-              proxy = "passthrough";
               hostname-strict-https = false;
             };
             database = {
