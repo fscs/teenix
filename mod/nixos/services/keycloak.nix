@@ -21,13 +21,21 @@
         mode = "444";
       };
 
-      environment.noXlibs = false;
       containers.keycloak = {
 
         autoStart = true;
         privateNetwork = true;
         hostAddress = "192.168.101.10";
         localAddress = "192.168.101.11";
+
+        bindMounts =
+          {
+            "secret" =
+              {
+                hostPath = config.sops.secrets.keycloak_pass.path;
+                mountPoint = config.sops.secrets.keycloak_pass.path;
+              };
+          };
 
         config = { pkgs, lib, ... }: {
 
