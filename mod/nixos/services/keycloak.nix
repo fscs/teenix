@@ -22,6 +22,8 @@
       };
 
       containers.keycloak = {
+        environment.noXlibs = false;
+
         autoStart = true;
         privateNetwork = true;
         hostAddress = "192.168.101.10";
