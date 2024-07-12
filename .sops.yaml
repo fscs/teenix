@@ -1,7 +1,9 @@
 keys:
   - &Felix-yubikey BF91E7F996966393DF5992FE15215F777DC602FC
+  - &teefax-test bad6d1e1dd36cb2af8f5d2263f56d7507551ce9c
 creation_rules:
   - path_regex: nixos/secrets/.*
     key_groups:
     - pgp:
         - *Felix-yubikey
+        - *teefax-test
