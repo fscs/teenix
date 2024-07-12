@@ -19,6 +19,13 @@
         sopsFile = opts.secretsFile;
         format = "binary";
       };
+      networking.nat = {
+        enable = true;
+        internalInterfaces = [ "ve-+" ];
+        externalInterface = "eno1";
+        # Lazy IPv6 connectivity for the container
+        enableIPv6 = true;
+      };
       containers.nextcloud = {
         autoStart = true;
         privateNetwork = true;
