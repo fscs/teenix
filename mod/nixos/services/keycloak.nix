@@ -28,6 +28,8 @@
         localAddress = "192.168.101.11";
 
         config = { pkgs, lib, ... }: {
+          services.postgresql.enable = true;
+
           services.keycloak = {
             enable = true;
             settings = {
@@ -37,19 +39,15 @@
             };
             database = {
               passwordFile = config.sops.secrets.keycloak.path;
+
+              type = "postgresql";
+              createLocally = true;
+
+              username = "keycloak";
             };
           };
 
 
-          services.postgresql = {
-            enable = true;
-            ensureDatabases = [ "keycloak" ];
-            package = pkgs.postgresql_16_jit;
-            authentication = pkgs.lib.mkOverride 10 ''
-              #type database  DBuser  auth-method
-              local all       all     trust
-            '';
-          };
           system.stateVersion = "23.11";
 
           networking = {
