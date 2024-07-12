@@ -65,16 +65,16 @@
               "pm.start_servers" = "50";
             };
 
-            services.postgresql = {
-              enable = true;
-              ensureDatabases = [ "nextcloud" ];
-              package = pkgs.postgresql_16_jit;
-              authentication = pkgs.lib.mkOverride 10 ''
-                #type database  DBuser  auth-method
-                local all       all     trust
-              '';
-            };
 
+          };
+          services.postgresql = {
+            enable = true;
+            ensureDatabases = [ "nextcloud" ];
+            package = pkgs.postgresql_16_jit;
+            authentication = pkgs.lib.mkOverride 10 ''
+              #type database  DBuser  auth-method
+              local all       all     trust
+            '';
           };
 
           system.stateVersion = "23.11";
