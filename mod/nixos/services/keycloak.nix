@@ -15,7 +15,7 @@
       opts = config.teenix.services.keycloak;
     in
     lib.mkIf opts.enable {
-      sops.secrets.keycloak = {
+      sops.secrets.keycloak_pass = {
         sopsFile = opts.secretsFile;
         format = "binary";
         mode = "444";
