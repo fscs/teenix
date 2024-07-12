@@ -32,6 +32,8 @@
             enable = true;
             settings = {
               hostname = "localhost";
+              http-enabled = true;
+              hostname-strict-https = false;
             };
             database = {
               passwordFile = config.sops.secrets.keycloak.path;
