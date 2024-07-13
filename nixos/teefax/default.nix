@@ -56,7 +56,14 @@
   teenix.services.fscshhude =
     {
       enable = true;
-      secretsFile = ../secrets/keycloak_pass;
+      secretsFile = ../secrets/fscshhude_env;
+      bindMounts = {
+        "db" = {
+          hostPath = "/home/felix/db2";
+          mountPoint = "/home/fscs-hhu/db";
+          isReadOnly = false;
+        };
+      };
     };
 
   # Users

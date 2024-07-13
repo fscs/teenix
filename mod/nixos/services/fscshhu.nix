@@ -10,7 +10,10 @@
       type = lib.types.path;
       description = "path to the sops secret file for the fscshhude website Server";
     };
-
+    bindMounts = lib.MkOption
+      {
+        type = lib.types.attrsets;
+      };
   };
   config =
     let
@@ -26,8 +29,8 @@
       containers.fscshhude = {
         autoStart = true;
         privateNetwork = true;
-        hostAddress = "192.168.110.10";
-        localAddress = "192.168.110.11";
+        hostAddress = "192.168.103.10";
+        localAddress = "192.168.103.11";
         bindMounts =
           {
             "secret" =
@@ -35,7 +38,7 @@
                 hostPath = config.sops.secrets.fscshhude.path;
                 mountPoint = config.sops.secrets.fscshhude.path;
               };
-          };
+          } // opts.bindMounts;
 
         config = { lib, ... }: {
           users.users.fscs-hhu = {
