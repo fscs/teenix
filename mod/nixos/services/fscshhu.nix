@@ -10,10 +10,9 @@
       type = lib.types.path;
       description = "path to the sops secret file for the fscshhude website Server";
     };
-    bindMounts = lib.mkOption
-      {
-        type = lib.types.attrsets;
-      };
+    db_hostPath = lib.mkOption {
+      type = lib.types.str;
+    };
   };
   config =
     let
@@ -38,7 +37,12 @@
                 hostPath = config.sops.secrets.fscshhude.path;
                 mountPoint = config.sops.secrets.fscshhude.path;
               };
-          } // opts.bindMounts;
+            "db" = {
+              hostPath = opts.db_hostPath;
+              mountPoint = "/home/fscs-hhu/db";
+              isReadOnly = false;
+            };
+          };
 
         config = { lib, ... }: {
           users.users.fscs-hhu = {
