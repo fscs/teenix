@@ -32,7 +32,7 @@
         config = { pkgs, lib, ... }: {
           services.traefik = {
             enable = true;
-            staticConfigFile = /run/traefik/config;
+            staticConfigFile = "/run/traefik/config";
           };
           system.stateVersion = "23.11";
 
