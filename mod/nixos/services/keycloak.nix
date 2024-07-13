@@ -15,39 +15,49 @@
       opts = config.teenix.services.keycloak;
     in
     lib.mkIf opts.enable {
-      sops.secrets.keycloak = {
+      sops.secrets.keycloak_pass = {
         sopsFile = opts.secretsFile;
         format = "binary";
         mode = "444";
       };
 
       containers.keycloak = {
+        ephemeral = true;
+
         autoStart = true;
         privateNetwork = true;
         hostAddress = "192.168.101.10";
         localAddress = "192.168.101.11";
 
+        bindMounts =
+          {
+            "secret" =
+              {
+                hostPath = config.sops.secrets.keycloak_pass.path;
+                mountPoint = config.sops.secrets.keycloak_pass.path;
+              };
+          };
+
         config = { pkgs, lib, ... }: {
+
           services.keycloak = {
             enable = true;
             settings = {
-              hostname = "localhost";
+              hostname = "192.168.101.11";
+              proxy = "passthrough";
+              http-enabled = true;
             };
             database = {
-              passwordFile = config.sops.secrets.keycloak.path;
+              passwordFile = config.sops.secrets.keycloak_pass.path;
+
+              type = "postgresql";
+              createLocally = true;
+
+              username = "keycloak";
             };
           };
 
 
-          services.postgresql = {
-            enable = true;
-            ensureDatabases = [ "keycloak" ];
-            package = pkgs.postgresql_16_jit;
-            authentication = pkgs.lib.mkOverride 10 ''
-              #type database  DBuser  auth-method
-              local all       all     trust
-            '';
-          };
           system.stateVersion = "23.11";
 
           networking = {
