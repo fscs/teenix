@@ -4,6 +4,10 @@
 }: {
   options.teenix.services.keycloak = {
     enable = lib.mkEnableOption "setup nextcloud";
+    hostname = lib.mkOption {
+      type = lib.types.str;
+      description = "hostname";
+    };
     secretsFile = lib.mkOption {
       type = lib.types.path;
       description = "path to the sops secret file for the adminPass";
@@ -43,7 +47,7 @@
           services.keycloak = {
             enable = true;
             settings = {
-              hostname = "192.168.101.11";
+              hostname = opts.hostname;
               proxy = "passthrough";
               http-enabled = true;
             };

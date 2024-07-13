@@ -4,6 +4,10 @@
 }: {
   options.teenix.services.nextcloud = {
     enable = lib.mkEnableOption "setup nextcloud";
+    hostname = lib.mkOption {
+      type = lib.types.str;
+      description = "hostname";
+    };
     secretsFile = lib.mkOption {
       type = lib.types.path;
       description = "path to the sops secret file for the adminPass";
@@ -38,7 +42,7 @@
           services.nextcloud = {
             enable = true;
             package = pkgs.nextcloud29;
-            hostName = "localhost";
+            hostName = opts.hostname;
             phpExtraExtensions = all: [ all.pdlib all.bz2 all.smbclient ];
 
             database.createLocally = true;

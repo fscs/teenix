@@ -39,12 +39,14 @@
   # Services
   teenix.services.nextcloud = {
     enable = true;
+    hostname = "cloud.inphima.de";
     secretsFile = ../secrets/nextcloud_pass;
   };
 
   teenix.services.keycloak =
     {
       enable = true;
+      hostname = "login.inphima.de";
       secretsFile = ../secrets/keycloak_pass;
     };
 
