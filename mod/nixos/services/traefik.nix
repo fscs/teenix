@@ -24,8 +24,8 @@
           {
             "secret" =
               {
-                hostPath = opts.configfile;
-                mountPoint = /run/traefik/config;
+                hostPath = "${opts.configFile}";
+                mountPoint = "/run/traefik/config";
               };
           };
 
