@@ -1,13 +1,68 @@
 { lib
 , config
-, fscshhu
+, inputs
+, pkgs
 , ...
 }: {
-  options.teenix.services.fscshhu.enable = lib.mkEnableOption "setup nextcloud";
+  options.teenix.services.fscshhude = {
+    enable = lib.mkEnableOption "setup fscshhude";
+    secretsFile = lib.mkOption {
+      type = lib.types.path;
+      description = "path to the sops secret file for the fscshhude website Server";
+    };
 
-  config = lib.mkIf config.teenix.services.fscshhu.enable {
-    environment.systemPackages = [
-      fscshhu.packages.serve
-    ];
   };
+  config =
+    let
+      opts = config.teenix.services.fscshhude;
+    in
+    lib.mkIf opts.enable {
+      sops.secrets.fscshhude = {
+        sopsFile = opts.secretsFile;
+        format = "json";
+        mode = "444";
+      };
+
+
+      containers.fscshhude = {
+        autoStart = true;
+        privateNetwork = true;
+        hostAddress = "192.168.110.10";
+        localAddress = "192.168.110.11";
+
+        config = { lib, ... }: {
+          environment.systemPackages = [
+            inputs.fscshhude.packages."${pkgs.stdenv.hostPlatform.system}".serve
+          ];
+          environment.sessionVariables = {
+            CLIENT_ID = "";
+            CLIENT_SECRET = "";
+            SIGNING_KEY = "";
+          };
+          systemd.services.fscs-website-serve = {
+            description = "Serve FSCS website";
+            after = [ "network.target" ];
+            serviceConfig = {
+              ExecStart = "${inputs.fscshhude.packages.aarch64-linux.serve}/bin/serve";
+              Restart = "always";
+              RestartSec = 5;
+            };
+            wantedBy = [ "multi-user.target" ];
+          };
+          system.stateVersion = "23.11";
+
+          networking = {
+            firewall = {
+              enable = true;
+              allowedTCPPorts = [ 8080 ];
+            };
+            # Use systemd-resolved inside the container
+            # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
+            useHostResolvConf = lib.mkForce false;
+          };
+
+          services.resolved.enable = true;
+        };
+      };
+    };
 }

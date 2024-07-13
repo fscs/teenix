@@ -2,7 +2,7 @@
   imports = [
     ./openssh.nix
     ./nextcloud.nix
-    # ./fscshhu.nix
+    ./fscshhu.nix
     ./keycloak.nix
     ./traefik.nix
   ];

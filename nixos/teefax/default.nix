@@ -53,6 +53,12 @@
       secretsFile = ../secrets/keycloak_pass;
     };
 
+  teenix.services.fscshhude =
+    {
+      enable = true;
+      secretsFile = ../secrets/keycloak_pass;
+    };
+
   # Users
   teenix.user_control.enable = true;
   sops.secrets.felix_pwd = {
