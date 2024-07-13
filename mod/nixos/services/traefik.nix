@@ -16,23 +16,31 @@
     in
     lib.mkIf opts.enable {
       containers.traefik = {
+        ephemeral = true;
         autoStart = true;
         privateNetwork = true;
         hostAddress = "192.168.102.10";
         localAddress = "192.168.102.11";
         bindMounts =
           {
-            "secret" =
+            "config" =
               {
-                hostPath = "${opts.configFile}";
-                mountPoint = "/run/traefik/config";
+                hostPath = "/home/felix/.dotfiles/config/traefik/config.yml";
+                mountPoint = "/etc/traefik/config.yml";
+                isReadOnly = false;
+              };
+            "dynamic" =
+              {
+                hostPath = "/home/felix/.dotfiles/config/traefik/dynamic";
+                mountPoint = "/dynamic";
+                isReadOnly = false;
               };
           };
 
         config = { pkgs, lib, ... }: {
           services.traefik = {
             enable = true;
-            staticConfigFile = "/run/traefik/config";
+            staticConfigFile = "/etc/traefik/config.yml";
           };
           system.stateVersion = "23.11";
 
