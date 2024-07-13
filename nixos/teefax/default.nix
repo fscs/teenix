@@ -37,6 +37,11 @@
   programs.fish.enable = true;
 
   # Services
+  teenix.services.traefik = {
+    enable = true;
+    configFile = ../../config/traefik/config;
+  };
+
   teenix.services.nextcloud = {
     enable = true;
     secretsFile = ../secrets/nextcloud_pass;
