@@ -19,30 +19,43 @@
     lib.mkIf opts.enable {
       sops.secrets.fscshhude = {
         sopsFile = opts.secretsFile;
-        format = "json";
+        format = "binary";
         mode = "444";
       };
-
 
       containers.fscshhude = {
         autoStart = true;
         privateNetwork = true;
         hostAddress = "192.168.110.10";
         localAddress = "192.168.110.11";
+        bindMounts =
+          {
+            "secret" =
+              {
+                hostPath = config.sops.secrets.fscshhude.path;
+                mountPoint = config.sops.secrets.fscshhude.path;
+              };
+          };
 
         config = { lib, ... }: {
+          users.users.fscs-hhu = {
+            home = "/home/fscs-hhu";
+            group = "users";
+            isNormalUser = true;
+          };
           environment.systemPackages = [
             inputs.fscshhude.packages."${pkgs.stdenv.hostPlatform.system}".serve
+            pkgs.bash
           ];
-          environment.sessionVariables = {
-            CLIENT_ID = "";
-            CLIENT_SECRET = "";
-            SIGNING_KEY = "";
-          };
           systemd.services.fscs-website-serve = {
             description = "Serve FSCS website";
             after = [ "network.target" ];
+            path = [ pkgs.bash ];
             serviceConfig = {
+              EnvironmentFile = config.sops.secrets.fscshhude.path;
+              Type = "exec";
+              User = "fscs-hhu";
+              WorkingDirectory = "/home/fscs-hhu";
               ExecStart = "${inputs.fscshhude.packages.aarch64-linux.serve}/bin/serve";
               Restart = "always";
               RestartSec = 5;
