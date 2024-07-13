@@ -10,7 +10,7 @@
       type = lib.types.path;
       description = "path to the sops secret file for the fscshhude website Server";
     };
-    bindMounts = lib.MkOption
+    bindMounts = lib.mkOption
       {
         type = lib.types.attrsets;
       };
