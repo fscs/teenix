@@ -8,6 +8,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     fscshhude.url = "git+ssh://git@git.hhu.de/fscs/website.git";
+    fscs-intern-bot.url = "git+ssh://git@git.hhu.de/fscs/fscs-intern-bot.git";
   };
 
   outputs =

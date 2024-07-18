@@ -4,11 +4,11 @@
 , pkgs
 , ...
 }: {
-  options.teenix.services.fscshhude = {
-    enable = lib.mkEnableOption "setup fscshhude";
+  options.teenix.services.fscs-intern-bot = {
+    enable = lib.mkEnableOption "setup fscs-intern-bot";
     secretsFile = lib.mkOption {
       type = lib.types.path;
-      description = "path to the sops secret file for the fscshhude website Server";
+      description = "path to the sops secret file for the fscs-intern-bot";
     };
     db_hostPath = lib.mkOption {
       type = lib.types.str;
@@ -16,16 +16,16 @@
   };
   config =
     let
-      opts = config.teenix.services.fscshhude;
+      opts = config.teenix.services.fscs-intern-bot;
     in
     lib.mkIf opts.enable {
-      sops.secrets.fscshhude = {
+      sops.secrets.fscs-intern-bot = {
         sopsFile = opts.secretsFile;
         format = "binary";
         mode = "444";
       };
 
-      containers.fscshhude = {
+      containers.fscs-intern-bot = {
         autoStart = true;
         privateNetwork = true;
         hostAddress = "192.168.103.10";
@@ -34,8 +34,8 @@
           {
             "secret" =
               {
-                hostPath = config.sops.secrets.fscshhude.path;
-                mountPoint = config.sops.secrets.fscshhude.path;
+                hostPath = config.sops.secrets.fscs-intern-bot.path;
+                mountPoint = config.sops.secrets.fscs-intern-bot.path;
               };
             "db" = {
               hostPath = opts.db_hostPath;
@@ -51,35 +51,23 @@
             isNormalUser = true;
           };
           environment.systemPackages = [
-            inputs.fscshhude.packages."${pkgs.stdenv.hostPlatform.system}".serve
-            pkgs.bash
+            inputs.fscs-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".serve
           ];
-          systemd.services.fscs-website-serve = {
-            description = "Serve FSCS website";
+          systemd.services.fscs-intern-bot = {
+            description = "Serve FSCS intern bot";
             after = [ "network.target" ];
-            path = [ pkgs.bash ];
             serviceConfig = {
-              EnvironmentFile = config.sops.secrets.fscshhude.path;
+              EnvironmentFile = config.sops.secrets.fscs-intern-bot.path;
               Type = "exec";
               User = "fscs-hhu";
               WorkingDirectory = "/home/fscs-hhu";
-              ExecStart = "${inputs.fscshhude.packages."${pkgs.stdenv.hostPlatform.system}".serve}/bin/serve";
+              ExecStart = "${inputs.fscs-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".serve}/bin/serve";
               Restart = "always";
               RestartSec = 5;
             };
             wantedBy = [ "multi-user.target" ];
           };
           system.stateVersion = "23.11";
-
-          networking = {
-            firewall = {
-              enable = true;
-              allowedTCPPorts = [ 8080 ];
-            };
-            # Use systemd-resolved inside the container
-            # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
-            useHostResolvConf = lib.mkForce false;
-          };
 
           services.resolved.enable = true;
         };

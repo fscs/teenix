@@ -30,7 +30,7 @@
 
   teenix.services.openssh.enable = true;
 
-  networking.hostName = "Teefax";
+  networking.hostName = "teefax";
 
   users.defaultUserShell = pkgs.fish;
 
@@ -47,14 +47,20 @@
     {
       enable = true;
       hostname = "login.inphima.de";
-      secretsFile = ../secrets/keycloak_pass;
+      secretsFile = ../secrets/felix_pwd;
     };
 
   teenix.services.fscshhude =
     {
       enable = true;
-      secretsFile = ../secrets/keycloak_pass;
-      db_hostPath = "/home/felix/db2";
+      secretsFile = ../secrets/felix_pwd;
+      db_hostPath = "/home/teefax/db2";
+    };
+
+  teenix.services.matrix =
+    {
+      enable = true;
+      secretsFile = ../secrets/felix_pwd;
     };
 
   # Users
@@ -65,7 +71,7 @@
     neededForUsers = true;
   };
 
-  teenix.users.felix = {
+  teenix.users.teefax = {
     shell = pkgs.fish;
     extraGroups = [ "wheel" "docker" ];
     hashedPasswordFile = config.sops.secrets.felix_pwd.path;

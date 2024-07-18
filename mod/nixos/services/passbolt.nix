@@ -5,10 +5,10 @@
 , ...
 }: {
   options.teenix.services.fscshhude = {
-    enable = lib.mkEnableOption "setup fscshhude";
+    enable = lib.mkEnableOption "setup Passbolt";
     secretsFile = lib.mkOption {
       type = lib.types.path;
-      description = "path to the sops secret file for the fscshhude website Server";
+      description = "path to the sops secret file for passbolt";
     };
     db_hostPath = lib.mkOption {
       type = lib.types.str;
@@ -63,7 +63,7 @@
               Type = "exec";
               User = "fscs-hhu";
               WorkingDirectory = "/home/fscs-hhu";
-              ExecStart = "${inputs.fscshhude.packages."${pkgs.stdenv.hostPlatform.system}".serve}/bin/serve";
+              ExecStart = "${inputs.fscshhude.packages.aarch64-linux.serve}/bin/serve";
               Restart = "always";
               RestartSec = 5;
             };

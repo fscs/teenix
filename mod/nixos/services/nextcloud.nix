@@ -47,7 +47,7 @@
 
             database.createLocally = true;
 
-            settings.trusted_domains = [ "192.168.100.11" ];
+            settings.trusted_domains = [ "192.168.100.11" opts.hostname ];
             config = {
               adminpassFile = config.sops.secrets.nextcloud_pass.path;
               dbtype = "pgsql";
