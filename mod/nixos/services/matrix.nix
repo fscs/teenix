@@ -137,8 +137,8 @@
               allowedTCPPortRanges = [ ];
               allowedTCPPorts = [ 80 443 8008 3478 5349 ];
             };
+          system.stateVersion = "23.11";
         };
-        system.stateVersion = "23.11";
       };
 
     };
