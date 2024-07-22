@@ -25,6 +25,11 @@
         mode = "444";
       };
 
+      teenix.services.traefik.services."keycloak" = {
+        router.rule = "Host(`${opts.hostname}`)";
+	services = [ config.containers.keycloak.config.networking.hostname ];
+      };
+
       containers.keycloak = {
         ephemeral = true;
 

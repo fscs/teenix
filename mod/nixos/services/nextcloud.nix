@@ -24,6 +24,11 @@
         format = "binary";
         mode = "444";
       };
+
+      teenix.services.traefik.services."nextcloud" = {
+        router.rule = "Host(`${opts.hostname}`)";
+	services = [ config.containers.nextcloud.config.networking.hostname ];
+      };
       containers.nextcloud = {
         autoStart = true;
         privateNetwork = true;

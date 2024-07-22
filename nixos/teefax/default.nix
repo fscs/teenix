@@ -36,6 +36,8 @@
 
   programs.fish.enable = true;
 
+  teenix.services.traefik.enable = true;
+
   # Services
   teenix.services.nextcloud = {
     enable = true;
