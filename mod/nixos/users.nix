@@ -1,44 +1,61 @@
-{ lib
-, config
-, ...
+{
+  config,
+  pkgs,
+  lib,
+  ...
 }: {
-  options.teenix.user_control.enable = lib.mkEnableOption "just for testing on other machines";
-  options.teenix.users =
-    let
-      t = lib.types;
-      userOpts = t.submodule {
+  options = {
+    teenix.users = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.submodule ({...}: {
         options = {
-          shell = lib.mkOption {
-            description = "the users shell";
-            type = t.shellPackage;
+          sshKeys = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [];
+            description = "Public SSH keys for the user";
           };
-          extraGroups = lib.mkOption {
-            type = t.nullOr (t.listOf t.str);
+          setPassword = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+            description = "Whether to set the password via sops.";
           };
-          hashedPasswordFile = lib.mkOption {
-            type = t.nullOr (t.str);
-          };
+	  shell = lib.mkOption {
+	    type = lib.types.shellPackage;
+	    default = pkgs.bash;
+	    description = ''
+	    The shell for the user.
+	    '';
+	  };
         };
-      };
-    in
-    lib.mkOption {
-      type = t.attrsOf userOpts;
+      }));
+      default = {};
     };
+  };
 
-  config =
-    let
-      opts = config.teenix.users;
-    in
-    lib.mkIf config.teenix.user_control.enable
-      {
-        users.users =
-          lib.attrsets.mapAttrs
-            (_: value: {
-              isNormalUser = true;
-              shell = value.shell;
-              hashedPasswordFile = value.hashedPasswordFile;
-              extraGroups = value.extraGroups;
-            })
-            opts;
-      };
+  config = {
+
+    sops.secrets =
+      lib.attrsets.mapAttrs' (name: value: {
+        format = "binary";
+        name = "${name}-pass";
+        value = {
+	  sopsFile = ./../../nixos/secrets + "/${name}_pwd";
+          neededForUsers = true;
+        };
+      })
+      (lib.attrsets.filterAttrs (name: value: value.setPassword) config.teenix.users);
+
+    users.users =
+      lib.attrsets.mapAttrs (name: value: {
+        isNormalUser = true;
+	hashedPasswordFile = lib.mkIf value.setPassword config.sops.secrets."${name}-pass".path;
+        extraGroups = [
+          "wheel"
+          (lib.mkIf config.virtualisation.docker.enable "docker")
+          (lib.mkIf config.networking.networkmanager.enable "networkmanager")
+        ];
+        shell = pkgs.fish;
+        openssh.authorizedKeys.keys = value.sshKeys;
+      })
+      config.teenix.users;
+  };
 }
