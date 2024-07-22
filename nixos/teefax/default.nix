@@ -46,14 +46,14 @@
   # Services
   teenix.services.nextcloud = {
     enable = true;
-    hostname = "cloud.inphima.de";
+    hostname = "cloud.teefax.g-mal.de";
     secretsFile = ../secrets/nextcloud_pass;
   };
 
   teenix.services.keycloak =
     {
       enable = true;
-      hostname = "login.inphima.de";
+      hostname = "login.teefax.g-mal.de";
       secretsFile = ../secrets/felix_pwd;
     };
 
