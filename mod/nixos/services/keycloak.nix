@@ -27,7 +27,7 @@
 
       teenix.services.traefik.services."keycloak" = {
         router.rule = "Host(`${opts.hostname}`)";
-	services = [ config.containers.keycloak.config.networking.hostname ];
+        services = [ config.containers.keycloak.config.networking.hostName ];
       };
 
       containers.keycloak = {

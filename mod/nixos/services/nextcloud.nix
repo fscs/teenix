@@ -27,7 +27,7 @@
 
       teenix.services.traefik.services."nextcloud" = {
         router.rule = "Host(`${opts.hostname}`)";
-	services = [ config.containers.nextcloud.config.networking.hostname ];
+        services = [ config.containers.nextcloud.config.networking.hostName ];
       };
       containers.nextcloud = {
         autoStart = true;
