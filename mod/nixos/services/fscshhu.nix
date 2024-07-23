@@ -65,6 +65,7 @@
           users.users.fscs-hhu = {
             home = "/home/fscs-hhu";
             group = "users";
+	    shell = pkgs.bash;
             isNormalUser = true;
           };
           environment.systemPackages = [
