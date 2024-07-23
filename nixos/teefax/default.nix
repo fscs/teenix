@@ -73,6 +73,7 @@
   teenix.services.matrix =
     {
       enable = true;
+      servername = "teefax";
       secretsFile = ../secrets/felix_pwd;
     };
 

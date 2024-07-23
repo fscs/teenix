@@ -6,6 +6,11 @@
 }: {
   options.teenix.services.matrix = {
     enable = lib.mkEnableOption "setup inphimatrix";
+    servername = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      description = "Servername for matrix. The Matrix Host will be matrix.servername, except for .well-known files";
+    };
     secretsFile = lib.mkOption {
       type = lib.types.path;
       description = "path to the sops secret file for the fscshhude website Server";
@@ -22,6 +27,10 @@
         mode = "444";
       };
 
+      teenix.services.traefik.services.inphimatrix = {
+        router.rule = "Host(`matrix.${opts.servername}`) || (Host(`${opts.servername}`) && (Path(`/_matrix/{name:.*}`) || Path(`/_synapse/{name:.*}`) || Path(`/.well-known/matrix/server`) || Path(`/.well-known/matrix/client`)))";
+	servers = [ "http://${config.containers.inphimatrix.config.networking.hostName}:8008" ];
+      };
 
       containers.inphimatrix = {
         ephemeral = true;
