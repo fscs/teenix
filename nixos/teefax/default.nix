@@ -50,6 +50,8 @@
   teenix.services.traefik.letsencryptMail = "fscs@hhu.de";
 
   # Services
+  nix-tun.storage.persist.enable = true;
+
   teenix.services.nextcloud = {
     enable = true;
     hostname = "cloud.teefax";
