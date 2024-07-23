@@ -76,6 +76,11 @@
       secretsFile = ../secrets/felix_pwd;
     };
 
+  teenix.services.element-web = {
+    enable = true;
+    hostname = "element.teefax";
+  };
+
   # Users
   sops.secrets.felix_pwd = {
     format = "binary";

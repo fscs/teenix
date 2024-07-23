@@ -4,11 +4,23 @@
 , pkgs
 , ...
 }: {
+  options.teenix.services.element-web = {
+    enable = lib.mkEnableOption "setup element-web";
+    hostname = lib.mkOption {
+      type = lib.types.str;
+      description = "hostname";
+    };
+  };
   config =
     let
-      opts = config.teenix.services.matrix;
+      opts = config.teenix.services.element-web;
     in
     lib.mkIf opts.enable {
+
+      teenix.services.traefik.services."element-web" = {
+        router.rule = "Host(`${opts.hostname}`)";
+        servers = [ "http://${config.containers.element-web.config.networking.hostName}:8000" ];
+      };
 
       containers.element-web = {
         ephemeral = true;
@@ -18,6 +30,7 @@
         localAddress = "192.168.106.11";
 
         config = { config, lib, ... }: {
+          networking.hostName = "element-web";
           systemd.services.fscs-website-serve = {
             description = "Serve element";
             after = [ "network.target" ];
