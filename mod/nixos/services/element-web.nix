@@ -26,8 +26,8 @@
         ephemeral = true;
         autoStart = true;
         privateNetwork = true;
-        hostAddress = "192.168.106.10";
-        localAddress = "192.168.106.11";
+        hostAddress = "192.168.107.10";
+        localAddress = "192.168.107.11";
 
         config = { config, lib, ... }: {
           networking.hostName = "element-web";
