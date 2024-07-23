@@ -6,5 +6,6 @@
     ./keycloak.nix
     ./matrix.nix
     ./traefik.nix
+    ./element-web.nix
   ];
 }
