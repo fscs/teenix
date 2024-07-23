@@ -31,10 +31,9 @@
 
       nix-tun.storage.persist.subvolumes."fscshhude" = {
         "/db" = {
-	  owner = "${builtins.toString config.containers.fscshhude.config.users.users.fscs-hhu.uid}";
-	  group = "${builtins.toString config.containers.fscshhude.config.users.groups.fscs-hhu.gid}";
-	  mode = "0700";
-	};
+          owner = "${builtins.toString config.containers.fscshhude.config.users.users.fscs-hhu.uid}";
+          mode = "0700";
+        };
       };
 
       teenix.services.traefik.services."fscshhude" = {
