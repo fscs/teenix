@@ -29,10 +29,10 @@
         mode = "444";
       };
 
-      teenix.services.traefik.services."fscshhude" = {
-        router.rule = "Host(`${opts.hostname}`)";
-        servers = [ "${opts.hostname}:8080" ];
-      };
+      # teenix.services.traefik.services."fscshhude" = {
+      #   router.rule = "Host(`${opts.hostname}`)";
+      #   servers = [ "${opts.hostname}:8080" ];
+      # };
 
       containers.fscshhude = {
         autoStart = true;
