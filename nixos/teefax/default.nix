@@ -61,7 +61,7 @@
     {
       enable = true;
       hostname = "teefax.g-mal.de";
-      secretsFile = ../secrets/felix_pwd;
+      secretsFile = ../secrets/fscshhude;
       db_hostPath = "/var/lib/db2";
     };
 
