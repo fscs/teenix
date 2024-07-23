@@ -31,7 +31,7 @@
 
       teenix.services.traefik.services."fscshhude" = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = [ "http://${opts.hostname}:8080" ];
+        servers = [ "http://${config.containers.fscshhude.config.networking.hostName}:8080" ];
       };
 
       containers.fscshhude = {
@@ -54,6 +54,7 @@
           };
 
         config = { lib, ... }: {
+          networking.hostName = "fscshhude";
           users.users.fscs-hhu = {
             home = "/home/fscs-hhu";
             group = "users";
