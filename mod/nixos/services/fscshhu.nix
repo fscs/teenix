@@ -31,7 +31,7 @@
 
       teenix.services.traefik.services."fscshhude" = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = [ opts.hostname ];
+        servers = [ "${opts.hostname}:8080" ];
       };
 
       containers.fscshhude = {

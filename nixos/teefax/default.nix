@@ -46,21 +46,21 @@
   # Services
   teenix.services.nextcloud = {
     enable = true;
-    hostname = "cloud.teefax.g-mal.de";
+    hostname = "cloud.teefax";
     secretsFile = ../secrets/nextcloud_pass;
   };
 
   teenix.services.keycloak =
     {
       enable = true;
-      hostname = "login.teefax.g-mal.de";
+      hostname = "login.teefax";
       secretsFile = ../secrets/felix_pwd;
     };
 
   teenix.services.fscshhude =
     {
       enable = true;
-      hostname = "teefax.g-mal.de";
+      hostname = "teefax";
       secretsFile = ../secrets/fscshhude;
       db_hostPath = "/var/lib/db2";
     };
