@@ -29,7 +29,7 @@
         mode = "444";
       };
 
-      nix-tun.storage.persist.subvolumes."fscshhude" = {
+      nix-tun.storage.persist.subvolumes."fscshhude".directories = {
         "/db" = {
           owner = "${builtins.toString config.containers.fscshhude.config.users.users.fscs-hhu.uid}";
           mode = "0700";
