@@ -9,6 +9,7 @@
     ../locale.nix
 
     inputs.sops.nixosModules.sops
+    inputs.nix-tun.nixosModules.nix-tun
 
     outputs.nixosModules.teenix
   ];

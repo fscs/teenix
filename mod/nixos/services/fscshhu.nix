@@ -29,6 +29,14 @@
         mode = "444";
       };
 
+      nix-tun.storage.persist.subvolumes."fscshhude" = {
+        "/db" = {
+	  owner = "${builtins.toString config.containers.fscshhude.config.users.users.fscs-hhu.uid}";
+	  group = "${builtins.toString config.containers.fscshhude.config.users.groups.fscs-hhu.gid}";
+	  mode = "0700";
+	};
+      };
+
       teenix.services.traefik.services."fscshhude" = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.fscshhude.config.networking.hostName}:8080" ];
@@ -47,7 +55,7 @@
                 mountPoint = config.sops.secrets.fscshhude.path;
               };
             "db" = {
-              hostPath = opts.db_hostPath;
+              hostPath = "${config.nix-tun.storage.persist.path}/fscshhude/db";
               mountPoint = "/home/fscs-hhu/db";
               isReadOnly = false;
             };
