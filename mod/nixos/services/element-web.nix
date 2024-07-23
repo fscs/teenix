@@ -36,7 +36,7 @@
             after = [ "network.target" ];
             serviceConfig = {
               Type = "exec";
-              ExecStart = "${pkgs.simple-http-server}/bin/simple-http-server ${pkgs.element-web} --index index.html";
+              ExecStart = "${pkgs.simple-http-server}/bin/simple-http-server ${pkgs.element-web} --index";
               Restart = "always";
               RestartSec = 5;
             };
