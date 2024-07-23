@@ -60,8 +60,9 @@
   teenix.services.fscshhude =
     {
       enable = true;
+      hostname = "teefax.g-mal.de";
       secretsFile = ../secrets/felix_pwd;
-      db_hostPath = "/home/teefax/db2";
+      db_hostPath = "/var/lib/db2";
     };
 
   teenix.services.matrix =

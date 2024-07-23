@@ -10,6 +10,10 @@
       type = lib.types.path;
       description = "path to the sops secret file for the fscshhude website Server";
     };
+    hostname = lib.mkOption {
+      type = lib.types.str;
+      description = "hostname";
+    };
     db_hostPath = lib.mkOption {
       type = lib.types.str;
     };
@@ -23,6 +27,11 @@
         sopsFile = opts.secretsFile;
         format = "binary";
         mode = "444";
+      };
+
+      teenix.services.traefik.services."fscshhude" = {
+        router.rule = "Host(`${opts.hostname}`)";
+        servers = [ opts.hostName ];
       };
 
       containers.fscshhude = {
