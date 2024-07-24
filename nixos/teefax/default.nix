@@ -83,6 +83,7 @@
   teenix.services.element-web = {
     enable = true;
     hostname = "element.teefax";
+    matrix_url = "https://matrix.teefax";
   };
 
   # Users
