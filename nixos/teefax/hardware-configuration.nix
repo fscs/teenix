@@ -19,6 +19,7 @@
       device = "/dev/disk/by-uuid/bf6dacbc-1e3a-4052-ae31-ac58e95d7bad";
       fsType = "btrfs";
       options = [ "subvol=root" ];
+      neededForBoot = true;
     };
 
   fileSystems."/persist" =
@@ -26,12 +27,14 @@
       device = "/dev/disk/by-uuid/bf6dacbc-1e3a-4052-ae31-ac58e95d7bad";
       fsType = "btrfs";
       options = [ "subvol=persist" ];
+      neededForBoot = true;
     };
   fileSystems."/nix" =
     {
       device = "/dev/disk/by-uuid/bf6dacbc-1e3a-4052-ae31-ac58e95d7bad";
       fsType = "btrfs";
       options = [ "subvol=nix" ];
+      neededForBoot = true;
     };
 
   fileSystems."/boot" =
