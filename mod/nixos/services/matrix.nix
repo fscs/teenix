@@ -63,15 +63,18 @@
           # enable postgres
           services.postgresql = {
             enable = true;
-            ensureUsers = [
+            ensureDatabases = [
+	      "matrix-synapse"
+	    ];
+	    initdbArgs = [
+	      "--locale=C.utf8"
+	    ];
+	    ensureUsers = [
               {
                 name = "matrix-synapse";
+		ensureDBOwnership = true;
               }
             ];
-            initialScript = pkgs.writeText "init-sql-script" ''
-              CREATE DATABASE "matrix-synapse" ENCODING 'UTF8' LC_COLLATE='C' LC_CTYPE='C' template=template0;
-              ALTER DATABASE "matrix-synapse" OWNER TO "matrix-synapse";
-            '';
             dataDir = "/var/lib/postgres";
             authentication = pkgs.lib.mkOverride 10 ''
               #type database  DBuser  auth-method
