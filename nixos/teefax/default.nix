@@ -54,21 +54,21 @@
 
   teenix.services.nextcloud = {
     enable = true;
-    hostname = "cloud.teefax";
+    hostname = "cloud.fscs-hhu.de";
     secretsFile = ../secrets/nextcloud_pass;
   };
 
   teenix.services.keycloak =
     {
       enable = true;
-      hostname = "login.teefax";
+      hostname = "login.fscs-hhu.de";
       secretsFile = ../secrets/felix_pwd;
     };
 
   teenix.services.fscshhude =
     {
       enable = true;
-      hostname = "teefax";
+      hostname = "fscs-hhu.de";
       secretsFile = ../secrets/fscshhude;
       db_hostPath = "/var/lib/db2";
     };
@@ -76,14 +76,20 @@
   teenix.services.matrix =
     {
       enable = true;
-      servername = "teefax";
+      servername = "fscs-hhu.de";
       secretsFile = ../secrets/felix_pwd;
     };
 
   teenix.services.element-web = {
     enable = true;
-    hostname = "element.teefax";
+    hostname = "element.fscs-hhu.de";
     matrix_url = "https://matrix.teefax";
+  };
+
+  teenix.services.pretix = {
+    enable = true;
+    hostname = "pretix.fscs-hhu.de";
+    email = "fscs@hhu.de";
   };
 
   # Users

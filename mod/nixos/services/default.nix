@@ -7,5 +7,6 @@
     ./matrix.nix
     ./traefik.nix
     ./element-web.nix
+    ./pretix.nix
   ];
 }

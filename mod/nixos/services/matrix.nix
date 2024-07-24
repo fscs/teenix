@@ -64,15 +64,15 @@
           services.postgresql = {
             enable = true;
             ensureDatabases = [
-	      "matrix-synapse"
-	    ];
-	    initdbArgs = [
-	      "--locale=C.utf8"
-	    ];
-	    ensureUsers = [
+              "matrix-synapse"
+            ];
+            initdbArgs = [
+              "--locale=C.utf8"
+            ];
+            ensureUsers = [
               {
                 name = "matrix-synapse";
-		ensureDBOwnership = true;
+                ensureDBOwnership = true;
               }
             ];
             dataDir = "/var/lib/postgres";
