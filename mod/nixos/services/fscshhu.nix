@@ -42,6 +42,7 @@
       };
 
       containers.fscshhude = {
+        ephemeral = true;
         autoStart = true;
         privateNetwork = true;
         hostAddress = "192.168.103.10";
@@ -63,9 +64,10 @@
         config = { lib, ... }: {
           networking.hostName = "fscshhude";
           users.users.fscs-hhu = {
+            uid = 1001;
             home = "/home/fscs-hhu";
             group = "users";
-	    shell = pkgs.bash;
+            shell = pkgs.bash;
             isNormalUser = true;
           };
           environment.systemPackages = [

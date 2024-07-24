@@ -31,30 +31,17 @@
 
         config = { config, lib, ... }: {
           networking.hostName = "element-web";
-          systemd.services.fscs-website-serve =
-            let
-              conf = {
-                default_server_config = {
-                  m.homeserver = {
-                    base_url = "https://${opts.hostname}";
-                  };
-                  m.identity_server = {
-                    base_url = "https://vector.im";
-                  };
-                };
-              };
-            in
-            pkgs.element-web.override { inherit conf; } {
-              description = "Serve element";
-              after = [ "network.target" ];
-              serviceConfig = {
-                Type = "exec";
-                ExecStart = "${pkgs.simple-http-server}/bin/simple-http-server ${pkgs.element-web} --index";
-                Restart = "always";
-                RestartSec = 5;
-              };
-              wantedBy = [ "multi-user.target" ];
+          systemd.services.fscs-website-serve = {
+            description = "Serve element";
+            after = [ "network.target" ];
+            serviceConfig = {
+              Type = "exec";
+              ExecStart = "${pkgs.simple-http-server}/bin/simple-http-server ${pkgs.element-web} --index";
+              Restart = "always";
+              RestartSec = 5;
             };
+            wantedBy = [ "multi-user.target" ];
+          };
           system.stateVersion = "23.11";
 
           networking = {

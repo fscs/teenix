@@ -27,9 +27,16 @@
         mode = "444";
       };
 
+      nix-tun.storage.persist.subvolumes."inphimatrix".directories = {
+        "/postgres" = {
+          owner = "${builtins.toString config.containers.inphimatrix.config.users.users.postgres.uid}";
+          mode = "0700";
+        };
+      };
+
       teenix.services.traefik.services.inphimatrix = {
         router.rule = "Host(`matrix.${opts.servername}`) || (Host(`${opts.servername}`) && (Path(`/_matrix/{name:.*}`) || Path(`/_synapse/{name:.*}`) || Path(`/.well-known/matrix/server`) || Path(`/.well-known/matrix/client`)))";
-	servers = [ "http://${config.containers.inphimatrix.config.networking.hostName}:8008" ];
+        servers = [ "http://${config.containers.inphimatrix.config.networking.hostName}:8008" ];
       };
 
       containers.inphimatrix = {
@@ -46,7 +53,7 @@
                 mountPoint = config.sops.secrets.matrix_pass.path;
               };
             "db" = {
-              hostPath = "/home/felix/db";
+              hostPath = "${config.nix-tun.storage.persist.path}/inphimatrix/postgres";
               mountPoint = "/var/lib/postgres";
               isReadOnly = false;
             };

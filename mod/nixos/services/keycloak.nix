@@ -25,6 +25,13 @@
         mode = "444";
       };
 
+      nix-tun.storage.persist.subvolumes."keycloak".directories = {
+        "/postgres" = {
+          owner = "${builtins.toString config.containers.keycloak.config.users.users.postgres.uid}";
+          mode = "0700";
+        };
+      };
+
       teenix.services.traefik.services."keycloak" = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.keycloak.config.networking.hostName}" ];
@@ -43,6 +50,11 @@
                 hostPath = config.sops.secrets.keycloak_pass.path;
                 mountPoint = config.sops.secrets.keycloak_pass.path;
               };
+            "db" = {
+              hostPath = "${config.nix-tun.storage.persist.path}/keycloak/postgres";
+              mountPoint = "/var/lib/postgres";
+              isReadOnly = false;
+            };
           };
 
         config = { pkgs, lib, ... }: {

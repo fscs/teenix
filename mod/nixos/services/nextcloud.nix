@@ -25,6 +25,12 @@
         mode = "444";
       };
 
+      nix-tun.storage.persist.subvolumes."nextcloud".directories = {
+        "/postgres" = {
+          owner = "${builtins.toString config.containers.nextcloud.config.users.users.postgres.uid}";
+          mode = "0700";
+        };
+      };
       teenix.services.traefik.services."nextcloud" = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.nextcloud.config.networking.hostName}" ];
@@ -41,6 +47,11 @@
                 hostPath = config.sops.secrets.nextcloud_pass.path;
                 mountPoint = config.sops.secrets.nextcloud_pass.path;
               };
+            "db" = {
+              hostPath = "${config.nix-tun.storage.persist.path}/nextcloud/postgres";
+              mountPoint = "/var/lib/postgres";
+              isReadOnly = false;
+            };
           };
 
         config = { pkgs, lib, ... }: {
