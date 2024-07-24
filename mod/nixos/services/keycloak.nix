@@ -38,6 +38,7 @@
       };
 
       containers.keycloak = {
+        ephemeral = true;
         autoStart = true;
         privateNetwork = true;
         hostAddress = "192.168.101.10";
@@ -63,7 +64,7 @@
             enable = true;
             settings = {
               hostname = opts.hostname;
-              proxy = "passthrough";
+              proxy = "edge";
               http-enabled = true;
             };
             database = {
