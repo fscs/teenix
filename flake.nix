@@ -2,7 +2,7 @@
   description = "Teenix nixos config";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     sops = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -10,6 +10,7 @@
     nix-tun.url = "github:nix-tun/nixos-modules";
     fscshhude.url = "git+ssh://git@git.hhu.de/fscs/website.git";
     fscs-intern-bot.url = "git+ssh://git@git.hhu.de/fscs/fscs-intern-bot.git";
+    arion.url = "github:hercules-ci/arion";
   };
 
   outputs =

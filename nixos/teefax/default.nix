@@ -10,6 +10,7 @@
 
     inputs.sops.nixosModules.sops
     inputs.nix-tun.nixosModules.nix-tun
+    inputs.arion.nixosModules.arion
 
     outputs.nixosModules.teenix
   ];
@@ -35,6 +36,9 @@
     enable = true;
     hostname = "cloud.fscs-hhu.de";
     secretsFile = ../secrets/nextcloud_pass;
+    extraApps = {
+      inherit (config.teenix.services.nextcloud.appPackages) calendar deck polls forms tasks spreed;
+    };
   };
 
   teenix.services.keycloak =
@@ -62,7 +66,7 @@
   teenix.services.element-web = {
     enable = true;
     hostname = "element.fscs-hhu.de";
-    matrix_url = "https://matrix.teefax";
+    matrix_url = "matrix.fscs-hhu.de";
   };
 
   teenix.services.pretix = {

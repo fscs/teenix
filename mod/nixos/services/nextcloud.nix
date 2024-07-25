@@ -12,7 +12,13 @@
       type = lib.types.path;
       description = "path to the sops secret file for the adminPass";
     };
-
+    appPackages = lib.mkOption {
+      type = lib.types.attrs;
+      default = config.containers.nextcloud.config.services.nextcloud.package.packages.apps;
+    };
+    extraApps = lib.mkOption {
+      type = lib.types.attrs;
+    };
   };
   config =
     let
@@ -75,6 +81,10 @@
               "opcache.interned_strings_buffer" = "16";
               "opcache.jit_buffer_size" = "128M";
             };
+
+            extraApps = opts.extraApps;
+
+            extraAppsEnable = true;
 
             configureRedis = true;
             caching.apcu = true;

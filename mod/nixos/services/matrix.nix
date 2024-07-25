@@ -67,7 +67,7 @@
               "matrix-synapse"
             ];
             initdbArgs = [
-              "--locale=C.utf8"
+              "--locale=C --encoding utf8"
             ];
             ensureUsers = [
               {

@@ -12,7 +12,6 @@
       type = lib.types.path;
       description = "path to the sops secret file for the adminPass";
     };
-
   };
   config =
     let

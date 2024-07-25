@@ -60,7 +60,7 @@
               mail.from = "${opts.email}";
               pretix = {
                 instance_name = "${opts.hostname}";
-                url = "${opts.hostname}";
+                url = "https://${opts.hostname}";
               };
             };
           };
