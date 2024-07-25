@@ -14,27 +14,6 @@
     outputs.nixosModules.teenix
   ];
 
-  systemd.targets.sleep.enable = false;
-  systemd.targets.suspend.enable = false;
-  systemd.targets.hibernate.enable = false;
-  systemd.targets.hybrid-sleep.enable = false;
-
-  # TEMP
-
-  services.tailscale.enable = true;
-
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-
-  networking.nat = {
-    enable = true;
-    internalInterfaces = [ "ve-+" ];
-    externalInterface = "eno1";
-    # Lazy IPv6 connectivity for the container
-    enableIPv6 = true;
-  };
-
   teenix.nixconfig.enable = true;
   teenix.bootconfig.enable = true;
 
