@@ -1,3 +1,10 @@
 # Teenix Project
 ## TODO
-- builttime secrets
+- [ ] docker-compose
+- [ ] Single-Sign-On
+- [ ] Wordpress
+- [ ] discord bots
+- [ ] helfer-tool
+- [ ] passbolt
+- [ ] pretix
+- [ ] prometheus/grafana
