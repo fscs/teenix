@@ -52,7 +52,7 @@
     {
       enable = true;
       hostname = "fscs-hhu.de";
-      secretsFile = ../secrets/test_pwd;
+      secretsFile = ../secrets/fscshhude;
       db_hostPath = "/var/lib/db2";
     };
 
