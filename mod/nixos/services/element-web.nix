@@ -39,7 +39,7 @@
               let
                 conf = {
                   default_server_config = {
-                    "m.homeserver".base_url = "${opts.matrix_url}";
+                    "m.homeserver".base_url = "https://${opts.matrix_url}";
                     "m.identity_server".base_url = "https://vector.im";
                   };
                 };
