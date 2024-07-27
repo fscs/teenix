@@ -29,6 +29,7 @@
     { device = "/dev/disk/by-uuid/07d5ba23-e856-4bc4-8a30-e1821efa0493";
       fsType = "btrfs";
       options = [ "subvol=persist" ];
+      neededForBoot = true;
     };
 
   fileSystems."/boot" =
