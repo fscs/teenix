@@ -35,7 +35,7 @@
   teenix.services.nextcloud = {
     enable = true;
     hostname = "cloud.fscs-hhu.de";
-    secretsFile = ../secrets/nextcloud_pass;
+    secretsFile = ../secrets/test_pwd;
     extraApps = {
       inherit (config.teenix.services.nextcloud.appPackages) calendar deck polls forms tasks spreed;
     };
@@ -45,14 +45,14 @@
     {
       enable = true;
       hostname = "login.fscs-hhu.de";
-      secretsFile = ../secrets/felix_pwd;
+      secretsFile = ../secrets/test_pwd;
     };
 
   teenix.services.fscshhude =
     {
       enable = true;
       hostname = "fscs-hhu.de";
-      secretsFile = ../secrets/fscshhude;
+      secretsFile = ../secrets/test_pwd;
       db_hostPath = "/var/lib/db2";
     };
 
@@ -60,7 +60,7 @@
     {
       enable = true;
       servername = "fscs-hhu.de";
-      secretsFile = ../secrets/felix_pwd;
+      secretsFile = ../secrets/test_pwd;
     };
 
   teenix.services.element-web = {
@@ -78,7 +78,7 @@
   # Users
   sops.secrets.felix_pwd = {
     format = "binary";
-    sopsFile = ../secrets/felix_pwd;
+    sopsFile = ../secrets/test_pwd;
     neededForUsers = true;
   };
 

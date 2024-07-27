@@ -4,43 +4,46 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports = [ ];
+  imports =
+    [
+      (modulesPath + "/profiles/qemu-guest.nix")
+    ];
 
-  boot.initrd.availableKernelModules = [ "ata_piix" "mptspi" "uhci_hcd" "ehci_pci" "sd_mod" "sr_mod" ];
+  boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/07d5ba23-e856-4bc4-8a30-e1821efa0493";
+    {
+      device = "/dev/disk/by-uuid/2867fb9e-96a7-4da3-870f-d15a18b49454";
       fsType = "btrfs";
       options = [ "subvol=root" ];
       neededForBoot = true;
     };
 
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/07d5ba23-e856-4bc4-8a30-e1821efa0493";
+    {
+      device = "/dev/disk/by-uuid/2867fb9e-96a7-4da3-870f-d15a18b49454";
       fsType = "btrfs";
       options = [ "subvol=nix" ];
       neededForBoot = true;
     };
 
   fileSystems."/persist" =
-    { device = "/dev/disk/by-uuid/07d5ba23-e856-4bc4-8a30-e1821efa0493";
+    {
+      device = "/dev/disk/by-uuid/2867fb9e-96a7-4da3-870f-d15a18b49454";
       fsType = "btrfs";
       options = [ "subvol=persist" ];
       neededForBoot = true;
     };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/DF59-9AEA";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
+  swapDevices =
+    [{ device = "/dev/disk/by-uuid/defb8c7f-dba9-42b8-bf14-7428e1d06b47"; }];
 
   boot.initrd.postDeviceCommands = lib.mkAfter ''
     mkdir /btrfs_tmp
-    mount /dev/disk/by-uuid/07d5ba23-e856-4bc4-8a30-e1821efa0493/root /btrfs_tmp
+    mount /dev/disk/by-uuid/2867fb9e-96a7-4da3-870f-d15a18b49454/root /btrfs_tmp
     if [[ -e /btrfs_tmp/root ]]; then
         mkdir -p /btrfs_tmp/old_roots
         timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%-d_%H:%M:%S")
@@ -62,17 +65,13 @@
     btrfs subvolume create /btrfs_tmp/root
     umount /btrfs_tmp
   '';
-  
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/1a9c1b41-b467-4bb7-8c60-202ed56c5545"; }
-    ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.ens33.useDHCP = lib.mkDefault true;
+  # networking.interfaces.enp1s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 }
