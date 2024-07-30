@@ -28,6 +28,26 @@
 
   teenix.services.traefik.enable = true;
   teenix.services.traefik.letsencryptMail = "fscs@hhu.de";
+  teenix.services.traefik.entrypoints =
+    {
+      web = {
+        port = 80;
+        http = {
+          redirections = {
+            entryPoint = {
+              to = "websecure";
+              scheme = "https";
+            };
+          };
+        };
+      };
+      websecure = {
+        port = 443;
+      };
+      metrics = {
+        port = 120;
+      };
+    };
 
   # Services
   nix-tun.storage.persist.enable = true;
@@ -73,6 +93,23 @@
     enable = true;
     hostname = "pretix.fscs-hhu.de";
     email = "fscs@hhu.de";
+  };
+
+  teenix.services.prometheus = {
+    enable = true;
+    hostname = "prometheus.fscs-hhu.de";
+    grafanaHostname = "grafana.fscs-hhu.de";
+  };
+
+  teenix.services.passbolt = {
+    enable = true;
+    hostname = "passbolt.fscs-hhu.de";
+  };
+
+  teenix.services.authentik = {
+    enable = true;
+    hostname = "auth.fscs-hhu.de";
+    envFile = ../secrets/authentik_env;
   };
 
   # Users

@@ -1,0 +1,119 @@
+{ lib
+, config
+, pkgs
+, ...
+}: {
+  options.teenix.services.prometheus = {
+    enable = lib.mkEnableOption "setup prometheus";
+    hostname = lib.mkOption {
+      type = lib.types.str;
+      description = "hostname";
+    };
+    grafanaHostname = lib.mkOption {
+      type = lib.types.str;
+      description = "hostname";
+    };
+  };
+  config =
+    let
+      opts = config.teenix.services.prometheus;
+    in
+    lib.mkIf opts.enable {
+      nix-tun.storage.persist.subvolumes."grafana".directories = {
+        "/postgres" = {
+          owner = "${builtins.toString config.containers.prometheus.config.users.users.postgres.uid}";
+          mode = "0700";
+        };
+      };
+
+      teenix.services.traefik.services."prometheus" = {
+        router.rule = "Host(`${opts.hostname}`)";
+        servers = [ "http://${config.containers.prometheus.config.networking.hostName}:9090" ];
+      };
+
+      teenix.services.traefik.services."grafana" = {
+        router.rule = "Host(`${opts.grafanaHostname}`)";
+        servers = [ "http://${config.containers.prometheus.config.networking.hostName}:3000" ];
+      };
+
+      containers.prometheus = {
+        ephemeral = true;
+        autoStart = true;
+        privateNetwork = true;
+        hostAddress = "192.168.109.10";
+        localAddress = "192.168.109.11";
+
+        bindMounts =
+          {
+            "db" = {
+              hostPath = "${config.nix-tun.storage.persist.path}/grafana/postgres";
+              mountPoint = "/var/lib/postgres";
+              isReadOnly = false;
+            };
+          };
+
+        config = { lib, ... }: {
+          networking.hostName = "prometheus";
+          services.prometheus = {
+            enable = true;
+            globalConfig.scrape_interval = "10s"; # "1m"
+            scrapeConfigs = [
+              {
+                job_name = "traefik";
+                metrics_path = "/metrics";
+                static_configs = [{
+                  targets = [
+                    "192.168.109.10:120"
+                  ];
+                }];
+              }
+            ];
+          };
+
+          services.grafana = {
+            enable = true;
+            settings = {
+              database = {
+                type = "postgres";
+                user = "grafana";
+                name = "grafana";
+                host = "localhost:5432";
+              };
+              server = {
+                http_addr = "0.0.0.0";
+                http_port = 3000;
+                domain = "${opts.hostname}";
+              };
+            };
+          };
+
+          services.postgresql = {
+            enable = true;
+            ensureDatabases = [
+              "grafana"
+            ];
+            ensureUsers = [
+              {
+                name = "grafana";
+                ensureDBOwnership = true;
+              }
+            ];
+            dataDir = "/var/lib/postgres";
+            authentication = pkgs.lib.mkOverride 10 ''
+              local all       all     trust
+              host  all       all     all trust
+            '';
+          };
+          networking = {
+            firewall = {
+              enable = true;
+              allowedTCPPorts = [ 9090 3000 ];
+            };
+            # Use systemd-resolved inside the container
+            # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
+            useHostResolvConf = lib.mkForce false;
+          };
+        };
+      };
+    };
+}

@@ -8,5 +8,8 @@
     ./traefik.nix
     ./element-web.nix
     ./pretix.nix
+    ./prometheus.nix
+    ./passbolt.nix
+    ./authentik.nix
   ];
 }

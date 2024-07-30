@@ -42,7 +42,7 @@
           {
             "db" = {
               hostPath = "${config.nix-tun.storage.persist.path}/pretix/postgres";
-              mountPoint = "/var/lib/postgres";
+              mountPoint = "/var/lib/postgresql";
               isReadOnly = false;
             };
           };
@@ -63,6 +63,15 @@
                 url = "https://${opts.hostname}";
               };
             };
+          };
+          networking = {
+            firewall = {
+              enable = true;
+              allowedTCPPorts = [ 80 ];
+            };
+            # Use systemd-resolved inside the container
+            # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
+            useHostResolvConf = lib.mkForce false;
           };
         };
       };

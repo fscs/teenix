@@ -1,6 +1,5 @@
 { lib
 , config
-, inputs
 , pkgs
 , ...
 }: {
@@ -48,7 +47,7 @@
           in
           {
             networking.hostName = "element-web";
-            systemd.services.fscs-website-serve = {
+            systemd.services.element-serve = {
               description = "Serve element";
               after = [ "network.target" ];
               serviceConfig = {
