@@ -23,7 +23,7 @@
       nixpkgs = {
         overlays = [
           outputs.overlays.additions
-          outputs.overlays.stable
+          outputs.overlays.unstable
         ];
 
         config.allowUnfree = opts.allowUnfree;

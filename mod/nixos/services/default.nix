@@ -11,5 +11,6 @@
     ./prometheus.nix
     ./passbolt.nix
     ./authentik.nix
+    ./kanidm.nix
   ];
 }

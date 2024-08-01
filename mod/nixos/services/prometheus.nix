@@ -13,6 +13,10 @@
       type = lib.types.str;
       description = "hostname";
     };
+    alertmanagerURL = lib.mkOption {
+      type = lib.types.str;
+      description = "hostname";
+    };
   };
   config =
     let
@@ -36,6 +40,11 @@
         servers = [ "http://${config.containers.prometheus.config.networking.hostName}:3000" ];
       };
 
+      teenix.services.traefik.services."alerts" = {
+        router.rule = "Host(`${opts.alertmanagerURL}`)";
+        servers = [ "http://${config.containers.prometheus.config.networking.hostName}:9093" ];
+      };
+
       containers.prometheus = {
         ephemeral = true;
         autoStart = true;
@@ -54,9 +63,39 @@
 
         config = { lib, ... }: {
           networking.hostName = "prometheus";
+          networking.nameservers = [ "9.9.9.9" ];
+
           services.prometheus = {
             enable = true;
-            globalConfig.scrape_interval = "10s"; # "1m"
+            globalConfig.scrape_interval = "10s";
+            alertmanager = {
+              enable = true;
+              webExternalUrl = "https://${opts.alertmanagerURL}";
+              configText = ''
+                route:
+                  group_by: ['alertname', 'job']
+
+                  group_wait: 30s
+                  group_interval: 5m
+                  repeat_interval: 3h
+
+                  receiver: discord
+
+                receivers:
+                - name: discord
+                  discord_configs:
+                  - webhook_url: "https://discord.com/api/webhooks/1268160361295511726/KOsvdpA4BzSYVNL2OQFQtfntBDloK0VAsSe4jzp9LHcuxuIXt7Osk3699MKDLyBeH3d4"
+              '';
+            };
+            alertmanagers = [{
+              scheme = "https";
+              path_prefix = "/alertmanager";
+              static_configs = [{
+                targets = [
+                  "localhost:9093"
+                ];
+              }];
+            }];
             scrapeConfigs = [
               {
                 job_name = "traefik";
@@ -107,7 +146,7 @@
           networking = {
             firewall = {
               enable = true;
-              allowedTCPPorts = [ 9090 3000 ];
+              allowedTCPPorts = [ 9090 3000 9093 ];
             };
             # Use systemd-resolved inside the container
             # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686

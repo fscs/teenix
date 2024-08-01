@@ -53,7 +53,6 @@
 
           services.pretix = {
             enable = true;
-            package = pkgs.stable.pretix;
             database.createLocally = true;
             nginx.domain = opts.hostname;
             settings = {
