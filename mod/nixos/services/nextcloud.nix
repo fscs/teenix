@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }: {
   options.teenix.services.nextcloud = {
     enable = lib.mkEnableOption "setup nextcloud";
@@ -20,10 +21,9 @@
       type = lib.types.attrs;
     };
   };
-  config =
-    let
-      opts = config.teenix.services.nextcloud;
-    in
+  config = let
+    opts = config.teenix.services.nextcloud;
+  in
     lib.mkIf opts.enable {
       sops.secrets.nextcloud_pass = {
         sopsFile = opts.secretsFile;
@@ -39,37 +39,39 @@
       };
       teenix.services.traefik.services."nextcloud" = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = [ "http://${config.containers.nextcloud.config.networking.hostName}" ];
+        servers = ["http://${config.containers.nextcloud.config.networking.hostName}"];
       };
       containers.nextcloud = {
         autoStart = true;
         privateNetwork = true;
         hostAddress = "192.168.100.10";
         localAddress = "192.168.100.11";
-        bindMounts =
-          {
-            "secret" =
-              {
-                hostPath = config.sops.secrets.nextcloud_pass.path;
-                mountPoint = config.sops.secrets.nextcloud_pass.path;
-              };
-            "db" = {
-              hostPath = "${config.nix-tun.storage.persist.path}/nextcloud/postgres";
-              mountPoint = "/var/lib/postgres";
-              isReadOnly = false;
-            };
+        bindMounts = {
+          "secret" = {
+            hostPath = config.sops.secrets.nextcloud_pass.path;
+            mountPoint = config.sops.secrets.nextcloud_pass.path;
           };
+          "db" = {
+            hostPath = "${config.nix-tun.storage.persist.path}/nextcloud/postgres";
+            mountPoint = "/var/lib/postgres";
+            isReadOnly = false;
+          };
+        };
 
-        config = { pkgs, lib, ... }: {
+        config = {
+          pkgs,
+          lib,
+          ...
+        }: {
           services.nextcloud = {
             enable = true;
             package = pkgs.nextcloud29;
             hostName = opts.hostname;
-            phpExtraExtensions = all: [ all.pdlib all.bz2 all.smbclient ];
+            phpExtraExtensions = all: [all.pdlib all.bz2 all.smbclient];
 
             database.createLocally = true;
 
-            settings.trusted_domains = [ "192.168.100.11" opts.hostname ];
+            settings.trusted_domains = ["192.168.100.11" opts.hostname];
             config = {
               adminpassFile = config.sops.secrets.nextcloud_pass.path;
               dbtype = "pgsql";
@@ -103,7 +105,7 @@
           networking = {
             firewall = {
               enable = true;
-              allowedTCPPorts = [ 80 ];
+              allowedTCPPorts = [80];
             };
             # Use systemd-resolved inside the container
             # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686

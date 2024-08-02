@@ -1,7 +1,8 @@
-{ lib
-, config
-, pkgs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  ...
 }: {
   options.teenix.services.prometheus = {
     enable = lib.mkEnableOption "setup prometheus";
@@ -18,10 +19,9 @@
       description = "hostname";
     };
   };
-  config =
-    let
-      opts = config.teenix.services.prometheus;
-    in
+  config = let
+    opts = config.teenix.services.prometheus;
+  in
     lib.mkIf opts.enable {
       nix-tun.storage.persist.subvolumes."grafana".directories = {
         "/postgres" = {
@@ -32,17 +32,17 @@
 
       teenix.services.traefik.services."prometheus" = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = [ "http://${config.containers.prometheus.config.networking.hostName}:9090" ];
+        servers = ["http://${config.containers.prometheus.config.networking.hostName}:9090"];
       };
 
       teenix.services.traefik.services."grafana" = {
         router.rule = "Host(`${opts.grafanaHostname}`)";
-        servers = [ "http://${config.containers.prometheus.config.networking.hostName}:3000" ];
+        servers = ["http://${config.containers.prometheus.config.networking.hostName}:3000"];
       };
 
       teenix.services.traefik.services."alerts" = {
         router.rule = "Host(`${opts.alertmanagerURL}`)";
-        servers = [ "http://${config.containers.prometheus.config.networking.hostName}:9093" ];
+        servers = ["http://${config.containers.prometheus.config.networking.hostName}:9093"];
       };
 
       containers.prometheus = {
@@ -52,18 +52,17 @@
         hostAddress = "192.168.109.10";
         localAddress = "192.168.109.11";
 
-        bindMounts =
-          {
-            "db" = {
-              hostPath = "${config.nix-tun.storage.persist.path}/grafana/postgres";
-              mountPoint = "/var/lib/postgres";
-              isReadOnly = false;
-            };
+        bindMounts = {
+          "db" = {
+            hostPath = "${config.nix-tun.storage.persist.path}/grafana/postgres";
+            mountPoint = "/var/lib/postgres";
+            isReadOnly = false;
           };
+        };
 
-        config = { lib, ... }: {
+        config = {lib, ...}: {
           networking.hostName = "prometheus";
-          networking.nameservers = [ "9.9.9.9" ];
+          networking.nameservers = ["9.9.9.9"];
 
           services.prometheus = {
             enable = true;
@@ -87,24 +86,30 @@
                   - webhook_url: "https://discord.com/api/webhooks/1268160361295511726/KOsvdpA4BzSYVNL2OQFQtfntBDloK0VAsSe4jzp9LHcuxuIXt7Osk3699MKDLyBeH3d4"
               '';
             };
-            alertmanagers = [{
-              scheme = "https";
-              path_prefix = "/alertmanager";
-              static_configs = [{
-                targets = [
-                  "localhost:9093"
+            alertmanagers = [
+              {
+                scheme = "https";
+                path_prefix = "/alertmanager";
+                static_configs = [
+                  {
+                    targets = [
+                      "localhost:9093"
+                    ];
+                  }
                 ];
-              }];
-            }];
+              }
+            ];
             scrapeConfigs = [
               {
                 job_name = "traefik";
                 metrics_path = "/metrics";
-                static_configs = [{
-                  targets = [
-                    "192.168.109.10:120"
-                  ];
-                }];
+                static_configs = [
+                  {
+                    targets = [
+                      "192.168.109.10:120"
+                    ];
+                  }
+                ];
               }
             ];
           };
@@ -146,7 +151,7 @@
           networking = {
             firewall = {
               enable = true;
-              allowedTCPPorts = [ 9090 3000 9093 ];
+              allowedTCPPorts = [9090 3000 9093];
             };
             # Use systemd-resolved inside the container
             # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686

@@ -1,7 +1,8 @@
-{ lib
-, config
-, pkgs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  ...
 }: {
   options.teenix.services.element-web = {
     enable = lib.mkEnableOption "setup element-web";
@@ -14,15 +15,13 @@
       description = "matrix url";
     };
   };
-  config =
-    let
-      opts = config.teenix.services.element-web;
-    in
+  config = let
+    opts = config.teenix.services.element-web;
+  in
     lib.mkIf opts.enable {
-
       teenix.services.traefik.services."element-web" = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = [ "http://${config.containers.element-web.config.networking.hostName}:8000" ];
+        servers = ["http://${config.containers.element-web.config.networking.hostName}:8000"];
       };
 
       containers.element-web = {
@@ -32,44 +31,45 @@
         hostAddress = "192.168.107.10";
         localAddress = "192.168.107.11";
 
-        config = { config, lib, ... }:
-          let
-            element =
-              let
-                conf = {
-                  default_server_config = {
-                    "m.homeserver".base_url = "https://${opts.matrix_url}";
-                    "m.identity_server".base_url = "https://vector.im";
-                  };
-                };
-              in
-              pkgs.element-web.override { inherit conf; };
+        config = {
+          config,
+          lib,
+          ...
+        }: let
+          element = let
+            conf = {
+              default_server_config = {
+                "m.homeserver".base_url = "https://${opts.matrix_url}";
+                "m.identity_server".base_url = "https://vector.im";
+              };
+            };
           in
-          {
-            networking.hostName = "element-web";
-            systemd.services.element-serve = {
-              description = "Serve element";
-              after = [ "network.target" ];
-              serviceConfig = {
-                Type = "exec";
-                ExecStart = "${pkgs.caddy}/bin/caddy file-server --root ${element} --listen :8000";
-                Restart = "always";
-                RestartSec = 5;
-              };
-              wantedBy = [ "multi-user.target" ];
+            pkgs.element-web.override {inherit conf;};
+        in {
+          networking.hostName = "element-web";
+          systemd.services.element-serve = {
+            description = "Serve element";
+            after = ["network.target"];
+            serviceConfig = {
+              Type = "exec";
+              ExecStart = "${pkgs.caddy}/bin/caddy file-server --root ${element} --listen :8000";
+              Restart = "always";
+              RestartSec = 5;
             };
-            system.stateVersion = "23.11";
-
-            networking = {
-              firewall = {
-                enable = true;
-                allowedTCPPorts = [ 8000 ];
-              };
-              # Use systemd-resolved inside the container
-              # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
-              useHostResolvConf = lib.mkForce false;
-            };
+            wantedBy = ["multi-user.target"];
           };
+          system.stateVersion = "23.11";
+
+          networking = {
+            firewall = {
+              enable = true;
+              allowedTCPPorts = [8000];
+            };
+            # Use systemd-resolved inside the container
+            # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
+            useHostResolvConf = lib.mkForce false;
+          };
+        };
       };
     };
 }

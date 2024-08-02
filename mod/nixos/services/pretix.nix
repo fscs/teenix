@@ -1,7 +1,8 @@
-{ lib
-, config
-, pkgs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  ...
 }: {
   options.teenix.services.pretix = {
     enable = lib.mkEnableOption "setup pretix";
@@ -14,15 +15,13 @@
       description = "email";
     };
   };
-  config =
-    let
-      opts = config.teenix.services.pretix;
-    in
+  config = let
+    opts = config.teenix.services.pretix;
+  in
     lib.mkIf opts.enable {
-
       teenix.services.traefik.services."pretix" = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = [ "http://${config.containers.pretix.config.networking.hostName}" ];
+        servers = ["http://${config.containers.pretix.config.networking.hostName}"];
       };
 
       nix-tun.storage.persist.subvolumes."pretix".directories = {
@@ -38,14 +37,13 @@
         privateNetwork = true;
         hostAddress = "192.168.108.10";
         localAddress = "192.168.108.11";
-        bindMounts =
-          {
-            "db" = {
-              hostPath = "${config.nix-tun.storage.persist.path}/pretix/postgres";
-              mountPoint = "/var/lib/postgresql";
-              isReadOnly = false;
-            };
+        bindMounts = {
+          "db" = {
+            hostPath = "${config.nix-tun.storage.persist.path}/pretix/postgres";
+            mountPoint = "/var/lib/postgresql";
+            isReadOnly = false;
           };
+        };
         config = {
           networking = {
             hostName = "pretix";
@@ -66,7 +64,7 @@
           networking = {
             firewall = {
               enable = true;
-              allowedTCPPorts = [ 80 ];
+              allowedTCPPorts = [80];
             };
             # Use systemd-resolved inside the container
             # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
@@ -76,4 +74,3 @@
       };
     };
 }
-

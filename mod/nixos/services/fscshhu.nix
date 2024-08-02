@@ -1,8 +1,9 @@
-{ lib
-, config
-, inputs
-, pkgs
-, ...
+{
+  lib,
+  config,
+  inputs,
+  pkgs,
+  ...
 }: {
   options.teenix.services.fscshhude = {
     enable = lib.mkEnableOption "setup fscshhude";
@@ -18,10 +19,9 @@
       type = lib.types.str;
     };
   };
-  config =
-    let
-      opts = config.teenix.services.fscshhude;
-    in
+  config = let
+    opts = config.teenix.services.fscshhude;
+  in
     lib.mkIf opts.enable {
       sops.secrets.fscshhude = {
         sopsFile = opts.secretsFile;
@@ -38,7 +38,7 @@
 
       teenix.services.traefik.services."fscshhude" = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = [ "http://${config.containers.fscshhude.config.networking.hostName}:8080" ];
+        servers = ["http://${config.containers.fscshhude.config.networking.hostName}:8080"];
       };
 
       containers.fscshhude = {
@@ -47,21 +47,19 @@
         privateNetwork = true;
         hostAddress = "192.168.103.10";
         localAddress = "192.168.103.11";
-        bindMounts =
-          {
-            "secret" =
-              {
-                hostPath = config.sops.secrets.fscshhude.path;
-                mountPoint = config.sops.secrets.fscshhude.path;
-              };
-            "db" = {
-              hostPath = "${config.nix-tun.storage.persist.path}/fscshhude/db";
-              mountPoint = "/home/fscs-hhu/db";
-              isReadOnly = false;
-            };
+        bindMounts = {
+          "secret" = {
+            hostPath = config.sops.secrets.fscshhude.path;
+            mountPoint = config.sops.secrets.fscshhude.path;
           };
+          "db" = {
+            hostPath = "${config.nix-tun.storage.persist.path}/fscshhude/db";
+            mountPoint = "/home/fscs-hhu/db";
+            isReadOnly = false;
+          };
+        };
 
-        config = { lib, ... }: {
+        config = {lib, ...}: {
           networking.hostName = "fscshhude";
           users.users.fscs-hhu = {
             uid = 1001;
@@ -76,8 +74,8 @@
           ];
           systemd.services.fscs-website-serve = {
             description = "Serve FSCS website";
-            after = [ "network.target" ];
-            path = [ pkgs.bash ];
+            after = ["network.target"];
+            path = [pkgs.bash];
             serviceConfig = {
               EnvironmentFile = config.sops.secrets.fscshhude.path;
               Type = "exec";
@@ -87,14 +85,14 @@
               Restart = "always";
               RestartSec = 5;
             };
-            wantedBy = [ "multi-user.target" ];
+            wantedBy = ["multi-user.target"];
           };
           system.stateVersion = "23.11";
 
           networking = {
             firewall = {
               enable = true;
-              allowedTCPPorts = [ 8080 ];
+              allowedTCPPorts = [8080];
             };
             # Use systemd-resolved inside the container
             # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686

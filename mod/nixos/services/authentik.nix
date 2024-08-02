@@ -1,7 +1,8 @@
-{ lib
-, config
-, inputs
-, ...
+{
+  lib,
+  config,
+  inputs,
+  ...
 }: {
   options.teenix.services.authentik = {
     enable = lib.mkEnableOption "setup authentik";
@@ -14,10 +15,9 @@
       description = "path to the sops secret file for the fscshhude website Server";
     };
   };
-  config =
-    let
-      opts = config.teenix.services.authentik;
-    in
+  config = let
+    opts = config.teenix.services.authentik;
+  in
     lib.mkIf opts.enable {
       sops.secrets.authentik_env = {
         sopsFile = opts.envFile;
@@ -34,7 +34,7 @@
 
       teenix.services.traefik.services."authentik" = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = [ "http://${config.containers.authentik.config.networking.hostName}" ];
+        servers = ["http://${config.containers.authentik.config.networking.hostName}"];
       };
 
       containers.authentik = {
@@ -44,22 +44,23 @@
         hostAddress = "192.168.111.10";
         localAddress = "192.168.111.11";
 
-        bindMounts =
-          {
-            "secret" =
-              {
-                hostPath = config.sops.secrets.authentik_env.path;
-                mountPoint = config.sops.secrets.authentik_env.path;
-              };
-            "db" = {
-              hostPath = "${config.nix-tun.storage.persist.path}/authentik/postgres";
-              mountPoint = "/var/lib/postgres";
-              isReadOnly = false;
-            };
+        bindMounts = {
+          "secret" = {
+            hostPath = config.sops.secrets.authentik_env.path;
+            mountPoint = config.sops.secrets.authentik_env.path;
           };
+          "db" = {
+            hostPath = "${config.nix-tun.storage.persist.path}/authentik/postgres";
+            mountPoint = "/var/lib/postgres";
+            isReadOnly = false;
+          };
+        };
 
-        config = { pkgs, lib, ... }: {
-
+        config = {
+          pkgs,
+          lib,
+          ...
+        }: {
           imports = [
             inputs.authentik-nix.nixosModules.default
           ];
@@ -87,7 +88,6 @@
               enableACME = false;
               host = "localhost";
             };
-
           };
 
           system.stateVersion = "23.11";
@@ -95,7 +95,7 @@
           networking = {
             firewall = {
               enable = true;
-              allowedTCPPorts = [ 80 9443 ];
+              allowedTCPPorts = [80 9443];
             };
             # Use systemd-resolved inside the container
             # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686

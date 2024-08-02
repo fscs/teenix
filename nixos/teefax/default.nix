@@ -1,8 +1,9 @@
-{ inputs
-, outputs
-, config
-, pkgs
-, ...
+{
+  inputs,
+  outputs,
+  config,
+  pkgs,
+  ...
 }: {
   imports = [
     ./hardware-configuration.nix
@@ -16,7 +17,7 @@
   ];
   networking.nat = {
     enable = true;
-    internalInterfaces = [ "ve-+" ];
+    internalInterfaces = ["ve-+"];
     externalInterface = "enp1s0";
     # Lazy IPv6 connectivity for the container
     enableIPv6 = true;
@@ -35,26 +36,25 @@
 
   teenix.services.traefik.enable = true;
   teenix.services.traefik.letsencryptMail = "fscs@hhu.de";
-  teenix.services.traefik.entrypoints =
-    {
-      web = {
-        port = 80;
-        http = {
-          redirections = {
-            entryPoint = {
-              to = "websecure";
-              scheme = "https";
-            };
+  teenix.services.traefik.entrypoints = {
+    web = {
+      port = 80;
+      http = {
+        redirections = {
+          entryPoint = {
+            to = "websecure";
+            scheme = "https";
           };
         };
       };
-      websecure = {
-        port = 443;
-      };
-      metrics = {
-        port = 120;
-      };
     };
+    websecure = {
+      port = 443;
+    };
+    metrics = {
+      port = 120;
+    };
+  };
 
   # Services
   nix-tun.storage.persist.enable = true;
@@ -68,27 +68,24 @@
     };
   };
 
-  teenix.services.keycloak =
-    {
-      enable = true;
-      hostname = "login.fscs-hhu.de";
-      secretsFile = ../secrets/test_pwd;
-    };
+  teenix.services.keycloak = {
+    enable = true;
+    hostname = "login.fscs-hhu.de";
+    secretsFile = ../secrets/test_pwd;
+  };
 
-  teenix.services.fscshhude =
-    {
-      enable = true;
-      hostname = "fscs-hhu.de";
-      secretsFile = ../secrets/fscshhude;
-      db_hostPath = "/var/lib/db2";
-    };
+  teenix.services.fscshhude = {
+    enable = true;
+    hostname = "fscs-hhu.de";
+    secretsFile = ../secrets/fscshhude;
+    db_hostPath = "/var/lib/db2";
+  };
 
-  teenix.services.matrix =
-    {
-      enable = true;
-      servername = "fscs-hhu.de";
-      secretsFile = ../secrets/test_pwd;
-    };
+  teenix.services.matrix = {
+    enable = true;
+    servername = "fscs-hhu.de";
+    secretsFile = ../secrets/test_pwd;
+  };
 
   teenix.services.element-web = {
     enable = true;
