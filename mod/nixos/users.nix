@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  inputs,
   lib,
   ...
 }: {
@@ -14,7 +13,7 @@
             default = [];
             description = "Public SSH keys for the user";
           };
-          setPassword = lib.mkOption {
+          setSopsPassword = lib.mkOption {
             type = lib.types.bool;
             default = true;
             description = "Whether to set the password via sops.";
@@ -32,9 +31,7 @@
     };
   };
 
-  config = let
-    opts = config.marchcraft.users;
-  in {
+  config = {
     sops.secrets =
       lib.attrsets.mapAttrs'
       (name: value: {
@@ -45,13 +42,13 @@
           neededForUsers = true;
         };
       })
-      (lib.attrsets.filterAttrs (name: value: value.setPassword) config.teenix.users);
+      (lib.attrsets.filterAttrs (name: value: value.setSopsPassword) config.teenix.users);
 
     users.users =
       lib.attrsets.mapAttrs
       (name: value: {
         isNormalUser = true;
-        hashedPasswordFile = lib.mkIf value.setPassword config.sops.secrets."${name}-pass".path;
+        hashedPasswordFile = lib.mkIf value.setSopsPassword config.sops.secrets."${name}-pass".path;
         extraGroups = [
           "wheel"
           (lib.mkIf config.virtualisation.docker.enable "docker")
