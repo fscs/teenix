@@ -19,65 +19,52 @@
     authentik-nix.url = "github:nix-community/authentik-nix";
   };
 
-  outputs =
-    { self
-    , nixpkgs
-    , ...
-    } @ inputs:
-    let
-      inherit (self) outputs;
-      systems = [
-        "x86_64-linux"
-        "x86_64-darwin"
-        "aarch64-linux"
-        "aarch64-darwin"
-      ];
+  outputs = {
+    self,
+    nixpkgs,
+    ...
+  } @ inputs: let
+    inherit (self) outputs;
+    systems = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
 
-      lib = nixpkgs.lib;
+    lib = nixpkgs.lib;
 
-      forAllSystems = lib.genAttrs systems;
+    forAllSystems = lib.genAttrs systems;
+  in {
+    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
 
-      mkSystem = hostname: {
-        "${hostname}" = lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [ ./nixos/${hostname} ];
-        };
-      };
+    packages =
+      forAllSystems
+      (system: import ./pkgs nixpkgs.legacyPackages.${system});
+    overlays = import ./overlays.nix {inherit inputs;};
 
-      devShell =
-        system:
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-        in
-        {
-          default =
-            with pkgs;
-            mkShell {
-              sopsPGPKeyDirs = [
-                "${toString ./.}/nixos/keys/hosts"
-                "${toString ./.}/nixos/keys/users"
-              ];
+    nixosModules.teenix = import ./mod/nixos;
 
-              nativeBuildInputs = [
-                (pkgs.callPackage inputs.sops { }).sops-import-keys-hook
-              ];
-            };
-        };
-
-      genSystems = hostnames:
-        builtins.foldl' lib.trivial.mergeAttrs { } (builtins.map mkSystem hostnames);
-    in
-    {
-      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
-
-      packages = forAllSystems
-        (system: import ./pkgs nixpkgs.legacyPackages.${system});
-      overlays = import ./overlays.nix { inherit inputs; };
-
-      nixosModules.teenix = import ./mod/nixos;
-
-      nixosConfigurations = genSystems [ "teefax" ];
-
-      devShells = forAllSystems devShell;
+    nixosConfigurations.teefax = lib.nixosSystem {
+      specialArgs = {inherit inputs outputs;};
+      modules = [./nixos/teefax];
     };
+
+    devShells = forAllSystems (
+      system: let
+        pkgs = nixpkgs.legacyPackages.${system};
+      in {
+        default = pkgs.mkShell {
+          sopsPGPKeyDirs = [
+            "${toString ./.}/nixos/keys/hosts"
+            "${toString ./.}/nixos/keys/users"
+          ];
+
+          nativeBuildInputs = [
+            (pkgs.callPackage inputs.sops {}).sops-import-keys-hook
+          ];
+        };
+      }
+    );
+  };
 }
