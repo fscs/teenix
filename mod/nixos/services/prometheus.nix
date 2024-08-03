@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
+{ lib
+, config
+, pkgs
+, ...
 }: {
   options.teenix.services.prometheus = {
     enable = lib.mkEnableOption "setup prometheus";
@@ -19,9 +18,10 @@
       description = "hostname";
     };
   };
-  config = let
-    opts = config.teenix.services.prometheus;
-  in
+  config =
+    let
+      opts = config.teenix.services.prometheus;
+    in
     lib.mkIf opts.enable {
       nix-tun.storage.persist.subvolumes."grafana".directories = {
         "/postgres" = {
@@ -32,17 +32,17 @@
 
       teenix.services.traefik.services."prometheus" = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = ["http://${config.containers.prometheus.config.networking.hostName}:9090"];
+        servers = [ "http://${config.containers.prometheus.config.networking.hostName}:9090" ];
       };
 
       teenix.services.traefik.services."grafana" = {
         router.rule = "Host(`${opts.grafanaHostname}`)";
-        servers = ["http://${config.containers.prometheus.config.networking.hostName}:3000"];
+        servers = [ "http://${config.containers.prometheus.config.networking.hostName}:3000" ];
       };
 
       teenix.services.traefik.services."alerts" = {
         router.rule = "Host(`${opts.alertmanagerURL}`)";
-        servers = ["http://${config.containers.prometheus.config.networking.hostName}:9093"];
+        servers = [ "http://${config.containers.prometheus.config.networking.hostName}:9093" ];
       };
 
       containers.prometheus = {
@@ -60,9 +60,9 @@
           };
         };
 
-        config = {lib, ...}: {
+        config = { lib, ... }: {
           networking.hostName = "prometheus";
-          networking.nameservers = ["9.9.9.9"];
+          networking.nameservers = [ "9.9.9.9" ];
 
           services.prometheus = {
             enable = true;
@@ -151,7 +151,7 @@
           networking = {
             firewall = {
               enable = true;
-              allowedTCPPorts = [9090 3000 9093];
+              allowedTCPPorts = [ 9090 3000 9093 ];
             };
             # Use systemd-resolved inside the container
             # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686

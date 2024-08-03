@@ -115,6 +115,28 @@
       enable = true;
       dynamicConfigOptions = {
         http = {
+          middlewares = {
+            test-auth = {
+              forwardAuth = {
+                address = "https://auth.fscs-hhu.de/";
+                trustForwardHeader = true;
+                authResponseHeaders = [
+                  "X-authentik-username"
+                  "X-authentik-groups"
+                  "X-authentik-email"
+                  "X-authentik-name"
+                  "X-authentik-uid"
+                  "X-authentik-jwt"
+                  "X-authentik-meta-jwks"
+                  "X-authentik-meta-outpost"
+                  "X-authentik-meta-provider"
+                  "X-authentik-meta-app"
+                  "X-authentik-meta-version"
+                ];
+
+              };
+            };
+          };
           routers =
             lib.attrsets.mapAttrs
             (

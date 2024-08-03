@@ -60,7 +60,7 @@
   nix-tun.storage.persist.enable = true;
 
   teenix.services.nextcloud = {
-    enable = true;
+    enable = false;
     hostname = "cloud.fscs-hhu.de";
     secretsFile = ../secrets/test_pwd;
     extraApps = {
@@ -97,6 +97,12 @@
     enable = true;
     hostname = "pretix.fscs-hhu.de";
     email = "fscs@hhu.de";
+  };
+
+  teenix.services.authentik = {
+    enable = true;
+    hostname = "auth.fscs-hhu.de";
+    envFile = ../secrets/authentik_env;
   };
 
   teenix.services.prometheus = {

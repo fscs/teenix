@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  inputs,
-  ...
+{ lib
+, config
+, inputs
+, ...
 }: {
   options.teenix.services.authentik = {
     enable = lib.mkEnableOption "setup authentik";
@@ -15,9 +14,10 @@
       description = "path to the sops secret file for the fscshhude website Server";
     };
   };
-  config = let
-    opts = config.teenix.services.authentik;
-  in
+  config =
+    let
+      opts = config.teenix.services.authentik;
+    in
     lib.mkIf opts.enable {
       sops.secrets.authentik_env = {
         sopsFile = opts.envFile;
@@ -34,7 +34,7 @@
 
       teenix.services.traefik.services."authentik" = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = ["http://${config.containers.authentik.config.networking.hostName}"];
+        servers = [ "http://${config.containers.authentik.config.networking.hostName}" ];
       };
 
       containers.authentik = {
@@ -56,54 +56,54 @@
           };
         };
 
-        config = {
-          pkgs,
-          lib,
-          ...
-        }: {
-          imports = [
-            inputs.authentik-nix.nixosModules.default
-          ];
+        config =
+          { pkgs
+          , lib
+          , ...
+          }: {
+            imports = [
+              inputs.authentik-nix.nixosModules.default
+            ];
 
-          networking.hostName = "authentik";
+            networking.hostName = "authentik";
 
-          services.authentik = {
-            enable = true;
-            environmentFile = config.sops.secrets.authentik_env.path;
-            createDatabase = true;
-            settings = {
-              email = {
-                host = "mail.hhu.de";
-                port = 587;
-                username = "fscs";
-                use_tls = true;
-                use_ssl = false;
-                from = "fscs@hhu.de";
+            services.authentik = {
+              enable = true;
+              environmentFile = config.sops.secrets.authentik_env.path;
+              createDatabase = true;
+              settings = {
+                email = {
+                  host = "mail.hhu.de";
+                  port = 587;
+                  username = "fscs";
+                  use_tls = true;
+                  use_ssl = false;
+                  from = "fscs@hhu.de";
+                };
+                disable_startup_analytics = true;
+                avatars = "initials";
               };
-              disable_startup_analytics = true;
-              avatars = "initials";
+              nginx = {
+                enable = true;
+                enableACME = false;
+                host = "localhost";
+              };
             };
-            nginx = {
-              enable = true;
-              enableACME = false;
-              host = "localhost";
+
+            system.stateVersion = "23.11";
+
+            networking = {
+              firewall = {
+                enable = true;
+                allowedTCPPorts = [ 80 9443 ];
+              };
+              # Use systemd-resolved inside the container
+              # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
+              useHostResolvConf = lib.mkForce false;
             };
+
+            services.resolved.enable = true;
           };
-
-          system.stateVersion = "23.11";
-
-          networking = {
-            firewall = {
-              enable = true;
-              allowedTCPPorts = [80 9443];
-            };
-            # Use systemd-resolved inside the container
-            # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
-            useHostResolvConf = lib.mkForce false;
-          };
-
-          services.resolved.enable = true;
-        };
       };
     };
 }
