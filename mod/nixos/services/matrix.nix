@@ -15,6 +15,10 @@
       type = lib.types.path;
       description = "path to the sops secret file for the fscshhude website Server";
     };
+    configFile = lib.mkOption {
+      type = lib.types.path;
+      description = "path to the sops secret file for the fscshhude website Server";
+    };
   };
   config =
     let
@@ -92,6 +96,9 @@
                 turn_uris = [ "turn:${realm}:3478?transport=udp" "turn:${realm}:3478?transport=tcp" ];
                 turn_shared_secret = static-auth-secret-file;
                 turn_user_lifetime = "1h";
+                server_name = "matrix.${opts.servername}";
+                extraConfigFiles = opts.configFile;
+
                 listeners = [
                   {
                     port = 8008;
@@ -151,10 +158,11 @@
             networking.firewall =
               let
                 range = with config.services.coturn;
-                  lib.singleton {
-                    from = min-port;
-                    to = max-port;
-                  };
+                  lib.singleton
+                    {
+                      from = min-port;
+                      to = max-port;
+                    };
               in
               {
                 allowedUDPPortRanges = range;
