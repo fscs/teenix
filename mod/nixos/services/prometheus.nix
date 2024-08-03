@@ -157,6 +157,8 @@
             # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
             useHostResolvConf = lib.mkForce false;
           };
+          
+          system.stateVersion = "23.11";
         };
       };
     };
