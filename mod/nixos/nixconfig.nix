@@ -21,11 +21,8 @@
     in
     {
       nixpkgs = {
-        overlays = [
-          outputs.overlays.additions
-          outputs.overlays.unstable
-        ];
-
+        overlays = builtins.attrValues outputs.overlays;
+        
         config.allowUnfree = opts.allowUnfree;
       };
 
