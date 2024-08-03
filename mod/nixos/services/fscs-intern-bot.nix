@@ -1,9 +1,8 @@
-{
-  lib,
-  config,
-  inputs,
-  pkgs,
-  ...
+{ lib
+, config
+, inputs
+, pkgs
+, ...
 }: {
   options.teenix.services.fscs-intern-bot = {
     enable = lib.mkEnableOption "setup fscs-intern-bot";
@@ -15,9 +14,10 @@
       type = lib.types.str;
     };
   };
-  config = let
-    opts = config.teenix.services.fscs-intern-bot;
-  in
+  config =
+    let
+      opts = config.teenix.services.fscs-intern-bot;
+    in
     lib.mkIf opts.enable {
       sops.secrets.fscs-intern-bot = {
         sopsFile = opts.secretsFile;
@@ -42,7 +42,7 @@
           };
         };
 
-        config = {lib, ...}: {
+        config = { lib, ... }: {
           users.users.fscs-hhu = {
             home = "/home/fscs-hhu";
             group = "users";
@@ -53,7 +53,7 @@
           ];
           systemd.services.fscs-intern-bot = {
             description = "Serve FSCS intern bot";
-            after = ["network.target"];
+            after = [ "network.target" ];
             serviceConfig = {
               EnvironmentFile = config.sops.secrets.fscs-intern-bot.path;
               Type = "exec";
@@ -63,7 +63,7 @@
               Restart = "always";
               RestartSec = 5;
             };
-            wantedBy = ["multi-user.target"];
+            wantedBy = [ "multi-user.target" ];
           };
           system.stateVersion = "23.11";
 

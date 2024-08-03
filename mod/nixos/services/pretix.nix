@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
+{ lib
+, config
+, pkgs
+, ...
 }: {
   options.teenix.services.pretix = {
     enable = lib.mkEnableOption "setup pretix";
@@ -15,13 +14,14 @@
       description = "email";
     };
   };
-  config = let
-    opts = config.teenix.services.pretix;
-  in
+  config =
+    let
+      opts = config.teenix.services.pretix;
+    in
     lib.mkIf opts.enable {
       teenix.services.traefik.services."pretix" = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = ["http://${config.containers.pretix.config.networking.hostName}"];
+        servers = [ "http://${config.containers.pretix.config.networking.hostName}" ];
       };
 
       nix-tun.storage.persist.subvolumes."pretix".directories = {
@@ -64,7 +64,7 @@
           networking = {
             firewall = {
               enable = true;
-              allowedTCPPorts = [80];
+              allowedTCPPorts = [ 80 ];
             };
             # Use systemd-resolved inside the container
             # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686

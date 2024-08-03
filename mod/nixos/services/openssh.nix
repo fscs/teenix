@@ -1,7 +1,6 @@
-{
-  lib,
-  config,
-  ...
+{ lib
+, config
+, ...
 }: {
   options.teenix.services.openssh.enable = lib.mkEnableOption "setup impermanence";
   config = lib.mkIf config.teenix.services.openssh.enable {

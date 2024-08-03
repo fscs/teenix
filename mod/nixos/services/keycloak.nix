@@ -1,7 +1,6 @@
-{
-  lib,
-  config,
-  ...
+{ lib
+, config
+, ...
 }: {
   options.teenix.services.keycloak = {
     enable = lib.mkEnableOption "setup nextcloud";
@@ -14,9 +13,10 @@
       description = "path to the sops secret file for the adminPass";
     };
   };
-  config = let
-    opts = config.teenix.services.keycloak;
-  in
+  config =
+    let
+      opts = config.teenix.services.keycloak;
+    in
     lib.mkIf opts.enable {
       sops.secrets.keycloak_pass = {
         sopsFile = opts.secretsFile;
@@ -33,7 +33,7 @@
 
       teenix.services.traefik.services."keycloak" = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = ["http://${config.containers.keycloak.config.networking.hostName}"];
+        servers = [ "http://${config.containers.keycloak.config.networking.hostName}" ];
       };
 
       containers.keycloak = {
@@ -55,42 +55,42 @@
           };
         };
 
-        config = {
-          pkgs,
-          lib,
-          ...
-        }: {
-          services.keycloak = {
-            enable = true;
-            settings = {
-              hostname = opts.hostname;
-              proxy = "edge";
-              http-enabled = true;
-            };
-            database = {
-              passwordFile = config.sops.secrets.keycloak_pass.path;
-
-              type = "postgresql";
-              createLocally = true;
-
-              username = "keycloak";
-            };
-          };
-
-          system.stateVersion = "23.11";
-
-          networking = {
-            firewall = {
+        config =
+          { pkgs
+          , lib
+          , ...
+          }: {
+            services.keycloak = {
               enable = true;
-              allowedTCPPorts = [80];
-            };
-            # Use systemd-resolved inside the container
-            # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
-            useHostResolvConf = lib.mkForce false;
-          };
+              settings = {
+                hostname = opts.hostname;
+                proxy = "edge";
+                http-enabled = true;
+              };
+              database = {
+                passwordFile = config.sops.secrets.keycloak_pass.path;
 
-          services.resolved.enable = true;
-        };
+                type = "postgresql";
+                createLocally = true;
+
+                username = "keycloak";
+              };
+            };
+
+            system.stateVersion = "23.11";
+
+            networking = {
+              firewall = {
+                enable = true;
+                allowedTCPPorts = [ 80 ];
+              };
+              # Use systemd-resolved inside the container
+              # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
+              useHostResolvConf = lib.mkForce false;
+            };
+
+            services.resolved.enable = true;
+          };
       };
     };
 }
