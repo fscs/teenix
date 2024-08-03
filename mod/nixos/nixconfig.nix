@@ -54,10 +54,7 @@
       };
 
       environment.systemPackages = with pkgs; [
-        comma
-        hydra-check
         nix-output-monitor
-        nixpkgs-review
       ];
     };
 }
