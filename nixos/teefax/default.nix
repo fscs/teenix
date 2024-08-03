@@ -59,12 +59,17 @@
   nix-tun.storage.persist.enable = true;
 
   teenix.services.nextcloud = {
-    enable = false;
+    enable = true;
     hostname = "cloud.fscs-hhu.de";
     secretsFile = ../secrets/test_pwd;
-    extraApps = {
-      inherit (config.teenix.services.nextcloud.appPackages) calendar deck polls forms tasks spreed;
-    };
+    extraApps = [
+      "calendar"
+      "deck"
+      "polls"
+      "forms"
+      "tasks"
+      "spreed"
+    ];
   };
 
   teenix.services.keycloak = {

@@ -1,25 +1,29 @@
 { lib
 , config
+, pkgs
 , ...
 }: {
-  options.teenix.services.nextcloud = {
-    enable = lib.mkEnableOption "setup nextcloud";
-    hostname = lib.mkOption {
-      type = lib.types.str;
-      description = "hostname";
+  options.teenix.services.nextcloud =
+    let
+      t = lib.types;
+    in
+    {
+      enable = lib.mkEnableOption "setup nextcloud";
+      hostname = lib.mkOption {
+        type = t.str;
+        description = "hostname";
+      };
+      secretsFile = lib.mkOption {
+        type = t.path;
+        description = "path to the sops secret file for the adminPass";
+      };
+      extraApps = lib.mkOption {
+        description = "nextcloud apps to install";
+        type = t.listOf t.str;
+        default = [ ];
+      };
     };
-    secretsFile = lib.mkOption {
-      type = lib.types.path;
-      description = "path to the sops secret file for the adminPass";
-    };
-    appPackages = lib.mkOption {
-      type = lib.types.attrs;
-      default = config.containers.nextcloud.config.services.nextcloud.package.packages.apps;
-    };
-    extraApps = lib.mkOption {
-      type = lib.types.attrs;
-    };
-  };
+
   config =
     let
       opts = config.teenix.services.nextcloud;
@@ -37,10 +41,12 @@
           mode = "0700";
         };
       };
+
       teenix.services.traefik.services."nextcloud" = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.nextcloud.config.networking.hostName}" ];
       };
+
       containers.nextcloud = {
         autoStart = true;
         privateNetwork = true;
@@ -63,42 +69,46 @@
           , lib
           , ...
           }: {
-            services.nextcloud = {
-              enable = true;
-              package = pkgs.nextcloud29;
-              hostName = opts.hostname;
-              phpExtraExtensions = all: [ all.pdlib all.bz2 all.smbclient ];
+            services.nextcloud =
+              let
+                package = pkgs.nextcloud29;
+              in
+              {
+                inherit package;
 
-              database.createLocally = true;
+                enable = true;
+                hostName = opts.hostname;
+                phpExtraExtensions = all: [ all.pdlib all.bz2 all.smbclient ];
 
-              settings.trusted_domains = [ "192.168.100.11" opts.hostname ];
-              config = {
-                adminpassFile = config.sops.secrets.nextcloud_pass.path;
-                dbtype = "pgsql";
+                database.createLocally = true;
+
+                settings.trusted_domains = [ "192.168.100.11" opts.hostname ];
+                config = {
+                  adminpassFile = config.sops.secrets.nextcloud_pass.path;
+                  dbtype = "pgsql";
+                };
+
+                phpOptions = {
+                  "opcache.jit" = "1255";
+                  "opcache.revalidate_freq" = "60";
+                  "opcache.interned_strings_buffer" = "16";
+                  "opcache.jit_buffer_size" = "128M";
+                };
+
+                extraApps = lib.attrsets.getAttrs opts.extraApps package.packages.apps;
+                extraAppsEnable = true;
+
+                configureRedis = true;
+                caching.apcu = true;
+                poolSettings = {
+                  pm = "dynamic";
+                  "pm.max_children" = "201";
+                  "pm.max_requests" = "500";
+                  "pm.max_spare_servers" = "150";
+                  "pm.min_spare_servers" = "50";
+                  "pm.start_servers" = "50";
+                };
               };
-
-              phpOptions = {
-                "opcache.jit" = "1255";
-                "opcache.revalidate_freq" = "60";
-                "opcache.interned_strings_buffer" = "16";
-                "opcache.jit_buffer_size" = "128M";
-              };
-
-              extraApps = opts.extraApps;
-
-              extraAppsEnable = true;
-
-              configureRedis = true;
-              caching.apcu = true;
-              poolSettings = {
-                pm = "dynamic";
-                "pm.max_children" = "201";
-                "pm.max_requests" = "500";
-                "pm.max_spare_servers" = "150";
-                "pm.min_spare_servers" = "50";
-                "pm.start_servers" = "50";
-              };
-            };
 
             system.stateVersion = "23.11";
 
