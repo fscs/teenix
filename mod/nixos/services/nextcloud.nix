@@ -11,7 +11,6 @@
       enable = lib.mkEnableOption "setup nextcloud";
       hostname = lib.mkOption {
         type = t.str;
-        description = "hostname";
       };
       secretsFile = lib.mkOption {
         type = t.path;

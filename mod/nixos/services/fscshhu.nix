@@ -12,12 +12,9 @@
     };
     hostname = lib.mkOption {
       type = lib.types.str;
-      description = "hostname";
-    };
-    db_hostPath = lib.mkOption {
-      type = lib.types.str;
     };
   };
+
   config =
     let
       opts = config.teenix.services.fscshhude;
@@ -68,10 +65,12 @@
             shell = pkgs.bash;
             isNormalUser = true;
           };
+
           environment.systemPackages = [
             inputs.fscshhude.packages."${pkgs.stdenv.hostPlatform.system}".serve
             pkgs.bash
           ];
+
           systemd.services.fscs-website-serve = {
             description = "Serve FSCS website";
             after = [ "network.target" ];
@@ -87,6 +86,7 @@
             };
             wantedBy = [ "multi-user.target" ];
           };
+
           system.stateVersion = "23.11";
 
           networking = {

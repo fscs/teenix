@@ -10,10 +10,11 @@
       type = lib.types.path;
       description = "path to the sops secret file for the fscs-intern-bot";
     };
-    db_hostPath = lib.mkOption {
+    dbHostPath = lib.mkOption {
       type = lib.types.str;
     };
   };
+
   config =
     let
       opts = config.teenix.services.fscs-intern-bot;
@@ -36,7 +37,7 @@
             mountPoint = config.sops.secrets.fscs-intern-bot.path;
           };
           "db" = {
-            hostPath = opts.db_hostPath;
+            hostPath = opts.dbHostPath;
             mountPoint = "/home/fscs-hhu/db";
             isReadOnly = false;
           };
@@ -48,9 +49,11 @@
             group = "users";
             isNormalUser = true;
           };
+
           environment.systemPackages = [
             inputs.fscs-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".serve
           ];
+
           systemd.services.fscs-intern-bot = {
             description = "Serve FSCS intern bot";
             after = [ "network.target" ];
@@ -65,6 +68,7 @@
             };
             wantedBy = [ "multi-user.target" ];
           };
+
           system.stateVersion = "23.11";
 
           services.resolved.enable = true;

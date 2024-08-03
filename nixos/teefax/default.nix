@@ -14,6 +14,7 @@
 
     outputs.nixosModules.teenix
   ];
+
   networking.nat = {
     enable = true;
     internalInterfaces = [ "ve-+" ];
@@ -82,7 +83,6 @@
     enable = true;
     hostname = "fscs-hhu.de";
     secretsFile = ../secrets/fscshhude;
-    db_hostPath = "/var/lib/db2";
   };
 
   teenix.services.matrix = {
@@ -95,7 +95,7 @@
   teenix.services.element-web = {
     enable = true;
     hostname = "element.fscs-hhu.de";
-    matrix_url = "matrix.fscs-hhu.de";
+    matrixUrl = "matrix.fscs-hhu.de";
   };
 
   teenix.services.pretix = {

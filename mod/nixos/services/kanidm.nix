@@ -7,17 +7,15 @@
     enable = lib.mkEnableOption "setup kanidm";
     hostname = lib.mkOption {
       type = lib.types.str;
-      description = "hostname";
     };
     chainFile = lib.mkOption {
       type = lib.types.path;
-      description = "path to the sops secret file for the fscshhude website Server";
     };
     keyFile = lib.mkOption {
       type = lib.types.path;
-      description = "path to the sops secret file for the fscshhude website Server";
     };
   };
+
   config =
     let
       opts = config.teenix.services.kanidm;
@@ -62,7 +60,6 @@
           };
 
         config = { pkgs, lib, ... }: {
-
           networking.hostName = "kanidm";
 
           services.kanidm = {

@@ -7,13 +7,12 @@
     enable = lib.mkEnableOption "setup element-web";
     hostname = lib.mkOption {
       type = lib.types.str;
-      description = "hostname";
     };
-    matrix_url = lib.mkOption {
+    matrixUrl = lib.mkOption {
       type = lib.types.str;
-      description = "matrix url";
     };
   };
+
   config =
     let
       opts = config.teenix.services.element-web;
@@ -41,7 +40,7 @@
               let
                 conf = {
                   default_server_config = {
-                    "m.homeserver".base_url = "https://${opts.matrix_url}";
+                    "m.homeserver".base_url = "https://${opts.matrixUrl}";
                     "m.identity_server".base_url = "https://vector.im";
                   };
                 };

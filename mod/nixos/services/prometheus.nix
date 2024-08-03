@@ -7,17 +7,15 @@
     enable = lib.mkEnableOption "setup prometheus";
     hostname = lib.mkOption {
       type = lib.types.str;
-      description = "hostname";
     };
     grafanaHostname = lib.mkOption {
       type = lib.types.str;
-      description = "hostname";
     };
     alertmanagerURL = lib.mkOption {
       type = lib.types.str;
-      description = "hostname";
     };
   };
+
   config =
     let
       opts = config.teenix.services.prometheus;
@@ -148,6 +146,7 @@
               host  all       all     all trust
             '';
           };
+
           networking = {
             firewall = {
               enable = true;
@@ -157,7 +156,7 @@
             # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
             useHostResolvConf = lib.mkForce false;
           };
-          
+
           system.stateVersion = "23.11";
         };
       };

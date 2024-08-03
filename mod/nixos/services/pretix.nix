@@ -7,13 +7,12 @@
     enable = lib.mkEnableOption "setup pretix";
     hostname = lib.mkOption {
       type = lib.types.str;
-      description = "hostname";
     };
     email = lib.mkOption {
       type = lib.types.str;
-      description = "email";
     };
   };
+
   config =
     let
       opts = config.teenix.services.pretix;
@@ -70,7 +69,7 @@
             # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
             useHostResolvConf = lib.mkForce false;
           };
-          
+
           system.stateVersion = "23.11";
         };
       };

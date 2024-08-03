@@ -41,70 +41,72 @@
         The entrypoints of the traefik reverse proxy default are 80 (web) and 443 (websecure)
       '';
     };
-    redirects =
-      lib.mkOption { };
-    services = lib.mkOption {
-      type = lib.types.attrsOf (lib.types.submodule ({ ... }: {
-        options = {
-          router = {
-            rule = lib.mkOption {
-              type = lib.types.str;
-              default = "";
-              description = ''
-                The routing rule for this service. The rules are defined here: https://doc.traefik.io/traefik/routing/routers/
-              '';
-            };
-            priority = lib.mkOption {
-              type = lib.types.int;
-              default = 0;
-            };
-            tls = {
-              enable = lib.mkOption {
-                type = lib.types.bool;
-                default = true;
+    services =
+      let
+        serviceOpts = lib.types.submodule {
+          options = {
+            router = {
+              rule = lib.mkOption {
+                type = lib.types.str;
+                default = "";
                 description = ''
-                  Enable tls for router, default = true;
+                  The routing rule for this service. The rules are defined here: https://doc.traefik.io/traefik/routing/routers/
                 '';
               };
-              options = lib.mkOption {
-                type = lib.types.attrs;
-                default = {
-                  certResolver = "letsencrypt";
+              priority = lib.mkOption {
+                type = lib.types.int;
+                default = 0;
+              };
+              tls = {
+                enable = lib.mkOption {
+                  type = lib.types.bool;
+                  default = true;
+                  description = ''
+                    Enable tls for router, default = true;
+                  '';
                 };
+                options = lib.mkOption {
+                  type = lib.types.attrs;
+                  default = {
+                    certResolver = "letsencrypt";
+                  };
+                  description = ''
+                    Options for tls, default is to use the letsencrypt certResolver
+                  '';
+                };
+              };
+              middlewares = lib.mkOption {
+                type = lib.types.listOf (lib.types.str);
+                default = [ ];
                 description = ''
-                  Options for tls, default is to use the letsencrypt certResolver
+                  The middlewares applied to the router, the middlewares are applied in order.
+                '';
+              };
+              entryPoints = lib.mkOption {
+                type = lib.types.listOf (lib.types.str);
+                default = [ "websecure" ];
+                description = ''
+                  The Entrypoint of the service, default is 443 (websecure)
                 '';
               };
             };
-            middlewares = lib.mkOption {
+            servers = lib.mkOption {
               type = lib.types.listOf (lib.types.str);
               default = [ ];
               description = ''
-                The middlewares applied to the router, the middlewares are applied in order.
+                The hosts of the service
               '';
             };
-            entryPoints = lib.mkOption {
-              type = lib.types.listOf (lib.types.str);
-              default = [ "websecure" ];
-              description = ''
-                The Entrypoint of the service, default is 443 (websecure)
-              '';
-            };
-          };
-          servers = lib.mkOption {
-            type = lib.types.listOf (lib.types.str);
-            default = [ ];
-            description = ''
-              The hosts of the service
-            '';
           };
         };
-      }));
-      default = { };
-      description = ''
-        A simple setup to configure http loadBalancer services and routers.
-      '';
-    };
+      in
+      lib.mkOption {
+        type = lib.types.attrsOf serviceOpts;
+        default = { };
+        description = ''
+          A simple setup to configure http loadBalancer services and routers.
+        '';
+      };
   };
 
   config = lib.mkIf config.teenix.services.traefik.enable {
@@ -117,7 +119,7 @@
           middlewares = {
             test-auth = {
               forwardAuth = {
-                address = "https://auth.fscs-hhu.de/";
+                address = "https://auth.fscs-hhu.de/"; # FIXME: das ist hardcoded not good
                 trustForwardHeader = true;
                 authResponseHeaders = [
                   "X-authentik-username"
@@ -132,10 +134,10 @@
                   "X-authentik-meta-app"
                   "X-authentik-meta-version"
                 ];
-
               };
             };
           };
+
           routers =
             lib.attrsets.mapAttrs
               (
@@ -154,6 +156,7 @@
                   ]
               )
               config.teenix.services.traefik.services;
+
           services =
             lib.attrsets.mapAttrs
               (name: value: {
@@ -169,6 +172,7 @@
         metrics.prometheus = {
           entryPoint = "metrics";
         };
+
         certificatesResolvers = {
           letsencrypt = {
             acme = {
@@ -199,7 +203,7 @@
         };
       };
     };
-    
+
     system.stateVersion = "23.11";
   };
 }

@@ -13,13 +13,12 @@
     };
     secretsFile = lib.mkOption {
       type = lib.types.path;
-      description = "path to the sops secret file for the fscshhude website Server";
     };
     configFile = lib.mkOption {
       type = lib.types.path;
-      description = "path to the sops secret file for the fscshhude website Server";
     };
   };
+
   config =
     let
       opts = config.teenix.services.matrix;
@@ -126,8 +125,9 @@
                 ];
               };
             };
+
             # enable coturn
-            services.coturn = rec {
+            services.coturn = {
               enable = true;
               no-cli = true;
               no-tcp-relay = true;
@@ -164,6 +164,7 @@
                 denied-peer-ip=fe80::-febf:ffff:ffff:ffff:ffff:ffff:ffff:ffff
               '';
             };
+
             # open the firewall
             networking.firewall =
               let
@@ -180,6 +181,7 @@
                 allowedTCPPortRanges = [ ];
                 allowedTCPPorts = [ 80 443 8008 3478 5349 ];
               };
+
             system.stateVersion = "23.11";
           };
       };

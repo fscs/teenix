@@ -7,13 +7,13 @@
     enable = lib.mkEnableOption "setup authentik";
     hostname = lib.mkOption {
       type = lib.types.str;
-      description = "hostname";
     };
     envFile = lib.mkOption {
       type = lib.types.path;
       description = "path to the sops secret file for the fscshhude website Server";
     };
   };
+
   config =
     let
       opts = config.teenix.services.authentik;

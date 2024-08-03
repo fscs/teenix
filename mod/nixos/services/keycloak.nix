@@ -6,13 +6,13 @@
     enable = lib.mkEnableOption "setup nextcloud";
     hostname = lib.mkOption {
       type = lib.types.str;
-      description = "hostname";
     };
     secretsFile = lib.mkOption {
       type = lib.types.path;
       description = "path to the sops secret file for the adminPass";
     };
   };
+
   config =
     let
       opts = config.teenix.services.keycloak;
