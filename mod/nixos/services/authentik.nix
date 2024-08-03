@@ -51,7 +51,7 @@
           };
           "db" = {
             hostPath = "${config.nix-tun.storage.persist.path}/authentik/postgres";
-            mountPoint = "/var/lib/postgres";
+            mountPoint = "/var/lib/postgresql";
             isReadOnly = false;
           };
         };
