@@ -31,6 +31,12 @@
         mode = "444";
       };
 
+      sops.secrets.matrix_env = {
+        sopsFile = opts.configFile;
+        format = "binary";
+        mode = "444";
+      };
+
       nix-tun.storage.persist.subvolumes."inphimatrix".directories = {
         "/postgres" = {
           owner = "${builtins.toString config.containers.inphimatrix.config.users.users.postgres.uid}";
@@ -54,6 +60,10 @@
             hostPath = config.sops.secrets.matrix_pass.path;
             mountPoint = config.sops.secrets.matrix_pass.path;
           };
+          "env" = {
+            hostPath = config.sops.secrets.matrix_env.path;
+            mountPoint = config.sops.secrets.matrix_env.path;
+          };
           "db" = {
             hostPath = "${config.nix-tun.storage.persist.path}/inphimatrix/postgres";
             mountPoint = "/var/lib/postgres";
@@ -62,8 +72,7 @@
         };
 
         config =
-          { config
-          , lib
+          { lib
           , ...
           }: {
             # enable postgres
@@ -90,14 +99,15 @@
             # enable synapse
             services.matrix-synapse = {
               enable = true;
-              settings = with config.services.coturn; {
+              extraConfigFiles = [ config.sops.secrets.matrix_env.path ];
+              settings = with config.containers.inphimatrix.config.services.coturn; {
                 enable_registration = true;
                 enable_registration_without_verification = true;
                 turn_uris = [ "turn:${realm}:3478?transport=udp" "turn:${realm}:3478?transport=tcp" ];
                 turn_shared_secret = static-auth-secret-file;
                 turn_user_lifetime = "1h";
                 server_name = "matrix.${opts.servername}";
-                extraConfigFiles = opts.configFile;
+                oidc_providers = "";
 
                 listeners = [
                   {

@@ -84,7 +84,7 @@
     enable = true;
     servername = "fscs-hhu.de";
     secretsFile = ../secrets/test_pwd;
-    configFile = ../secrets/matrix_comfig;
+    configFile = ../secrets/matrix_config;
   };
 
   teenix.services.element-web = {
