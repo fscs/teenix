@@ -116,28 +116,6 @@
       enable = true;
       dynamicConfigOptions = {
         http = {
-          middlewares = {
-            test-auth = {
-              forwardAuth = {
-                address = "https://auth.fscs-hhu.de/"; # FIXME: das ist hardcoded not good
-                trustForwardHeader = true;
-                authResponseHeaders = [
-                  "X-authentik-username"
-                  "X-authentik-groups"
-                  "X-authentik-email"
-                  "X-authentik-name"
-                  "X-authentik-uid"
-                  "X-authentik-jwt"
-                  "X-authentik-meta-jwks"
-                  "X-authentik-meta-outpost"
-                  "X-authentik-meta-provider"
-                  "X-authentik-meta-app"
-                  "X-authentik-meta-version"
-                ];
-              };
-            };
-          };
-
           routers =
             lib.attrsets.mapAttrs
               (
@@ -162,6 +140,11 @@
               (name: value: {
                 loadBalancer = {
                   servers = builtins.map (value: { url = value; }) value.servers;
+                  healthcheck = {
+                    path = "/";
+                    interval = "10s";
+                    timeout = "3s";
+                  };
                 };
               })
               config.teenix.services.traefik.services;
@@ -172,38 +155,44 @@
         metrics.prometheus = {
           entryPoint = "metrics";
         };
+        <<<<<<< HEAD
 
-        certificatesResolvers = {
-          letsencrypt = {
-            acme = {
-              email = config.teenix.services.traefik.letsencryptMail;
-              storage = "/var/lib/traefik/acme.json";
-              tlsChallenge = { };
-            };
+          ====== =
+          ping = {
+        entryPoint = "ping";
+      };
+      >>>>>>> 0f5a263 (feat: healthcheck)
+      certificatesResolvers = {
+        letsencrypt = {
+          acme = {
+            email = config.teenix.services.traefik.letsencryptMail;
+            storage = "/var/lib/traefik/acme.json";
+            tlsChallenge = { };
           };
         };
+      };
 
-        entryPoints =
-          lib.attrsets.filterAttrs (n: v: n != "port")
-            (lib.attrsets.mapAttrs
-              (name: value:
-                lib.attrsets.mergeAttrsList [
-                  {
-                    address = ":${toString value.port}";
-                  }
-                  value
-                  {
-                    port = null;
-                  }
-                ])
-              config.teenix.services.traefik.entrypoints);
+      entryPoints =
+        lib.attrsets.filterAttrs (n: v: n != "port")
+          (lib.attrsets.mapAttrs
+            (name: value:
+              lib.attrsets.mergeAttrsList [
+                {
+                  address = ":${toString value.port}";
+                }
+                value
+                {
+                  port = null;
+                }
+              ])
+            config.teenix.services.traefik.entrypoints);
 
-        api = {
-          dashboard = true;
-        };
+      api = {
+        dashboard = true;
       };
     };
-
-    system.stateVersion = "23.11";
   };
+
+  system.stateVersion = "23.11";
+};
 }

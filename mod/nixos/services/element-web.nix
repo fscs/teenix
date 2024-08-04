@@ -40,12 +40,15 @@
               let
                 conf = {
                   default_server_config = {
-                    "m.homeserver".base_url = "https://${opts.matrixUrl}";
+                    "m.homeserver" = {
+                      base_url = "https://${opts.matrix_url}";
+                      server_name = "${opts.matrix_url}";
+                    };
                     "m.identity_server".base_url = "https://vector.im";
                   };
                 };
               in
-              pkgs.element-web.override { inherit conf; };
+              pkgs.unstable.element-web.override { inherit conf; };
           in
           {
             networking.hostName = "element-web";
@@ -54,7 +57,7 @@
               after = [ "network.target" ];
               serviceConfig = {
                 Type = "exec";
-                ExecStart = "${pkgs.caddy}/bin/caddy file-server --root ${element} --listen :8000";
+                ExecStart = "${pkgs.simple-http-server}/bin/simple-http-server --index ${element}";
                 Restart = "always";
                 RestartSec = 5;
               };

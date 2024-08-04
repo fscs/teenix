@@ -51,6 +51,9 @@
     websecure = {
       port = 443;
     };
+    ping = {
+      port = 8082;
+    };
     metrics = {
       port = 120;
     };

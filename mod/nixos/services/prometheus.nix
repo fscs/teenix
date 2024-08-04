@@ -56,6 +56,16 @@
             mountPoint = "/var/lib/postgres";
             isReadOnly = false;
           };
+          "grafana" = {
+            hostPath = "${config.nix-tun.storage.persist.path}/grafana/grafana";
+            mountPoint = "/var/lib/grafana";
+            isReadOnly = false;
+          };
+          "prometheus" = {
+            hostPath = "${config.nix-tun.storage.persist.path}/grafana/prometheus";
+            mountPoint = "/var/lib/prometheus2";
+            isReadOnly = false;
+          };
         };
 
         config = { lib, ... }: {
