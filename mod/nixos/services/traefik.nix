@@ -155,44 +155,40 @@
         metrics.prometheus = {
           entryPoint = "metrics";
         };
-        <<<<<<< HEAD
-
-          ====== =
-          ping = {
-        entryPoint = "ping";
-      };
-      >>>>>>> 0f5a263 (feat: healthcheck)
-      certificatesResolvers = {
-        letsencrypt = {
-          acme = {
-            email = config.teenix.services.traefik.letsencryptMail;
-            storage = "/var/lib/traefik/acme.json";
-            tlsChallenge = { };
+        ping = {
+          entryPoint = "ping";
+        };
+        certificatesResolvers = {
+          letsencrypt = {
+            acme = {
+              email = config.teenix.services.traefik.letsencryptMail;
+              storage = "/var/lib/traefik/acme.json";
+              tlsChallenge = { };
+            };
           };
         };
-      };
 
-      entryPoints =
-        lib.attrsets.filterAttrs (n: v: n != "port")
-          (lib.attrsets.mapAttrs
-            (name: value:
-              lib.attrsets.mergeAttrsList [
-                {
-                  address = ":${toString value.port}";
-                }
-                value
-                {
-                  port = null;
-                }
-              ])
-            config.teenix.services.traefik.entrypoints);
+        entryPoints =
+          lib.attrsets.filterAttrs (n: v: n != "port")
+            (lib.attrsets.mapAttrs
+              (name: value:
+                lib.attrsets.mergeAttrsList [
+                  {
+                    address = ":${toString value.port}";
+                  }
+                  value
+                  {
+                    port = null;
+                  }
+                ])
+              config.teenix.services.traefik.entrypoints);
 
-      api = {
-        dashboard = true;
+        api = {
+          dashboard = true;
+        };
       };
     };
-  };
 
-  system.stateVersion = "23.11";
-};
+    system.stateVersion = "23.11";
+  };
 }
