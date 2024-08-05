@@ -97,6 +97,12 @@
                 The hosts of the service
               '';
             };
+            healthCheck = lib.mkEnableOption {
+              default = false;
+              description = ''
+                Enable the HealthCheck for this serviceOpts
+              '';
+            };
           };
         };
       in
@@ -137,16 +143,23 @@
 
           services =
             lib.attrsets.mapAttrs
-              (name: value: {
-                loadBalancer = {
-                  servers = builtins.map (value: { url = value; }) value.servers;
-                  healthcheck = {
-                    path = "/";
-                    interval = "10s";
-                    timeout = "3s";
-                  };
-                };
-              })
+              (name: value:
+                {
+                  loadBalancer =
+                    lib.mkMerge [
+                      {
+                        servers = builtins.map (value: { url = value; }) value.servers;
+                      }
+                      (lib.mkIf value.healthCheck {
+                        healthCheck = {
+                          path = "/";
+                          interval = "10s";
+                          timeout = "5s";
+                        };
+                      })
+                    ];
+                }
+              )
               config.teenix.services.traefik.services;
         };
       };
@@ -154,6 +167,9 @@
       staticConfigOptions = {
         metrics.prometheus = {
           entryPoint = "metrics";
+          buckets = [ 0.1 0.3 1.2 5.0 ];
+          addEntryPointsLabels = true;
+          addServicesLabels = true;
         };
         ping = {
           entryPoint = "ping";
