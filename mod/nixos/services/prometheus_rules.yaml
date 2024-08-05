@@ -1,0 +1,11 @@
+  groups:
+    - name: TraefikMonitoring
+      rules:
+      - alert: TraefikServiceDown
+        expr: traefik_service_server_up == 0
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: Traefik service down (instance {{ $labels.instance }})
+          description: "All Traefik services are down\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"

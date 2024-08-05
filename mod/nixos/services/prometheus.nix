@@ -14,6 +14,9 @@
     alertmanagerURL = lib.mkOption {
       type = lib.types.str;
     };
+    envFile = lib.mkOption {
+      type = lib.types.path;
+    };
   };
 
   config =
@@ -21,9 +24,23 @@
       opts = config.teenix.services.prometheus;
     in
     lib.mkIf opts.enable {
+      sops.secrets.prometheus_env = {
+        sopsFile = opts.envFile;
+        format = "binary";
+        mode = "444";
+      };
+
       nix-tun.storage.persist.subvolumes."grafana".directories = {
         "/postgres" = {
           owner = "${builtins.toString config.containers.prometheus.config.users.users.postgres.uid}";
+          mode = "0700";
+        };
+        "/prometheus" = {
+          owner = "${builtins.toString config.containers.prometheus.config.users.users.prometheus.uid}";
+          mode = "0700";
+        };
+        "/grafana" = {
+          owner = "${builtins.toString config.containers.prometheus.config.users.users.grafana.uid}";
           mode = "0700";
         };
       };
@@ -66,6 +83,10 @@
             mountPoint = "/var/lib/prometheus2";
             isReadOnly = false;
           };
+          "env" = {
+            hostPath = config.sops.secrets.prometheus_env.path;
+            mountPoint = config.sops.secrets.prometheus_env.path;
+          };
         };
 
         config = { lib, ... }: {
@@ -75,9 +96,12 @@
           services.prometheus = {
             enable = true;
             globalConfig.scrape_interval = "10s";
+            ruleFiles = [ ./prometheus_rules.yaml ];
             alertmanager = {
               enable = true;
               webExternalUrl = "https://${opts.alertmanagerURL}";
+              environmentFile = config.sops.secrets.prometheus_env.path;
+              checkConfig = false;
               configText = ''
                 route:
                   group_by: ['alertname', 'job']
@@ -91,13 +115,13 @@
                 receivers:
                 - name: discord
                   discord_configs:
-                  - webhook_url: "https://discord.com/api/webhooks/1268160361295511726/KOsvdpA4BzSYVNL2OQFQtfntBDloK0VAsSe4jzp9LHcuxuIXt7Osk3699MKDLyBeH3d4"
+                  - webhook_url: $ENVIRONMENT ''${discord_url}
               '';
             };
             alertmanagers = [
               {
-                scheme = "https";
-                path_prefix = "/alertmanager";
+                scheme = "http";
+                path_prefix = "/";
                 static_configs = [
                   {
                     targets = [
