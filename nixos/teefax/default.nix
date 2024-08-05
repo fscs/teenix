@@ -118,6 +118,7 @@
     hostname = "prometheus.fscs-hhu.de";
     grafanaHostname = "grafana.fscs-hhu.de";
     alertmanagerURL = "alerts.fscs-hhu.de";
+    envFile = ../secrets/prometheus_env;
   };
 
   # Users
