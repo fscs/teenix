@@ -21,6 +21,7 @@
       teenix.services.traefik.services."element-web" = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.element-web.config.networking.hostName}:8000" ];
+        healthCheck = true;
       };
 
       containers.element-web = {
@@ -41,8 +42,8 @@
                 conf = {
                   default_server_config = {
                     "m.homeserver" = {
-                      base_url = "https://${opts.matrix_url}";
-                      server_name = "${opts.matrix_url}";
+                      base_url = "https://${opts.matrixUrl}";
+                      server_name = "${opts.matrixUrl}";
                     };
                     "m.identity_server".base_url = "https://vector.im";
                   };
