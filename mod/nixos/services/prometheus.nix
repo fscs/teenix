@@ -106,8 +106,8 @@
                 route:
                   group_by: ['alertname', 'job']
 
-                  group_wait: 30s
-                  group_interval: 5m
+                  group_wait: 10s
+                  group_interval: 10s
                   repeat_interval: 3h
 
                   receiver: discord

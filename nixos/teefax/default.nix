@@ -35,6 +35,7 @@
   programs.fish.enable = true;
 
   teenix.services.traefik.enable = true;
+  teenix.services.traefik.dashboardUrl = "traefik.fscs-hhu.de";
   teenix.services.traefik.letsencryptMail = "fscs@hhu.de";
   teenix.services.traefik.entrypoints = {
     web = {
