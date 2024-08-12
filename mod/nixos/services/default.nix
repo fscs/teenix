@@ -1,14 +1,14 @@
 { ... }: {
   imports = [
+    ./authentik
+    ./element-web
+    ./fscshhude
+    ./keycloak
+    ./matrix
+    ./nextcloud
     ./openssh.nix
-    ./nextcloud.nix
-    ./fscshhu.nix
-    ./keycloak.nix
-    ./matrix.nix
+    ./pretix
+    ./prometheus
     ./traefik.nix
-    ./element-web.nix
-    ./pretix.nix
-    ./prometheus.nix
-    ./authentik.nix
   ];
 }

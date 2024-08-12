@@ -1,5 +1,7 @@
 { lib
 , config
+, inputs
+, pkgs
 , ...
 }: {
   options.teenix.services.keycloak = {
@@ -56,42 +58,12 @@
           };
         };
 
-        config =
-          { pkgs
-          , lib
-          , ...
-          }: {
-            services.keycloak = {
-              enable = true;
-              settings = {
-                hostname = opts.hostname;
-                proxy = "edge";
-                http-enabled = true;
-              };
-              database = {
-                passwordFile = config.sops.secrets.keycloak_pass.path;
+        specialArgs = {
+          inherit inputs pkgs;
+          host-config = config;
+        };
 
-                type = "postgresql";
-                createLocally = true;
-
-                username = "keycloak";
-              };
-            };
-
-            system.stateVersion = "23.11";
-
-            networking = {
-              firewall = {
-                enable = true;
-                allowedTCPPorts = [ 80 ];
-              };
-              # Use systemd-resolved inside the container
-              # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
-              useHostResolvConf = lib.mkForce false;
-            };
-
-            services.resolved.enable = true;
-          };
+        config = import ./container.nix;
       };
     };
 }
