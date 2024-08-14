@@ -40,12 +40,12 @@
 
       nix-tun.storage.persist.subvolumes."passbolt".directories = {
         "/postgres" = {
-          owner = "${builtins.toString config.containers.passbolt.config.users.users.postgres.uid}";
-          mode = "0700";
+          owner = "1000";
+          mode = "0777";
         };
         "/env" = {
-          owner = "${builtins.toString config.containers.passbolt.config.users.users.postgres.uid}";
-          mode = "0700";
+          owner = "1000";
+          mode = "0777";
         };
       };
 
