@@ -17,7 +17,7 @@ in
         image = "passbolt/passbolt";
         restart = "unless-stopped";
         env_file = [ host-config.sops.secrets.passbolt.path ];
-        ports = [ 8080:8080 ];
+        ports = [ "8080:8080" ];
         environment = {
           DATASOURCES_DEFAULT_HOST = "mariadb";
           DATASOURCES_DEFAULT_USERNAME = "passbolt";
