@@ -16,7 +16,7 @@ in
       "passbolt".settings.services."passbolt".service = {
         image = "passbolt/passbolt";
         restart = "unless-stopped";
-        env_file = host-config.sops.secrets.passbolt.path;
+        env_file = [ host-config.sops.secrets.passbolt.path ];
         environment = {
           DATASOURCES_DEFAULT_HOST = "mariadb";
           DATASOURCES_DEFAULT_USERNAME = "passbolt";
@@ -32,7 +32,7 @@ in
       "mariadb".settings.services."mariadb".service = {
         image = "mariadb";
         restart = "unless-stopped";
-        env_file = host-config.sops.secrets.passbolt_mariadb.path;
+        env_file = [ host-config.sops.secrets.passbolt_mariadb.path ];
         environment = {
           MYSQL_DATABASE = "passbolt";
           MYSQL_USER = "passbolt";
