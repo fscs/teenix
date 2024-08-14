@@ -9,7 +9,7 @@
       t = lib.types;
     in
     {
-      enable = lib.mkEnableOption "setup nextcloud";
+      enable = lib.mkEnableOption "setup passbolt";
       hostname = lib.mkOption {
         type = t.str;
       };
@@ -51,7 +51,7 @@
 
       teenix.services.traefik.services."passbolt" = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = [ "http://${config.containers.passbolt.config.networking.hostName}" ];
+        servers = [ "http://${config.containers.passbolt.config.networking.hostName}:8080" ];
       };
 
       containers.passbolt = {
