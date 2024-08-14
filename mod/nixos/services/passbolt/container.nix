@@ -17,7 +17,6 @@ in
         image = "passbolt/passbolt";
         restart = "unless-stopped";
         env_file = [ host-config.sops.secrets.passbolt.path ];
-        host.uid = 1000;
         ports = [ "8080:8080" ];
         environment = {
           DATASOURCES_DEFAULT_HOST = "mariadb";
@@ -35,7 +34,6 @@ in
         image = "mariadb";
         restart = "unless-stopped";
         env_file = [ host-config.sops.secrets.passbolt_mariadb.path ];
-        host.uid = 1000;
         environment = {
           MYSQL_DATABASE = "passbolt";
           MYSQL_USER = "passbolt";
