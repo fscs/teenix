@@ -6,5 +6,3 @@
 - [ ] discord bots
 - [ ] helfer-tool
 - [ ] passbolt
-- [ ] pretix
-- [ ] prometheus/grafana

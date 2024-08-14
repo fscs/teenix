@@ -10,7 +10,6 @@
 
     inputs.sops.nixosModules.sops
     inputs.nix-tun.nixosModules.nix-tun
-    inputs.arion.nixosModules.arion
 
     outputs.nixosModules.teenix
   ];
@@ -120,6 +119,13 @@
     grafanaHostname = "grafana.fscs-hhu.de";
     alertmanagerURL = "alerts.fscs-hhu.de";
     envFile = ../secrets/prometheus_env;
+  };
+
+  teenix.services.passbolt = {
+    enable = true;
+    hostname = "passbolt.fscs-hhu.de";
+    envFile = ../secrets/passbolt/env;
+    mariaEnvFile = ../secrets/passbolt/maria_env;
   };
 
   # Users

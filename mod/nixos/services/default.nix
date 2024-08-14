@@ -9,6 +9,7 @@
     ./openssh.nix
     ./pretix
     ./prometheus
+    ./passbolt
     ./traefik.nix
   ];
 }
