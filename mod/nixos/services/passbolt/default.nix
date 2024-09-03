@@ -1,7 +1,5 @@
 { lib
 , config
-, pkgs
-, inputs
 , ...
 }: {
   options.teenix.services.passbolt =
