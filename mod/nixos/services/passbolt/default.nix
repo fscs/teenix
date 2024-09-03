@@ -39,49 +39,62 @@
       };
 
       nix-tun.storage.persist.subvolumes."passbolt".directories = {
-        "/postgres" = {
-          owner = "1000";
+        "/mariadb" = {
+          owner = "1000"; #TODO: Set the correct owner and mode
           mode = "0777";
         };
         "/env" = {
-          owner = "1000";
+          owner = "1000"; #TODO: Set the correct owner and mode
           mode = "0777";
         };
       };
 
       teenix.services.traefik.services."passbolt" = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = [ "http://${config.containers.passbolt.config.networking.hostName}:8080" ];
+        #TODO: Set the adderees dynamically maybe traefix docker impl
+        servers = [ "http://172.17.0.3:80" ];
       };
 
-      containers.passbolt = {
-        autoStart = true;
-        privateNetwork = true;
-        hostAddress = "192.168.113.10";
-        localAddress = "192.168.113.11";
-        bindMounts = {
-          "db" = {
-            hostPath = "${config.nix-tun.storage.persist.path}/passbolt/postgres";
-            mountPoint = "/var/lib/postgres";
-            isReadOnly = false;
+      virtualisation.docker.rootless = {
+        enable = true;
+        setSocketVariable = true;
+      };
+
+      virtualisation.oci-containers = {
+        backend = "docker";
+        containers = {
+          passbolt = {
+            image = "passbolt/passbolt";
+            dependsOn = [ "mariadb" ];
+            environmentFiles = [ config.sops.secrets.passbolt.path ];
+            volumes = [
+              "${config.nix-tun.storage.persist.path}/passbolt/mysql:/var/lib/mysql"
+            ];
+            environment = {
+              DATASOURCES_DEFAULT_HOST = "mariadb";
+              DATASOURCES_DEFAULT_USERNAME = "passbolt";
+              DATASOURCES_DEFAULT_DATABASE = "passbolt";
+              DATASOURCES_DEFAULT_PORT = "3306";
+              DATASOURCES_QUOTE_IDENTIFIER = "true";
+              APP_FULL_BASE_URL = "https://passbolt.fscs-hhu.de";
+              EMAIL_DEFAULT_FROM = "fscs@hhu.de";
+              EMAIL_TRANSPORT_DEFAULT_TLS = "true";
+              PASSBOLT_KEY_EMAIL = "fscs@hhu.de";
+            };
           };
-          "env" = {
-            hostPath = config.sops.secrets.passbolt.path;
-            mountPoint = config.sops.secrets.passbolt.path;
-          };
-          "maria_env" = {
-            hostPath = config.sops.secrets.passbolt_mariadb.path;
-            mountPoint = config.sops.secrets.passbolt_mariadb.path;
+          mariadb = {
+            image = "mariadb";
+            environmentFiles = [ config.sops.secrets.passbolt_mariadb.path ];
+            volumes = [
+              "${config.nix-tun.storage.persist.path}/passbolt/gpg:/etc/passbolt/gpg"
+              "${config.nix-tun.storage.persist.path}/passbolt/jwtc:/etc/passbolt/jwtc"
+            ];
+            environment = {
+              MYSQL_DATABASE = "passbolt";
+              MYSQL_USER = "passbolt";
+            };
           };
         };
-
-        specialArgs = {
-          inherit inputs pkgs;
-          host-config = config;
-        };
-
-        config =
-          import ./container.nix;
       };
     };
 }
