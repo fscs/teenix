@@ -26,6 +26,13 @@
         mode = "444";
       };
 
+      nix-tun.storage.persist.subvolumes."fscs-intern-bot".directories = {
+        "/postgres" = {
+          owner = "${builtins.toString config.containers.fscs-intern-bot.config.users.users.fscs-hhu.uid}";
+          mode = "0700";
+        };
+      };
+
       containers.fscs-intern-bot = {
         autoStart = true;
         privateNetwork = true;
@@ -37,7 +44,7 @@
             mountPoint = config.sops.secrets.fscs-intern-bot.path;
           };
           "db" = {
-            hostPath = opts.dbHostPath;
+            hostPath = "${config.nix-tun.storage.persist.path}/fscs-intern-bot/postgres";
             mountPoint = "/home/fscs-hhu/db";
             isReadOnly = false;
           };

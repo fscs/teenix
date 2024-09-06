@@ -10,6 +10,7 @@
     ./pretix
     ./prometheus
     ./passbolt
+    ./fscs-intern-bot
     ./traefik.nix
   ];
 }

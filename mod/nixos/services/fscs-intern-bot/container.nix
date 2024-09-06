@@ -1,5 +1,6 @@
 { pkgs
 , inputs
+, lib
 , host-config
 , ...
 }: {
@@ -9,10 +10,6 @@
     isNormalUser = true;
   };
 
-  environment.systemPackages = [
-    inputs.fscs-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".serve
-  ];
-
   systemd.services.fscs-intern-bot = {
     description = "Serve FSCS intern bot";
     after = [ "network.target" ];
@@ -21,11 +18,21 @@
       Type = "exec";
       User = "fscs-hhu";
       WorkingDirectory = "/home/fscs-hhu";
-      ExecStart = "${inputs.fscs-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".serve}/bin/serve";
+      ExecStart = "${inputs.fscs-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".fscs-intern-bot}/bin/top-manager-discord";
       Restart = "always";
       RestartSec = 5;
     };
     wantedBy = [ "multi-user.target" ];
+  };
+
+  networking = {
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 8080 ];
+    };
+    # Use systemd-resolved inside the container
+    # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
+    useHostResolvConf = lib.mkForce false;
   };
 
   services.resolved.enable = true;

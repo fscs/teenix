@@ -128,6 +128,11 @@
     mariaEnvFile = ../secrets/passbolt/maria_env;
   };
 
+  teenix.services.fscs-intern-bot = {
+    enable = true;
+    secretsFile = ../secrets/fscsinternbot;
+  };
+
   # Users
   sops.secrets.felix_pwd = {
     format = "binary";
