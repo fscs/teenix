@@ -21,7 +21,7 @@
 
   config =
     let
-      opts = config.teenix.services.passbolt;
+      opts = config.teenix.services.inphimade;
     in
     lib.mkIf opts.enable {
       sops.secrets.inphimade_mariadb = {
