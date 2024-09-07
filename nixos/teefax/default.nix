@@ -14,6 +14,8 @@
     outputs.nixosModules.teenix
   ];
 
+  networking.nameservers = [ "134.99.154.201" "134.99.154.228" ];
+
   networking.nat = {
     enable = true;
     internalInterfaces = [ "ve-+" ];
@@ -43,6 +45,7 @@
   };
 
   teenix.nixconfig.enable = true;
+  teenix.nixconfig.allowUnfree = true;
   teenix.bootconfig.enable = true;
 
   teenix.services.openssh.enable = true;
@@ -147,6 +150,12 @@
       enable = true;
       secretsFile = ../secrets/fscsinternbot;
     };
+
+  nix-tun.services.containers.onlyoffice = {
+    enable = true;
+    hostname = "office.inphima.de";
+    jwtSecretFile = ../secrets/onlyoffice;
+  };
 
 
   # teenix.services.inphimade = {
