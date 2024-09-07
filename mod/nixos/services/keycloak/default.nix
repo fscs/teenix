@@ -51,6 +51,10 @@
             hostPath = config.sops.secrets.keycloak_pass.path;
             mountPoint = config.sops.secrets.keycloak_pass.path;
           };
+          "resolv" = {
+            hostPath = "/etc/resolv.conf";
+            mountPoint = "/etc/resolv.conf";
+          };
           "db" = {
             hostPath = "${config.nix-tun.storage.persist.path}/keycloak/mysql";
             mountPoint = "/var/lib/mysql";

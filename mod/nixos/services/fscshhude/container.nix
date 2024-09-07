@@ -25,7 +25,7 @@
       EnvironmentFile = host-config.sops.secrets.fscshhude.path;
       Type = "exec";
       User = "fscs-website";
-      WorkingDirectory = "/home/fscs-hhu";
+      WorkingDirectory = "/home/fscs-website";
       ExecStart = "${inputs.fscshhude.packages."${pkgs.stdenv.hostPlatform.system}".serve}/bin/serve";
       Restart = "always";
       RestartSec = 5;
