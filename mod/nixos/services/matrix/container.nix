@@ -99,7 +99,6 @@ in
     '';
   };
 
-  networking.nameservers = [ "9.9.9.9" ];
   # open the firewall
   networking.firewall =
     let

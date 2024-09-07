@@ -56,6 +56,10 @@
         hostAddress = "192.168.105.10";
         localAddress = "192.168.105.11";
         bindMounts = {
+          "resolv" = {
+            hostPath = "/etc/resolv.conf";
+            mountPoint = "/etc/resolv.conf";
+          };
           "secret" = {
             hostPath = config.sops.secrets.matrix_pass.path;
             mountPoint = config.sops.secrets.matrix_pass.path;
