@@ -22,6 +22,19 @@
   #   enableIPv6 = true;
   # };
 
+  virtualisation.vmware.guest.enable = true;
+
+  networking.interfaces.ens34 = {
+    ipv4 = {
+      addresses = [
+        {
+          address = "134.99.147.42";
+          prefixLength = 27;
+        }
+      ];
+    };
+  };
+
   teenix.nixconfig.enable = true;
   teenix.bootconfig.enable = true;
 
