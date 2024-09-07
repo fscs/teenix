@@ -107,7 +107,7 @@
 
   teenix.services.matrix = {
     enable = true;
-    servername = "hhu-fscs.de";
+    servername = "inphima.de";
     secretsFile = ../secrets/test_pwd;
     configFile = ../secrets/matrix_config;
   };
@@ -160,12 +160,12 @@
   };
 
 
-  # teenix.services.inphimade = {
-  #   enable = true;
-  #   hostname = "inphima.hhu-fscs.de";
-  #   envFile = ../secrets/inphimade/env;
-  #   mariaEnvFile = ../secrets/inphimade/maria_env;
-  # };
+  teenix.services.inphimade = {
+    enable = true;
+    hostname = "inphima.de";
+    envFile = ../secrets/inphimade/env;
+    mariaEnvFile = ../secrets/inphimade/maria_env;
+  };
 
   # Users
   sops.secrets.felix_pwd = {
