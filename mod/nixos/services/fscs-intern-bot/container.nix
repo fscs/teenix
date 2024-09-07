@@ -17,7 +17,7 @@
       EnvironmentFile = host-config.sops.secrets.fscs-intern-bot.path;
       Type = "exec";
       User = "fscs-hhu";
-      WorkingDirectory = "/home/fscs-hhu";
+      WorkingDirectory = "/home/fscs-website";
       ExecStart = "${inputs.fscs-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".fscs-intern-bot}/bin/top-manager-discord";
       Restart = "always";
       RestartSec = 5;
