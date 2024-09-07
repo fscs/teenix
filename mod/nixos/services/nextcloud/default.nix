@@ -35,7 +35,7 @@
         mode = "444";
       };
 
-      nix-tun.utils.container.nextcloud.volumes = {
+      nix-tun.utils.containers.nextcloud.volumes = {
         "/var/lib/mysql" = {
           owner = "mysql";
           mode = "0700";
@@ -58,7 +58,7 @@
             mountPoint = config.sops.secrets.nextcloud_pass.path;
           };
           "files" = {
-            hostPath = "/mnt/netapp/Nexcloud";
+            hostPath = "/mnt/netapp/Nextcloud";
             mountPoint = "/var/lib/nextcloud";
           };
         };
