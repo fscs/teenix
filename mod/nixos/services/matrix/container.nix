@@ -39,7 +39,7 @@ in
       turn_uris = [ "turn:${config.services.coturn.realm}:3478?transport=udp" "turn:${config.services.coturn.realm}:3478?transport=tcp" ];
       turn_shared_secret = config.services.coturn.static-auth-secret-file;
       turn_user_lifetime = "1h";
-      server_name = "matrix.${opts.servername}";
+      server_name = "${opts.servername}";
       oidc_providers = "";
 
       listeners = [
