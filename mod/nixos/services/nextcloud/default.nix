@@ -65,6 +65,7 @@
           "data" = {
             hostPath = "/mnt/netapp/Nextcloud";
             mountPoint = "/var/lib/nextcloud/data";
+            read_only = false;
           };
         };
 
