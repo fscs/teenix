@@ -28,7 +28,7 @@
 
       nix-tun.storage.persist.subvolumes."fscshhude".directories = {
         "/db" = {
-          owner = "${builtins.toString config.containers.fscshhude.config.users.users.fscs-hhu.uid}";
+          owner = "${builtins.toString config.containers.fscshhude.config.users.users.fscs-website.uid}";
           mode = "0700";
         };
       };
@@ -52,7 +52,7 @@
           };
           "db" = {
             hostPath = "${config.nix-tun.storage.persist.path}/fscshhude/db";
-            mountPoint = "/home/fscs-hhu/db";
+            mountPoint = "/home/fscs-website/db";
             isReadOnly = false;
           };
         };

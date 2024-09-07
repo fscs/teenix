@@ -5,9 +5,8 @@
 , ...
 }: {
   networking.hostName = "fscshhude";
-  users.users.fscs-hhu = {
-    uid = 1001;
-    home = "/home/fscs-hhu";
+  users.users.fscs-website = {
+    home = "/home/fscs-website";
     group = "users";
     shell = pkgs.bash;
     isNormalUser = true;
@@ -25,7 +24,7 @@
     serviceConfig = {
       EnvironmentFile = host-config.sops.secrets.fscshhude.path;
       Type = "exec";
-      User = "fscs-hhu";
+      User = "fscs-website";
       WorkingDirectory = "/home/fscs-hhu";
       ExecStart = "${inputs.fscshhude.packages."${pkgs.stdenv.hostPlatform.system}".serve}/bin/serve";
       Restart = "always";

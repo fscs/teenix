@@ -7,7 +7,7 @@ let
 in
 {
   networking.hostName = "prometheus";
-  networking.nameservers = [ "9.9.9.9" ];
+  networking.nameservers = [ "134.99.154.201" "134.99.154.228" ];
 
   services.prometheus = {
     enable = true;
