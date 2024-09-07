@@ -85,7 +85,7 @@
   teenix.services.nextcloud = {
     enable = true;
     hostname = "cloud.hhu-fscs.de";
-    secretsFile = ../secrets/test_pwd;
+    secretsFile = ../secrets/nextcloud;
     extraApps = [
       "calendar"
       "deck"

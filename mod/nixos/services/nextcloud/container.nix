@@ -20,7 +20,7 @@ in
     settings.trusted_domains = [ "192.168.100.11" opts.hostname ];
     config = {
       adminpassFile = host-config.sops.secrets.nextcloud_pass.path;
-      dbtype = "pgsql";
+      dbtype = "mysql";
     };
 
     phpOptions = {

@@ -35,9 +35,9 @@
         mode = "444";
       };
 
-      nix-tun.storage.persist.subvolumes."nextcloud".directories = {
-        "/postgres" = {
-          owner = "${builtins.toString config.containers.nextcloud.config.users.users.postgres.uid}";
+      nix-tun.utils.container.nextcloud.volumes = {
+        "/var/lib/mysql" = {
+          owner = "mysql";
           mode = "0700";
         };
       };
@@ -57,10 +57,9 @@
             hostPath = config.sops.secrets.nextcloud_pass.path;
             mountPoint = config.sops.secrets.nextcloud_pass.path;
           };
-          "db" = {
-            hostPath = "${config.nix-tun.storage.persist.path}/nextcloud/postgres";
-            mountPoint = "/var/lib/postgres";
-            isReadOnly = false;
+          "files" = {
+            hostPath = "/mnt/netapp/Nexcloud";
+            mountPoint = "/var/lib/nextcloud";
           };
         };
 
