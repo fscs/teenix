@@ -44,7 +44,7 @@
       teenix.services.traefik.services."inphimade" = {
         router.rule = "Host(`${opts.hostname}`)";
         #TODO: Set the adderees dynamically maybe traefix docker impl
-        servers = [ "http://172.17.0.3:80" ];
+        servers = [ "http://172.17.0.5:80" ];
       };
 
       virtualisation.docker.rootless = {
@@ -63,7 +63,7 @@
               "${config.nix-tun.storage.persist.path}/inphimade/wp:/var/www/html"
             ];
             environment = {
-              WORDPRESS_DB_HOST = "mariadb-inphimade";
+              WORDPRESS_DB_HOST = "127.17.0.4";
               WORDPRESS_DB_USER = "inphima";
               WORDPRESS_DB_NAME = "inphimadb";
             };
