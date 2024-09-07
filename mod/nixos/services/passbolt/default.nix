@@ -66,7 +66,8 @@
             dependsOn = [ "mariadb" ];
             environmentFiles = [ config.sops.secrets.passbolt.path ];
             volumes = [
-              "${config.nix-tun.storage.persist.path}/passbolt/mysql:/var/lib/mysql"
+              "${config.nix-tun.storage.persist.path}/passbolt/gpg:/etc/passbolt/gpg"
+              "${config.nix-tun.storage.persist.path}/passbolt/jwtc:/etc/passbolt/jwtc"
             ];
             environment = {
               DATASOURCES_DEFAULT_HOST = "mariadb";
@@ -84,8 +85,7 @@
             image = "mariadb";
             environmentFiles = [ config.sops.secrets.passbolt_mariadb.path ];
             volumes = [
-              "${config.nix-tun.storage.persist.path}/passbolt/gpg:/etc/passbolt/gpg"
-              "${config.nix-tun.storage.persist.path}/passbolt/jwtc:/etc/passbolt/jwtc"
+              "${config.nix-tun.storage.persist.path}/passbolt/mariadb:/var/lib/mysql"
             ];
             environment = {
               MYSQL_DATABASE = "passbolt";
