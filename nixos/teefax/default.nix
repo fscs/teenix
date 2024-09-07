@@ -32,6 +32,13 @@
           prefixLength = 27;
         }
       ];
+      routes = [
+        {
+          address = "134.99.210.131";
+          prefixLength = 32;
+          via = "134.99.147.33";
+        }
+      ];
     };
   };
 
