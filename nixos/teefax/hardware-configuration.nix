@@ -30,6 +30,7 @@
       device = "/dev/disk/by-uuid/f312acc1-a543-4513-a487-ca7d8f302a8b";
       fsType = "btrfs";
       options = [ "subvol=persist" ];
+      neededForBoot = true;
     };
 
   fileSystems."/boot" =
@@ -37,6 +38,13 @@
       device = "/dev/disk/by-uuid/6ABA-E9B7";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
+    };
+
+  fileSystems."/mnt/netapp" =
+    {
+      device = "134.99.210.131:/fsinfo";
+      fsType = "nfs";
+      options = [ "rw" "hard" "intr" "nfsvers=3" "noatime" "nodev" "async" ];
     };
 
   swapDevices = [ ];
