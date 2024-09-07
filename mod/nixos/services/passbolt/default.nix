@@ -45,6 +45,14 @@
           owner = "1000"; #TODO: Set the correct owner and mode
           mode = "0777";
         };
+        "/gpg" = {
+          owner = "1000"; #TODO: Set the correct owner and mode
+          mode = "0777";
+        };
+        "/jwtc" = {
+          owner = "1000"; #TODO: Set the correct owner and mode
+          mode = "0777";
+        };
       };
 
       teenix.services.traefik.services."passbolt" = {
