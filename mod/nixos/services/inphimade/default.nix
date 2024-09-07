@@ -42,7 +42,7 @@
       };
 
       teenix.services.traefik.services."inphimade" = {
-        router.rule = "Host(`${opts.hostname}`)";
+        router.rule = "Host(`${opts.hostname}`) || Host(`www.${opts.hostname}`)";
         #TODO: Set the adderees dynamically maybe traefix docker impl
         servers = [ "http://172.17.0.5:80" ];
       };
