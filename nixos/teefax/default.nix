@@ -34,7 +34,7 @@
   programs.fish.enable = true;
 
   teenix.services.traefik.enable = true;
-  teenix.services.traefik.dashboardUrl = "traefik.fscs-hhu.de";
+  teenix.services.traefik.dashboardUrl = "traefik.hhu-fscs.de";
   teenix.services.traefik.letsencryptMail = "fscs@hhu.de";
   teenix.services.traefik.entrypoints = {
     web = {
@@ -64,7 +64,7 @@
 
   teenix.services.nextcloud = {
     enable = true;
-    hostname = "cloud.fscs-hhu.de";
+    hostname = "cloud.hhu-fscs.de";
     secretsFile = ../secrets/test_pwd;
     extraApps = [
       "calendar"
@@ -78,52 +78,52 @@
 
   teenix.services.keycloak = {
     enable = true;
-    hostname = "login.fscs-hhu.de";
+    hostname = "login.hhu-fscs.de";
     secretsFile = ../secrets/test_pwd;
   };
 
   teenix.services.fscshhude = {
     enable = true;
-    hostname = "fscs-hhu.de";
+    hostname = "hhu-fscs.de";
     secretsFile = ../secrets/fscshhude;
   };
 
   teenix.services.matrix = {
     enable = true;
-    servername = "fscs-hhu.de";
+    servername = "hhu-fscs.de";
     secretsFile = ../secrets/test_pwd;
     configFile = ../secrets/matrix_config;
   };
 
   teenix.services.element-web = {
     enable = true;
-    hostname = "element.fscs-hhu.de";
-    matrixUrl = "matrix.fscs-hhu.de";
+    hostname = "element.hhu-fscs.de";
+    matrixUrl = "matrix.hhu-fscs.de";
   };
 
   teenix.services.pretix = {
     enable = true;
-    hostname = "pretix.fscs-hhu.de";
+    hostname = "pretix.hhu-fscs.de";
     email = "fscs@hhu.de";
   };
 
   teenix.services.authentik = {
     enable = true;
-    hostname = "auth.fscs-hhu.de";
+    hostname = "auth.hhu-fscs.de";
     envFile = ../secrets/authentik_env;
   };
 
   teenix.services.prometheus = {
     enable = true;
-    hostname = "prometheus.fscs-hhu.de";
-    grafanaHostname = "grafana.fscs-hhu.de";
-    alertmanagerURL = "alerts.fscs-hhu.de";
+    hostname = "prometheus.hhu-fscs.de";
+    grafanaHostname = "grafana.hhu-fscs.de";
+    alertmanagerURL = "alerts.hhu-fscs.de";
     envFile = ../secrets/prometheus_env;
   };
 
   teenix.services.passbolt = {
     enable = true;
-    hostname = "passbolt.fscs-hhu.de";
+    hostname = "passbolt.hhu-fscs.de";
     envFile = ../secrets/passbolt/env;
     mariaEnvFile = ../secrets/passbolt/maria_env;
   };
@@ -135,12 +135,12 @@
     };
 
 
-  teenix.services.inphimade = {
-    enable = true;
-    hostname = "inphima.fscs-hhu.de";
-    envFile = ../secrets/inphimade/env;
-    mariaEnvFile = ../secrets/inphimade/maria_env;
-  };
+  # teenix.services.inphimade = {
+  #   enable = true;
+  #   hostname = "inphima.hhu-fscs.de";
+  #   envFile = ../secrets/inphimade/env;
+  #   mariaEnvFile = ../secrets/inphimade/maria_env;
+  # };
 
   # Users
   sops.secrets.felix_pwd = {
