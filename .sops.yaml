@@ -1,11 +1,13 @@
 keys:
   - &Felix-yubikey 499C66E9512BA96797CDAC410562840F5B0C9BD4
-  - &teefax-test 836578108a97d170fcd5b11b9ba0839b3899dbb0
+  - &Florian-yubikey 0825D643BDBE821C5C5EEA77F9D26066E471221D
+  - &teefax-test cebeae9995e7e299c890ea0037889e2d9e9b58e1
   - &Arthur age1n9e7ymdmcprdynwutygfvd6an2h9xcvpneehu9gcsd93vr0mvg5sqndy08
 creation_rules:
   - path_regex: nixos/secrets/.*
     key_groups:
     - pgp:
+        - *Florian-yubikey
         - *Felix-yubikey
         - *teefax-test
       age:
