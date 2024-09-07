@@ -16,7 +16,7 @@ in
     database = {
       passwordFile = host-config.sops.secrets.keycloak_pass.path;
 
-      type = "postgresql";
+      type = "mysql";
       createLocally = true;
 
       username = "keycloak";

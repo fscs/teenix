@@ -27,8 +27,8 @@
       };
 
       nix-tun.storage.persist.subvolumes."keycloak".directories = {
-        "/postgres" = {
-          owner = "${builtins.toString config.containers.keycloak.config.users.users.postgres.uid}";
+        "/mysql" = {
+          owner = "${builtins.toString config.containers.keycloak.config.users.users.mysql.uid}";
           mode = "0700";
         };
       };
@@ -52,8 +52,8 @@
             mountPoint = config.sops.secrets.keycloak_pass.path;
           };
           "db" = {
-            hostPath = "${config.nix-tun.storage.persist.path}/keycloak/postgres";
-            mountPoint = "/var/lib/postgres";
+            hostPath = "${config.nix-tun.storage.persist.path}/keycloak/mysql";
+            mountPoint = "/var/lib/mysql";
             isReadOnly = false;
           };
         };
