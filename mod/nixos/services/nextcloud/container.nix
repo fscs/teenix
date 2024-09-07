@@ -15,7 +15,7 @@ in
     enable = true;
     package = pkgs.nextcloud29;
 
-    nextcloud.https = true;
+    https = true;
 
     hostName = opts.hostname;
     phpExtraExtensions = all: [ all.pdlib all.bz2 all.smbclient ];
