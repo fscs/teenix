@@ -78,7 +78,7 @@
               "${config.nix-tun.storage.persist.path}/passbolt/jwtc:/etc/passbolt/jwtc"
             ];
             environment = {
-              DATASOURCES_DEFAULT_HOST = "mariadb";
+              DATASOURCES_DEFAULT_HOST = "172.17.0.2";
               DATASOURCES_DEFAULT_USERNAME = "passbolt";
               DATASOURCES_DEFAULT_DATABASE = "passbolt";
               DATASOURCES_DEFAULT_PORT = "3306";
