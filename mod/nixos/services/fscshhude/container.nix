@@ -14,6 +14,7 @@
 
   environment.systemPackages = [
     inputs.fscshhude.packages."${pkgs.stdenv.hostPlatform.system}".serve
+    pkgs.postgresql
     pkgs.bash
   ];
 

@@ -46,6 +46,10 @@
         hostAddress = "192.168.103.10";
         localAddress = "192.168.103.11";
         bindMounts = {
+          "resolv" = {
+            hostPath = "/etc/resolv.conf";
+            mountPoint = "/etc/resolv.conf";
+          };
           "secret" = {
             hostPath = config.sops.secrets.fscshhude.path;
             mountPoint = config.sops.secrets.fscshhude.path;
