@@ -14,13 +14,13 @@
     outputs.nixosModules.teenix
   ];
 
-  # networking.nat = {
-  #   enable = true;
-  #   internalInterfaces = [ "ve-+" ];
-  #   externalInterface = "ens32";
-  #   # Lazy IPv6 connectivity for the container
-  #   enableIPv6 = true;
-  # };
+  networking.nat = {
+    enable = true;
+    internalInterfaces = [ "ve-+" ];
+    externalInterface = "ens32";
+    # Lazy IPv6 connectivity for the container
+    enableIPv6 = true;
+  };
 
   virtualisation.vmware.guest.enable = true;
 
