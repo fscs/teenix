@@ -714,11 +714,11 @@
         "nixpkgs": "nixpkgs_7"
       },
       "locked": {
-        "lastModified": 1725745903,
-        "narHash": "sha256-tlcYhj9Fy9GItqLygHt/KiKgG6xGuSfqyTm1gGAK1lA=",
+        "lastModified": 1725746738,
+        "narHash": "sha256-eOeUHIEQs7xmaf4I0RLxlKL0d7l4PCVFMEcWdBOcX3o=",
         "owner": "nix-tun",
         "repo": "nixos-modules",
-        "rev": "8bb21cee50a0b411833eac0cf5a5241116fce220",
+        "rev": "8a359d2c819c92b53b2b65ca503d4d0f5c74d4f8",
         "type": "github"
       },
       "original": {

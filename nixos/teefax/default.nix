@@ -151,6 +151,8 @@
       secretsFile = ../secrets/fscsinternbot;
     };
 
+  teenix.services.traefik.services.onlyoffice = config.nix-tun.services.traefik.services.onlyoffice;
+
   nix-tun.services.containers.onlyoffice = {
     enable = true;
     hostname = "office.inphima.de";
