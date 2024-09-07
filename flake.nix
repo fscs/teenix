@@ -18,6 +18,10 @@
     fscs-intern-bot.url = "git+ssh://git@git.hhu.de/fscs/fscs-intern-bot.git";
     arion.url = "github:hercules-ci/arion";
     authentik-nix.url = "github:nix-community/authentik-nix";
+    mete = {
+      url = "github:fscs/mete/wip/fscs";
+      flake = false;
+    };
   };
 
   outputs =

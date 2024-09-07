@@ -8,6 +8,9 @@ let
   opts = host-config.teenix.services.nextcloud;
 in
 {
+  users.users.nextcloud.uid = 33;
+  users.groups.nextcloud.gid = 33;
+
   services.nextcloud = {
     enable = true;
     package = pkgs.nextcloud29;
@@ -16,6 +19,7 @@ in
     phpExtraExtensions = all: [ all.pdlib all.bz2 all.smbclient ];
 
     database.createLocally = true;
+
 
     settings.trusted_domains = [ "192.168.100.11" opts.hostname ];
     config = {

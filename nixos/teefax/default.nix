@@ -87,19 +87,13 @@
     hostname = "cloud.hhu-fscs.de";
     secretsFile = ../secrets/nextcloud;
     extraApps = [
-      "calendar"
-      "deck"
-      "polls"
-      "forms"
-      "tasks"
-      "spreed"
     ];
   };
 
   teenix.services.keycloak = {
     enable = true;
-    hostname = "login.hhu-fscs.de";
-    secretsFile = ../secrets/test_pwd;
+    hostname = "login.inphima.de";
+    secretsFile = ../secrets/keycloak;
   };
 
   teenix.services.fscshhude = {

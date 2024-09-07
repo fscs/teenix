@@ -40,6 +40,10 @@
           owner = "mysql";
           mode = "0700";
         };
+        "/var/lib/nextcloud" = {
+          owner = "nextcloud";
+          mode = "0700";
+        };
       };
 
       teenix.services.traefik.services."nextcloud" = {
@@ -49,6 +53,7 @@
 
       containers.nextcloud = {
         autoStart = true;
+        ephemeral = true;
         privateNetwork = true;
         hostAddress = "192.168.100.10";
         localAddress = "192.168.100.11";
@@ -57,9 +62,9 @@
             hostPath = config.sops.secrets.nextcloud_pass.path;
             mountPoint = config.sops.secrets.nextcloud_pass.path;
           };
-          "files" = {
+          "data" = {
             hostPath = "/mnt/netapp/Nextcloud";
-            mountPoint = "/var/lib/nextcloud";
+            mountPoint = "/var/lib/nextcloud/data";
           };
         };
 
