@@ -114,8 +114,8 @@
 
   teenix.services.element-web = {
     enable = true;
-    hostname = "element.hhu-fscs.de";
-    matrixUrl = "matrix.hhu-fscs.de";
+    hostname = "element.inphima.de";
+    matrixUrl = "matrix.inphima.de";
   };
 
   teenix.services.pretix = {
