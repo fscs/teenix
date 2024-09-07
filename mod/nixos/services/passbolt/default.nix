@@ -75,7 +75,7 @@
               DATASOURCES_DEFAULT_DATABASE = "passbolt";
               DATASOURCES_DEFAULT_PORT = "3306";
               DATASOURCES_QUOTE_IDENTIFIER = "true";
-              APP_FULL_BASE_URL = "https://passbolt.fscs-hhu.de";
+              APP_FULL_BASE_URL = "https://passbolt.hhu-fscs.de";
               EMAIL_DEFAULT_FROM = "fscs@hhu.de";
               EMAIL_TRANSPORT_DEFAULT_TLS = "true";
               PASSBOLT_KEY_EMAIL = "fscs@hhu.de";
