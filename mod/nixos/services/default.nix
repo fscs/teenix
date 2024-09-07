@@ -11,7 +11,7 @@
     ./prometheus
     ./passbolt
     ./fscs-intern-bot
-    # ./inphimade
+    ./inphimade
     ./traefik.nix
   ];
 }
