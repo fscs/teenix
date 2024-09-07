@@ -58,6 +58,10 @@
         hostAddress = "192.168.100.10";
         localAddress = "192.168.100.11";
         bindMounts = {
+          "resolv" = {
+            hostPath = "/etc/resolv.conf";
+            mountPoint = "/etc/resolv.conf";
+          };
           "secret" = {
             hostPath = config.sops.secrets.nextcloud_pass.path;
             mountPoint = config.sops.secrets.nextcloud_pass.path;

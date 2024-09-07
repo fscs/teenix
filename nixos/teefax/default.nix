@@ -84,7 +84,7 @@
 
   teenix.services.nextcloud = {
     enable = true;
-    hostname = "cloud.hhu-fscs.de";
+    hostname = "nextcloud.inphima.de";
     secretsFile = ../secrets/nextcloud;
     extraApps = [
     ];
