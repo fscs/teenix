@@ -173,6 +173,13 @@
     mariaEnvFile = ../secrets/inphimade/maria_env;
   };
 
+  teenix.services.nawi = {
+    enable = true;
+    hostname = "fsnawi.de";
+    envFile = ../secrets/nawi/env;
+    mariaEnvFile = ../secrets/nawi/maria_env;
+  };
+
   # Users
   sops.secrets.felix_pwd = {
     format = "binary";
