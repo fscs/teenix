@@ -33,15 +33,18 @@
       };
 
       teenix.services.traefik.services."mete" = {
-        router.rule = "Host(`${opts.hostname}`)";
-        #TODO: Set the adderees dynamically maybe traefix docker impl
-        servers = [ "http://172.17.0.7:8080" ];
+        router =
+          {
+            rule = "Host(`${opts.hostname}`)";
+            middlewares = [ "meteredirect" "meteauth" ];
+          };
+        servers = [ "http://172.17.0.3:8080" ];
       };
 
       teenix.services.traefik.services."mete-summary" = {
         router.rule = "Host(`${opts.hostname-summary}`)";
         #TODO: Set the adderees dynamically maybe traefix docker impl
-        servers = [ "http://172.17.0.6:5000" ];
+        servers = [ "http://172.17.0.2:5000" ];
       };
 
       virtualisation.docker.rootless = {

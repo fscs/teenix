@@ -206,7 +206,17 @@
                             };
                           }
                       )
-                      config.teenix.services.traefik.redirects;
+                      config.teenix.services.traefik.redirects
+                    //
+                    {
+                      meteredirect.redirectregex = {
+                        regex = "https://mete.hhu-fscs.de/(.*?)((/deposit)|(/retrieve)|(/transaction))(.*)";
+                        replacement = "https://mete.hhu-fscs.de/$1";
+                      };
+                      meteauth.basicauth = {
+                        users = [ "mete:$apr1$o5xlJ1Te$8rd1J0xlDWYtV9xio8bSi1" ];
+                      };
+                    };
                   services =
                     lib.attrsets.mapAttrs
                       (name: value:
