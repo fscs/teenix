@@ -44,6 +44,12 @@
     };
   };
 
+  networking.firewall.extraCommands = ''
+    iptables -I nixos-fw -i ens32 --source 134.99.147.0/27 -j nixos-fw-accept
+  '';
+  networking.firewall.logRefusedConnections = true;
+
+
   teenix.nixconfig.enable = true;
   teenix.nixconfig.allowUnfree = true;
   teenix.bootconfig.enable = true;
