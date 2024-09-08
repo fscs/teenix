@@ -50,6 +50,10 @@
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.nextcloud.config.networking.hostName}" ];
       };
+      teenix.services.traefik.redirects."cloud_inphima" = {
+        from = "Host(`cloud.inphima.de`)";
+        to = "nextcloud.inphima.de";
+      };
 
       containers.nextcloud = {
         autoStart = true;
