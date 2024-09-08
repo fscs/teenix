@@ -34,7 +34,7 @@
       };
 
       teenix.services.traefik.services."fscshhude" = {
-        router.rule = "Host(`${opts.hostname}`)";
+        router.rule = "Host(`fscs.hhu.de`) || Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.fscshhude.config.networking.hostName}:8080" ];
         healthCheck = true;
       };
