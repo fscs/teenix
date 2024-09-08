@@ -34,8 +34,20 @@
       };
 
       teenix.services.traefik.services."authentik" = {
-        router.rule = "Host(`${opts.hostname}`)";
+        router =
+          {
+            rule = "Host(`${opts.hostname}`)";
+            priority = 10;
+          };
         servers = [ "http://${config.containers.authentik.config.networking.hostName}" ];
+      };
+
+      teenix.services.traefik.services."authentik_auth" = {
+        router = {
+          rule = "Host(`${opts.hostname}`) && PathPrefix(`/outpost.goauthentik.io/`)";
+          priority = 15;
+        };
+        servers = [ "http://${config.containers.authentik.config.networking.hostName}:9000/outpost.goauthentik.io" ];
       };
 
       containers.authentik = {
@@ -49,6 +61,10 @@
           "secret" = {
             hostPath = config.sops.secrets.authentik_env.path;
             mountPoint = config.sops.secrets.authentik_env.path;
+          };
+          "resolv" = {
+            hostPath = "/etc/resolv.conf";
+            mountPoint = "/etc/resolv.conf";
           };
           "db" = {
             hostPath = "${config.nix-tun.storage.persist.path}/authentik/postgres";

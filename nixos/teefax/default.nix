@@ -15,7 +15,6 @@
   ];
 
   networking.nameservers = [ "134.99.154.201" "134.99.154.228" ];
-  networking.firewall.interfaces."ens32".allowedTCPPorts = [ 80 443 22 ];
 
   networking.nat = {
     enable = true;
@@ -133,7 +132,7 @@
 
   teenix.services.authentik = {
     enable = true;
-    hostname = "auth.hhu-fscs.de";
+    hostname = "auth.inphima.de";
     envFile = ../secrets/authentik_env;
   };
 

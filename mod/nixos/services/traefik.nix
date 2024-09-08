@@ -216,6 +216,12 @@
                       meteauth.basicauth = {
                         users = [ "mete:$apr1$o5xlJ1Te$8rd1J0xlDWYtV9xio8bSi1" ];
                       };
+                      authentik.forwardAuth = {
+                        address = "https://authentik:9443/outpost.goauthentik.io/auth/traefik";
+                        trustForwardHeader = true;
+                        tls.insecureSkipVerify = true;
+                        authResponseHeaders = [ "X-authentik-username" "X-authentik-groups" "X-authentik-email" "X-authentik-name" "X-authentik-uid" "X-authentik-jwt" "X-authentik-meta-jwks" "X-authentik-meta-outpost" "X-authentik-meta-provider" "X-authentik-meta-app" "X-authentik-meta-version" ];
+                      };
                     };
                   services =
                     lib.attrsets.mapAttrs

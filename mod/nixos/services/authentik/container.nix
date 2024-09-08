@@ -13,7 +13,7 @@
     enable = true;
     environmentFile = host-config.sops.secrets.authentik_env.path;
     createDatabase = true;
-    
+
     settings = {
       email = {
         host = "mail.hhu.de";
@@ -26,18 +26,32 @@
       disable_startup_analytics = true;
       avatars = "initials";
     };
-    
+
     nginx = {
       enable = true;
       enableACME = false;
       host = "localhost";
+    };
+
+  };
+
+  services.nginx = {
+    virtualHosts."localhost".locations."/outpost.goauthentik.io" = {
+      recommendedProxySettings = false;
+      extraConfig = ''
+        proxy_pass http://localhost:9000/outpost.goauthentik.io;
+        proxy_set_header        Host $host;
+        proxy_set_header        X-Real-IP $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header        X-Forwarded-Proto $scheme;
+      '';
     };
   };
 
   networking = {
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 80 9443 ];
+      allowedTCPPorts = [ 80 9443 9000 ];
     };
     # Use systemd-resolved inside the container
     # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686

@@ -41,6 +41,15 @@
         servers = [ "http://172.17.0.3:8080" ];
       };
 
+      teenix.services.traefik.services."metesecure" = {
+        router =
+          {
+            rule = "Host(`metesecure.hhu-fscs.de`)";
+            middlewares = [ "authentik" ];
+          };
+        servers = [ "http://172.17.0.3:8080" ];
+      };
+
       teenix.services.traefik.services."mete-summary" = {
         router.rule = "Host(`${opts.hostname-summary}`)";
         #TODO: Set the adderees dynamically maybe traefix docker impl
