@@ -1,5 +1,6 @@
 { lib
 , config
+, pkgs
 , ...
 }: {
   options.teenix.services.nawi =
@@ -50,43 +51,146 @@
       teenix.services.traefik.services."nawi" = {
         router.rule = "Host(`${opts.hostname}`) || Host(`www.${opts.hostname}`)";
         #TODO: Set the adderees dynamically maybe traefix docker impl
-        servers = [ "http://172.17.0.7:80" ];
+        servers = [ "http://172.19.0.3:80" ];
       };
-
-      virtualisation.docker.rootless = {
+      # Runtime
+      virtualisation.docker = {
         enable = true;
-        setSocketVariable = true;
+        autoPrune.enable = true;
+      };
+      virtualisation.oci-containers.backend = "docker";
+
+      # Containers
+      virtualisation.oci-containers.containers."nawi-nawi-db" = {
+        image = "mysql:5.7";
+        environment = {
+          "MYSQL_DATABASE" = "nawidb";
+          "MYSQL_RANDOM_ROOT_PASSWORD" = "1";
+          "MYSQL_USER" = "nawi";
+        };
+        environmentFiles = [ config.sops.secrets.nawi_mariadb.path ];
+        volumes = [
+          "${config.nix-tun.storage.persist.path}/nawi/mysql:/var/lib/mysql"
+        ];
+        log-driver = "journald";
+        extraOptions = [
+          "--network-alias=nawi-db"
+          "--network=nawi_default"
+        ];
+      };
+      systemd.services."docker-nawi-nawi-db" = {
+        serviceConfig = {
+          Restart = lib.mkOverride 500 "always";
+          RestartMaxDelaySec = lib.mkOverride 500 "1m";
+          RestartSec = lib.mkOverride 500 "100ms";
+          RestartSteps = lib.mkOverride 500 9;
+        };
+        after = [
+          "docker-network-nawi_default.service"
+          "docker-volume-nawi_db.service"
+        ];
+        requires = [
+          "docker-network-nawi_default.service"
+          "docker-volume-nawi_db.service"
+        ];
+        partOf = [
+          "docker-compose-nawi-root.target"
+        ];
+        wantedBy = [
+          "docker-compose-nawi-root.target"
+        ];
+      };
+      virtualisation.oci-containers.containers."nawi-nawi-website" = {
+        image = "wordpress:latest";
+        environment = {
+          "WORDPRESS_DB_HOST" = "nawi-db";
+          "WORDPRESS_DB_NAME" = "nawidb";
+          "WORDPRESS_DB_USER" = "nawi";
+        };
+        environmentFiles = [ config.sops.secrets.nawi.path ];
+        volumes = [
+          "${config.nix-tun.storage.persist.path}/nawi/wp:/var/www/html"
+        ];
+        log-driver = "journald";
+        extraOptions = [
+          "--network-alias=nawi-website"
+          "--network=nawi_default"
+        ];
+      };
+      systemd.services."docker-nawi-nawi-website" = {
+        serviceConfig = {
+          Restart = lib.mkOverride 500 "always";
+          RestartMaxDelaySec = lib.mkOverride 500 "1m";
+          RestartSec = lib.mkOverride 500 "100ms";
+          RestartSteps = lib.mkOverride 500 9;
+        };
+        after = [
+          "docker-network-nawi_default.service"
+          "docker-volume-nawi_wp.service"
+        ];
+        requires = [
+          "docker-network-nawi_default.service"
+          "docker-volume-nawi_wp.service"
+        ];
+        partOf = [
+          "docker-compose-nawi-root.target"
+        ];
+        wantedBy = [
+          "docker-compose-nawi-root.target"
+        ];
       };
 
-      virtualisation.oci-containers = {
-        backend = "docker";
-        containers = {
-          nawi = {
-            image = "wordpress";
-            dependsOn = [ "mariadb-nawi" ];
-            environmentFiles = [ config.sops.secrets.nawi.path ];
-            volumes = [
-              "${config.nix-tun.storage.persist.path}/nawi/wp:/var/www/html"
-            ];
-            environment = {
-              WORDPRESS_DB_HOST = "172.17.0.6";
-              WORDPRESS_DB_USER = "nawi";
-              WORDPRESS_DB_NAME = "nawidb";
-            };
-          };
-          mariadb-nawi = {
-            image = "mariadb";
-            environmentFiles = [ config.sops.secrets.nawi_mariadb.path ];
-            volumes = [
-              "${config.nix-tun.storage.persist.path}/nawi/mysql:/var/lib/mysql"
-            ];
-            environment = {
-              MYSQL_DATABASE = "nawidb";
-              MYSQL_USER = "nawi";
-            };
-          };
+      # Networks
+      systemd.services."docker-network-nawi_default" = {
+        path = [ pkgs.docker ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStop = "docker network rm -f nawi_default";
         };
+        script = ''
+          docker network inspect nawi_default || docker network create nawi_default
+        '';
+        partOf = [ "docker-compose-nawi-root.target" ];
+        wantedBy = [ "docker-compose-nawi-root.target" ];
       };
+
+      # Volumes
+      systemd.services."docker-volume-nawi_db" = {
+        path = [ pkgs.docker ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+        script = ''
+          docker volume inspect nawi_db || docker volume create nawi_db
+        '';
+        partOf = [ "docker-compose-nawi-root.target" ];
+        wantedBy = [ "docker-compose-nawi-root.target" ];
+      };
+      systemd.services."docker-volume-nawi_wp" = {
+        path = [ pkgs.docker ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+        script = ''
+          docker volume inspect nawi_wp || docker volume create nawi_wp
+        '';
+        partOf = [ "docker-compose-nawi-root.target" ];
+        wantedBy = [ "docker-compose-nawi-root.target" ];
+      };
+
+      # Root service
+      # When started, this will automatically create all resources and start
+      # the containers. When stopped, this will teardown all resources.
+      systemd.targets."docker-compose-nawi-root" = {
+        unitConfig = {
+          Description = "Root target generated by compose2nix.";
+        };
+        wantedBy = [ "multi-user.target" ];
+      };
+
     };
 }
 
