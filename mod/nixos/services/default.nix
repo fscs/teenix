@@ -12,6 +12,7 @@
     ./passbolt
     ./fscs-intern-bot
     ./inphimade
+    ./mete
     ./traefik.nix
   ];
 }
