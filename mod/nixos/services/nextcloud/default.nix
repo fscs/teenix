@@ -54,6 +54,10 @@
         from = "Host(`cloud.inphima.de`)";
         to = "nextcloud.inphima.de";
       };
+      teenix.services.traefik.redirects."klausur_inphima" = {
+        from = "Host(`klausur.inphima.de`)";
+        to = "nextcloud.inphima.de/s/K6xSKSXmJRQAiia";
+      };
 
       containers.nextcloud = {
         autoStart = true;
