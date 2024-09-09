@@ -22,7 +22,7 @@
       mode = "444";
     };
     sops.secrets.helfendentool-rabbitmq = {
-      sopsFile = config.teenix.services.helfendentool.secretsFile;
+      sopsFile = config.teenix.services.helfendentool.rabbitmqSecret;
       format = "binary";
       mode = "444";
     };
@@ -55,7 +55,7 @@
     virtualisation.oci-containers.containers."helfendentool-helfertool" = {
       image = "ghcr.io/fscs/helfertool:dockertest";
       volumes = [
-        "${config.sops.secrets.helfendentool.path}:/config/helfendentool.yaml"
+        "${config.sops.secrets.helfendentool.path}:/config/helfertool.yaml"
         "${config.nix-tun.storage.persist.path}/helfendentool/data:/data"
         "${config.nix-tun.storage.persist.path}/helfendentool/log:/log"
         "${config.nix-tun.storage.persist.path}/helfendentool/run:/run"

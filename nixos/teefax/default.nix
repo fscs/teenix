@@ -100,7 +100,7 @@
     enable = true;
     hostname = "helfendentool.inphima.de";
     secretsFile = ../secrets/helfendentool_yaml;
-    rabbitmqSecret = ../secrets/helfendentool_rabbitmq;
+    rabbitmqSecret = ../secrets/helfendtool_rabbitmq;
   };
 
   teenix.services.nextcloud = {
