@@ -26,6 +26,10 @@
         mode = "444";
       };
 
+      services.traefik.dynamicConfigOptions = {
+        http.routers.fscshhude.tls = lib.mkForce true;
+      };
+
       nix-tun.storage.persist.subvolumes."fscshhude".directories = {
         "/db" = {
           owner = "${builtins.toString config.containers.fscshhude.config.users.users.fscs-website.uid}";

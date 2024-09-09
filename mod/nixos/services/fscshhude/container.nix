@@ -6,6 +6,7 @@
 }: {
   networking.hostName = "fscshhude";
   users.users.fscs-website = {
+    uid = 1033;
     home = "/home/fscs-website";
     group = "users";
     shell = pkgs.bash;

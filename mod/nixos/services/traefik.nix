@@ -147,11 +147,41 @@
       networking.firewall.allowedTCPPorts = lib.attrsets.mapAttrsToList (name: value: value.port) config.teenix.services.traefik.entrypoints;
 
       services.traefik =
+        let
+
+          dynamicConfig = pkgs.runCommand "config.toml"
+            {
+              buildInputs = [ pkgs.remarshal ];
+              preferLocalBuild = true;
+            } ''
+            remarshal -if json -of toml \
+              < ${
+                pkgs.writeText "dynamic_config.json"
+                (builtins.toJSON  config.services.traefik.dynamicConfigOptions)
+              } \
+              > $out
+          '';
+
+          configDir = pkgs.stdenv.mkDerivation {
+            name = "traefikConfig";
+            src = ./.;
+            buildPhase = ''
+              mkdir $out
+              ln -s ${dynamicConfig} $out/dyn_config.toml
+              ln -s ${config.sops.secrets.traefik.path} $out/dyn_sops.toml
+            '';
+          };
+        in
         {
           package = pkgs.traefik.traefik;
           enable = true;
+
           dynamicConfigOptions =
             {
+              tls.certificates = [{
+                certFile = "/persist/traefik/certificates/fscs.hhu.de.crt";
+                keyFile = "/persist/traefik/certificates/fscs.hhu.de.key";
+              }];
               http =
                 {
                   routers =
@@ -213,9 +243,6 @@
                         regex = "https://mete.hhu-fscs.de/(.*?)((/deposit)|(/retrieve)|(/transaction))(.*)";
                         replacement = "https://mete.hhu-fscs.de/$1";
                       };
-                      meteauth.basicauth = {
-                        users = [ "mete:$apr1$o5xlJ1Te$8rd1J0xlDWYtV9xio8bSi1" ];
-                      };
                       authentik.forwardAuth = {
                         address = "https://authentik:9443/outpost.goauthentik.io/auth/traefik";
                         trustForwardHeader = true;
@@ -258,7 +285,6 @@
                     };
                 };
             };
-
           staticConfigOptions =
             {
               metrics.prometheus = {
@@ -267,6 +293,7 @@
                 addEntryPointsLabels = true;
                 addServicesLabels = true;
               };
+              providers.file.directory = configDir;
               ping = {
                 entryPoint = "ping";
               };
