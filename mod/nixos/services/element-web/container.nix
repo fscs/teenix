@@ -27,7 +27,7 @@ in
     after = [ "network.target" ];
     serviceConfig = {
       Type = "exec";
-      ExecStart = "${pkgs.caddy} file-server ${element}";
+      ExecStart = "${pkgs.caddy}/bin/caddy file-server -r ${element} --listen :80";
       Restart = "always";
       RestartSec = 5;
     };
