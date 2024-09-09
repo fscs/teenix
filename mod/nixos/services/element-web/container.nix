@@ -27,7 +27,7 @@ in
     after = [ "network.target" ];
     serviceConfig = {
       Type = "exec";
-      ExecStart = "${pkgs.simple-http-server}/bin/simple-http-server --index ${element}";
+      ExecStart = "${pkgs.caddy} file-server ${element}";
       Restart = "always";
       RestartSec = 5;
     };
