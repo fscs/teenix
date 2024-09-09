@@ -209,7 +209,7 @@
                         name: value:
                           {
                             service = "blank";
-                            rule = value.from;
+                            rule = "Host(`${value.from}`)";
                             middlewares = name;
                             tls.certResolver = "letsencrypt";
                           }
@@ -230,7 +230,7 @@
                         name: value:
                           {
                             redirectRegex = {
-                              regex = "(www\\.)?cloud\\.inphima\\.de/?";
+                              regex = "(www\\.)?${builtins.replaceStrings ["."] ["\\."] value.from}/?";
                               replacement = value.to;
                               permanent = true;
                             };

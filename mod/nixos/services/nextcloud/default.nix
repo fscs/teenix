@@ -51,11 +51,11 @@
         servers = [ "http://${config.containers.nextcloud.config.networking.hostName}" ];
       };
       teenix.services.traefik.redirects."cloud_inphima" = {
-        from = "Host(`cloud.inphima.de`)";
+        from = "cloud.inphima.de";
         to = "nextcloud.inphima.de";
       };
       teenix.services.traefik.redirects."klausur_inphima" = {
-        from = "Host(`klausur.inphima.de`)";
+        from = "klausur.inphima.de";
         to = "nextcloud.inphima.de/s/K6xSKSXmJRQAiia";
       };
 
