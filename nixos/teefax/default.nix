@@ -96,6 +96,13 @@
   # Services
   nix-tun.storage.persist.enable = true;
 
+  teenix.services.helfendentool = {
+    enable = true;
+    hostname = "helfendentool.inphima.de";
+    secretsFile = ../secrets/helfendentool_yaml;
+    rabbitmqSecret = ../secrets/helfendentool_rabbitmq;
+  };
+
   teenix.services.nextcloud = {
     enable = true;
     hostname = "nextcloud.inphima.de";

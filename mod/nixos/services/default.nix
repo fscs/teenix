@@ -8,6 +8,7 @@
     ./nextcloud
     ./openssh.nix
     ./pretix
+    ./helfendentool
     ./prometheus
     ./passbolt
     ./fscs-intern-bot
