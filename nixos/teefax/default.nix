@@ -44,6 +44,8 @@
     };
   };
 
+  networking.firewall.checkReversePath = "loose";
+
   sops.secrets.traefik = {
     format = "binary";
     mode = "444";
