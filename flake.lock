@@ -474,11 +474,11 @@
         "theme": "theme"
       },
       "locked": {
-        "lastModified": 1725616251,
-        "narHash": "sha256-fzimD8FfZk1sYvl5/C8Cf0wDyv14tTwLzlAoqgmAagE=",
+        "lastModified": 1725969938,
+        "narHash": "sha256-LzhgDl7a5kauUJkmVxdw2iOD3vW7eVhBX9Q03lKDkc8=",
         "ref": "refs/heads/main",
-        "rev": "f29485733ff900ba2f13ae691d05278c68efa4a4",
-        "revCount": 319,
+        "rev": "a06f3df5375e9f2f61751f17b9fadb7c9392f19e",
+        "revCount": 321,
         "type": "git",
         "url": "ssh://git@git.hhu.de/fscs/website.git"
       },
@@ -849,11 +849,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1724395761,
-        "narHash": "sha256-zRkDV/nbrnp3Y8oCADf5ETl1sDrdmAW6/bBVJ8EbIdQ=",
+        "lastModified": 1725910328,
+        "narHash": "sha256-n9pCtzGZ0httmTwMuEbi5E78UQ4ZbQMr1pzi5N0LAG8=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "ae815cee91b417be55d43781eb4b73ae1ecc396c",
+        "rev": "5775c2583f1801df7b790bf7f7d710a19bac66f4",
         "type": "github"
       },
       "original": {
@@ -1004,28 +1004,6 @@
       "inputs": {
         "nixpkgs": [
           "fscshhude",
-          "server",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1724552650,
-        "narHash": "sha256-u1xzgrdRTL0DQhjXMgmEvl75IrL8zGf0RS34IQJXxeU=",
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "rev": "19fda552b69513df7b6aa5fcfd1412c0221467b1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "type": "github"
-      }
-    },
-    "rust-overlay_2": {
-      "inputs": {
-        "nixpkgs": [
-          "fscshhude",
           "theme",
           "server",
           "nixpkgs"
@@ -1055,15 +1033,14 @@
         "nixpkgs": [
           "fscshhude",
           "nixpkgs"
-        ],
-        "rust-overlay": "rust-overlay"
+        ]
       },
       "locked": {
-        "lastModified": 1725037377,
-        "narHash": "sha256-sT2L8nI9zYKRn6fv4byiTaxneZV/WlOz4cyJVznrgs4=",
+        "lastModified": 1725962399,
+        "narHash": "sha256-aSvYBKPfHK5eGjJ8uOcT4xMs3OBZCbhUqaJ9/k3h9Dc=",
         "owner": "fscs",
         "repo": "website-server",
-        "rev": "a11e3e57986184b539908ccff62306df39c5cd68",
+        "rev": "948177318aa7472d848321e87d79886a193d79f0",
         "type": "github"
       },
       "original": {
@@ -1081,7 +1058,7 @@
           "theme",
           "nixpkgs"
         ],
-        "rust-overlay": "rust-overlay_2"
+        "rust-overlay": "rust-overlay"
       },
       "locked": {
         "lastModified": 1724590366,
@@ -1246,11 +1223,11 @@
         "server": "server_2"
       },
       "locked": {
-        "lastModified": 1725572592,
-        "narHash": "sha256-Q6EAk3Nba27QmUvRDHiCMadHNqDg+lFRGd38SawegKQ=",
+        "lastModified": 1725714750,
+        "narHash": "sha256-cyIXUUNS/BuhqgJidmWeUrsBrAYrumcjHvVKfmRrSTc=",
         "owner": "fscs",
         "repo": "website-theme",
-        "rev": "dd0c20c318a5a13cb95df908f1991ea0c9169500",
+        "rev": "f0f64e972150f34908c61aa10a613d705c33412e",
         "type": "github"
       },
       "original": {
