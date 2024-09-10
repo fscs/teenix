@@ -58,6 +58,10 @@
         from = "klausur.inphima.de";
         to = "nextcloud.inphima.de/s/K6xSKSXmJRQAiia";
       };
+      teenix.services.traefik.redirects."klausur_inphima2" = {
+        from = "https://www.inphima.de/klausurarchiv/";
+        to = "nextcloud.inphima.de/s/K6xSKSXmJRQAiia";
+      };
 
       containers.nextcloud = {
         autoStart = true;

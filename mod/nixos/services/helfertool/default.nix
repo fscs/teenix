@@ -50,7 +50,7 @@
       teenix.services.traefik.services."passbolt" = {
         router.rule = "Host(`${opts.hostname}`)";
         #TODO: Set the adderees dynamically maybe traefix docker impl
-        servers = [ "http://172.17.0.3:80" ];
+        servers = [ "http://172.21.0.4:80" ];
       };
 
       virtualisation.docker.rootless = {
