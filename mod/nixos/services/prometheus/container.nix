@@ -31,7 +31,17 @@ in
         receivers:
         - name: discord
           discord_configs:
-          - webhook_url: $ENVIRONMENT ''${discord_url}
+          - message: |
+              {{ range .Alerts.Firing }}
+              - {{ .Labels.service }} {{ end }}
+              {{ if and (gt (len .Alerts.Resolved) 0) (gt (len .Alerts.Firing) 0) }}
+              ### Traefik Service is back up
+              {{ end }}
+              {{ range .Alerts.Resolved }}
+              - {{ .Labels.service }} {{ end }}
+            title: 'Traefik Service is {{ if gt (len .Alerts.Firing) 0 }}down {{ else }}back up {{ end }}'
+            send_resolved: true
+            webhook_url: $ENVIRONMENT ''${discord_url}
       '';
     };
     alertmanagers = [

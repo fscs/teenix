@@ -7,5 +7,4 @@
         labels:
           severity: critical
         annotations:
-          summary: Traefik service down (instance {{ $labels.instance }})
-          description: "All Traefik services are down\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          description: "Traefik service down {{ $labels.service }}"
