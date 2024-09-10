@@ -33,6 +33,21 @@
       servers = [ "http://172.21.0.4:8000" ];
     };
 
+    teenix.services.traefik.redirects."helfer_redirect" = {
+      from = "helfer.inphima.de";
+      to = "helfendentool.inphima.de";
+    };
+
+    teenix.services.traefik.redirects."helfen_redirect" = {
+      from = "helfen.inphima.de";
+      to = "helfendentool.inphima.de";
+    };
+
+    teenix.services.traefik.redirects."helfende_redirect" = {
+      from = "helfende.inphima.de";
+      to = "helfendentool.inphima.de";
+    };
+
     nix-tun.storage.persist.subvolumes."helfendentool".directories = {
       "data" = {
         mode = "0777";
