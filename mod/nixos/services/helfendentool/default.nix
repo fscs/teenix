@@ -30,7 +30,7 @@
     teenix.services.traefik.services."helfendentool" = {
       router.rule = "Host(`${config.teenix.services.helfendentool.hostname}`)";
       #TODO: Set the adderees dynamically maybe traefix docker impl
-      servers = [ "http://172.20.0.3:8080" ];
+      servers = [ "http://172.21.0.4:8000" ];
     };
 
     nix-tun.storage.persist.subvolumes."helfendentool".directories = {
