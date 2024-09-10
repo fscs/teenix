@@ -34,8 +34,7 @@ in
     enable = true;
     extraConfigFiles = [ host-config.sops.secrets.matrix_env.path ];
     settings = {
-      enable_registration = true;
-      enable_registration_without_verification = true;
+      serve_server_wellknown = true;
       turn_uris = [ "turn:${config.services.coturn.realm}:3478?transport=udp" "turn:${config.services.coturn.realm}:3478?transport=tcp" ];
       turn_shared_secret = config.services.coturn.static-auth-secret-file;
       turn_user_lifetime = "1h";

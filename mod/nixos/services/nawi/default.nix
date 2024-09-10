@@ -51,7 +51,7 @@
       teenix.services.traefik.services."nawi" = {
         router.rule = "Host(`nawi.inphima.de`) || Host(`${opts.hostname}`) || Host(`www.${opts.hostname}`)";
         #TODO: Set the adderees dynamically maybe traefix docker impl
-        servers = [ "http://172.19.0.3:80" ];
+        servers = [ "http://172.19.0.2:80" ];
       };
       # Runtime
       virtualisation.docker = {

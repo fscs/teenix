@@ -44,7 +44,7 @@
     };
   };
 
-  networking.firewall.checkReversePath = "loose";
+  networking.firewall.checkReversePath = false;
 
   sops.secrets.traefik = {
     format = "binary";
@@ -133,7 +133,7 @@
   teenix.services.element-web = {
     enable = true;
     hostname = "element.inphima.de";
-    matrixUrl = "matrix.inphima.de";
+    matrixUrl = "inphima.de";
   };
 
   teenix.services.pretix = {
