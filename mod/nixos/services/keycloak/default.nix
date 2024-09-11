@@ -33,7 +33,7 @@
         };
       };
 
-      teenix.services.traefik.redirects."keyclaok_auth" = {
+      teenix.services.traefik.redirects."keycloak_auth" = {
         from = "login.inphima.de/auth";
         to = "login.inphima.de";
       };
@@ -43,6 +43,8 @@
         servers = [ "http://${config.containers.keycloak.config.networking.hostName}" ];
         healthCheck = true;
       };
+
+      services.traefik.dynamicConfigOptions.http.routers.keycloak.middlewares = [ "keycloak_auth" ];
 
       containers.keycloak = {
         ephemeral = true;
