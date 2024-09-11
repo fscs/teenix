@@ -93,6 +93,12 @@
     };
   };
 
+  teenix.services.sliding-sync = {
+    enable = true;
+    hostname = "syncv3.inphima.de";
+    envFile = ../secrets/sliding_env;
+  };
+
   # Services
   nix-tun.storage.persist.enable = true;
 

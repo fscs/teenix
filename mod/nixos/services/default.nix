@@ -16,6 +16,7 @@
     ./nawi
     ./mete
     ./sydent
+    ./sliding-sync
     ./traefik.nix
   ];
 }
