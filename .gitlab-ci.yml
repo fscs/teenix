@@ -9,8 +9,6 @@ setup:
   script: |
     mkdir -p ~/.ssh
     chmod 700 ~/.ssh
-    # install ssh private key
-    chmod 400 "$SSH_PRIVATE_KEY"
     # install known_kosts
     cp "$SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
     chmod 644 ~/.ssh/known_hosts
@@ -20,29 +18,17 @@ setup:
     # enable flakes and nix command
     mkdir -p ~/.config/nix
     echo 'experimental-features = nix-command flakes' > ~/.config/nix/nix.conf
-    cat ~/.config/nix/nix.conf
 
 lock-update:
   stage: build
   image: nixos/nix
+  cache:
+    paths:
+      - flake.lock
   rules:
     - if: $CI_PIPELINE_SOURCE == "pipeline"
-  before_script: |
-    eval $(ssh-agent -s)
-    ssh-add "$SSH_PRIVATE_KEY"
-    # set git names
-    git config --global user.email "fscs@hhu.de"
-    git config --global user.name "Knut"
   script: |
-    # update website input
-    nix flake lock --update-input fscshhude
-    # git commit
-    git add flake.lock
-    git status
-    git commit \
-      -m "updated ${CI_NIX_UPDATE_INPUT} to $(cat flake.lock | nix run nixpkgs#jq -- -r .nodes.fscshhude.locked.rev)"
-    # aaaand push
-    git push origin main
+    nix flake lock --update-input ${CI_NIX_UPDATE_INPUT}
 
 deploy:
   stage: deploy
@@ -51,9 +37,31 @@ deploy:
     - if: $CI_PIPELINE_SOURCE != "pipeline"
   before_script: |
     eval $(ssh-agent -s)
+    chmod 400 "$SSH_PRIVATE_KEY"
     ssh-add "$SSH_PRIVATE_KEY"
     # set git names
     git config --global user.email "fscs@hhu.de"
     git config --global user.name "Knut"
   script: |
     nix develop -c nixos-rebuild --flake . --target-host gitlab@fscs.hhu.de --build-host gitlab@fscs.hhu.de switch --use-remote-sudo
+
+commit-lockfile:
+  stage: .after
+  image: nixos/nix
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "pipeline"
+  before_script: |
+    eval $(ssh-agent -s)
+    chmod 400 "$SSH_PRIVATE_KEY"
+    ssh-add "$SSH_PRIVATE_KEY"
+    # set git names
+    git config --global user.email "fscs@hhu.de"
+    git config --global user.name "Knut"
+  script: |
+    # git commit
+    git add flake.lock
+    git status
+    git commit \
+      -m "updated ${CI_NIX_UPDATE_INPUT} to $(cat flake.lock | nix run nixpkgs#jq -- -r .nodes.${CI_NIX_UPDATE_INPUT}.locked.rev)"
+    # aaaand push
+    git push origin main
