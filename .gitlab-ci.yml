@@ -4,8 +4,8 @@ setup:
   cache:
     paths:
       - /nix/store/*
-      - ~/.ssh
-      - ~/.config/nix
+      - ~/.ssh/*
+      - ~/.config/nix/*
   script: |
     mkdir -p ~/.ssh
     chmod 700 ~/.ssh
