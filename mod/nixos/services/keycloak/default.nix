@@ -34,8 +34,8 @@
       };
 
       teenix.services.traefik.redirects."keycloak_auth" = {
-        from = "login.inphima.de/auth";
-        to = "login.inphima.de";
+        from = "login.inphima.de/auth/";
+        to = "login.inphima.de/";
       };
 
       teenix.services.traefik.services."keycloak" = {
