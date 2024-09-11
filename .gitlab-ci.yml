@@ -1,10 +1,10 @@
-setup:
-  stage: .pre
+stages:
+  - deploy
+
+build-job:
+  stage: deploy
   image: nixos/nix
-  cache:
-    paths:
-      - /nix/store/*
-  script: |
+  before_script: |
     mkdir -p ~/.ssh
     chmod 700 ~/.ssh
     # install ssh private key
@@ -17,34 +17,5 @@ setup:
     # install ssh config
     cp "$SSH_CONFIG" ~/.ssh/config
     chmod 644 ~/.ssh/config
-    # enable flakes and nix command
-    mkdir -p ~/.config/nix
-    echo 'experimental-features = nix-command flakes' > ~/.config/nix/nix.conf
-    # set git names
-    git config --global user.email "fscs@hhu.de"
-    git config --global user.name "Knut"
-
-lock-update:
-  stage: build
-  image: nixos/nix
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "pipeline"
   script: |
-    # update website input
-    nix flake lock --update-input ${CI_NIX_UPDATE_INPUT}
-    # git commit
-    git add flake.lock
-    git status
-    git commit \
-      -m "updated ${CI_NIX_UPDATE_INPUT} to $(cat flake.lock | nix run nixpkgs#jq -- -r .nodes.${CI_NIX_UPDATE_INPUT}.locked.rev)"
-    # aaaand push
-    git push origin main
-
-deploy:
-  stage: deploy
-  image: nixos/nix
-  interruptible: true
-  rules:
-    - if: $CI_PIPELINE_SOURCE != "pipeline"
-  script: |
-    nix develop -c nixos-rebuild --flake . --target-host gitlab@fscs.hhu.de --build-host gitlab@fscs.hhu.de switch --use-remote-sudo
+    nixos-rebuild --flake . --target-host gitlab@fscs.hhu.de --build-host gitlab@fscs.hhu.de switch --use-remote-sudo
