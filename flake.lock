@@ -173,20 +173,12 @@
       }
     },
     "crane_3": {
-      "inputs": {
-        "nixpkgs": [
-          "fscshhude",
-          "theme",
-          "server",
-          "nixpkgs"
-        ]
-      },
       "locked": {
-        "lastModified": 1724537630,
-        "narHash": "sha256-gpqINM71zp3kw5XYwUXa84ZtPnCmLLnByuFoYesT1bY=",
+        "lastModified": 1725409566,
+        "narHash": "sha256-PrtLmqhM6UtJP7v7IGyzjBFhbG4eOAHT6LPYOFmYfbk=",
         "owner": "ipetkov",
         "repo": "crane",
-        "rev": "3e08f4b1fc9aaede5dd511d8f5f4ef27501e49b0",
+        "rev": "7e4586bad4e3f8f97a9271def747cf58c4b68f3c",
         "type": "github"
       },
       "original": {
@@ -467,11 +459,11 @@
         "theme": "theme"
       },
       "locked": {
-        "lastModified": 1726041603,
-        "narHash": "sha256-otryyvvJR5zQ2oWTkSNj9tm+hbSALsndlbcqNWospNI=",
+        "lastModified": 1726057107,
+        "narHash": "sha256-IynnG1Vc7e6vYxEiYLPDXZGvHIWwIwe3rpGy0TV+2nA=",
         "ref": "refs/heads/main",
-        "rev": "ed64983fef310e245ec9bf252485c92a70446fc8",
-        "revCount": 323,
+        "rev": "118b2291987fa323127bb15af82821c7dce0e8e5",
+        "revCount": 325,
         "type": "git",
         "url": "ssh://git@git.hhu.de/fscs/website.git"
       },
@@ -842,11 +834,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1725910328,
-        "narHash": "sha256-n9pCtzGZ0httmTwMuEbi5E78UQ4ZbQMr1pzi5N0LAG8=",
+        "lastModified": 1726042813,
+        "narHash": "sha256-LnNKCCxnwgF+575y0pxUdlGZBO/ru1CtGHIqQVfvjlA=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5775c2583f1801df7b790bf7f7d710a19bac66f4",
+        "rev": "159be5db480d1df880a0135ca0bfed84c2f88353",
         "type": "github"
       },
       "original": {
@@ -858,11 +850,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1724395761,
-        "narHash": "sha256-zRkDV/nbrnp3Y8oCADf5ETl1sDrdmAW6/bBVJ8EbIdQ=",
+        "lastModified": 1726042813,
+        "narHash": "sha256-LnNKCCxnwgF+575y0pxUdlGZBO/ru1CtGHIqQVfvjlA=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "ae815cee91b417be55d43781eb4b73ae1ecc396c",
+        "rev": "159be5db480d1df880a0135ca0bfed84c2f88353",
         "type": "github"
       },
       "original": {
@@ -993,29 +985,6 @@
         "sops": "sops"
       }
     },
-    "rust-overlay": {
-      "inputs": {
-        "nixpkgs": [
-          "fscshhude",
-          "theme",
-          "server",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1724552650,
-        "narHash": "sha256-u1xzgrdRTL0DQhjXMgmEvl75IrL8zGf0RS34IQJXxeU=",
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "rev": "19fda552b69513df7b6aa5fcfd1412c0221467b1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "type": "github"
-      }
-    },
     "server": {
       "inputs": {
         "crane": "crane_2",
@@ -1029,11 +998,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1725996996,
-        "narHash": "sha256-2NIfsZkFTSj/zosZqf7Ls8O61HrGgRCsjZvgn3Fu0lI=",
+        "lastModified": 1726054137,
+        "narHash": "sha256-UW9aIMFZHrPz7xnGaqKwsG3mTL+FZeAjhvge6n+CLAI=",
         "owner": "fscs",
         "repo": "website-server",
-        "rev": "f089f84e48bfb4311dc337260954b1539da22e9c",
+        "rev": "62448d9dc22a415162db2ebdc89e65708a0e5044",
         "type": "github"
       },
       "original": {
@@ -1050,15 +1019,14 @@
           "fscshhude",
           "theme",
           "nixpkgs"
-        ],
-        "rust-overlay": "rust-overlay"
+        ]
       },
       "locked": {
-        "lastModified": 1724590366,
-        "narHash": "sha256-/+EuqM4OoiJ+lNdJvGYHtHpE6PfbErd6/lzPc/n+9Eg=",
+        "lastModified": 1726054137,
+        "narHash": "sha256-UW9aIMFZHrPz7xnGaqKwsG3mTL+FZeAjhvge6n+CLAI=",
         "owner": "fscs",
         "repo": "website-server",
-        "rev": "22cd45e8c4035f4596a70d164320d0f025cfd30f",
+        "rev": "62448d9dc22a415162db2ebdc89e65708a0e5044",
         "type": "github"
       },
       "original": {
@@ -1216,11 +1184,11 @@
         "server": "server_2"
       },
       "locked": {
-        "lastModified": 1725714750,
-        "narHash": "sha256-cyIXUUNS/BuhqgJidmWeUrsBrAYrumcjHvVKfmRrSTc=",
+        "lastModified": 1726056818,
+        "narHash": "sha256-E0vkETNAkv4QF0yEYpGkPhHa+zRsTQCguvREYFykCjc=",
         "owner": "fscs",
         "repo": "website-theme",
-        "rev": "f0f64e972150f34908c61aa10a613d705c33412e",
+        "rev": "e5fb67028e54b571962902a5fede55ff48503368",
         "type": "github"
       },
       "original": {
