@@ -17,6 +17,7 @@ setup:
     # enable flakes and nix command
     mkdir -p ~/.config/nix
     echo 'experimental-features = nix-command flakes' > ~/.config/nix/nix.conf
+    cat ~/.config/nix/nix.conf
     # set git names
     git config --global user.email "fscs@hhu.de"
     git config --global user.name "Knut"
