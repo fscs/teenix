@@ -27,12 +27,6 @@
       mode = "444";
     };
 
-    teenix.services.traefik.services."helfendentool" = {
-      router.rule = "Host(`${config.teenix.services.helfendentool.hostname}`)";
-      #TODO: Set the adderees dynamically maybe traefix docker impl
-      servers = [ "http://172.21.0.4:8000" ];
-    };
-
     teenix.services.traefik.redirects."helfer_redirect" = {
       from = "helfer.inphima.de";
       to = "helfendentool.inphima.de";
@@ -79,6 +73,14 @@
         "helfendentool-postgressql"
         "helfendentool-rabbitmq"
       ];
+      labels = {
+        "traefik.enable"="true";
+        "traefik.http.routers.helfertool.entrypoints"="websecure";
+        "traefik.http.routers.helfertool.rule"="Host(`helfendentool.inphima.de`) || Host(`www.helfendentool.inphima.de`)";
+        "traefik.http.routers.helfertool.tls"="true";
+        "traefik.http.routers.helfertool.tls.certresolver"="letsencrypt";
+        "traefik.http.services.helfertool.loadbalancer.server.port"="8000";
+      };
       log-driver = "journald";
       extraOptions = [
         "--network-alias=helfertool"

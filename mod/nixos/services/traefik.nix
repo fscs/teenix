@@ -144,6 +144,7 @@
 
   config = lib.mkIf config.teenix.services.traefik.enable
     {
+      users.users.traefik.extraGroups = [ "docker" ];
       networking.firewall.allowedTCPPorts = lib.attrsets.mapAttrsToList (name: value: value.port) config.teenix.services.traefik.entrypoints;
 
       services.traefik =
@@ -294,6 +295,10 @@
                 addServicesLabels = true;
               };
               providers.file.directory = configDir;
+	      providers.docker = {
+	        exposedByDefault = false;
+	        watch = true;
+	      };
               ping = {
                 entryPoint = "ping";
               };
