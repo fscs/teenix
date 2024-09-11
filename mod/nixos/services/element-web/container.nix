@@ -13,7 +13,7 @@ let
             base_url = "https://${opts.matrixUrl}";
             server_name = "${opts.matrixUrl}";
           };
-          "m.identity_server".base_url = "https://vector.im";
+          "m.identity_server".base_url = "https://sydent.inphima.de";
         };
       };
     in

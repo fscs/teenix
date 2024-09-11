@@ -15,6 +15,7 @@
     ./inphimade
     ./nawi
     ./mete
+    ./sydent
     ./traefik.nix
   ];
 }

@@ -198,6 +198,11 @@
     mariaEnvFile = ../secrets/nawi/maria_env;
   };
 
+  teenix.services.sydent = {
+    enable = true;
+    hostname = "sydent.inphima.de";
+  };
+
   # Users
   sops.secrets.felix_pwd = {
     format = "binary";

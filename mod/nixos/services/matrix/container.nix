@@ -35,6 +35,15 @@ in
     extraConfigFiles = [ host-config.sops.secrets.matrix_env.path ];
     settings = {
       serve_server_wellknown = true;
+      default_identity_server = "https://sydent.inphima.de";
+      public_baseurl = "https://inphima.de";
+      user_directory = {
+        enabled = true;
+        search_all_users = true;
+        prefer_local_users = true;
+        show_locked_users = true;
+      };
+
       turn_uris = [ "turn:${config.services.coturn.realm}:3478?transport=udp" "turn:${config.services.coturn.realm}:3478?transport=tcp" ];
       turn_shared_secret = config.services.coturn.static-auth-secret-file;
       turn_user_lifetime = "1h";
