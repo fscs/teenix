@@ -46,7 +46,7 @@ commit-lockfile:
     - if: $CI_PIPELINE_SOURCE == "pipeline"
   script: |
     # only commit if something actually changed
-    git diff -s --exit-code flake.lock || exit
+    git diff -s --exit-code flake.lock && exit
     # git commit
     git add flake.lock
     git status
