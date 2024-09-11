@@ -18,4 +18,4 @@ build-job:
     cp "$SSH_CONFIG" ~/.ssh/config
     chmod 644 ~/.ssh/config
   script: |
-    nixos-rebuild --flake . --target-host gitlab@fscs.hhu.de --build-host gitlab@fscs.hhu.de switch --use-remote-sudo
+    nix develop -c nixos-rebuild --flake . --target-host gitlab@fscs.hhu.de --build-host gitlab@fscs.hhu.de switch --use-remote-sudo
