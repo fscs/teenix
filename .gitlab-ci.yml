@@ -5,7 +5,7 @@ setup:
     paths:
       - /nix/store/*
       - ~/.ssh
-      - ~/.config
+      - ~/.config/nix
   script: |
     mkdir -p ~/.ssh
     chmod 700 ~/.ssh
