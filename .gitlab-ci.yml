@@ -46,7 +46,7 @@ deploy:
     nix develop -c nixos-rebuild --flake . --target-host gitlab@fscs.hhu.de --build-host gitlab@fscs.hhu.de switch --use-remote-sudo
 
 commit-lockfile:
-  stage: .after
+  stage: .post
   image: nixos/nix
   rules:
     - if: $CI_PIPELINE_SOURCE == "pipeline"
