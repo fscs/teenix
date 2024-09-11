@@ -210,6 +210,7 @@
                         name: value:
                           {
                             service = "blank";
+                            priority = 10;
                             rule = "Host(`${value.from}`)";
                             middlewares = name;
                             tls.certResolver = "letsencrypt";
@@ -295,10 +296,10 @@
                 addServicesLabels = true;
               };
               providers.file.directory = configDir;
-	      providers.docker = {
-	        exposedByDefault = false;
-	        watch = true;
-	      };
+              providers.docker = {
+                exposedByDefault = false;
+                watch = true;
+              };
               ping = {
                 entryPoint = "ping";
               };
