@@ -4,6 +4,9 @@ stages:
 build-job:
   stage: deploy
   image: nixos/nix
+  cache:
+    paths:
+      - /nix/store/*
   before_script: |
     mkdir -p ~/.ssh
     chmod 700 ~/.ssh
