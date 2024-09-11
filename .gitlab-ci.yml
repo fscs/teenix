@@ -47,10 +47,12 @@ commit-lockfile:
   rules:
     - if: $CI_PIPELINE_SOURCE == "pipeline"
   script: |
+    # only commit if something actually changed
+    git diff -s --exit-code flake.lock || exit
     # git commit
     git add flake.lock
     git status
     git commit \
       -m "updated ${CI_NIX_UPDATE_INPUT} to $(cat flake.lock | nix run nixpkgs#jq -- -r .nodes.${CI_NIX_UPDATE_INPUT}.locked.rev)"
     # aaaand push
-    git push origin main
+    git push origin main -o ci.skip
