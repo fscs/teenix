@@ -1,0 +1,24 @@
+stages:
+  - deploy
+
+build-job:
+  stage: deploy
+  image: nixos/nix
+  before_script: |
+    mkdir -p ~/.ssh
+    chmod 700 ~/.ssh
+    # install ssh private key
+    eval $(ssh-agent -s)
+    chmod 400 "$SSH_PRIVATE_KEY"
+    ssh-add "$SSH_PRIVATE_KEY"
+    # install known_kosts
+    cp "$SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
+    chmod 644 ~/.ssh/known_hosts
+    # install ssh config
+    cp "$SSH_CONFIG" ~/.ssh/config
+    chmod 644 ~/.ssh/config
+    # enable flakes and nix command
+    mkdir -p ~/.config/nix
+    echo 'experimental-features = nix-command flakes' > ~/.config/nix/nix.conf
+  script: |
+    nix develop -c nixos-rebuild --flake . --target-host gitlab@fscs.hhu.de --build-host gitlab@fscs.hhu.de switch --use-remote-sudo

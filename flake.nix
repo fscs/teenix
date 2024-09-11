@@ -71,6 +71,7 @@
 
             nativeBuildInputs = [
               (pkgs.callPackage inputs.sops { }).sops-import-keys-hook
+              pkgs.nixos-rebuild
             ];
           };
         }
