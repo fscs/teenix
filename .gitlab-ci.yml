@@ -18,7 +18,9 @@ default:
     # set git user info
     git config --global user.email "fscs@hhu.de"
     git config --global user.name "Knut"
-
+    # correct git origin
+    git remote set-url origin git@git.hhu.de:fscs/teenix
+    
 lock-update:
   stage: build
   image: nixos/nix
