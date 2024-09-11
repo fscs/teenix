@@ -29,14 +29,6 @@
         };
       };
 
-      teenix.services.traefik.services."sydent" = {
-        router =
-          {
-            rule = "Host(`${opts.hostname}`)";
-          };
-        servers = [ "http://172.17.0.4:8090" ];
-      };
-
       virtualisation.docker.rootless = {
         enable = true;
         setSocketVariable = true;
@@ -47,6 +39,14 @@
         containers = {
           sydent = {
             image = "matrixdotorg/sydent";
+            labels = {
+              "traefik.enable" = "true";
+              "traefik.http.routers.sydent.entrypoints" = "websecure";
+              "traefik.http.routers.sydent.rule" = "Host(`${opts.hostname}`)";
+              "traefik.http.routers.sydent.tls" = "true";
+              "traefik.http.routers.sydent.tls.certresolver" = "letsencrypt";
+              "traefik.http.services.sydent.loadbalancer.server.port" = "8090";
+            };
             volumes = [
               "${config.nix-tun.storage.persist.path}/sydent/data:/data"
             ];

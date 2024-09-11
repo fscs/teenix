@@ -48,12 +48,6 @@
         };
       };
 
-      teenix.services.traefik.services."inphimade" = {
-        router.rule = "Host(`${opts.hostname}`) || Host(`www.${opts.hostname}`)";
-        #TODO: Set the adderees dynamically maybe traefix docker impl
-        servers = [ "http://172.18.0.3:80" ];
-      };
-
       # Runtime
       virtualisation.docker = {
         enable = true;
@@ -107,6 +101,14 @@
           "WORDPRESS_DB_HOST" = "inphima-db";
           "WORDPRESS_DB_NAME" = "inphimadb";
           "WORDPRESS_DB_USER" = "inphima";
+        };
+        labels = {
+          "traefik.enable" = "true";
+          "traefik.http.routers.inphima.entrypoints" = "websecure";
+          "traefik.http.routers.inphima.rule" = "Host(`${opts.hostname}`) || Host(`www.${opts.hostname}`)";
+          "traefik.http.routers.inphima.tls" = "true";
+          "traefik.http.routers.inphima.tls.certresolver" = "letsencrypt";
+          "traefik.http.services.inphima.loadbalancer.server.port" = "80";
         };
         environmentFiles = [ config.sops.secrets.inphimade.path ];
         volumes = [

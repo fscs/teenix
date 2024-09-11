@@ -32,30 +32,6 @@
         };
       };
 
-      teenix.services.traefik.services."mete" = {
-        router =
-          {
-            rule = "Host(`${opts.hostname}`)";
-            middlewares = [ "meteredirect" "meteauth" ];
-          };
-        servers = [ "http://172.17.0.3:8080" ];
-      };
-
-      teenix.services.traefik.services."metesecure" = {
-        router =
-          {
-            rule = "Host(`metesecure.hhu-fscs.de`)";
-            middlewares = [ "authentik" ];
-          };
-        servers = [ "http://172.17.0.3:8080" ];
-      };
-
-      teenix.services.traefik.services."mete-summary" = {
-        router.rule = "Host(`${opts.hostname-summary}`)";
-        #TODO: Set the adderees dynamically maybe traefix docker impl
-        servers = [ "http://172.17.0.2:5000" ];
-      };
-
       virtualisation.docker.rootless = {
         enable = true;
         setSocketVariable = true;
@@ -66,6 +42,24 @@
         containers = {
           mete = {
             image = "ghcr.io/fscs/mete:wip-fscs";
+            labels = {
+              "traefik.enable" = "true";
+              # Certificate
+              "traefik.http.routers.mete.tls" = "true";
+              "traefik.http.routers.mete.tls.certresolver" = "letsencrypt";
+              "traefik.http.routers.mete.rule" = "Host(`mete.hhu-fscs.de`)";
+              "traefik.http.routers.mete.middlewares" = "meteauth@file,meteredirect@file";
+              "traefik.http.services.mete.loadbalancer.server.port" = "8080";
+              "traefik.http.services.mete.loadbalancer.healthCheck.path" = "/";
+              # Mete Secure
+              "traefik.http.middlewares.meteredirect.redirectregex.regex" = "https://mete.hhu-fscs.de/(.*?)((/deposit)|(/retrieve)|(/transaction))(.*)";
+              "traefik.http.middlewares.meteredirect.redirectregex.replacement" = "https://mete.hhu-fscs.de/$1";
+              "traefik.http.routers.metesecure.rule" = "Host(`metesecure.hhu-fscs.de`)";
+              "traefik.http.routers.metesecure.tls" = "true";
+              "traefik.http.routers.metesecure.tls.certresolver" = "letsencrypt";
+              "traefik.http.routers.metesecure.service" = "mete";
+              "traefik.http.routers.metesecure.middlewares" = "authentik@file";
+            };
             volumes = [
               "${config.nix-tun.storage.persist.path}/mete/db:/app/var"
               "${config.nix-tun.storage.persist.path}/mete/drinks:/app/public/system/drinks"

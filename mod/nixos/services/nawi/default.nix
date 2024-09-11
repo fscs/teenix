@@ -48,11 +48,6 @@
         };
       };
 
-      teenix.services.traefik.services."nawi" = {
-        router.rule = "Host(`nawi.inphima.de`) || Host(`${opts.hostname}`) || Host(`www.${opts.hostname}`)";
-        #TODO: Set the adderees dynamically maybe traefix docker impl
-        servers = [ "http://172.19.0.2:80" ];
-      };
       # Runtime
       virtualisation.docker = {
         enable = true;
@@ -106,6 +101,14 @@
           "WORDPRESS_DB_HOST" = "nawi-db";
           "WORDPRESS_DB_NAME" = "nawidb";
           "WORDPRESS_DB_USER" = "nawi";
+        };
+        labels = {
+          "traefik.enable" = "true";
+          "traefik.http.routers.nawi.entrypoints" = "websecure";
+          "traefik.http.routers.nawi.rule" = "Host(`nawi.inphima.de`) || Host(`${opts.hostname}`) || Host(`www.${opts.hostname}`)";
+          "traefik.http.routers.nawi.tls" = "true";
+          "traefik.http.routers.nawi.tls.certresolver" = "letsencrypt";
+          "traefik.http.services.nawi.loadbalancer.server.port" = "80";
         };
         environmentFiles = [ config.sops.secrets.nawi.path ];
         volumes = [

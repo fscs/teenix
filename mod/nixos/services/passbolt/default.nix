@@ -56,12 +56,6 @@
         };
       };
 
-      teenix.services.traefik.services."passbolt" = {
-        router.rule = "Host(`${opts.hostname}`)";
-        #TODO: Set the adderees dynamically maybe traefix docker impl
-        servers = [ "http://172.20.0.3:8080" ];
-      };
-
       # Runtime
       virtualisation.docker = {
         enable = true;
@@ -122,6 +116,14 @@
           "EMAIL_TRANSPORT_DEFAULT_TLS" = "true";
           "EMAIL_TRANSPORT_DEFAULT_USERNAME" = "noreply-fscs";
           "PASSBOLT_KEY_EMAIL" = "fscs@hhu.de";
+        };
+        labels = {
+          "traefik.enable" = "true";
+          "traefik.http.routers.passbolt.entrypoints" = "websecure";
+          "traefik.http.routers.passbolt.rule" = "Host(`passbolt.hhu-fscs.de`)";
+          "traefik.http.routers.passbolt.tls" = "true";
+          "traefik.http.routers.passbolt.tls.certresolver" = "letsencrypt";
+          "traefik.http.services.passbolt.loadbalancer.server.port" = "8080";
         };
         environmentFiles = [ config.sops.secrets.passbolt.path ];
         volumes = [
