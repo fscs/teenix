@@ -53,4 +53,4 @@ commit-lockfile:
     git commit \
       -m "updated ${CI_NIX_UPDATE_INPUT} to $(cat flake.lock | nix run nixpkgs#jq -- -r .nodes.${CI_NIX_UPDATE_INPUT}.locked.rev)"
     # aaaand push
-    git push -o ci.skip HEAD:main
+    git push -o ci.skip origin HEAD:main
