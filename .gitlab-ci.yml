@@ -18,6 +18,7 @@ build-job:
     cp "$SSH_CONFIG" ~/.ssh/config
     chmod 644 ~/.ssh/config
     # enable flakes and nix command
+    mkdir -p ~/.config/nix
     echo 'experimental-features = nix-command flakes' > ~/.config/nix/nix.conf
   script: |
     nix develop -c nixos-rebuild --flake . --target-host gitlab@fscs.hhu.de --build-host gitlab@fscs.hhu.de switch --use-remote-sudo
