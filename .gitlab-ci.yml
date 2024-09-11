@@ -4,7 +4,7 @@ setup:
   cache:
     paths:
       - /nix/store/*
-  before_script: |
+  script: |
     mkdir -p ~/.ssh
     chmod 700 ~/.ssh
     # install ssh private key
