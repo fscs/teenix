@@ -438,17 +438,17 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1725624513,
-        "narHash": "sha256-8SnINOPZ1e/cQo4ZbpDcURuafSqzPZoHU5u9PtJNJDs=",
+        "lastModified": 1726173373,
+        "narHash": "sha256-sXxuPdNVYtF14yiAY01qBCx3m1TMIWRAveAx3KGXZzU=",
         "ref": "refs/heads/master",
-        "rev": "9847a5e6292bcf7c3b550d3bf6ed744465c809a5",
-        "revCount": 31,
+        "rev": "7914612df9bab825c03bff2f0075853f959a8fdb",
+        "revCount": 32,
         "type": "git",
-        "url": "ssh://git@git.hhu.de/fscs/fscs-intern-bot.git"
+        "url": "ssh://git@git.hhu.de/fscs/discord-intern-bot.git"
       },
       "original": {
         "type": "git",
-        "url": "ssh://git@git.hhu.de/fscs/fscs-intern-bot.git"
+        "url": "ssh://git@git.hhu.de/fscs/discord-intern-bot.git"
       }
     },
     "fscshhude": {
