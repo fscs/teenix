@@ -34,11 +34,15 @@
         hostAddress = "192.168.113.10";
         localAddress = "192.168.113.11";
         bindMounts = {
+          "resolv" = {
+            hostPath = "/etc/resolv.conf";
+            mountPoint = "/etc/resolv.conf";
+          };
           "secret" = {
             hostPath = config.sops.secrets.discord-intern-bot.path;
             mountPoint = config.sops.secrets.discord-intern-bot.path;
           };
-          "db" = {
+          "home" = {
             hostPath = "${config.nix-tun.storage.persist.path}/discord-intern-bot/";
             mountPoint = "/home/discord-intern-bot/";
             isReadOnly = false;
