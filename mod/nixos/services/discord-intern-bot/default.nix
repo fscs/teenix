@@ -44,8 +44,8 @@
             mountPoint = config.sops.secrets.discord-intern-bot.path;
           };
           "db" = {
-            hostPath = "${config.nix-tun.storage.persist.path}/discord-intern-bot/database.sqlite";
-            mountPoint = "/home/discord-intern-bot/database.sqlite";
+            hostPath = "${config.nix-tun.storage.persist.path}/discord-intern-bot/db/";
+            mountPoint = "/home/discord-intern-bot/db/";
             isReadOnly = false;
           };
         };
