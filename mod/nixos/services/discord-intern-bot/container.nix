@@ -17,7 +17,7 @@
       EnvironmentFile = host-config.sops.secrets.discord-intern-bot.path;
       Type = "exec";
       User = "discord-intern-bot";
-      WorkingDirectory = "/home/discord-intern-bot/db";
+      WorkingDirectory = "/home/discord-intern-bot/";
       ExecStart = "${inputs.discord-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".default}/bin/discord-intern-bot";
       Restart = "always";
       RestartSec = 5;
