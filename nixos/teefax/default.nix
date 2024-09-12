@@ -177,7 +177,7 @@
 
   teenix.services.fscs-intern-bot =
     {
-      enable = true;
+      enable = false;
       secretsFile = ../secrets/fscsinternbot;
     };
 
