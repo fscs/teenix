@@ -29,6 +29,7 @@ lock-update:
   script: |
     nix flake lock --update-input ${CI_NIX_UPDATE_INPUT}
   artifacts:
+    expire_in: 48 hrs
     paths:
       - flake.lock
 
