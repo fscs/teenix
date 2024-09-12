@@ -31,8 +31,8 @@
       containers.discord-intern-bot = {
         autoStart = true;
         privateNetwork = true;
-        hostAddress = "192.168.103.10";
-        localAddress = "192.168.103.11";
+        hostAddress = "192.168.113.10";
+        localAddress = "192.168.113.11";
         bindMounts = {
           "secret" = {
             hostPath = config.sops.secrets.discord-intern-bot.path;
