@@ -35,6 +35,8 @@ lock-update:
 deploy:
   stage: deploy
   image: nixos/nix
+  only:
+    - main
   cache:
     paths:
       - /nix/store/*
@@ -44,6 +46,8 @@ deploy:
 commit-lockfile:
   stage: .post
   image: nixos/nix
+  only:
+    - main
   rules:
     - if: $CI_PIPELINE_SOURCE == "pipeline"
   script: |
