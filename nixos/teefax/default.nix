@@ -246,6 +246,7 @@
       setSopsPassword = false;
       sshKeys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICAoWrXcbe0HbxOHRqbeSofUoYez8l5ydvTfpop0I5gD notuser@nixos"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMbxDGg250fa1tE9HK4U1G3Uee2L7p5kA+V82RAIL89b yesmachine"
       ];
     };
 
