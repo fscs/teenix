@@ -11,7 +11,7 @@
     ./helfendentool
     ./prometheus
     ./passbolt
-    ./fscs-intern-bot
+    ./discord-intern-bot
     ./inphimade
     ./nawi
     ./mete

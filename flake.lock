@@ -123,7 +123,7 @@
     "crane": {
       "inputs": {
         "nixpkgs": [
-          "fscs-intern-bot",
+          "discord-intern-bot",
           "nixpkgs"
         ]
       },
@@ -169,6 +169,27 @@
         "owner": "ipetkov",
         "repo": "crane",
         "type": "github"
+      }
+    },
+    "discord-intern-bot": {
+      "inputs": {
+        "crane": "crane",
+        "fenix": "fenix",
+        "flake-utils": "flake-utils_2",
+        "nixpkgs": "nixpkgs_4"
+      },
+      "locked": {
+        "lastModified": 1726177484,
+        "narHash": "sha256-fTVOTXEHuh42H0n3lsArHiOo/w+fNS+soOBHvO3Al0A=",
+        "ref": "refs/heads/master",
+        "rev": "55b3d477cae42650ad905e661bd2e838840d0a41",
+        "revCount": 38,
+        "type": "git",
+        "url": "ssh://git@git.hhu.de/fscs/discord-intern-bot.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@git.hhu.de/fscs/discord-intern-bot.git"
       }
     },
     "fenix": {
@@ -407,27 +428,6 @@
         "owner": "numtide",
         "repo": "flake-utils",
         "type": "github"
-      }
-    },
-    "fscs-intern-bot": {
-      "inputs": {
-        "crane": "crane",
-        "fenix": "fenix",
-        "flake-utils": "flake-utils_2",
-        "nixpkgs": "nixpkgs_4"
-      },
-      "locked": {
-        "lastModified": 1726177484,
-        "narHash": "sha256-fTVOTXEHuh42H0n3lsArHiOo/w+fNS+soOBHvO3Al0A=",
-        "ref": "refs/heads/master",
-        "rev": "55b3d477cae42650ad905e661bd2e838840d0a41",
-        "revCount": 38,
-        "type": "git",
-        "url": "ssh://git@git.hhu.de/fscs/discord-intern-bot.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "ssh://git@git.hhu.de/fscs/discord-intern-bot.git"
       }
     },
     "fscshhude": {
@@ -969,7 +969,7 @@
       "inputs": {
         "arion": "arion",
         "authentik-nix": "authentik-nix",
-        "fscs-intern-bot": "fscs-intern-bot",
+        "discord-intern-bot": "discord-intern-bot",
         "fscshhude": "fscshhude",
         "hm": "hm",
         "mete": "mete",

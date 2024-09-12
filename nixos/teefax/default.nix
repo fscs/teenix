@@ -175,11 +175,10 @@
     mariaEnvFile = ../secrets/passbolt/maria_env;
   };
 
-  teenix.services.fscs-intern-bot =
-    {
-      enable = false;
-      secretsFile = ../secrets/fscsinternbot;
-    };
+  teenix.services.discord-intern-bot = {
+    enable = true;
+    secretsFile = ../secrets/discordinternbot;
+  };
 
   teenix.services.traefik.services.onlyoffice = config.nix-tun.services.traefik.services.onlyoffice;
 

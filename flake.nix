@@ -15,7 +15,7 @@
     };
     nix-tun.url = "github:nix-tun/nixos-modules";
     fscshhude.url = "git+ssh://git@git.hhu.de/fscs/website.git";
-    fscs-intern-bot.url = "git+ssh://git@git.hhu.de/fscs/discord-intern-bot.git";
+    discord-intern-bot.url = "git+ssh://git@git.hhu.de/fscs/discord-intern-bot.git";
     arion.url = "github:hercules-ci/arion";
     authentik-nix.url = "github:nix-community/authentik-nix";
     mete = {

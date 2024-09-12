@@ -4,21 +4,21 @@
 , host-config
 , ...
 }: {
-  users.users.fscs-hhu = {
-    home = "/home/fscs-hhu";
+  users.users.discord-intern-bot = {
+    home = "/home/discord-intern-bot";
     group = "users";
     isNormalUser = true;
   };
 
   systemd.services.fscs-intern-bot = {
-    description = "Serve FSCS intern bot";
+    description = "Serve discord intern bot";
     after = [ "network.target" ];
     serviceConfig = {
-      EnvironmentFile = host-config.sops.secrets.fscs-intern-bot.path;
+      EnvironmentFile = host-config.sops.secrets.discord-intern-bot.path;
       Type = "exec";
-      User = "fscs-webiste";
-      WorkingDirectory = " /home/fscs-website ";
-      ExecStart = "${inputs.fscs-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".fscs-intern-bot}/bin/top-manager-discord";
+      User = "discord-intern-bot";
+      WorkingDirectory = "/home/discord-intern-bot/";
+      ExecStart = "${inputs.discord-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".default}/bin/discord-intern-bot";
       Restart = "always";
       RestartSec = 5;
     };
@@ -28,7 +28,6 @@
   networking = {
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 8080 ];
     };
     # Use systemd-resolved inside the container
     # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
