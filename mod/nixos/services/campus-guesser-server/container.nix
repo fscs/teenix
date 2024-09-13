@@ -1,7 +1,6 @@
 { pkgs
 , inputs
 , lib
-, config
 , host-config
 , ...
 }: {
@@ -15,10 +14,14 @@
     enable = true;
     ensureUsers = [
       {
-        name = config.users.users.campus-guesser-server.name;
+        name = "campus-guesser-server";
       }
     ];
   };
+
+  environment.systemPackages = [
+    inputs.campus-guesser-server.packages.${pkgs.stdenv.hostPlatform.system}.default
+  ];
 
   systemd.services.campus-guesser-server = {
     description = "Serve the CampusGuesser Server";
