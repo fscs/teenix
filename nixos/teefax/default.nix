@@ -24,6 +24,12 @@
     enableIPv6 = true;
   };
 
+  teenix.services.traefik.redirects."essen_inphima" = {
+    from = "essen.inphima.de";
+    to = "www.stw-d.de/gastronomie/speiseplaene/essenausgabe-sued-duesseldorf";
+  };
+
+
   virtualisation.vmware.guest.enable = true;
 
   networking.interfaces.ens34 = {
