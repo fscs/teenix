@@ -23,6 +23,7 @@
       flake = false;
     };
     campus-guesser-server.url = "git+ssh://git@git.hhu.de/fscs/campus-guesser-server.git";
+    campus-guesser-server.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
