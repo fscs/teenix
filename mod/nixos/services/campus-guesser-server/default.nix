@@ -6,15 +6,27 @@
 }: {
   options.teenix.services.campus-guesser-server = {
     enable = lib.mkEnableOption "setup campus-guesser-server";
+    hostname = lib.mkOption {
+      type = lib.types.str;
+    };
   };
 
   config =
     let
-      opts = config.teenix.services.discord-intern-bot;
+      opts = config.teenix.services.campus-guesser-server;
     in
     lib.mkIf opts.enable {
-      nix-tun.storage.persist.subvolumes."campus-guesser-server" = {};
-      
+      nix-tun.storage.persist.subvolumes."campus-guesser-server" = { };
+
+      teenix.services.traefik.services."campus_guessser" = {
+        router =
+          {
+            rule = "Host(`${opts.hostname}`)";
+          };
+        servers = [ "http://${config.containers.campus-guesser-server.config.networking.hostName}:8080" ];
+      };
+
+
       containers.campus-guesser-server = {
         autoStart = true;
         privateNetwork = true;

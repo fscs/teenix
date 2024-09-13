@@ -1,10 +1,9 @@
-{
-  pkgs,
-  inputs,
-  lib,
-  config,
-  host-config,
-  ...
+{ pkgs
+, inputs
+, lib
+, config
+, host-config
+, ...
 }: {
   users.users.campus-guesser-server = {
     home = "/home/campus-guesser-server";
@@ -23,7 +22,7 @@
 
   systemd.services.campus-guesser-server = {
     description = "Serve the CampusGuesser Server";
-    after = ["network.target"];
+    after = [ "network.target" ];
     serviceConfig = {
       Type = "exec";
       Environment = "SPRING_DATASOURCE_USERNAME='campus-guesser-server' SPRING_DATASOURCE_URL='postgresql:///run/postgresql:5432'";
@@ -32,12 +31,13 @@
       Restart = "always";
       RestartSec = 5;
     };
-    wantedBy = ["multi-user.target"];
+    wantedBy = [ "multi-user.target" ];
   };
 
   networking = {
     firewall = {
       enable = true;
+      allowedTCPPorts = [ 8080 ];
     };
     # Use systemd-resolved inside the container
     # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
