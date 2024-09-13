@@ -678,11 +678,11 @@
         "nixpkgs": "nixpkgs_8"
       },
       "locked": {
-        "lastModified": 1725748038,
-        "narHash": "sha256-WHOo39VTHRwUILO288xGj1kZq8WYCEb/0qD1e5NM4rY=",
+        "lastModified": 1726230424,
+        "narHash": "sha256-kaquX+rUd7MO+zqRry8eHkI1k4tXlQeMp5jNRULXzuQ=",
         "owner": "nix-tun",
         "repo": "nixos-modules",
-        "rev": "99a6d6ac2f1cdf68ca788d160bafe94f3a0df4e8",
+        "rev": "99a1b2b315852a02eb3b47c722baa5deee1b728a",
         "type": "github"
       },
       "original": {
