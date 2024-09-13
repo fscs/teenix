@@ -22,6 +22,7 @@
         router =
           {
             rule = "Host(`${opts.hostname}`)";
+            middlewares = [ "authentik" ];
           };
         servers = [ "http://${config.containers.campus-guesser-server.config.networking.hostName}:8080" ];
       };
