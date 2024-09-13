@@ -42,7 +42,7 @@ deploy:
     echo $src $srcs
     export src=""
     export secs=""
-    nix develop -c nixos-rebuild --fast --flake .# switch --build-host gitlab@fscs.hhu.de --target-host gitlab@fscs.hhu.de --use-remote-sudo --show-trace --impure --no-sandbox
+    nix develop -c nixos-rebuild --fast --flake .# switch --build-host gitlab@fscs.hhu.de --target-host gitlab@fscs.hhu.de --use-remote-sudo --show-trace --impure
 
 commit-lockfile:
   stage: .post
