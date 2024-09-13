@@ -38,9 +38,6 @@ deploy:
   image: nixos/nix:2.18.5
   only:
     - main
-  cache:
-    paths:
-      - /nix/store/*
   script: |
     nix develop -c nixos-rebuild --flake . --target-host gitlab@fscs.hhu.de --build-host gitlab@fscs.hhu.de switch --use-remote-sudo
 
