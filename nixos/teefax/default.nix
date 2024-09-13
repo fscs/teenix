@@ -214,6 +214,8 @@
     hostname = "sydent.inphima.de";
   };
 
+  teenix.services.campus-guesser-server.enable = true;
+
   # Users
   sops.secrets.felix_pwd = {
     format = "binary";

@@ -22,6 +22,7 @@
       url = "github:fscs/mete/wip/fscs";
       flake = false;
     };
+    campus-guesser-server.url = "git+ssh://git@git.hhu.de/fscs/campus-guesser-server.git";
   };
 
   outputs =
