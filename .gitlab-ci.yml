@@ -23,7 +23,7 @@ default:
     
 lock-update:
   stage: build
-  image: nixos/nix:2.23.2
+  image: nixos/nix:2.18.5
   rules:
     - if: $CI_PIPELINE_SOURCE == "pipeline"
   script: |
@@ -35,7 +35,7 @@ lock-update:
 
 deploy:
   stage: deploy
-  image: nixos/nix:2.23.2
+  image: nixos/nix:2.18.5
   only:
     - main
   cache:
@@ -46,7 +46,7 @@ deploy:
 
 commit-lockfile:
   stage: .post
-  image: nixos/nix:2.23.2
+  image: nixos/nix:2.18.5
   rules:
     - if: $CI_PIPELINE_SOURCE == "pipeline" && $CI_COMMIT_BRANCH == "main"
   script: |
