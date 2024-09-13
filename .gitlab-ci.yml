@@ -39,6 +39,9 @@ deploy:
   only:
     - main
   script: |
+    echo $src $srcs
+    export src=""
+    export secs=""
     nix develop -c nixos-rebuild --fast --flake .# switch --build-host gitlab@fscs.hhu.de --target-host gitlab@fscs.hhu.de --use-remote-sudo --show-trace
 
 commit-lockfile:
