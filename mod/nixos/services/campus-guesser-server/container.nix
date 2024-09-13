@@ -1,6 +1,7 @@
 { pkgs
 , inputs
 , lib
+, config
 , host-config
 , ...
 }: {
@@ -14,7 +15,7 @@
     enable = true;
     ensureUsers = [
       {
-        name = "campus-guesser-server";
+        name = config.users.users.campus-guesser-server.name;
       }
     ];
   };
