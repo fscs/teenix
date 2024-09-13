@@ -39,7 +39,7 @@ deploy:
   only:
     - main
   script: |
-    nix develop -c nixos-rebuild --flake .#teefax build
+    nix develop -c nixos-rebuild --flake .# switch --build-host gitlab@fscs.hhu.de --target-host gitlab@fscs.hhu.de --use-remote-sudo --no-build-nix
 
 commit-lockfile:
   stage: .post
