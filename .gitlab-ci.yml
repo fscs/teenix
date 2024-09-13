@@ -39,7 +39,7 @@ deploy:
   only:
     - main
   script: |
-    nix develop -c nixos-rebuild --flake .# switch --build-host gitlab@fscs.hhu.de --target-host gitlab@fscs.hhu.de --use-remote-sudo --no-build-nix
+    nix develop -c nixos-rebuild --fast --flake .# switch --build-host gitlab@fscs.hhu.de --target-host gitlab@fscs.hhu.de --use-remote-sudo
 
 commit-lockfile:
   stage: .post
