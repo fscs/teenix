@@ -39,7 +39,7 @@ deploy:
   only:
     - main
   script: |
-    nix develop -c nixos-rebuild --flake . build
+    nix develop -c nixos-rebuild --flake .#teefax build
 
 commit-lockfile:
   stage: .post
