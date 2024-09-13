@@ -218,10 +218,10 @@
     hostname = "sydent.inphima.de";
   };
 
-  # teenix.services.campus-guesser-server = {
-  #   enable = false; # ENABLE ME
-  #   hostname = "campusguesser.inphima.de";
-  # };
+  teenix.services.campus-guesser-server = {
+    enable = true;
+    hostname = "campusguesser.inphima.de";
+  };
 
   # Users
   sops.secrets.felix_pwd = {
