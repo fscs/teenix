@@ -29,7 +29,7 @@
     after = [ "network.target" ];
     serviceConfig = {
       Type = "exec";
-      Environment = "SPRING_DATASOURCE_USERNAME='campus-guesser-server' SPRING_DATASOURCE_URL='postgresql:///run/postgresql:5432'";
+      Environment = "SPRING_DATASOURCE_USERNAME='campus-guesser-server' SPRING_DATASOURCE_URL='jdbc:postgresql:///run/postgresql:5432'";
       User = "campus-guesser-server";
       ExecStart = "${inputs.campus-guesser-server.packages."${pkgs.stdenv.hostPlatform.system}".default}/bin/CampusGuesserServer-fscs";
       Restart = "always";
