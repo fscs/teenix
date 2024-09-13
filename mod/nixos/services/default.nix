@@ -18,6 +18,6 @@
     ./sydent
     ./sliding-sync
     ./traefik.nix
-    ./campus-guesser-server
+    # ./campus-guesser-server
   ];
 }
