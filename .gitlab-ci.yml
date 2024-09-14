@@ -39,7 +39,7 @@ deploy:
   only:
     - main
   script: |
-    nix develop -c nixos-rebuild --flake . --build-host gitlab@fscs.hhu.de --target-host gitlab@fscs.hhu.de --use-remote-sudo switch
+    nix develop -c nixos-rebuild --flake . --build-host gitlab@fscs.hhu.de --target-host gitlab@fscs.hhu.de --use-remote-sudo --verbose switch
 
 commit-lockfile:
   stage: .post
@@ -53,6 +53,6 @@ commit-lockfile:
     git add flake.lock
     git status
     git commit \
-    -m "updated ${CI_NIX_UPDATE_INPUT} to $(cat flake.lock | nix run nixpkgs#jq -- -r .nodes.\"${CI_NIX_UPDATE_INPUT}\".locked.rev)"
+    -m "updated ${CI_NIX_UPDATE_INPUT} to $(cat flake.lock | nix run nixpkgs#jq -- -r .nodes.\"${CI_NIX_UPDATE_INPUT}\".locked.rev[0:7])"
     # aaaand push
     git push -o ci.skip origin HEAD:main
