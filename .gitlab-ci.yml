@@ -39,12 +39,7 @@ deploy:
   only:
     - main
   script: |
-    echo $src $srcs
-    export src=""
-    export secs=""
-    ssh-add -L
-    ssh gitlab@fscs.hhu.de "ssh-add -L"
-    ssh gitlab@fscs.hhu.de "cd ~/ && rm * -rf && git clone git@git.hhu.de:fscs/teenix ~/teenix  && cd ~/teenix && sudo nixos-rebuild switch --flake ."
+    nix-develop -c nixos-rebuild --flake . --build-host gitlab@fscs.hhu.de --target-host gitlab@fscs.hhu.de --use-remote-sudo
 
 commit-lockfile:
   stage: .post
