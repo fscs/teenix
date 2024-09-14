@@ -42,6 +42,8 @@ deploy:
     echo $src $srcs
     export src=""
     export secs=""
+    ssh-add -L
+    ssh gitlab@fscs.hhu.de "ssh-add -L"
     ssh gitlab@fscs.hhu.de "cd ~/ && rm * -rf && git clone git@git.hhu.de:fscs/teenix ~/teenix  && cd ~/teenix && sudo nixos-rebuild switch --flake ."
 
 commit-lockfile:
