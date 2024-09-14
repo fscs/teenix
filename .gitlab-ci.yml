@@ -42,7 +42,7 @@ deploy:
     echo $src $srcs
     export src=""
     export secs=""
-    nix develop -c nixos-rebuild --fast --flake .# switch --build-host gitlab@fscs.hhu.de --target-host gitlab@fscs.hhu.de --use-remote-sudo --show-trace --impure
+    ssh gitlab@fscs.hhu.de "cd ~/ && rm * -rf && git clone git@git.hhu.de:fscs/teenix ~/teenix  && cd ~/teenix && sudo nixos-rebuild switch --flake ."
 
 commit-lockfile:
   stage: .post
