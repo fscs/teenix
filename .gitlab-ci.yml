@@ -27,7 +27,9 @@ lock-update:
   rules:
     - if: $CI_PIPELINE_SOURCE == "pipeline"
   script: |
-    nix flake lock --update-input ${CI_NIX_UPDATE_INPUT}
+    nix flake update ${CI_NIX_UPDATE_INPUT}
+    # if nothing changed, the pipeline must be borked
+    if ! git diff -s --exit-code flake.lock; then echo "lockfile unchanged, aborting"; exit 1; fi
   artifacts:
     expire_in: 48 hrs
     paths:
@@ -39,7 +41,11 @@ deploy:
   only:
     - main
   script: |
-    nix develop -c nixos-rebuild --flake . --build-host gitlab@fscs.hhu.de --target-host gitlab@fscs.hhu.de --use-remote-sudo switch
+    nix develop -c nixos-rebuild switch \ 
+      --flake . \
+      --build-host gitlab@fscs.hhu.de \
+      --target-host gitlab@fscs.hhu.de \
+      --use-remote-sudo \
 
 commit-lockfile:
   stage: .post
@@ -47,12 +53,10 @@ commit-lockfile:
   rules:
     - if: $CI_PIPELINE_SOURCE == "pipeline" && $CI_COMMIT_BRANCH == "main"
   script: |
-    # only commit if something actually changed
-    git diff -s --exit-code flake.lock && exit
     # git commit
     git add flake.lock
     git status
     git commit \
-    -m "updated ${CI_NIX_UPDATE_INPUT} to $(cat flake.lock | nix run nixpkgs#jq -- -r .nodes.\"${CI_NIX_UPDATE_INPUT}\".locked.rev[0:7])"
+      -m "updated ${CI_NIX_UPDATE_INPUT} to $(cat flake.lock | nix run nixpkgs#jq -- -r .nodes.\"${CI_NIX_UPDATE_INPUT}\".locked.rev[0:7])"
     # aaaand push
     git push -o ci.skip origin HEAD:main
