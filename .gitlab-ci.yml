@@ -28,8 +28,6 @@ lock-update:
     - if: $CI_PIPELINE_SOURCE == "pipeline"
   script: |
     nix flake update ${CI_NIX_UPDATE_INPUT}
-    # if nothing changed, the pipeline must be borked
-    if ! git diff -s --exit-code flake.lock; then echo "lockfile unchanged, aborting"; exit 1; fi
   artifacts:
     expire_in: 48 hrs
     paths:
@@ -53,6 +51,8 @@ commit-lockfile:
   rules:
     - if: $CI_PIPELINE_SOURCE == "pipeline" && $CI_COMMIT_BRANCH == "main"
   script: |
+    # if nothing changed, dont commit (this might be cause by the website auto deploy)
+    if ! git diff -s --exit-code flake.lock; then echo "lockfile unchanged, not commiting"; exit; fi
     # git commit
     git add flake.lock
     git status
