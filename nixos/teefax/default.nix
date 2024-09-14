@@ -13,9 +13,10 @@
 
     outputs.nixosModules.teenix
   ];
-  
+
   environment.systemPackages = [
     inputs.campus-guesser-server.packages.${pkgs.stdenv.hostPlatform.system}.default
+    pkgs.git
   ];
 
   networking.nameservers = [ "134.99.154.201" "134.99.154.228" ];
