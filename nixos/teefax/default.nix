@@ -19,7 +19,13 @@
     pkgs.git
   ];
 
-  networking.nameservers = [ "134.99.154.201" "134.99.154.228" ];
+  networking = {
+    nameservers = [ "134.99.154.201" "134.99.154.228" ];
+    defaultGateway = {
+      address = "134.99.154.1";
+      interface = "ens32";
+    };
+  };
 
   networking.nat = {
     enable = true;

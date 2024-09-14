@@ -232,7 +232,7 @@
                         name: value:
                           {
                             redirectRegex = {
-                              regex = "(www\\.)?${builtins.replaceStrings ["."] ["\\."] value.from}/?";
+                              regex = "(www\\.)?${builtins.replaceStrings ["." "/"] ["\\." "\\/"] value.from}/?";
                               replacement = value.to;
                               permanent = true;
                             };
