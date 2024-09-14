@@ -129,11 +129,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1726319306,
-        "narHash": "sha256-stdwcEpt7BEWNKSXJ/PdrsJ3I+gsK6eVDP+5c9+kAuQ=",
+        "lastModified": 1726320130,
+        "narHash": "sha256-B2PGRXeAiLJBp8/9/6O1+VFMx+Z8AU8U4dhxng/sgWM=",
         "owner": "0x5a4",
         "repo": "buildGradleApplication",
-        "rev": "e484eb0b4e90e111d143735bbad9389981e55e39",
+        "rev": "5625bb6cf0e3eefc8e40975d7cb23a9b069e3f78",
         "type": "github"
       },
       "original": {
@@ -151,11 +151,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1726319376,
-        "narHash": "sha256-Bn9LoAlY2BodvaH0UlmZUEYMs1EX7a4LIWe63hYXn/E=",
+        "lastModified": 1726334995,
+        "narHash": "sha256-jBNUxBk095tPQG5UbNKg0dvbHZ4aXrePq6n9FHNojig=",
         "ref": "refs/heads/main",
-        "rev": "14a07832ac2783afa136c60e9602abbdb98bec0c",
-        "revCount": 57,
+        "rev": "365f657a8691077e9c89c6300a915ca12a734ecc",
+        "revCount": 66,
         "type": "git",
         "url": "ssh://git@git.hhu.de/fscs/campus-guesser-server.git"
       },
