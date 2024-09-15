@@ -43,7 +43,7 @@ deploy:
       --flake . \
       --build-host gitlab@fscs.hhu.de \
       --target-host gitlab@fscs.hhu.de \
-      --use-remote-sudo \
+      --use-remote-sudo
 
 commit-lockfile:
   stage: .post
