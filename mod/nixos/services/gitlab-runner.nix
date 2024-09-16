@@ -55,7 +55,7 @@
               . ${pkgs.nix}/etc/profile.d/nix-daemon.sh
               ${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixos-24.05 nixpkgs
               ${pkgs.nix}/bin/nix-channel --update nixpkgs
-              ${pkgs.nix}/bin/nix-env -i ${concatStringsSep " " (with pkgs; [nix cacert git openssh])}
+              ${pkgs.nix}/bin/nix-env -i ${concatStringsSep " " (with pkgs; [nixVersions.latest cacert git openssh])}
             '';
 
             environmentVariables = {
