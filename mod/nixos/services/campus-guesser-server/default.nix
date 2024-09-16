@@ -26,7 +26,7 @@
         mode = "444";
       };
 
-      nix-tun.storage.persist.subvolumes."campus-guesser-server" = {
+      nix-tun.storage.persist.subvolumes."campus-guesser-server".directories = {
         "/data" = {
           owner = "${builtins.toString config.containers.campus-guesser-server.config.users.users.campus-guesser-server.uid}";
           mode = "0700";
