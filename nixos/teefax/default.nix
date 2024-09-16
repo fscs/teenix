@@ -235,6 +235,10 @@
     secretsFile = ../secrets/campusguesser;
   };
 
+  teenix.services.node_exporter = {
+    enable = true;
+  };
+
   # Users
   sops.secrets.felix_pwd = {
     format = "binary";

@@ -1,5 +1,6 @@
 { lib
 , host-config
+, pkgs
 , ...
 }:
 let
@@ -69,7 +70,41 @@ in
           }
         ];
       }
+      {
+        job_name = "node_exporter";
+        metrics_path = "/metrics";
+        static_configs = [
+          {
+            targets = [
+              "localhost:9100"
+            ];
+          }
+        ];
+      }
     ];
+  };
+
+  users.users.node_exporter = {
+    uid = 1033;
+    home = "/home/node_exporter";
+    group = "users";
+    shell = pkgs.bash;
+    isNormalUser = true;
+  };
+
+  systemd.services.node_exporter-serve = {
+    description = "Start node exporter";
+    after = [ "network.target" ];
+    path = [ pkgs.bash ];
+    serviceConfig = {
+      Type = "exec";
+      User = "node_exporter";
+      WorkingDirectory = "/home/node_exporter";
+      ExecStart = "${pkgs.prometheus-node-exporter}/bin/node_exporter";
+      Restart = "always";
+      RestartSec = 5;
+    };
+    wantedBy = [ "multi-user.target" ];
   };
 
   services.grafana = {

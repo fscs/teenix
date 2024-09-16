@@ -19,5 +19,6 @@
     ./sliding-sync
     ./traefik.nix
     ./campus-guesser-server
+    ./node_exporter
   ];
 }
