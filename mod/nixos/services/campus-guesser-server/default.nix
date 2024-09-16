@@ -56,7 +56,6 @@
             hostPath = "/etc/resolv.conf";
             mountPoint = "/etc/resolv.conf";
           };
-          }
         };
 
         specialArgs = {
