@@ -52,6 +52,11 @@
             hostPath = config.sops.secrets.campusguesser.path;
             mountPoint = config.sops.secrets.campusguesser.path;
           };
+          "resolv" = {
+            hostPath = "/etc/resolv.conf";
+            mountPoint = "/etc/resolv.conf";
+          };
+          }
         };
 
         specialArgs = {
