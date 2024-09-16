@@ -36,7 +36,6 @@
         servers = [ "http://${config.containers.campus-guesser-server.config.networking.hostName}:8080" ];
       };
 
-
       containers.campus-guesser-server = {
         autoStart = true;
         privateNetwork = true;
@@ -47,6 +46,10 @@
             hostPath = "${config.nix-tun.storage.persist.path}/campus-guesser-server/postgres";
             mountPoint = "/var/lib/postgresql";
             isReadOnly = false;
+          };
+          "images" = {
+            hostPath =  "${config.nix-tun.storage.persist.path}/campus-guesser-server/data";
+            mountPoint = "/var/lib/campus-guesser/images";
           };
           "secret" = {
             hostPath = config.sops.secrets.campusguesser.path;
