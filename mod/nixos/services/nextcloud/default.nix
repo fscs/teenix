@@ -49,10 +49,6 @@
       teenix.services.traefik.services."nextcloud" = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.nextcloud.config.networking.hostName}" ];
-        healthCheck = {
-          enable = true;
-          path = "/login";
-        };
       };
       teenix.services.traefik.redirects."cloud_inphima" = {
         from = "cloud.inphima.de";

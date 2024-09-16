@@ -22,7 +22,6 @@
       teenix.services.traefik.services."element-web" = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.element-web.config.networking.hostName}:80" ];
-        healthCheck.enable = true;
       };
 
       containers.element-web = {
