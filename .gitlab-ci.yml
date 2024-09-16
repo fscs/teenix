@@ -52,7 +52,7 @@ commit-lockfile:
     - if: $CI_PIPELINE_SOURCE == "pipeline" && $CI_COMMIT_BRANCH == "main"
   script: |
     # if nothing changed, dont commit (this might be cause by the website auto deploy)
-    if ! git diff -s --exit-code flake.lock; then echo "lockfile unchanged, not commiting"; exit; fi
+    if git diff -s --exit-code flake.lock; then echo "lockfile unchanged, not commiting"; exit; fi
     # git commit
     git add flake.lock
     git status
