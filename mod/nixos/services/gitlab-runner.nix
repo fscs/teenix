@@ -40,8 +40,6 @@
               "/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket:ro"
             ];
 
-            dockerDisableCache = true;
-
             preBuildScript = pkgs.writeScript "setup-container" ''
               mkdir -p -m 0755 /nix/var/log/nix/drvs
               mkdir -p -m 0755 /nix/var/nix/gcroots
