@@ -25,7 +25,6 @@ default:
     
 lock-update:
   stage: build
-  image: nixos/nix
   rules:
     - if: $CI_PIPELINE_SOURCE == "pipeline"
   script: |
@@ -37,7 +36,6 @@ lock-update:
 
 deploy:
   stage: deploy
-  image: nixos/nix
   only:
     - main
   script: |
@@ -49,7 +47,6 @@ deploy:
 
 commit-lockfile:
   stage: .post
-  image: nixos/nix
   rules:
     - if: $CI_PIPELINE_SOURCE == "pipeline" && $CI_COMMIT_BRANCH == "main"
   script: |
