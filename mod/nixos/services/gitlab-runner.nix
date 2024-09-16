@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
+{ lib
+, config
+, pkgs
+, ...
 }: {
   options.teenix.services.gitlab-runner = {
     enable = lib.mkEnableOption "setup the gitlab runner";
@@ -12,9 +11,10 @@
     };
   };
 
-  config = let
-    opts = config.teenix.services.gitlab-runner;
-  in
+  config =
+    let
+      opts = config.teenix.services.gitlab-runner;
+    in
     lib.mkIf opts.enable {
       sops.secrets.gitlab-runner = {
         sopsFile = opts.secretsFile;
@@ -40,6 +40,8 @@
               "/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket:ro"
             ];
 
+            #NOTE: change channel on update of nixos version
+
             preBuildScript = pkgs.writeScript "setup-container" ''
               mkdir -p -m 0755 /nix/var/log/nix/drvs
               mkdir -p -m 0755 /nix/var/nix/gcroots
@@ -51,7 +53,7 @@
               mkdir -p -m 0755 /nix/var/nix/profiles/per-user/root
               mkdir -p -m 0700 "$HOME/.nix-defexpr"
               . ${pkgs.nix}/etc/profile.d/nix-daemon.sh
-              ${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixos-20.09 nixpkgs # 3
+              ${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixos-24.05 nixpkgs
               ${pkgs.nix}/bin/nix-channel --update nixpkgs
               ${pkgs.nix}/bin/nix-env -i ${concatStringsSep " " (with pkgs; [nix cacert git openssh])}
             '';
