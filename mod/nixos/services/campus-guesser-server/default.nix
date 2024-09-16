@@ -26,7 +26,12 @@
         mode = "444";
       };
 
-      nix-tun.storage.persist.subvolumes."campus-guesser-server" = { };
+      nix-tun.storage.persist.subvolumes."campus-guesser-server" = {
+        "/data" = {
+          owner = "${builtins.toString config.containers.fscshhude.config.users.users.campus-guesser-server.uid}";
+          mode = "0700";
+        };
+      };
 
       teenix.services.traefik.services."campus_guessser" = {
         router =
