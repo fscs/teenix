@@ -124,11 +124,27 @@
                 The hosts of the service
               '';
             };
-            healthCheck = lib.mkEnableOption {
-              default = false;
-              description = ''
-                Enable the HealthCheck for this serviceOpts
-              '';
+            healthCheck = {
+              enable = lib.mkEnableOption {
+                default = false;
+                description = ''
+                  Enable the HealthCheck for this serviceOpts
+                '';
+              };
+              path = lib.mkOption {
+                type = lib.types.str;
+                default = "/";
+                description = ''
+                  set the Healthcheck Path
+                '';
+              };
+              interval = lib.mkOption {
+                type = lib.types.str;
+                default = "10s";
+                description = ''
+                  set the Healthcheck Interval
+                '';
+              };
             };
           };
         };
@@ -265,10 +281,10 @@
                                   })
                                   value.servers;
                               }
-                              (lib.mkIf value.healthCheck {
+                              (lib.mkIf value.healthCheck.enable {
                                 healthCheck = {
-                                  path = "/";
-                                  interval = "10s";
+                                  path = value.healthCheck.path;
+                                  interval = value.healthCheck.interval;
                                 };
                               })
                             ];

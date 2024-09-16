@@ -49,6 +49,10 @@
       teenix.services.traefik.services."nextcloud" = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.nextcloud.config.networking.hostName}" ];
+        healthCheck = {
+          enable = true;
+          path = "/login";
+        };
       };
       teenix.services.traefik.redirects."cloud_inphima" = {
         from = "cloud.inphima.de";
@@ -58,16 +62,16 @@
         from = "klausur.inphima.de";
         to = "nextcloud.inphima.de/s/K6xSKSXmJRQAiia";
       };
-      teenix.services.traefik.redirects."klausur_inphima2" = {
-        from = "https://www.inphima.de/klausurarchiv/";
-        to = "nextcloud.inphima.de/s/K6xSKSXmJRQAiia";
-      };
+      # teenix.services.traefik.redirects."klausur_inphima2" = {
+      #   from = "https://www.inphima.de/klausurarchiv/";
+      #   to = "nextcloud.inphima.de/s/K6xSKSXmJRQAiia";
+      # };
 
       containers.nextcloud = {
         autoStart = true;
         ephemeral = true;
         privateNetwork = true;
-	timeoutStartSec = "5min";
+        timeoutStartSec = "5min";
         hostAddress = "192.168.100.10";
         localAddress = "192.168.100.11";
         bindMounts = {

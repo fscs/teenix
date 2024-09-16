@@ -9,6 +9,10 @@
     hostname = lib.mkOption {
       type = lib.types.str;
     };
+    secretsFile = lib.mkOption {
+      type = lib.types.path;
+      description = "path to the sops secret file for the campusguesser Server";
+    };
   };
 
   config =
@@ -16,13 +20,18 @@
       opts = config.teenix.services.campus-guesser-server;
     in
     lib.mkIf opts.enable {
+      sops.secrets.campusguesser = {
+        sopsFile = opts.secretsFile;
+        format = "binary";
+        mode = "444";
+      };
+
       nix-tun.storage.persist.subvolumes."campus-guesser-server" = { };
 
       teenix.services.traefik.services."campus_guessser" = {
         router =
           {
             rule = "Host(`${opts.hostname}`)";
-            middlewares = [ "authentik" ];
           };
         servers = [ "http://${config.containers.campus-guesser-server.config.networking.hostName}:8080" ];
       };
@@ -38,6 +47,10 @@
             hostPath = "${config.nix-tun.storage.persist.path}/campus-guesser-server/postgres";
             mountPoint = "/var/lib/postgresql";
             isReadOnly = false;
+          };
+          "secret" = {
+            hostPath = config.sops.secrets.campusguesser.path;
+            mountPoint = config.sops.secrets.campusguesser.path;
           };
         };
 

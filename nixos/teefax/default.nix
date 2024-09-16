@@ -40,6 +40,10 @@
     to = "www.stw-d.de/gastronomie/speiseplaene/essenausgabe-sued-duesseldorf";
   };
 
+  teenix.services.traefik.services."status_inphima" = {
+    router.rule = "Host(`status.inphima.de`)";
+    servers = [ "https://fscs.github.io/Status" ];
+  };
 
   virtualisation.vmware.guest.enable = true;
 
@@ -228,6 +232,7 @@
   teenix.services.campus-guesser-server = {
     enable = true;
     hostname = "campusguesser.inphima.de";
+    secretsFile = ../secrets/campusguesser;
   };
 
   # Users
