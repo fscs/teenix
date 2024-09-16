@@ -45,12 +45,12 @@
           nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
         };
 
-      programs.nh.enable = true;
-      programs.command-not-found.enable = false;
-      programs.nix-index = {
+      programs.nh = {
         enable = true;
-        enableFishIntegration = true;
-        enableBashIntegration = true;
+        clean = {
+          enable = true;
+          extraArgs = "--keep 15 --keep-since 14d";
+        };
       };
 
       environment.systemPackages = with pkgs; [
