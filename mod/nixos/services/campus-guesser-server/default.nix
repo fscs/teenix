@@ -28,7 +28,7 @@
 
       nix-tun.storage.persist.subvolumes."campus-guesser-server" = {
         "/data" = {
-          owner = "${builtins.toString config.containers.fscshhude.config.users.users.campus-guesser-server.uid}";
+          owner = "${builtins.toString config.containers.campus-guessser-server.config.users.users.campus-guesser-server.uid}";
           mode = "0700";
         };
       };
