@@ -1,4 +1,6 @@
 default:
+  tags:
+    - nix
   before_script: |
     mkdir -p ~/.ssh
     chmod 700 ~/.ssh
