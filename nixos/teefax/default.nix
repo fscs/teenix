@@ -209,7 +209,6 @@
     jwtSecretFile = ../secrets/onlyoffice;
   };
 
-
   teenix.services.inphimade = {
     enable = true;
     hostname = "inphima.de";
@@ -237,6 +236,11 @@
 
   teenix.services.node_exporter = {
     enable = true;
+  };
+
+  teenix.services.gitlab-runner = {
+    enable = true;
+    secretsFile = ../secrets/gitlab_runner;
   };
 
   # Users

@@ -20,5 +20,6 @@
     ./traefik.nix
     ./campus-guesser-server
     ./node_exporter
+    ./gitlab-runner.nix
   ];
 }
