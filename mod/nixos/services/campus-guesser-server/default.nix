@@ -28,7 +28,7 @@
 
       nix-tun.storage.persist.subvolumes."campus-guesser-server" = {
         "/data" = {
-          owner = "${builtins.toString config.containers.campus-guessser-server.config.users.users.campus-guesser-server.uid}";
+          owner = "${builtins.toString config.containers.campus-guesser-server.config.users.users.campus-guesser-server.uid}";
           mode = "0700";
         };
       };
@@ -53,7 +53,7 @@
             isReadOnly = false;
           };
           "images" = {
-            hostPath =  "${config.nix-tun.storage.persist.path}/campus-guesser-server/data";
+            hostPath = "${config.nix-tun.storage.persist.path}/campus-guesser-server/data";
             mountPoint = "/var/lib/campus-guesser/images";
           };
           "secret" = {
