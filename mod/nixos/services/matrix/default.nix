@@ -45,7 +45,7 @@
 
       teenix.services.traefik.services.inphimatrix = {
         router = {
-          rule = "Host(`matrix.${opts.servername}`) || (Host(`${opts.servername}`) && (Path(`/_matrix/{name:.*}`) || Path(`/_synapse/{name:.*}`) || Path(`/.well-known/matrix/server`) || Path(`/.well-known/matrix/client`)))";
+          rule = "Host(`matrix.${opts.servername}`) || (Host(`${opts.servername}`) && (PathPrefix(`/_matrix`) || PathPrefix(`/_synapse`) || Path(`/.well-known/matrix/server`) || Path(`/.well-known/matrix/client`)))";
           priority = 10;
         };
         servers = [ "http://${config.containers.inphimatrix.config.networking.hostName}:8008" ];
