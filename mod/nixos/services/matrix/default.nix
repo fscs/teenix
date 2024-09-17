@@ -46,10 +46,6 @@
       teenix.services.traefik.services.inphimatrix = {
         router.rule = "Host(`matrix.${opts.servername}`) || (Host(`${opts.servername}`) && (Path(`/_matrix/{name:.*}`) || Path(`/_synapse/{name:.*}`) || Path(`/.well-known/matrix/server`) || Path(`/.well-known/matrix/client`)))";
         servers = [ "http://${config.containers.inphimatrix.config.networking.hostName}:8008" ];
-        healthCheck = {
-          enable = true;
-          path = "/_matrix/static/";
-        };
       };
 
       containers.inphimatrix = {
