@@ -54,7 +54,7 @@
 
       teenix.services.traefik.services."grafana" = {
         router.rule = "Host(`${opts.grafanaHostname}`)";
-        servers = [ "http://${config.containers.prometheus.config.networking.hostName}:3000" ];
+        servers = [ "http://${config.containers.prometheus.config.networking.hostName}:80" ];
       };
 
       teenix.services.traefik.services."alerts" = {

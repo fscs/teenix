@@ -118,9 +118,24 @@ in
       };
       server = {
         http_addr = "0.0.0.0";
-        http_port = 3000;
-        domain = "${opts.hostname}";
+        http_port = 80;
+        domain = "grafana.hhu-fscs.de";
       };
+      "auth.generic_oauth" = {
+        enabled = true;
+        name = "Authentik";
+        allow_sign_up = true;
+        client_id = "hFGHZUCwQEL8BD8vzGoakVKIXwKHDiPgMQAwkC5g";
+        scopes = [ "openid" "email" "profile" "offline_access" "roles" ];
+        email_attribute_path = "email";
+        login_attribute_path = "preferred_username";
+        name_attribute_path = "given_name";
+        auth_url = "https://auth.inphima.de/application/o/authorize/";
+        token_url = "https://auth.inphima.de/application/o/token/";
+        api_url = "https://auth.inphima.de/application/o/userinfo/";
+        role_attribute_path = "Editor";
+      };
+
     };
   };
 
@@ -145,7 +160,7 @@ in
   networking = {
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 9090 3000 9093 ];
+      allowedTCPPorts = [ 9090 80 9093 ];
     };
     # Use systemd-resolved inside the container
     # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
