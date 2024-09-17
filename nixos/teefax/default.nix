@@ -41,6 +41,11 @@
     to = "www.stw-d.de/gastronomie/speiseplaene/essenausgabe-sued-duesseldorf";
   };
 
+  teenix.services.traefik.redirects."physik_inphima" = {
+    from = "physik.inphima.de";
+    to = "https://fsphy.de";
+  };
+
   teenix.services.traefik.services."status_inphima" = {
     router.rule = "Host(`status.inphima.de`)";
     servers = [ "https://fscs.github.io/Status" ];
