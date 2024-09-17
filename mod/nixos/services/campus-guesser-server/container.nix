@@ -7,6 +7,7 @@
 }: {
   users.users.campus-guesser-server = {
     home = "/home/campus-guesser-server";
+    uid = 1000;
     group = "users";
     isNormalUser = true;
   };

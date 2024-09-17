@@ -55,6 +55,7 @@
           "images" = {
             hostPath = "${config.nix-tun.storage.persist.path}/campus-guesser-server/data";
             mountPoint = "/var/lib/campus-guesser/images";
+            isReadOnly = false;
           };
           "secret" = {
             hostPath = config.sops.secrets.campusguesser.path;
