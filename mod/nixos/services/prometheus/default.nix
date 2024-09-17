@@ -49,6 +49,7 @@
       teenix.services.traefik.services."prometheus" = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.prometheus.config.networking.hostName}:9090" ];
+        healthCheck.enable = true;
       };
 
       teenix.services.traefik.services."grafana" = {

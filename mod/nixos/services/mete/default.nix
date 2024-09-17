@@ -50,6 +50,7 @@
               "traefik.http.routers.mete.rule" = "Host(`mete.hhu-fscs.de`)";
               "traefik.http.routers.mete.middlewares" = "meteauth@file,meteredirect@file";
               "traefik.http.services.mete.loadbalancer.server.port" = "8080";
+              "traefik.http.services.mete.loadbalancer.healthCheck.path" = "/";
               # Mete Secure
               "traefik.http.middlewares.meteredirect.redirectregex.regex" = "https://mete.hhu-fscs.de/(.*?)((/deposit)|(/retrieve)|(/transaction))(.*)";
               "traefik.http.middlewares.meteredirect.redirectregex.replacement" = "https://mete.hhu-fscs.de/$1";

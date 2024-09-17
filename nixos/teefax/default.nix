@@ -145,7 +145,7 @@
   };
 
   teenix.services.keycloak = {
-    enable = true;
+    enable = false;
     hostname = "login.inphima.de";
     secretsFile = ../secrets/keycloak;
   };

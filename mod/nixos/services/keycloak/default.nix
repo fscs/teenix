@@ -41,6 +41,7 @@
       teenix.services.traefik.services."keycloak" = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.keycloak.config.networking.hostName}" ];
+        healthCheck.enable = true;
       };
 
       services.traefik.dynamicConfigOptions.http.routers.keycloak.middlewares = [ "keycloak_auth" ];

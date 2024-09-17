@@ -22,6 +22,7 @@
       teenix.services.traefik.services."pretix" = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.pretix.config.networking.hostName}" ];
+        healthCheck.enable = true;
       };
 
       nix-tun.storage.persist.subvolumes."pretix".directories = {

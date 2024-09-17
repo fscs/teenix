@@ -39,6 +39,7 @@
             rule = "Host(`${opts.hostname}`)";
           };
         servers = [ "http://${config.containers.campus-guesser-server.config.networking.hostName}:8080" ];
+        healthCheck.enable = true;
       };
 
       containers.campus-guesser-server = {

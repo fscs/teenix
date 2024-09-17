@@ -124,6 +124,7 @@
           "traefik.http.routers.passbolt.tls" = "true";
           "traefik.http.routers.passbolt.tls.certresolver" = "letsencrypt";
           "traefik.http.services.passbolt.loadbalancer.server.port" = "8080";
+          "traefik.http.services.passbolt.loadbalancer.healthCheck.path" = "/";
         };
         environmentFiles = [ config.sops.secrets.passbolt.path ];
         volumes = [

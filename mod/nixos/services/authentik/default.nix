@@ -40,6 +40,7 @@
             priority = 10;
           };
         servers = [ "http://${config.containers.authentik.config.networking.hostName}" ];
+        healthCheck.enable = true;
       };
 
       teenix.services.traefik.services."authentik_auth" = {
