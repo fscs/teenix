@@ -133,7 +133,7 @@ in
         auth_url = "https://auth.inphima.de/application/o/authorize/";
         token_url = "https://auth.inphima.de/application/o/token/";
         api_url = "https://auth.inphima.de/application/o/userinfo/";
-        role_attribute_path = "Editor";
+        role_attribute_path = "contains(groups[*], 'admin') && 'Admin' || 'Editor'";
       };
 
     };
