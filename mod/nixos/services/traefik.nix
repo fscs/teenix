@@ -190,7 +190,7 @@
           };
         in
         {
-          package = pkgs.traefik;
+          package = pkgs.unstable.traefik;
           enable = true;
 
           dynamicConfigOptions =
