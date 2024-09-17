@@ -6,6 +6,7 @@
 }: {
   users.users.discord-intern-bot = {
     home = "/home/discord-intern-bot";
+    uid = 1000;
     group = "users";
     isNormalUser = true;
   };

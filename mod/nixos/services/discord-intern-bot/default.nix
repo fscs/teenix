@@ -26,8 +26,13 @@
         mode = "444";
       };
 
-      nix-tun.storage.persist.subvolumes."discord-intern-bot" = {};
-      
+      nix-tun.storage.persist.subvolumes."discord-intern-bot".directories = {
+        "/db" = {
+          owner = "${builtins.toString config.containers.discord-intern-bot.config.users.users.discord-intern-bot.uid}";
+          mode = "0700";
+        };
+      };
+
       containers.discord-intern-bot = {
         autoStart = true;
         privateNetwork = true;
@@ -43,7 +48,7 @@
             mountPoint = config.sops.secrets.discord-intern-bot.path;
           };
           "home" = {
-            hostPath = "${config.nix-tun.storage.persist.path}/discord-intern-bot/";
+            hostPath = "${config.nix-tun.storage.persist.path}/discord-intern-bot/db";
             mountPoint = "/home/discord-intern-bot/";
             isReadOnly = false;
           };
