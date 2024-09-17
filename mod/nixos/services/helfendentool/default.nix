@@ -80,7 +80,7 @@
         "traefik.http.routers.helfertool.tls" = "true";
         "traefik.http.routers.helfertool.tls.certresolver" = "letsencrypt";
         "traefik.http.services.helfertool.loadbalancer.server.port" = "8000";
-        "traefik.http.services.helfertool.loadbalancer.healthCheck.path" = "/";
+        # "traefik.http.services.helfertool.loadbalancer.healthCheck.path" = "/";
       };
       log-driver = "journald";
       extraOptions = [
