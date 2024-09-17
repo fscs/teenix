@@ -109,7 +109,6 @@
           "traefik.http.routers.inphima.tls" = "true";
           "traefik.http.routers.inphima.tls.certresolver" = "letsencrypt";
           "traefik.http.services.inphima.loadbalancer.server.port" = "80";
-          "traefik.http.services.inphima.loadbalancer.healthCheck.path" = "/";
         };
         environmentFiles = [ config.sops.secrets.inphimade.path ];
         volumes = [
