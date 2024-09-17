@@ -107,8 +107,10 @@
           "traefik.http.routers.inphima.entrypoints" = "websecure";
           "traefik.http.routers.inphima.rule" = "Host(`${opts.hostname}`) || Host(`www.${opts.hostname}`)";
           "traefik.http.routers.inphima.tls" = "true";
+          "traefik.http.routers.inphima.priority" = "1";
           "traefik.http.routers.inphima.tls.certresolver" = "letsencrypt";
           "traefik.http.services.inphima.loadbalancer.server.port" = "80";
+          "traefik.http.services.inphima.loadbalancer.healthCheck.path" = "/";
         };
         environmentFiles = [ config.sops.secrets.inphimade.path ];
         volumes = [
