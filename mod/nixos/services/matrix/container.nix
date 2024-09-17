@@ -36,7 +36,6 @@ in
     settings = {
       serve_server_wellknown = true;
       default_identity_server = "https://sydent.inphima.de";
-      org.matrix.msc3575.proxy.url = "https://syncv3.inphima.de";
       public_baseurl = "https://inphima.de";
       user_directory = {
         enabled = true;
