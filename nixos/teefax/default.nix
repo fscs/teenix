@@ -43,7 +43,7 @@
 
   teenix.services.traefik.redirects."physik_inphima" = {
     from = "physik.inphima.de";
-    to = "https://fsphy.de";
+    to = "fsphy.de";
   };
 
   teenix.services.traefik.services."status_inphima" = {
