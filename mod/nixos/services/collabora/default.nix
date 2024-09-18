@@ -17,6 +17,8 @@
       environment = {
         aliasgroup1 = "https://${config.teenix.services.collabora.nextcloudHost}:443";
         DONT_GEN_SSL_CERT = "NONE";
+        server_name = "${config.teenix.services.collabora.hostname}";
+        extra_options = "--o:ssl.enable=false";
       };
       labels = {
         "traefik.enable" = "true";
