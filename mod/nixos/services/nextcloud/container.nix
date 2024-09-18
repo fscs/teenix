@@ -11,6 +11,8 @@ in
   users.users.nextcloud.uid = 33;
   users.groups.nextcloud.gid = 33;
 
+  programs.appimage.binfmt = true;
+
   services.nextcloud = {
     enable = true;
     package = pkgs.nextcloud29;
@@ -20,8 +22,6 @@ in
       dbhost = "/run/mysqld/mysqld.sock";
       dbuser = "nextcloud@localhost:";
     };
-
-
 
     https = true;
 
