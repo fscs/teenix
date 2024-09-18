@@ -36,6 +36,12 @@
     enableIPv6 = true;
   };
 
+  teenix.services.collabora = {
+    enable = true;
+    hostname = "collabora.inphima.de";
+    nextcloudHost = "nextcloud.inphima.de";
+  };
+
   teenix.services.traefik.redirects."essen_inphima" = {
     from = "essen.inphima.de";
     to = "www.stw-d.de/gastronomie/speiseplaene/essenausgabe-sued-duesseldorf";
