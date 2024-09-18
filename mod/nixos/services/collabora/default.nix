@@ -26,7 +26,7 @@
         "traefik.http.routers.collabora.tls" = "true";
         "traefik.http.routers.collabora.tls.certresolver" = "letsencrypt";
         "traefik.http.services.collabora.loadbalancer.server.port" = "9980";
-        traefik.http.services.collabora.loadbalancer.server.scheme" = "https";
+        "traefik.http.services.collabora.loadbalancer.server.scheme" = "https";
       };
     };
   };
