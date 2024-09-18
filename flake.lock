@@ -223,11 +223,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1726607880,
-        "narHash": "sha256-y8tsiivs2ST91UIMwP3bRsWuS//rDYSnPViqT7yry1M=",
+        "lastModified": 1726669511,
+        "narHash": "sha256-PHUphU/WPq/v8uLyGFg+dvLZpt0F+ghhCinYhshRFeU=",
         "ref": "refs/heads/master",
-        "rev": "5fc2e6c2fe3e69baa78729a13c3c53909c0b09e1",
-        "revCount": 47,
+        "rev": "f617e94a1b8a0ae95bcc76c08a0cfa3ef30a12fa",
+        "revCount": 48,
         "type": "git",
         "url": "ssh://git@git.hhu.de/fscs/discord-intern-bot.git"
       },
