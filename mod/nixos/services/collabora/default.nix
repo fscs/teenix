@@ -17,7 +17,7 @@
       environment = {
         aliasgroup1 = "https://${config.teenix.services.collabora.nextcloudHost}:443";
         server_name = "${config.teenix.services.collabora.hostname}";
-        extra_params = "--o:ssl.termination=false";
+        extra_params = "--o:ssl.enable=true";
       };
       labels = {
         "traefik.enable" = "true";
@@ -26,6 +26,7 @@
         "traefik.http.routers.collabora.tls" = "true";
         "traefik.http.routers.collabora.tls.certresolver" = "letsencrypt";
         "traefik.http.services.collabora.loadbalancer.server.port" = "9980";
+        traefik.http.services.collabora.loadbalancer.server.scheme" = "https";
       };
     };
   };
