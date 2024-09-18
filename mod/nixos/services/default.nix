@@ -1,5 +1,6 @@
 { ... }: {
   imports = [
+    ./collabora
     ./authentik
     ./element-web
     ./fscshhude
