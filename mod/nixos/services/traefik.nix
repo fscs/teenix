@@ -305,6 +305,7 @@
             };
           staticConfigOptions =
             {
+              serversTransport.insecureSkipVerify = true;
               metrics.prometheus = {
                 entryPoint = "metrics";
                 buckets = [ 0.1 0.3 1.2 5.0 ];
