@@ -59,29 +59,6 @@ in
     };
   };
 
-  services.nginx.virtualHosts.${opts.hostname} = {
-    locations = {
-      "~ ^\/nextcloud\/(?:index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|oc[ms]-provider\/.+|.+\/richdocumentscode\/proxy)\.php(?:$|\/)" = {
-        extraConfig = ''
-          fastcgi_split_path_info ^(.+?\.php)(\/.*|)$;
-          set $path_info $fastcgi_path_info;
-          try_files $fastcgi_script_name =404;
-          include fastcgi_params;
-          fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-          fastcgi_param PATH_INFO $path_info;
-          fastcgi_param HTTPS on;
-          # Avoid sending the security headers twice
-          fastcgi_param modHeadersAvailable true;
-          # Enable pretty urls
-          fastcgi_param front_controller_active true;
-          fastcgi_pass php-handler;
-          fastcgi_intercept_errors on;
-          fastcgi_request_buffering off;
-        '';
-      };
-    };
-  };
-
   networking = {
     firewall = {
       enable = true;
