@@ -19,8 +19,9 @@ in
       # The module checks in a weird way if we use a unix socket
       dbhost = "/run/mysqld/mysqld.sock";
       dbuser = "nextcloud@localhost:";
-      bendDomainToLocalhost = true;
     };
+
+
 
     https = true;
 
@@ -30,6 +31,7 @@ in
     database.createLocally = true;
 
     settings.trusted_domains = [ "134.99.154.48" "192.168.100.11" "192,168.100.10" opts.hostname config.networking.hostName ];
+    settings.trusted_proxies = [ "192.168.100.10" ];
     config = {
       adminpassFile = host-config.sops.secrets.nextcloud_pass.path;
       dbtype = "mysql";
