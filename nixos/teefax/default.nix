@@ -48,7 +48,7 @@
 
   teenix.services.traefik.services."status_inphima" = {
     router.rule = "Host(`status.inphima.de`)";
-    servers = [ "https://fscs.github.io/Status" ];
+    servers = [ "https://grafana.hhu-fscs.de/public-dashboards/84a25d574e334559b2095f1d5c573be6" ];
   };
 
   virtualisation.vmware.guest.enable = true;
