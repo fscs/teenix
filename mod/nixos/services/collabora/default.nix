@@ -16,6 +16,7 @@
       image = "collabora/code:latest";
       environment = {
         aliasgroup1 = "https://${config.teenix.services.collabora.nextcloudHost}:443";
+        DONT_GEN_SSL_CERT = "NONE";
       };
       labels = {
         "traefik.enable" = "true";
