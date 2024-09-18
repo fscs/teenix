@@ -11,6 +11,7 @@ in
   users.users.nextcloud.uid = 33;
   users.groups.nextcloud.gid = 33;
 
+  programs.appimage.enable = true;
   programs.appimage.binfmt = true;
 
   services.nextcloud = {
