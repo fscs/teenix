@@ -51,6 +51,9 @@
         servers = [ "http://${config.containers.nextcloud.config.networking.hostName}" ];
         healthCheck = { enable = true; path = "/login"; };
       };
+
+      services.traefik.dynamicConfigOptions.entryPoints.websecure.trustedProxies = [ "192.168.100.11" "192.168.100.10" ];
+
       teenix.services.traefik.redirects."cloud_inphima" = {
         from = "cloud.inphima.de";
         to = "nextcloud.inphima.de";
