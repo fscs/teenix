@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05"; #NOTE: change channel in gitlab runner when updating this
-    nixpkgs-23-11.url = "github:nixos/nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     hm = {
       url = "github:nix-community/home-manager";

@@ -66,6 +66,11 @@
             hostPath = "/etc/resolv.conf";
             mountPoint = "/etc/resolv.conf";
           };
+          "logs" = {
+            hostPath = "/var/log/campusguesser";
+            mountPoint = "/var/log/campusguesser";
+            isReadOnly = false;
+          };
         };
 
         specialArgs = {

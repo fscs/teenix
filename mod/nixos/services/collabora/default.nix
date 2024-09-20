@@ -17,7 +17,7 @@
       environment = {
         aliasgroup1 = "https://${config.teenix.services.collabora.nextcloudHost}:443";
         server_name = "${config.teenix.services.collabora.hostname}";
-        extra_params = "--o:ssl.enable=true";
+        extra_params = "--o:ssl.enable=true --o:remote_font_config.url=https://nextcloud.inphima.de/apps/richdocuments/settings/fonts.json";
       };
       labels = {
         "traefik.enable" = "true";

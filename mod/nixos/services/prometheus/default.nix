@@ -89,6 +89,10 @@
             hostPath = config.sops.secrets.prometheus_env.path;
             mountPoint = config.sops.secrets.prometheus_env.path;
           };
+          "logs" = {
+            hostPath = "/var/log";
+            mountPoint = "/var/log/other";
+          };
         };
 
         specialArgs = {

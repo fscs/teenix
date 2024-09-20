@@ -44,6 +44,8 @@
       ExecStart = "${inputs.campus-guesser-server.packages."${pkgs.stdenv.hostPlatform.system}".default}/bin/CampusGuesserServer-fscs";
       Restart = "always";
       RestartSec = 5;
+      StandardOutput = "append:/var/log/campusguesser/log.log";
+      StandardError = "append:/var/log/campusguesser/log.log";
     };
     wantedBy = [ "multi-user.target" ];
   };
