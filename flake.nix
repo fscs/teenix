@@ -4,25 +4,30 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05"; #NOTE: change channel in gitlab runner when updating this
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    hm = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    
     sops = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-tun.url = "github:nix-tun/nixos-modules";
-    fscshhude.url = "git+ssh://git@git.hhu.de/fscs/website.git";
-    discord-intern-bot.url = "git+ssh://git@git.hhu.de/fscs/discord-intern-bot.git";
-    arion.url = "github:hercules-ci/arion";
     authentik-nix.url = "github:nix-community/authentik-nix";
+    
+    discord-intern-bot = {
+      url = "git+ssh://git@git.hhu.de/fscs/discord-intern-bot.git";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    fscshhude = {
+      url = "git+ssh://git@git.hhu.de/fscs/website.git";
+      inputs.nixpkgs.follows = "nixpkgs-unstable"; # needs hugo 134
+    };
     mete = {
       url = "github:fscs/mete/wip/fscs";
       flake = false;
     };
-    campus-guesser-server.url = "git+ssh://git@git.hhu.de/fscs/campus-guesser-server.git";
-    campus-guesser-server.inputs.nixpkgs.follows = "nixpkgs";
+    campus-guesser-server = {
+      url = "git+ssh://git@git.hhu.de/fscs/campus-guesser-server.git";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
