@@ -1,5 +1,5 @@
 {
-  description = "Teenix nixos config";
+  description = "Teefax NixOS config";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05"; #NOTE: change channel in gitlab runner when updating this
@@ -9,8 +9,14 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-tun.url = "github:nix-tun/nixos-modules";
-    authentik-nix.url = "github:nix-community/authentik-nix";
+    nix-tun = {
+      url = "github:nix-tun/nixos-modules";
+      inputs.nixpkgs.follows = "nixpkgs-unstable"; # uses unstable internally
+    };
+    authentik-nix = {
+      url = "github:nix-community/authentik-nix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable"; # uses unstable internally
+    };
     
     discord-intern-bot = {
       url = "git+ssh://git@git.hhu.de/fscs/discord-intern-bot.git";
