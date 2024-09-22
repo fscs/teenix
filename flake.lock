@@ -324,6 +324,27 @@
         "type": "github"
       }
     },
+    "flake-programs-sqlite": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "utils": "utils"
+      },
+      "locked": {
+        "lastModified": 1727022509,
+        "narHash": "sha256-EIpo5p9kO3Sxwd2EiLcYBlILO5OE5HHQ4Bd9SCL/VzQ=",
+        "owner": "wamserma",
+        "repo": "flake-programs-sqlite",
+        "rev": "160221cdccaddee74478be29246599c66f32d2ac",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wamserma",
+        "repo": "flake-programs-sqlite",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
@@ -818,6 +839,7 @@
         "authentik-nix": "authentik-nix",
         "campus-guesser-server": "campus-guesser-server",
         "discord-intern-bot": "discord-intern-bot",
+        "flake-programs-sqlite": "flake-programs-sqlite",
         "fscshhude": "fscshhude",
         "mete": "mete",
         "nix-tun": "nix-tun",
@@ -1103,6 +1125,21 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "utils": {
+      "locked": {
+        "lastModified": 1678901627,
+        "narHash": "sha256-U02riOqrKKzwjsxc/400XnElV+UtPUQWpANPlyazjH0=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "93a2b84fc4b70d9e089d029deacc3583435c2ed6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
         "type": "github"
       }
     }

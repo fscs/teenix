@@ -9,6 +9,11 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    flake-programs-sqlite = {
+      url = "github:wamserma/flake-programs-sqlite";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    
     nix-tun = {
       url = "github:nix-tun/nixos-modules";
       inputs.nixpkgs.follows = "nixpkgs-unstable"; # uses unstable internally

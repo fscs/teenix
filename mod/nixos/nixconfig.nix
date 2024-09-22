@@ -5,13 +5,17 @@
 , pkgs
 , ...
 }: {
+  imports = [
+    inputs.flake-programs-sqlite.nixosModules.programs-sqlite 
+  ];
+
   options.teenix.nixconfig = {
     enable = lib.mkOption {
       description = "auto configure nix";
       type = lib.type.bool;
       default = true;
     };
-    allowUnfree = lib.mkEnableOption "allow unfree packages in both home manager and nixos";
+    allowUnfree = lib.mkEnableOption "allow unfree packages";
     enableChannels = lib.mkEnableOption "enable channels";
   };
 
