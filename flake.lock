@@ -132,11 +132,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1727123156,
-        "narHash": "sha256-mPB8puHlxp6k6h8gQXNUaIVBuLjj/6F2i7fFRW4Jl0o=",
+        "lastModified": 1727123635,
+        "narHash": "sha256-3nbaMJVeepj32Iz/bqFo5qLh/nKtzlqpVkI2GvIB1H0=",
         "ref": "refs/heads/main",
-        "rev": "aaa63304b6379002a32d77a14c93edce121b9671",
-        "revCount": 109,
+        "rev": "13992029475337f2a9bde198eb97d2cd6eb87ca2",
+        "revCount": 111,
         "type": "git",
         "url": "ssh://git@git.hhu.de/fscs/campus-guesser-server.git"
       },
