@@ -31,6 +31,8 @@
       ExecStart = "${inputs.fscshhude.packages."${pkgs.stdenv.hostPlatform.system}".serve}/bin/serve";
       Restart = "always";
       RestartSec = 5;
+      StandardOutput = "append:/var/log/fscshhude/log.log";
+      StandardError = "append:/var/log/fscshhude/log.log";
     };
     wantedBy = [ "multi-user.target" ];
   };

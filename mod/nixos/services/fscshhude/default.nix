@@ -62,6 +62,11 @@
             mountPoint = "/home/fscs-website/db";
             isReadOnly = false;
           };
+          "logs" = {
+            hostPath = "/var/log/fscshhude";
+            mountPoint = "/var/log/fscshhude";
+            isReadOnly = false;
+          };
         };
 
         specialArgs = {
