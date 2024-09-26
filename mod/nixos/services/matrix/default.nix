@@ -41,6 +41,10 @@
           owner = "${builtins.toString config.containers.inphimatrix.config.users.users.postgres.uid}";
           mode = "0700";
         };
+        "/data" = {
+          owner = "${builtins.toString config.containers.inphimatrix.config.users.users.matrix-synapse.uid}";
+          mode = "0700";
+        };
       };
 
       teenix.services.traefik.services.inphimatrix = {
@@ -71,8 +75,13 @@
             mountPoint = config.sops.secrets.matrix_env.path;
           };
           "synapse" = {
-            hostPath = "/mnt/netapp/inphimatrix";
+            hostPath = "${config.nix-tun.storage.persist.path}/inphimatrix/data";
             mountPoint = "/var/lib/matrix-synapse";
+            isReadOnly = false;
+          };
+          "media_store" = {
+            hostPath = "/mnt/netapp/inphimatrix/media_store";
+            mountPoint = "/var/lib/matrix-synapse/media_store";
             isReadOnly = false;
           };
           "db" = {
