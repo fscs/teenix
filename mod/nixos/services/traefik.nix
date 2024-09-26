@@ -68,6 +68,13 @@
         The entrypoints of the traefik reverse proxy default are 80 (web) and 443 (websecure)
       '';
     };
+    logging = {
+      enable = lib.mkEnableOption "enable logging";
+      filePath = lib.mkOption {
+        type = lib.types.str;
+        default = "/var/log/traefik.log";
+      };
+    };
     services =
       let
         serviceOpts = lib.types.submodule {
@@ -319,6 +326,10 @@
               };
               ping = {
                 entryPoint = "ping";
+              };
+              log.level = "DEBUG";
+              accesslog = lib.mkIf config.teenix.services.traefik.logging.enable {
+                filePath = config.teenix.services.traefik.logging.filePath;
               };
               certificatesResolvers = {
                 letsencrypt = {

@@ -23,3 +23,9 @@ scrape_configs:
       job: fscshhude
       host: teefax
       __path__: /var/log/other/fscshhude/*.log
+   - targets:
+      - localhost
+     labels:
+      job: traefik
+      host: teefax
+      __path__: /var/log/*.log
