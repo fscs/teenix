@@ -34,7 +34,7 @@ in
     enable = true;
     extraConfigFiles = [ host-config.sops.secrets.matrix_env.path ];
     settings = {
-      app_service_config_files = [ "/var/lib/matrix-synapse/discord-registration.yaml" ]
+      app_service_config_files = [ "/var/lib/matrix-synapse/discord-registration.yaml" ];
       serve_server_wellknown = true;
       default_identity_server = "https://sydent.inphima.de";
       public_baseurl = "https://inphima.de";
