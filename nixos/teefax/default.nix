@@ -20,6 +20,10 @@
     pkgs.kitty
   ];
 
+  nixpkgs.config.permittedInsecurePackages = [
+    "olm-3.2.16"
+  ];
+
   networking = {
     nameservers = [ "134.99.154.201" "134.99.154.228" ];
     defaultGateway = {

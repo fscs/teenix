@@ -68,6 +68,30 @@ in
     };
   };
 
+  nixpkgs.config.permittedInsecurePackages = [
+    "olm-3.2.16"
+  ];
+
+  environment.systemPackages = [
+    pkgs.mautrix-discord
+  ];
+
+  systemd.services."mautrix-discord" = {
+    description = "Start mautrix discord";
+    after = [ "network.target" ];
+    path = [ pkgs.bash ];
+    serviceConfig = {
+      Type = "exec";
+      User = "matrix-synapse";
+      WorkingDirectory = "/var/lib/matrix-synapse";
+      ExecStart = "${pkgs.mautrix-discord}/bin/mautrix-discord";
+      Restart = "always";
+      RestartSec = 5;
+    };
+    wantedBy = [ "multi-user.target" ];
+  };
+
+
   # enable coturn
   services.coturn = {
     enable = true;

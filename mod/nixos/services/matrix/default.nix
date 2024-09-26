@@ -70,6 +70,11 @@
             hostPath = config.sops.secrets.matrix_env.path;
             mountPoint = config.sops.secrets.matrix_env.path;
           };
+          "synapse" = {
+            hostPath = "/mnt/netapp/inphimatrix";
+            mountPoint = "/var/lib/matrix-synapse";
+            isReadOnly = false;
+          };
           "db" = {
             hostPath = "${config.nix-tun.storage.persist.path}/inphimatrix/postgres";
             mountPoint = "/var/lib/postgres";
