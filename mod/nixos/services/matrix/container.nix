@@ -61,7 +61,7 @@ in
           resources = [
             {
               names = [ "client" "federation" ];
-              compress = true;
+              compress = false;
             }
           ];
         }
