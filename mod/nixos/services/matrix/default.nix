@@ -11,6 +11,10 @@
       default = "";
       description = "Servername for matrix. The Matrix Host will be matrix.servername, except for .well-known files";
     };
+
+    masSecrets = lib.mkOption {
+      type = lib.types.path;
+    };
     secretsFile = lib.mkOption {
       type = lib.types.path;
     };
@@ -26,6 +30,12 @@
     lib.mkIf opts.enable {
       sops.secrets.matrix_pass = {
         sopsFile = opts.secretsFile;
+        format = "binary";
+        mode = "444";
+      };
+
+      sops.secrets.masSecrets = {
+        sopsFile = opts.masSecrets;
         format = "binary";
         mode = "444";
       };
@@ -69,6 +79,10 @@
           "secret" = {
             hostPath = config.sops.secrets.matrix_pass.path;
             mountPoint = config.sops.secrets.matrix_pass.path;
+          };
+          "masSecrets" = {
+            hostPath = config.sops.secrets.masSecrets.path;
+            mountPoint = config.sops.secrets.masSecrets.path;
           };
           "env" = {
             hostPath = config.sops.secrets.matrix_env.path;

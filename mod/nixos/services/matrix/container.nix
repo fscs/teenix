@@ -9,16 +9,40 @@ let
   opts = host-config.teenix.services.matrix;
 in
 {
+  imports = [
+    ./mas.nix
+  ];
+
+  teenix.services.mas = {
+    enable = true;
+    secretFile = host-config.sops.secrets.masSecrets.path;
+    settings = {
+      passwords.enabled = false;
+      matrix = {
+        homeserver = "inphima.de";
+        endpoint = "http://localhost:8008/";
+      };
+      database = {
+        uri = "postgres://matrix-authentication-service";
+      };
+    };
+  };
+
   # enable postgres
   services.postgresql = {
     enable = true;
     ensureDatabases = [
       "matrix-synapse"
+      "matrix-authentication-service"
     ];
     initdbArgs = [
       "--locale=C --encoding utf8"
     ];
     ensureUsers = [
+      {
+        name = "matrix-authentication-service";
+        ensureDBOwnership = true;
+      }
       {
         name = "matrix-synapse";
         ensureDBOwnership = true;
@@ -35,7 +59,10 @@ in
     enable = true;
     extraConfigFiles = [ host-config.sops.secrets.matrix_env.path ];
     settings = {
-      app_service_config_files = [ "/var/lib/matrix-synapse/discord-registration.yaml" "/var/lib/matrix-synapse/double-puppet-registration.yaml" ];
+      app_service_config_files = [
+        "/var/lib/matrix-synapse/discord-registration.yaml"
+        "/var/lib/matrix-synapse/double-puppet-registration.yaml"
+      ];
       serve_server_wellknown = true;
       use_appservice_legacy_authorization = true;
       default_identity_server = "https://sydent.inphima.de";
