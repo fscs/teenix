@@ -1,6 +1,7 @@
 { lib
 , pkgs
 , host-config
+, pkgs-unstable
 , config
 , ...
 }:
@@ -34,8 +35,9 @@ in
     enable = true;
     extraConfigFiles = [ host-config.sops.secrets.matrix_env.path ];
     settings = {
-      app_service_config_files = [ "/var/lib/matrix-synapse/discord-registration.yaml" ];
+      app_service_config_files = [ "/var/lib/matrix-synapse/discord-registration.yaml" "/var/lib/matrix-synapse/double-puppet-registration.yaml" ];
       serve_server_wellknown = true;
+      use_appservice_legacy_authorization = true;
       default_identity_server = "https://sydent.inphima.de";
       public_baseurl = "https://inphima.de";
       user_directory = {
@@ -43,6 +45,16 @@ in
         search_all_users = true;
         prefer_local_users = true;
         show_locked_users = true;
+      };
+      rc_joins = {
+        local = {
+          per_second = 1000;
+          burst_count = 15;
+        };
+        remote = {
+          per_second = 300;
+          burst_count = 12;
+        };
       };
 
       turn_uris = [ "turn:${config.services.coturn.realm}:3478?transport=udp" "turn:${config.services.coturn.realm}:3478?transport=tcp" ];
@@ -74,7 +86,7 @@ in
   ];
 
   environment.systemPackages = [
-    pkgs.mautrix-discord
+    pkgs-unstable.mautrix-discord
   ];
 
   systemd.services."mautrix-discord" = {
@@ -85,7 +97,7 @@ in
       Type = "exec";
       User = "matrix-synapse";
       WorkingDirectory = "/var/lib/matrix-synapse";
-      ExecStart = "${pkgs.mautrix-discord}/bin/mautrix-discord";
+      ExecStart = "${pkgs-unstable.mautrix-discord}/bin/mautrix-discord";
       Restart = "always";
       RestartSec = 5;
     };

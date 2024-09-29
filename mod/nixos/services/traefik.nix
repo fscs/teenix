@@ -1,5 +1,6 @@
 { config
 , pkgs
+, pkgs-unstable
 , lib
 , ...
 }: {
@@ -197,7 +198,7 @@
           };
         in
         {
-          package = pkgs.unstable.traefik;
+          package = pkgs-unstable.traefik;
           enable = true;
 
           dynamicConfigOptions =

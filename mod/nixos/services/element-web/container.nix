@@ -17,7 +17,7 @@ let
         };
       };
     in
-    pkgs.unstable.element-web.override { inherit conf; };
+    pkgs.element-web.override { inherit conf; };
 in
 {
   networking.hostName = "element-web";

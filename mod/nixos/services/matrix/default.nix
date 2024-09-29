@@ -94,6 +94,12 @@
         specialArgs = {
           inherit inputs pkgs;
           host-config = config;
+          pkgs-unstable = import inputs.nixpkgs-unstable {
+            system = "x86_64-linux";
+            config.permittedInsecurePackages = [
+              "olm-3.2.16"
+            ];
+          };
         };
 
         config =

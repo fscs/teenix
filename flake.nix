@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05"; #NOTE: change channel in gitlab runner when updating this
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    
+
     sops = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -13,7 +13,7 @@
       url = "github:wamserma/flake-programs-sqlite";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
+
     nix-tun = {
       url = "github:nix-tun/nixos-modules";
       inputs.nixpkgs.follows = "nixpkgs-unstable"; # uses unstable internally
@@ -22,7 +22,7 @@
       url = "github:nix-community/authentik-nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable"; # uses unstable internally
     };
-    
+
     discord-intern-bot = {
       url = "git+ssh://git@git.hhu.de/fscs/discord-intern-bot.git";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -44,6 +44,7 @@
   outputs =
     { self
     , nixpkgs
+    , nixpkgs-unstable
     , ...
     } @ inputs:
     let
@@ -72,6 +73,9 @@
       nixosConfigurations.teefax = lib.nixosSystem {
         specialArgs = { inherit inputs outputs; };
         modules = [ ./nixos/teefax ];
+        specialArgs = {
+          pkgs-unstable = import nixpkgs-unstable { system = "x86_64-linux"; config.allowUnfree = true; };
+        };
       };
 
       devShells = forAllSystems (
