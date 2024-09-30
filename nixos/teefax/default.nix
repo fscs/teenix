@@ -61,6 +61,11 @@
     to = "grafana.hhu-fscs.de/public-dashboards/84a25d574e334559b2095f1d5c573be6";
   };
 
+  teenix.services.traefik.redirects."inphima_discord" = {
+    from = "fscs.hhu.de/discord"; 
+    to = "discord.gg/K3ddgjh";
+  };
+
   virtualisation.vmware.guest.enable = true;
 
   networking.interfaces.ens34 = {
