@@ -22,11 +22,52 @@ in
         homeserver = "inphima.de";
         endpoint = "http://localhost:8008/";
       };
+      http = {
+        public_base = "https://matrixauth.inphima.de/";
+        listeners = [
+          {
+            name = "web";
+            resources = [
+              {
+                name = "discovery";
+              }
+              {
+                name = "human";
+              }
+              {
+                name = "oauth";
+              }
+              {
+                name = "compat";
+              }
+              {
+                name = "graphql";
+              }
+              {
+                name = "assets";
+                path = "${pkgs-unstable.matrix-authentication-service}/share/matrix-authentication-service/assets/";
+              }
+            ];
+            binds = [
+              {
+                host = "0.0.0.0";
+                port = 8080;
+              }
+            ];
+          }
+        ];
+      };
       database = {
-        uri = "postgres://matrix-authentication-service";
+        uri = "postgresql:///matrix-authentication-service?host=/run/postgresql";
       };
     };
   };
+
+
+  environment.systemPackages = [
+    pkgs.python312Packages.authlib
+  ];
+
 
   # enable postgres
   services.postgresql = {
@@ -58,6 +99,7 @@ in
   services.matrix-synapse = {
     enable = true;
     extraConfigFiles = [ host-config.sops.secrets.matrix_env.path ];
+    extras = [ "oidc" ];
     settings = {
       app_service_config_files = [
         "/var/lib/matrix-synapse/discord-registration.yaml"
@@ -94,7 +136,6 @@ in
       turn_shared_secret = config.services.coturn.static-auth-secret-file;
       turn_user_lifetime = "1h";
       server_name = "${opts.servername}";
-      oidc_providers = "";
 
       listeners = [
         {
@@ -116,10 +157,6 @@ in
 
   nixpkgs.config.permittedInsecurePackages = [
     "olm-3.2.16"
-  ];
-
-  environment.systemPackages = [
-    pkgs-unstable.mautrix-discord
   ];
 
   systemd.services."mautrix-discord" = {
@@ -191,7 +228,7 @@ in
       allowedUDPPortRanges = range;
       allowedUDPPorts = [ 3478 5349 ];
       allowedTCPPortRanges = [ ];
-      allowedTCPPorts = [ 80 443 8008 3478 5349 ];
+      allowedTCPPorts = [ 80 443 8008 8080 3478 5349 ];
     };
 
   system.stateVersion = "23.11";

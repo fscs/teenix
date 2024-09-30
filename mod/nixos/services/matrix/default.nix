@@ -55,6 +55,10 @@
           owner = "${builtins.toString config.containers.inphimatrix.config.users.users.matrix-synapse.uid}";
           mode = "0700";
         };
+        "/auth" = {
+          owner = "${builtins.toString config.containers.inphimatrix.config.users.users.matrix-authentication-service.uid}";
+          mode = "0700";
+        };
       };
 
       teenix.services.traefik.services.inphimatrix = {
@@ -63,6 +67,13 @@
           priority = 10;
         };
         servers = [ "http://${config.containers.inphimatrix.config.networking.hostName}:8008" ];
+      };
+
+      teenix.services.traefik.services.inphimatrix_auth = {
+        router = {
+          rule = "Host(`matrixauth.${opts.servername}`) || (( Host(`matrix.${opts.servername}`) || Host(`${opts.servername}`)) && PathRegexp(`^/_matrix/client/.*/(login|logout|refresh)`) )";
+        };
+        servers = [ "http://${config.containers.inphimatrix.config.networking.hostName}:8080" ];
       };
 
       containers.inphimatrix = {
@@ -91,6 +102,11 @@
           "synapse" = {
             hostPath = "${config.nix-tun.storage.persist.path}/inphimatrix/data";
             mountPoint = "/var/lib/matrix-synapse";
+            isReadOnly = false;
+          };
+          "auth" = {
+            hostPath = "${config.nix-tun.storage.persist.path}/inphimatrix/auth";
+            mountPoint = "/var/lib/matrix-auth";
             isReadOnly = false;
           };
           "media_store" = {
