@@ -36,7 +36,12 @@
         format = "binary";
         mode = "444";
       };
+      teenix.services.traefik.redirects."discord_inphimade" = {
+        from = "discord.inphima.de";
+        to = "discord.gg/K3ddgjh";
+      };
 
+      }
       nix-tun.storage.persist.subvolumes."inphimade".directories = {
         "/mysql" = {
           owner = "1000"; #TODO: Set the correct owner and mode
