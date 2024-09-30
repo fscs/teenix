@@ -172,6 +172,7 @@
     servername = "inphima.de";
     secretsFile = ../secrets/test_pwd;
     configFile = ../secrets/matrix_config;
+    masSecrets = ../secrets/masconfig_yaml;
   };
 
   teenix.services.element-web = {

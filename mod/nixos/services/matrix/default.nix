@@ -11,6 +11,10 @@
       default = "";
       description = "Servername for matrix. The Matrix Host will be matrix.servername, except for .well-known files";
     };
+
+    masSecrets = lib.mkOption {
+      type = lib.types.path;
+    };
     secretsFile = lib.mkOption {
       type = lib.types.path;
     };
@@ -30,6 +34,12 @@
         mode = "444";
       };
 
+      sops.secrets.masSecrets = {
+        sopsFile = opts.masSecrets;
+        format = "binary";
+        mode = "444";
+      };
+
       sops.secrets.matrix_env = {
         sopsFile = opts.configFile;
         format = "binary";
@@ -45,6 +55,10 @@
           owner = "${builtins.toString config.containers.inphimatrix.config.users.users.matrix-synapse.uid}";
           mode = "0700";
         };
+        "/auth" = {
+          owner = "${builtins.toString config.containers.inphimatrix.config.users.users.matrix-authentication-service.uid}";
+          mode = "0700";
+        };
       };
 
       teenix.services.traefik.services.inphimatrix = {
@@ -53,6 +67,13 @@
           priority = 10;
         };
         servers = [ "http://${config.containers.inphimatrix.config.networking.hostName}:8008" ];
+      };
+
+      teenix.services.traefik.services.inphimatrix_auth = {
+        router = {
+          rule = "Host(`matrixauth.${opts.servername}`) || (( Host(`matrix.${opts.servername}`) || Host(`${opts.servername}`)) && PathRegexp(`^/_matrix/client/.*/(login|logout|refresh)`) )";
+        };
+        servers = [ "http://${config.containers.inphimatrix.config.networking.hostName}:8080" ];
       };
 
       containers.inphimatrix = {
@@ -70,6 +91,10 @@
             hostPath = config.sops.secrets.matrix_pass.path;
             mountPoint = config.sops.secrets.matrix_pass.path;
           };
+          "masSecrets" = {
+            hostPath = config.sops.secrets.masSecrets.path;
+            mountPoint = config.sops.secrets.masSecrets.path;
+          };
           "env" = {
             hostPath = config.sops.secrets.matrix_env.path;
             mountPoint = config.sops.secrets.matrix_env.path;
@@ -77,6 +102,11 @@
           "synapse" = {
             hostPath = "${config.nix-tun.storage.persist.path}/inphimatrix/data";
             mountPoint = "/var/lib/matrix-synapse";
+            isReadOnly = false;
+          };
+          "auth" = {
+            hostPath = "${config.nix-tun.storage.persist.path}/inphimatrix/auth";
+            mountPoint = "/var/lib/matrix-auth";
             isReadOnly = false;
           };
           "media_store" = {

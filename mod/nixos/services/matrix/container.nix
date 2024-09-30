@@ -9,16 +9,81 @@ let
   opts = host-config.teenix.services.matrix;
 in
 {
+  imports = [
+    ./mas.nix
+  ];
+
+  teenix.services.mas = {
+    enable = true;
+    secretFile = host-config.sops.secrets.masSecrets.path;
+    settings = {
+      passwords.enabled = false;
+      matrix = {
+        homeserver = "inphima.de";
+        endpoint = "http://localhost:8008/";
+      };
+      http = {
+        public_base = "https://matrixauth.inphima.de/";
+        listeners = [
+          {
+            name = "web";
+            resources = [
+              {
+                name = "discovery";
+              }
+              {
+                name = "human";
+              }
+              {
+                name = "oauth";
+              }
+              {
+                name = "compat";
+              }
+              {
+                name = "graphql";
+              }
+              {
+                name = "assets";
+                path = "${pkgs-unstable.matrix-authentication-service}/share/matrix-authentication-service/assets/";
+              }
+            ];
+            binds = [
+              {
+                host = "0.0.0.0";
+                port = 8080;
+              }
+            ];
+          }
+        ];
+      };
+      database = {
+        uri = "postgresql:///matrix-authentication-service?host=/run/postgresql";
+      };
+    };
+  };
+
+
+  environment.systemPackages = [
+    pkgs.python312Packages.authlib
+  ];
+
+
   # enable postgres
   services.postgresql = {
     enable = true;
     ensureDatabases = [
       "matrix-synapse"
+      "matrix-authentication-service"
     ];
     initdbArgs = [
       "--locale=C --encoding utf8"
     ];
     ensureUsers = [
+      {
+        name = "matrix-authentication-service";
+        ensureDBOwnership = true;
+      }
       {
         name = "matrix-synapse";
         ensureDBOwnership = true;
@@ -34,8 +99,12 @@ in
   services.matrix-synapse = {
     enable = true;
     extraConfigFiles = [ host-config.sops.secrets.matrix_env.path ];
+    extras = [ "oidc" ];
     settings = {
-      app_service_config_files = [ "/var/lib/matrix-synapse/discord-registration.yaml" "/var/lib/matrix-synapse/double-puppet-registration.yaml" ];
+      app_service_config_files = [
+        "/var/lib/matrix-synapse/discord-registration.yaml"
+        "/var/lib/matrix-synapse/double-puppet-registration.yaml"
+      ];
       serve_server_wellknown = true;
       use_appservice_legacy_authorization = true;
       default_identity_server = "https://sydent.inphima.de";
@@ -67,7 +136,6 @@ in
       turn_shared_secret = config.services.coturn.static-auth-secret-file;
       turn_user_lifetime = "1h";
       server_name = "${opts.servername}";
-      oidc_providers = "";
 
       listeners = [
         {
@@ -89,10 +157,6 @@ in
 
   nixpkgs.config.permittedInsecurePackages = [
     "olm-3.2.16"
-  ];
-
-  environment.systemPackages = [
-    pkgs-unstable.mautrix-discord
   ];
 
   systemd.services."mautrix-discord" = {
@@ -164,7 +228,7 @@ in
       allowedUDPPortRanges = range;
       allowedUDPPorts = [ 3478 5349 ];
       allowedTCPPortRanges = [ ];
-      allowedTCPPorts = [ 80 443 8008 3478 5349 ];
+      allowedTCPPorts = [ 80 443 8008 8080 3478 5349 ];
     };
 
   system.stateVersion = "23.11";
