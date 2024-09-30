@@ -235,7 +235,7 @@
                           {
                             service = "blank";
                             priority = 10;
-                            rule = "Host(`${value.from}`)";
+                            rule = "HostRegexp(`${builtins.replaceStrings ["."] ["\\."] value.from}`)";
                             middlewares = name;
                             tls.certResolver = "letsencrypt";
                           }
@@ -256,7 +256,7 @@
                         name: value:
                           {
                             redirectRegex = {
-                              regex = "(www\\.)?${builtins.replaceStrings ["." "/"] ["\\." "\\/"] value.from}/?";
+                              regex = "(www\\.)?${builtins.replaceStrings ["."] ["\\."] value.from}/?";
                               replacement = value.to;
                               permanent = true;
                             };
