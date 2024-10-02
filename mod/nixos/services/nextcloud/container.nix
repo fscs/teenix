@@ -20,7 +20,6 @@ in
     package = pkgs-master.nextcloud30;
     notify_push = {
       enable = true;
-      bendDomainToLocalhost = true;
       # The module checks in a weird way if we use a unix socket
       dbhost = "/run/mysqld/mysqld.sock";
       dbuser = "nextcloud@localhost:";
