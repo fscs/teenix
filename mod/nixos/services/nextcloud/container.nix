@@ -33,7 +33,7 @@ in
     database.createLocally = true;
 
     settings.trusted_domains = [ "134.99.154.48" "192.168.100.11" "192,168.100.10" opts.hostname config.networking.hostName ];
-    settings.trusted_proxies = [ "192.168.100.10" ];
+    settings.trusted_proxies = [ "192.168.100.10" "192.168.100.11" ];
     config = {
       adminpassFile = host-config.sops.secrets.nextcloud_pass.path;
       dbtype = "mysql";
