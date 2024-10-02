@@ -1,6 +1,7 @@
 { lib
 , config
 , pkgs
+, pkgs-master
 , inputs
 , ...
 }: {
@@ -91,7 +92,7 @@
         };
 
         specialArgs = {
-          inherit inputs pkgs;
+          inherit inputs pkgs pkgs-master;
           host-config = config;
         };
 
