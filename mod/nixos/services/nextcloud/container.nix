@@ -2,6 +2,7 @@
 , config
 , host-config
 , pkgs
+, pkgs-master
 , ...
 }:
 let
@@ -16,7 +17,7 @@ in
 
   services.nextcloud = {
     enable = true;
-    package = pkgs.nextcloud29;
+    package = pkgs-master.nextcloud30;
     notify_push = {
       enable = true;
       # The module checks in a weird way if we use a unix socket
