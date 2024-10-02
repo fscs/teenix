@@ -46,7 +46,7 @@
     { self
     , nixpkgs
     , nixpkgs-unstable
-    , nixpkgd-master
+    , nixpkgs-master
     , ...
     } @ inputs:
     let
