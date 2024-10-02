@@ -53,7 +53,7 @@
         healthCheck = { enable = true; path = "/login"; };
       };
 
-      services.traefik.staticConfigOptions.entryPoints.websecure.proxyProtocol.trustedIPs = [ "192.168.100.11" "192.168.100.10" ];
+      services.traefik.staticConfigOptions.entryPoints.websecure.proxyProtocol.insecure = true;
 
       teenix.services.traefik.redirects."cloud_inphima" = {
         from = "cloud.inphima.de";
