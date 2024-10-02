@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05"; #NOTE: change channel in gitlab runner when updating this
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-master.url = "github:nixos/nixpkgs";
 
     sops = {
       url = "github:Mic92/sops-nix";
@@ -45,6 +46,7 @@
     { self
     , nixpkgs
     , nixpkgs-unstable
+    , nixpkgd-master
     , ...
     } @ inputs:
     let
@@ -75,8 +77,11 @@
         modules = [ ./nixos/teefax ];
         specialArgs = {
           pkgs-unstable = import nixpkgs-unstable { system = "x86_64-linux"; config.allowUnfree = true; };
-        };
+          pkgs-master = import nixpkgs-master {
+            system = "x86_64-linux";
+          };
       };
+    };
 
       devShells = forAllSystems (
         system:
