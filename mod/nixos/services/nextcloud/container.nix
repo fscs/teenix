@@ -15,6 +15,8 @@ in
   programs.appimage.enable = true;
   programs.appimage.binfmt = true;
 
+  systemd.services.nextcloud-notify_push.environment.NEXTCLOUD_URL = lib.mkForce "http://localhost:80";
+
   services.nextcloud = {
     enable = true;
     package = pkgs-master.nextcloud30;
@@ -32,8 +34,8 @@ in
 
     database.createLocally = true;
 
-    settings.trusted_domains = [ "134.99.154.48" "192.168.100.11" "192,168.100.10" opts.hostname config.networking.hostName ];
-    settings.trusted_proxies = [ "192.168.100.10" "192.168.100.11" ];
+    settings.trusted_domains = [ "134.99.154.48" "192.168.100.11" "192.168.100.10" opts.hostname config.networking.hostName ];
+    settings.trusted_proxies = [ "192.168.100.10" "::1" ];
     config = {
       adminpassFile = host-config.sops.secrets.nextcloud_pass.path;
       dbtype = "mysql";
