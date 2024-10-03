@@ -51,6 +51,11 @@
     to = "www.stw-d.de/gastronomie/speiseplaene/essenausgabe-sued-duesseldorf";
   };
 
+  teenix.services.traefik.redirects."wiki_inphima" = {
+    from = "wiki.inphima.de";
+    to = "wiki.hhu.de/display/INPHIMA/INPhiMa+Startseite";
+  };
+
   teenix.services.traefik.redirects."physik_inphima" = {
     from = "physik.inphima.de";
     to = "fsphy.de";
@@ -62,7 +67,7 @@
   };
 
   teenix.services.traefik.redirects."inphima_discord" = {
-    from = "fscs.hhu.de/discord"; 
+    from = "fscs.hhu.de/discord";
     to = "discord.gg/K3ddgjh";
   };
 
