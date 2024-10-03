@@ -15,6 +15,10 @@ in
   programs.appimage.enable = true;
   programs.appimage.binfmt = true;
 
+  environment.systemPackages = [
+    pkgs.docker
+  ];
+
   systemd.services.nextcloud-notify_push.environment.NEXTCLOUD_URL = lib.mkForce "http://localhost:80";
 
   services.nextcloud = {
