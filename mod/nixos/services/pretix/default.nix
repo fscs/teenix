@@ -44,6 +44,10 @@
             mountPoint = "/var/lib/postgresql";
             isReadOnly = false;
           };
+          "resolv" = {
+            hostPath = "/etc/resolv.conf";
+            mountPoint = "/etc/resolv.conf";
+          };
         };
 
         specialArgs = {
