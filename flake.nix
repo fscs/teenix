@@ -40,6 +40,9 @@
       url = "git+ssh://git@git.hhu.de/fscs/campus-guesser-server.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sitzungsverwalung = {
+      url = "github:fscs/sitzungsverwaltung-gui";
+    };
   };
 
   outputs =
@@ -80,8 +83,8 @@
           pkgs-master = import nixpkgs-master {
             system = "x86_64-linux";
           };
+        };
       };
-    };
 
       devShells = forAllSystems (
         system:

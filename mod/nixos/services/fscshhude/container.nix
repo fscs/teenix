@@ -37,11 +37,25 @@
     wantedBy = [ "multi-user.target" ];
   };
 
+  systemd.services.sitzungsverwaltung = {
+    description = "Serve FSCS sitzungsverwaltung";
+    after = [ "network.target" ];
+    path = [ pkgs.bash ];
+    serviceConfig = {
+      Type = "exec";
+      User = "fscs-website";
+      WorkingDirectory = "/home/fscs-website";
+      ExecStart = "${pkgs.caddy}/bin/caddy file-server -r ${inputs.sitzungsverwalung.packages."${pkgs.stdenv.hostPlatform.system}".default} --listen :8090";
+      Restart = "always";
+      RestartSec = 5;
+    };
+    wantedBy = [ "multi-user.target" ];
+  };
 
   networking = {
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 8080 ];
+      allowedTCPPorts = [ 8080 8090 ];
     };
     # Use systemd-resolved inside the container
     # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686

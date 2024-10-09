@@ -37,6 +37,13 @@
         };
       };
 
+      teenix.services.traefik.services."fscshhude_manage" = {
+        router = {
+          rule = "Host(`sitzungen.${opts.hostname}`)";
+        };
+        servers = [ "http://${config.containers.fscshhude.config.networking.hostName}:8090" ];
+      };
+
       teenix.services.traefik.services."fscshhude" = {
         router.rule = "Host(`fscs.hhu.de`) || Host(`${opts.hostname}`)";
         healthCheck = {
