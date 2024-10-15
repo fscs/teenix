@@ -980,11 +980,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1728651246,
-        "narHash": "sha256-mMM65Dw9VSBe8qaFF8W9dfD1ogwGdO79nmN9ck8YM74=",
+        "lastModified": 1728996451,
+        "narHash": "sha256-LdjVvf6FnXsRcdIe/VfWwPFAFkvS8OPvVJ9QHKQfuww=",
         "owner": "fscs",
         "repo": "sitzungsverwaltung-gui",
-        "rev": "e845c1eebc667df6fd132eba4c661df4eee83a74",
+        "rev": "0f6ff5371ff553bb08114492db5931ef2b47a61e",
         "type": "github"
       },
       "original": {
