@@ -485,11 +485,11 @@
         "theme": "theme"
       },
       "locked": {
-        "lastModified": 1728860471,
-        "narHash": "sha256-uld9hggewGIg1sgMM5vy8T+VEjNmPDFp50KvxTlplKQ=",
+        "lastModified": 1728993620,
+        "narHash": "sha256-mqEVbNOISog7jSJVO8ppJdrzZofUwn0tIRe25izG0LI=",
         "ref": "refs/heads/main",
-        "rev": "7ed578acabc32c718ce958481f9b8eb4aed6cd65",
-        "revCount": 417,
+        "rev": "84e3f5996d8d93485722e4332ef1a86731d65646",
+        "revCount": 418,
         "type": "git",
         "url": "ssh://git@git.hhu.de/fscs/website.git"
       },
@@ -937,11 +937,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1728860451,
-        "narHash": "sha256-Mmw0ejJmMSuIb6Rrw0y9KE3QVsg9GBKCj4TwdAVwF3w=",
+        "lastModified": 1728993399,
+        "narHash": "sha256-xbZ8CkOwnH1cDlL61Yus+2Ie4Lk1ytzfubVs+sncU+4=",
         "owner": "fscs",
         "repo": "website-server",
-        "rev": "5fb4f5df81848296dfed2f275befbac117c11f73",
+        "rev": "e8b7119a2aea2dc6a7bd81e33e617c25d70d1db6",
         "type": "github"
       },
       "original": {
