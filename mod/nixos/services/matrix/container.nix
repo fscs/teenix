@@ -66,6 +66,7 @@ in
 
   environment.systemPackages = [
     pkgs.python312Packages.authlib
+    pkgs-unstable.matrix-authentication-service
   ];
 
 
@@ -108,7 +109,7 @@ in
       serve_server_wellknown = true;
       use_appservice_legacy_authorization = true;
       default_identity_server = "https://sydent.inphima.de";
-      public_baseurl = "https://inphima.de";
+      public_baseurl = "https://inphima.de:443";
       user_directory = {
         enabled = true;
         search_all_users = true;
