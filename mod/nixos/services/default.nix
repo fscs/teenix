@@ -18,6 +18,7 @@
     ./mete
     ./sydent
     ./sliding-sync
+    ./vaultwarden
     ./traefik.nix
     ./campus-guesser-server
     ./node_exporter

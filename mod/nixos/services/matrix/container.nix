@@ -109,7 +109,7 @@ in
       serve_server_wellknown = true;
       use_appservice_legacy_authorization = true;
       default_identity_server = "https://sydent.inphima.de";
-      public_baseurl = "https://inphima.de:443";
+      public_baseurl = "https://matrix.inphima.de:443";
       user_directory = {
         enabled = true;
         search_all_users = true;
@@ -126,17 +126,33 @@ in
           burst_count = 12;
         };
       };
+      rc_invites = {
+        per_room = {
+          per_second = 1000;
+          burst_count = 1000;
+        };
+        per_user = {
+          per_user = 1000;
+          per_second = 1000;
+        };
+        per_issuer = {
+          per_second = 1000;
+          burst_count = 1000;
+        };
+      };
 
       extra_well_known_client_content = {
         "org.matrix.msc3575.proxy" = {
           url = "https://syncv3.inphima.de";
         };
       };
-
-      turn_uris = [ "turn:${config.services.coturn.realm}:3478?transport=udp" "turn:${config.services.coturn.realm}:3478?transport=tcp" ];
-      turn_shared_secret = config.services.coturn.static-auth-secret-file;
-      turn_user_lifetime = "1h";
       server_name = "${opts.servername}";
+
+      turn_uris = [ "turn:turn.matrix.org?transport=udp" "turn:turn.matrix.org?transport=tcp" ];
+      turn_shared_secret = "n0t4ctuAllymatr1Xd0TorgSshar3d5ecret4obvIousreAsons";
+      turn_user_lifetime = "1h";
+      turn_allow_guests = true;
+
 
       listeners = [
         {
@@ -152,6 +168,13 @@ in
             }
           ];
         }
+        {
+          port = 9009;
+          bind_addresses = [ "0.0.0.0" ];
+          type = "metrics";
+          tls = false;
+        }
+
       ];
     };
   };
@@ -184,6 +207,7 @@ in
     min-port = 49000;
     max-port = 50000;
     use-auth-secret = true;
+    realm = "turn.inphima.de";
     static-auth-secret-file = "/run/secrets/matrix_pass";
     extraConfig = ''
       # for debugging

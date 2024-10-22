@@ -271,11 +271,10 @@
     secretsFile = ../secrets/gitlab_runner;
   };
 
-  # Users
-  sops.secrets.felix_pwd = {
-    format = "binary";
-    sopsFile = ../secrets/test_pwd;
-    neededForUsers = true;
+  teenix.services.vaultwarden = {
+    enable = true;
+    secretsFile = ../secrets/vaultwarden;
+    hostname = "vaultwarden.hhu-fscs.de";
   };
 
   security.pam.sshAgentAuth.enable = true;
