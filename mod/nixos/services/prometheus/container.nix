@@ -81,6 +81,17 @@ in
           }
         ];
       }
+      {
+        job_name = "matrix";
+        metrics_path = "/_synapse/metrics";
+        static_configs = [
+          {
+            targets = [
+              "matrix.inphima.de"
+            ];
+          }
+        ];
+      }
     ];
   };
 

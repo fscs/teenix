@@ -106,6 +106,7 @@ in
         "/var/lib/matrix-synapse/discord-registration.yaml"
         "/var/lib/matrix-synapse/double-puppet-registration.yaml"
       ];
+      enable_metrics = true;
       serve_server_wellknown = true;
       use_appservice_legacy_authorization = true;
       default_identity_server = "https://sydent.inphima.de";
@@ -141,18 +142,13 @@ in
         };
       };
 
+
       extra_well_known_client_content = {
         "org.matrix.msc3575.proxy" = {
           url = "https://syncv3.inphima.de";
         };
       };
       server_name = "${opts.servername}";
-
-      turn_uris = [ "turn:turn.matrix.org?transport=udp" "turn:turn.matrix.org?transport=tcp" ];
-      turn_shared_secret = "n0t4ctuAllymatr1Xd0TorgSshar3d5ecret4obvIousreAsons";
-      turn_user_lifetime = "1h";
-      turn_allow_guests = true;
-
 
       listeners = [
         {
@@ -163,18 +159,11 @@ in
           x_forwarded = true;
           resources = [
             {
-              names = [ "client" "federation" ];
+              names = [ "metrics" "client" "federation" ];
               compress = false;
             }
           ];
         }
-        {
-          port = 9009;
-          bind_addresses = [ "0.0.0.0" ];
-          type = "metrics";
-          tls = false;
-        }
-
       ];
     };
   };
