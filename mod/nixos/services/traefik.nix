@@ -214,7 +214,7 @@
           package = pkgs-unstable.traefik;
           enable = true;
 
-          environmentFiles = [ config.sops.secrets.traefik.path ];
+          environmentFiles = [ config.sops.secrets.traefik_static.path ];
 
           dynamicConfigOptions =
             {
