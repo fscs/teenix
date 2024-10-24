@@ -27,7 +27,7 @@
       };
 
       services.traefik.dynamicConfigOptions = {
-        http.routers.fscshhude.tls = lib.mkForce true;
+        http.routers.fscshhude.tls.certResolver = lib.mkForce "uniintern";
       };
 
       nix-tun.storage.persist.subvolumes."fscshhude".directories = {
@@ -45,7 +45,7 @@
       };
 
       teenix.services.traefik.services."fscshhude" = {
-        router.rule = "Host(`fscs.hhu.de`) || Host(`${opts.hostname}`)";
+        router.rule = "Host(`fscs.hhu.de`)";
         healthCheck = {
           enable = true;
           path = "/de/";

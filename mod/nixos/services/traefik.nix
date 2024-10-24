@@ -1,6 +1,7 @@
 { config
 , pkgs
 , pkgs-unstable
+, sops
 , lib
 , ...
 }: {
@@ -18,6 +19,12 @@
       default = null;
       description = ''
         The url to which the dashboard should be published to
+      '';
+    };
+    staticConfigPath = lib.mkOption {
+      type = lib.types.path;
+      description = ''
+        The path to the static configuration ENV file
       '';
     };
     redirects =
@@ -171,6 +178,12 @@
       users.users.traefik.extraGroups = [ "docker" ];
       networking.firewall.allowedTCPPorts = lib.attrsets.mapAttrsToList (name: value: value.port) config.teenix.services.traefik.entrypoints;
 
+      sops.secrets.traefik_static = {
+        sopsFile = config.teenix.services.traefik.staticConfigPath;
+        format = "binary";
+        mode = "444";
+      };
+
       services.traefik =
         let
 
@@ -201,12 +214,10 @@
           package = pkgs-unstable.traefik;
           enable = true;
 
+          environmentFiles = [ config.sops.secrets.traefik.path ];
+
           dynamicConfigOptions =
             {
-              tls.certificates = [{
-                certFile = "/persist/traefik/certificates/fscs.hhu.de.crt";
-                keyFile = "/persist/traefik/certificates/fscs.hhu.de.key";
-              }];
               http =
                 {
                   routers =
@@ -338,6 +349,18 @@
                     email = config.teenix.services.traefik.letsencryptMail;
                     storage = "/var/lib/traefik/acme.json";
                     tlsChallenge = { };
+                  };
+                };
+                uniintern = {
+                  acme = {
+                    email = config.teenix.services.traefik.letsencryptMail;
+                    storage = "/var/lib/traefik/acme2.json";
+                    tlsChallenge = { };
+                    caServer = ''$TRAEFIK_CERTIFICATESRESOLVERS_uniintern_ACME_CASERVER'';
+                    eab = {
+                      kid = ''$TRAEFIK_CERTIFICATESRESOLVERS_uniintern_ACME_EAB_KID'';
+                      hmacEncoded = ''$TRAEFIK_CERTIFICATESRESOLVERS_uniintern_ACME_EAB_HMACENCODED'';
+                    };
                   };
                 };
               };
