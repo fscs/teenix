@@ -6,7 +6,7 @@
 , ...
 }: {
   imports = [
-    inputs.flake-programs-sqlite.nixosModules.programs-sqlite 
+    inputs.flake-programs-sqlite.nixosModules.programs-sqlite
   ];
 
   options.teenix.nixconfig = {
