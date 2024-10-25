@@ -45,7 +45,7 @@
       };
 
       teenix.services.traefik.services."fscshhude" = {
-        router.rule = "Host(`fscs.hhu.de`)";
+        router.rule = "Host(`fscs.hhu.de`) || Host(`fscs.uni-duesseldorf.de`)";
         healthCheck = {
           enable = true;
           path = "/de/";
