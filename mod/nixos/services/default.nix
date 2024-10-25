@@ -19,6 +19,7 @@
     ./sydent
     ./sliding-sync
     ./vaultwarden
+    ./ntfy
     ./traefik.nix
     ./campus-guesser-server
     ./node_exporter

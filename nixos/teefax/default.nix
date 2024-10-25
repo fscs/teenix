@@ -278,6 +278,11 @@
     hostname = "vaultwarden.hhu-fscs.de";
   };
 
+  teenix.services.ntfy = {
+    enable = true;
+    hostname = "ntfy.hhu-fscs.de";
+  };
+
   security.pam.sshAgentAuth.enable = true;
 
   teenix.users = {
