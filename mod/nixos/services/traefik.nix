@@ -200,15 +200,11 @@
               > $out
           '';
 
-          configDir = pkgs.stdenv.mkDerivation {
-            name = "traefikConfig";
-            src = ./.;
-            buildPhase = ''
-              mkdir $out
-              ln -s ${dynamicConfig} $out/dyn_config.toml
-              ln -s ${config.sops.secrets.traefik.path} $out/dyn_sops.toml
-            '';
-          };
+          configDir = pkgs.runCommandLocal "traefik-config-dir" { } ''
+            mkdir $out
+            ln -s ${dynamicConfig} $out/dyn_config.toml
+            ln -s ${config.sops.secrets.traefik.path} $out/dyn_sops.toml
+          '';
         in
         {
           package = pkgs-unstable.traefik;
