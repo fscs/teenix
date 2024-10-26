@@ -142,6 +142,9 @@ in
         };
       };
 
+      turn_uris = [ "turn:${config.services.coturn.realm}:3478?transport=udp" "turn:${config.services.coturn.realm}:3478?transport=tcp" ];
+      turn_shared_secret = config.services.coturn.static-auth-secret-file;
+      turn_user_lifetime = "1h";
 
       extra_well_known_client_content = {
         "org.matrix.msc3575.proxy" = {
@@ -193,8 +196,8 @@ in
     enable = true;
     no-cli = true;
     no-tcp-relay = true;
-    min-port = 49000;
-    max-port = 50000;
+    min-port = 30000;
+    max-port = 30010;
     use-auth-secret = true;
     realm = "turn.inphima.de";
     static-auth-secret-file = "/run/secrets/matrix_pass";
