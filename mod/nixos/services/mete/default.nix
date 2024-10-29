@@ -51,14 +51,6 @@
               "traefik.http.routers.mete.middlewares" = "meteauth@file,meteredirect@file";
               "traefik.http.services.mete.loadbalancer.server.port" = "8080";
               "traefik.http.services.mete.loadbalancer.healthCheck.path" = "/";
-              # Mete Secure
-              "traefik.http.middlewares.meteredirect.redirectregex.regex" = "https://mete.hhu-fscs.de/(.*?)((/deposit)|(/retrieve)|(/transaction))(.*)";
-              "traefik.http.middlewares.meteredirect.redirectregex.replacement" = "https://mete.hhu-fscs.de/$1";
-              "traefik.http.routers.metesecure.rule" = "Host(`metesecure.hhu-fscs.de`)";
-              "traefik.http.routers.metesecure.tls" = "true";
-              "traefik.http.routers.metesecure.tls.certresolver" = "letsencrypt";
-              "traefik.http.routers.metesecure.service" = "mete";
-              "traefik.http.routers.metesecure.middlewares" = "authentik@file";
             };
             volumes = [
               "${config.nix-tun.storage.persist.path}/mete/db:/app/var"

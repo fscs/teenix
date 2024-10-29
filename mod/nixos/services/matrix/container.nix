@@ -117,6 +117,7 @@ in
         prefer_local_users = true;
         show_locked_users = true;
       };
+      max_upload_size = "100M";
       rc_joins = {
         local = {
           per_second = 1000;
