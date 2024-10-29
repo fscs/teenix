@@ -45,12 +45,14 @@
             labels = {
               "traefik.enable" = "true";
               # Certificate
-              "traefik.http.routers.mete.tls" = "true";
-              "traefik.http.routers.mete.tls.certresolver" = "letsencrypt";
-              "traefik.http.routers.mete.rule" = "Host(`mete.hhu-fscs.de`)";
-              "traefik.http.routers.mete.middlewares" = "meteauth@file,meteredirect@file";
               "traefik.http.services.mete.loadbalancer.server.port" = "8080";
               "traefik.http.services.mete.loadbalancer.healthCheck.path" = "/";
+              # Mete Secure
+              "traefik.http.routers.metesecure.rule" = "Host(`metesecure.hhu-fscs.de`)";
+              "traefik.http.routers.metesecure.tls" = "true";
+              "traefik.http.routers.metesecure.tls.certresolver" = "letsencrypt";
+              "traefik.http.routers.metesecure.service" = "mete";
+              "traefik.http.routers.metesecure.middlewares" = "authentik@file";
             };
             volumes = [
               "${config.nix-tun.storage.persist.path}/mete/db:/app/var"
