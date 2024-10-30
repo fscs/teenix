@@ -2,6 +2,7 @@
 , outputs
 , config
 , pkgs
+, lib
 , ...
 }: {
   imports = [
@@ -51,7 +52,7 @@
     to = "www.stw-d.de/gastronomie/speiseplaene/essenausgabe-sued-duesseldorf";
   };
 
-  teenix.services.traefik.redirects."wiki_inphima" = {
+  teenix.services.traefik.redirects."wiki_inphima_de" = {
     from = "wiki.inphima.de";
     to = "wiki.hhu.de/display/INPHIMA/INPhiMa+Startseite";
   };
@@ -91,6 +92,11 @@
     };
   };
 
+  networking.firewall =
+    {
+      allowedUDPPortRanges = [{ from = 30000; to = 30010; }];
+    };
+
   networking.firewall.checkReversePath = false;
 
   sops.secrets.traefik = {
@@ -119,6 +125,7 @@
   teenix.services.traefik.dashboardUrl = "traefik.hhu-fscs.de";
   teenix.services.traefik.letsencryptMail = "fscs@hhu.de";
   teenix.services.traefik.logging.enable = true;
+
   teenix.services.traefik.entrypoints = {
     web = {
       port = 80;
@@ -140,7 +147,12 @@
     metrics = {
       port = 120;
     };
-  };
+  } //
+  (builtins.foldl'
+    lib.trivial.mergeAttrs
+    { }
+    (builtins.map (i: { "turn_port_udp_${builtins.toString i}" = { port = i; }; })
+      (lib.range 30000 30010)));
 
   teenix.services.sliding-sync = {
     enable = true;

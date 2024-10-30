@@ -242,7 +242,7 @@
                           {
                             service = "blank";
                             priority = 10;
-                            rule = "HostRegexp(`${builtins.replaceStrings ["."] ["\\."] value.from}`)";
+                            rule = "Host(`${builtins.replaceStrings ["."] ["\."] value.from}`)";
                             middlewares = name;
                             tls.certResolver = "letsencrypt";
                           }
@@ -263,7 +263,7 @@
                         name: value:
                           {
                             redirectRegex = {
-                              regex = "(www\\.)?${builtins.replaceStrings ["."] ["\\."] value.from}/?";
+                              regex = "(www\\.)?${builtins.replaceStrings ["."] ["\."] value.from}/?";
                               replacement = value.to;
                               permanent = true;
                             };
@@ -374,7 +374,11 @@
                           port = null;
                         }
                       ])
-                    config.teenix.services.traefik.entrypoints);
+                    config.teenix.services.traefik.entrypoints) // {
+                  udp_30001 = {
+                    address = ":30001/udp";
+                  };
+                };
 
               api = {
                 dashboard = true;
