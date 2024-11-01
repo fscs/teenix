@@ -45,7 +45,7 @@
       Type = "exec";
       User = "fscs-website";
       WorkingDirectory = "/home/fscs-website";
-      ExecStart = "${pkgs.caddy}/bin/caddy file-server -r ${inputs.sitzungsverwalung.packages."${pkgs.stdenv.hostPlatform.system}".default} --listen :8090";
+      ExecStart = "${pkgs.caddy}/bin/caddy file-server -r ${inputs.sitzungsverwaltung.packages."${pkgs.stdenv.hostPlatform.system}".default} --listen :8090";
       Restart = "always";
       RestartSec = 5;
     };

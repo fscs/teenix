@@ -40,8 +40,9 @@
       url = "git+ssh://git@git.hhu.de/fscs/campus-guesser-server.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    sitzungsverwalung = {
+    sitzungsverwaltung = {
       url = "github:fscs/sitzungsverwaltung-gui";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
