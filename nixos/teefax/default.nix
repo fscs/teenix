@@ -57,6 +57,11 @@
     to = "wiki.hhu.de/display/INPHIMA/INPhiMa+Startseite";
   };
 
+  teenix.services.traefik.redirects."wiki_fsnawi" = {
+    from = "wiki.fsnawi.de";
+    to = "wiki.hhu.de/display/NAWI/FS+Naturwissenschaften+Startseite";
+  };
+
   teenix.services.traefik.redirects."physik_inphima" = {
     from = "physik.inphima.de";
     to = "fsphy.de";
