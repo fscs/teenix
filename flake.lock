@@ -966,11 +966,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1730483251,
-        "narHash": "sha256-FGIF5RhHiD9I7m9WnRP9c6qRftHTBsBp9l2TQpyaC7s=",
+        "lastModified": 1730556187,
+        "narHash": "sha256-nBsTBIhVuWayOUS2JhzG69pzRLp6PLfDwXW9DNGhD7s=",
         "owner": "fscs",
         "repo": "sitzungsverwaltung-gui",
-        "rev": "ddaaea58d1ec6e1923cf57e1f0e1252bea126c17",
+        "rev": "33e3e0e0a335d5f1da55c78e3387a21a99e50ed7",
         "type": "github"
       },
       "original": {
