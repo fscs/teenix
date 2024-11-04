@@ -104,6 +104,10 @@
             hostPath = config.sops.secrets.masSecrets.path;
             mountPoint = config.sops.secrets.masSecrets.path;
           };
+          "hookshotSecrets" = {
+            hostPath = config.sops.secrets.matrix-hookshot.path;
+            mountPoint = config.sops.secrets.matrix-hookshot.path;
+          };
           "env" = {
             hostPath = config.sops.secrets.matrix_env.path;
             mountPoint = config.sops.secrets.matrix_env.path;

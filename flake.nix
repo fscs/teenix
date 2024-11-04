@@ -36,10 +36,7 @@
       flake = false;
     };
     campus-guesser-server.url = "git+ssh://git@git.hhu.de/fscs/campus-guesser-server.git";
-    sitzungsverwaltung = {
-      url = "github:fscs/sitzungsverwaltung-gui";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    sitzungsverwaltung.url = "github:fscs/sitzungsverwaltung-gui";
   };
 
   outputs =
