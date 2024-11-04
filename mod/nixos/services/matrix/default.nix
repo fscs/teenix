@@ -85,6 +85,11 @@
         servers = [ "http://${config.containers.inphimatrix.config.networking.hostName}:8080" ];
       };
 
+      teenix.services.traefik.services.matrix-hookshot = {
+        router.rule = "Host(`hookshot.${opts.servername}`)";
+        servers = [ "http://${config.containers.inphimatrix.config.networking.hostName}:9000" ];
+      };
+
       containers.inphimatrix = {
         ephemeral = true;
         autoStart = true;

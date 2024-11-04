@@ -111,6 +111,7 @@ in
       app_service_config_files = [
         "/var/lib/matrix-synapse/discord-registration.yaml"
         "/var/lib/matrix-synapse/double-puppet-registration.yaml"
+        "/run/secrets/matrix-hookshot"
       ];
       enable_metrics = true;
       serve_server_wellknown = true;
@@ -227,7 +228,7 @@ in
       allowedUDPPortRanges = range;
       allowedUDPPorts = [ 3478 5349 ];
       allowedTCPPortRanges = [ ];
-      allowedTCPPorts = [ 80 443 8008 8080 3478 5349 ];
+      allowedTCPPorts = [ 80 443 8008 8080 3478 5349 9000 ];
     };
 
   system.stateVersion = "23.11";
