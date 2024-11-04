@@ -159,12 +159,6 @@
     (builtins.map (i: { "turn_port_udp_${builtins.toString i}" = { port = i; }; })
       (lib.range 30000 30010)));
 
-  teenix.services.sliding-sync = {
-    enable = true;
-    hostname = "syncv3.inphima.de";
-    envFile = ../secrets/sliding_env;
-  };
-
   # Services
   nix-tun.storage.persist.enable = true;
 
@@ -183,12 +177,6 @@
     ];
   };
 
-  teenix.services.keycloak = {
-    enable = true;
-    hostname = "login.inphima.de";
-    secretsFile = ../secrets/keycloak;
-  };
-
   teenix.services.fscshhude = {
     enable = true;
     hostname = "hhu-fscs.de";
@@ -201,6 +189,7 @@
     secretsFile = ../secrets/test_pwd;
     configFile = ../secrets/matrix_config;
     masSecrets = ../secrets/masconfig_yaml;
+    hookshotSecrets = ../secrets/matrix-hookshot;
   };
 
   teenix.services.element-web = {

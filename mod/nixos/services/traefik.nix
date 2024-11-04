@@ -1,6 +1,5 @@
 { config
 , pkgs
-, pkgs-unstable
 , sops
 , lib
 , ...
@@ -207,7 +206,6 @@
           '';
         in
         {
-          package = pkgs-unstable.traefik;
           enable = true;
 
           environmentFiles = [ config.sops.secrets.traefik_static.path ];

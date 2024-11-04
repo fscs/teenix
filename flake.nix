@@ -2,8 +2,7 @@
   description = "Teefax NixOS config";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05"; #NOTE: change channel in gitlab runner when updating this
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; #NOTE: change channel in gitlab runner when updating this
     nixpkgs-master.url = "github:nixos/nixpkgs";
 
     sops = {
@@ -17,11 +16,11 @@
 
     nix-tun = {
       url = "github:nix-tun/nixos-modules";
-      inputs.nixpkgs.follows = "nixpkgs-unstable"; # uses unstable internally
+      inputs.nixpkgs.follows = "nixpkgs"; # uses unstable internally
     };
     authentik-nix = {
       url = "github:nix-community/authentik-nix";
-      inputs.nixpkgs.follows = "nixpkgs-unstable"; # uses unstable internally
+      inputs.nixpkgs.follows = "nixpkgs"; # uses unstable internally
     };
 
     discord-intern-bot = {
@@ -30,16 +29,13 @@
     };
     fscshhude = {
       url = "git+ssh://git@git.hhu.de/fscs/website.git";
-      inputs.nixpkgs.follows = "nixpkgs-unstable"; # needs hugo 134
+      inputs.nixpkgs.follows = "nixpkgs"; # needs hugo 134
     };
     mete = {
       url = "github:fscs/mete/wip/fscs";
       flake = false;
     };
-    campus-guesser-server = {
-      url = "git+ssh://git@git.hhu.de/fscs/campus-guesser-server.git";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    campus-guesser-server.url = "git+ssh://git@git.hhu.de/fscs/campus-guesser-server.git";
     sitzungsverwaltung = {
       url = "github:fscs/sitzungsverwaltung-gui";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -49,7 +45,6 @@
   outputs =
     { self
     , nixpkgs
-    , nixpkgs-unstable
     , nixpkgs-master
     , ...
     } @ inputs:
@@ -80,7 +75,6 @@
         specialArgs = { inherit inputs outputs; };
         modules = [ ./nixos/teefax ];
         specialArgs = {
-          pkgs-unstable = import nixpkgs-unstable { system = "x86_64-linux"; config.allowUnfree = true; };
           pkgs-master = import nixpkgs-master {
             system = "x86_64-linux";
           };

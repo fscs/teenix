@@ -15,6 +15,9 @@
     masSecrets = lib.mkOption {
       type = lib.types.path;
     };
+    hookshotSecrets = lib.mkOption {
+      type = lib.types.path;
+    };
     secretsFile = lib.mkOption {
       type = lib.types.path;
     };
@@ -42,6 +45,12 @@
 
       sops.secrets.matrix_env = {
         sopsFile = opts.configFile;
+        format = "binary";
+        mode = "444";
+      };
+
+      sops.secrets.matrix-hookshot = {
+        sopsFile = opts.hookshotSecrets;
         format = "binary";
         mode = "444";
       };
@@ -124,12 +133,6 @@
         specialArgs = {
           inherit inputs pkgs;
           host-config = config;
-          pkgs-unstable = import inputs.nixpkgs-unstable {
-            system = "x86_64-linux";
-            config.permittedInsecurePackages = [
-              "olm-3.2.16"
-            ];
-          };
         };
 
         config =

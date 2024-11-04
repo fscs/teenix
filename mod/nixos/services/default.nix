@@ -4,7 +4,6 @@
     ./authentik
     ./element-web
     ./fscshhude
-    ./keycloak
     ./matrix
     ./nextcloud
     ./openssh.nix
@@ -17,7 +16,6 @@
     ./nawi
     ./mete
     ./sydent
-    ./sliding-sync
     ./vaultwarden
     ./ntfy
     ./traefik.nix

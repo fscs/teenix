@@ -1,7 +1,6 @@
 { lib
 , pkgs
 , host-config
-, pkgs-unstable
 , config
 , ...
 }:
@@ -11,7 +10,14 @@ in
 {
   imports = [
     ./mas.nix
+    ./hookshot.nix
   ];
+
+  # fuck my life we need to refactor all of this so fucking bad
+  teenix.services.matrix-hookshot = {
+    enable = true;
+    secretFile = host-config.sops.secrets.matrix-hookshot.path;
+  };
 
   teenix.services.mas = {
     enable = true;
@@ -45,7 +51,7 @@ in
               }
               {
                 name = "assets";
-                path = "${pkgs-unstable.matrix-authentication-service}/share/matrix-authentication-service/assets/";
+                path = "${pkgs.matrix-authentication-service}/share/matrix-authentication-service/assets/";
               }
             ];
             binds = [
@@ -66,7 +72,7 @@ in
 
   environment.systemPackages = [
     pkgs.python312Packages.authlib
-    pkgs-unstable.matrix-authentication-service
+    pkgs.matrix-authentication-service
   ];
 
 
@@ -184,7 +190,7 @@ in
       Type = "exec";
       User = "matrix-synapse";
       WorkingDirectory = "/var/lib/matrix-synapse";
-      ExecStart = "${pkgs-unstable.mautrix-discord}/bin/mautrix-discord";
+      ExecStart = "${pkgs.mautrix-discord}/bin/mautrix-discord";
       Restart = "always";
       RestartSec = 5;
     };
