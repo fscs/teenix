@@ -18,6 +18,7 @@
     ./sydent
     ./vaultwarden
     ./ntfy
+    ./freescout
     ./traefik.nix
     ./campus-guesser-server
     ./node_exporter

@@ -258,6 +258,13 @@
     mariaEnvFile = ../secrets/nawi/maria_env;
   };
 
+  teenix.services.freescout = {
+    enable = true;
+    hostname = "tickets.hhu-fscs.de";
+    envFile = ../secrets/freescout/env;
+    mariaEnvFile = ../secrets/freescout/maria_env;
+  };
+
   teenix.services.sydent = {
     enable = true;
     hostname = "sydent.inphima.de";
