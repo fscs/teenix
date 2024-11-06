@@ -102,7 +102,7 @@
           SITE_URL = "https://${opts.hostname}";
           ADMIN_EMAIL = "admin@admin.com";
           ENABLE_SSL_PROXY = "false";
-          DISPLAY_ERRORS = "true";
+          DISPLAY_ERRORS = "false";
           TIMEZONE = "Europe/Berlin";
         };
         labels = {
