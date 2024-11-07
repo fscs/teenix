@@ -252,6 +252,7 @@
                         rule = "Host(`${config.teenix.services.traefik.dashboardUrl}`)";
                         service = "api@internal";
                         entryPoints = [ "websecure" ];
+                        middlewares = [ "authentik" ];
                         tls.certResolver = "letsencrypt";
                       };
                     };
