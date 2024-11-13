@@ -296,6 +296,11 @@
     hostname = "ntfy.hhu-fscs.de";
   };
 
+  teenix.services.matrix-intern-bot = {
+    enable = true;
+    secretsFile = ../secrets/matrixinternbot;
+  };
+
   security.pam.sshAgentAuth.enable = true;
 
   teenix.users = {

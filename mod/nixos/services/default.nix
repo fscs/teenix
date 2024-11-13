@@ -18,6 +18,7 @@
     ./sydent
     ./vaultwarden
     ./ntfy
+    ./matrix-intern-bot
     ./freescout
     ./traefik.nix
     ./campus-guesser-server

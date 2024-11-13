@@ -27,6 +27,10 @@
       url = "git+ssh://git@git.hhu.de/fscs/discord-intern-bot.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    matrix-intern-bot = {
+      url = "git+ssh://git@git.hhu.de/fscs/matrix-bot.git";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     fscshhude = {
       url = "git+ssh://git@git.hhu.de/fscs/website.git";
       inputs.nixpkgs.follows = "nixpkgs"; # needs hugo 134
