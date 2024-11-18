@@ -78,7 +78,6 @@
               "traefik.http.routers.gorden-summary.tls.certresolver" = "letsencrypt";
               "traefik.http.routers.gorden-summary.middlewares" = "authentik@file";
               "traefik.http.routers.gorden-summary.rule" = "Host(`robert.hhu-fscs.de`)";
-              "traefik.http.services.gorden-summary.loadbalancer.healthCheck.path" = "/";
               "traefik.http.services.gorden-summary.loadbalancer.server.port" = "5000";
 
             };
