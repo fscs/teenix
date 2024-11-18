@@ -19,8 +19,6 @@ in
     pkgs.docker
   ];
 
-  systemd.services.nextcloud-notify_push.environment.NEXTCLOUD_URL = lib.mkForce "http://localhost:80";
-
   services.nextcloud = {
     enable = true;
     package = pkgs-master.nextcloud30;
