@@ -911,11 +911,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1730327045,
-        "narHash": "sha256-xKel5kd1AbExymxoIfQ7pgcX6hjw9jCgbiBjiUfSVJ8=",
+        "lastModified": 1728193676,
+        "narHash": "sha256-PbDWAIjKJdlVg+qQRhzdSor04bAPApDqIv2DofTyynk=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "080166c15633801df010977d9d7474b4a6c549d7",
+        "rev": "ecbc1ca8ffd6aea8372ad16be9ebbb39889e55b6",
         "type": "github"
       },
       "original": {
@@ -1075,11 +1075,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1730556187,
-        "narHash": "sha256-nBsTBIhVuWayOUS2JhzG69pzRLp6PLfDwXW9DNGhD7s=",
+        "lastModified": 1732533684,
+        "narHash": "sha256-DoN6KXt8A3x16V9ui7rsSycVk7gzf17LW5VRRP627I0=",
         "owner": "fscs",
         "repo": "sitzungsverwaltung-gui",
-        "rev": "33e3e0e0a335d5f1da55c78e3387a21a99e50ed7",
+        "rev": "7f2e1ee5334d9627a98fe286a24bab65732a3650",
         "type": "github"
       },
       "original": {
