@@ -1075,11 +1075,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1732703548,
-        "narHash": "sha256-X3y8xr0FTDyuMZwi4uAdKwILd2c4swaLePYgj+5hzV8=",
+        "lastModified": 1732703945,
+        "narHash": "sha256-Y6kTSO53hZr3PfwkkWR19ebJ6tSpGfhofvQXAdFeJkc=",
         "owner": "fscs",
         "repo": "sitzungsverwaltung-gui",
-        "rev": "9b731311c638080e16ededd13d50b9ad5839d4cb",
+        "rev": "9fa3b1b69dcc14c3543c69d27c065c26af835231",
         "type": "github"
       },
       "original": {
