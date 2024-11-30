@@ -82,6 +82,16 @@
         };
       };
 
+      nixosConfigurations.testfax = lib.nixosSystem {
+        specialArgs = { inherit inputs outputs; };
+        modules = [ ./nixos/testfax ];
+        specialArgs = {
+          pkgs-master = import nixpkgs-master {
+            system = "x86_64-linux";
+          };
+        };
+      };
+
       devShells = forAllSystems (
         system:
         let
