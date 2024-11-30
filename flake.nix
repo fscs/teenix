@@ -2,7 +2,7 @@
   description = "Teefax NixOS config";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; #NOTE: change channel in gitlab runner when updating this
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; # NOTE: change channel in gitlab runner when updating this
     nixpkgs-master.url = "github:nixos/nixpkgs";
 
     sops = {
@@ -44,11 +44,12 @@
   };
 
   outputs =
-    { self
-    , nixpkgs
-    , nixpkgs-master
-    , ...
-    } @ inputs:
+    {
+      self,
+      nixpkgs,
+      nixpkgs-master,
+      ...
+    }@inputs:
     let
       inherit (self) outputs;
       systems = [
@@ -65,31 +66,56 @@
     {
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
 
-      packages =
-        forAllSystems
-          (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
       overlays = import ./overlays.nix { inherit inputs; };
 
       nixosModules.teenix = import ./mod/nixos;
 
-      nixosConfigurations.teefax = lib.nixosSystem {
-        specialArgs = { inherit inputs outputs; };
-        modules = [ ./nixos/teefax ];
-        specialArgs = {
-          pkgs-master = import nixpkgs-master {
-            system = "x86_64-linux";
+      colmena = {
+        meta = {
+          nixpkgs = import nixpkgs { system = "x86_64-linux"; };
+          specialArgs = {
+            inherit inputs outputs;
+            pkgs-master = import nixpkgs-master {
+              system = "x86_64-linux";
+            };
           };
+        };
+
+        defaults.deployment = {
+          buildOnTarget = true;
+          targetUser = null;
+        };
+
+        teefax = {
+          deployment.targetHost = "fscs.hhu.de";
+          imports = [ ./nixos/teefax ];
+        };
+
+        testfax = {
+          deployment.targetHost = "minecraft.fsphy.de";
+          imports = [ ./nixos/testfax ];
         };
       };
 
-      nixosConfigurations.testfax = lib.nixosSystem {
-        specialArgs = { inherit inputs outputs; };
-        modules = [ ./nixos/testfax ];
+      nixosConfigurations.teefax = lib.nixosSystem {
         specialArgs = {
+          inherit inputs outputs;
           pkgs-master = import nixpkgs-master {
             system = "x86_64-linux";
           };
         };
+        modules = [ ./nixos/teefax ];
+      };
+
+      nixosConfigurations.testfax = lib.nixosSystem {
+        specialArgs = {
+          inherit inputs outputs;
+          pkgs-master = import nixpkgs-master {
+            system = "x86_64-linux";
+          };
+        };
+        modules = [ ./nixos/testfax ];
       };
 
       devShells = forAllSystems (
@@ -104,9 +130,10 @@
               "${toString ./.}/nixos/keys/users"
             ];
 
-            nativeBuildInputs = [
-              (pkgs.callPackage inputs.sops { }).sops-import-keys-hook
-              pkgs.nixos-rebuild
+            nativeBuildInputs = with pkgs; [
+              (callPackage inputs.sops { }).sops-import-keys-hook
+              nixos-rebuild
+              colmena
             ];
           };
         }

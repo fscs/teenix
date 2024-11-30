@@ -115,6 +115,11 @@
     enable = true;
   };
 
+  teenix.services.element-web = {
+    enable = true; 
+    hostname = "element.minecraft.fsphy.de";
+    matrixUrl = "inphima.de";
+  };
 
   security.pam.sshAgentAuth.enable = true;
 
