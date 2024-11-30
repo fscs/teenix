@@ -10,7 +10,7 @@
     };
   };
 
-  config = {
+  config = lib.mkIf config.teenix.services.collabora.enable {
 
     virtualisation.oci-containers.containers."collabora" = {
       image = "collabora/code:latest";
