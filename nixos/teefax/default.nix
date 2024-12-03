@@ -133,6 +133,14 @@
     {
       web = {
         port = 80;
+         http = {
+          redirections = {
+            entryPoint = {
+              to = "websecure";
+              scheme = "https";
+            };
+          };
+        };
       };
       websecure = {
         port = 443;
