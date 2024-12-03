@@ -1,14 +1,18 @@
-{ lib
-, host-config
-, pkgs
-, ...
+{
+  lib,
+  host-config,
+  pkgs,
+  ...
 }:
 let
   opts = host-config.teenix.services.prometheus;
 in
 {
   networking.hostName = "prometheus";
-  networking.nameservers = [ "134.99.154.201" "134.99.154.228" ];
+  networking.nameservers = [
+    "134.99.154.201"
+    "134.99.154.228"
+  ];
 
   services.prometheus = {
     enable = true;
@@ -111,7 +115,6 @@ in
     };
   };
 
-
   users.users.node_exporter = {
     uid = 1033;
     home = "/home/node_exporter";
@@ -154,7 +157,13 @@ in
         name = "Authentik";
         allow_sign_up = true;
         client_id = "hFGHZUCwQEL8BD8vzGoakVKIXwKHDiPgMQAwkC5g";
-        scopes = [ "openid" "email" "profile" "offline_access" "roles" ];
+        scopes = [
+          "openid"
+          "email"
+          "profile"
+          "offline_access"
+          "roles"
+        ];
         email_attribute_path = "email";
         login_attribute_path = "preferred_username";
         name_attribute_path = "given_name";
@@ -188,7 +197,11 @@ in
   networking = {
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 9090 80 9093 ];
+      allowedTCPPorts = [
+        9090
+        80
+        9093
+      ];
     };
     # Use systemd-resolved inside the container
     # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686

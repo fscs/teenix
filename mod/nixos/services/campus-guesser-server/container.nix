@@ -1,10 +1,12 @@
-{ pkgs
-, inputs
-, lib
-, config
-, host-config
-, ...
-}: {
+{
+  pkgs,
+  inputs,
+  lib,
+  config,
+  host-config,
+  ...
+}:
+{
   users.users.campus-guesser-server = {
     home = "/home/campus-guesser-server";
     uid = 1000;
@@ -41,7 +43,9 @@
       Environment = "SPRING_DATASOURCE_USERNAME='campus-guesser-server' SPRING_DATASOURCE_URL='jdbc:postgresql://localhost:5432/campus-guesser-server'";
       EnvironmentFile = host-config.sops.secrets.campusguesser.path;
       User = "campus-guesser-server";
-      ExecStart = "${inputs.campus-guesser-server.packages."${pkgs.stdenv.hostPlatform.system}".default}/bin/CampusGuesserServer-fscs";
+      ExecStart = "${
+        inputs.campus-guesser-server.packages."${pkgs.stdenv.hostPlatform.system}".default
+      }/bin/CampusGuesserServer-fscs";
       Restart = "always";
       RestartSec = 5;
       StandardOutput = "append:/var/log/campusguesser/log.log";

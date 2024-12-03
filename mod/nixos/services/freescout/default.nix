@@ -1,9 +1,11 @@
-{ lib
-, config
-, inputs
-, pkgs
-, ...
-}: {
+{
+  lib,
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
+{
   options.teenix.services.freescout = {
     enable = lib.mkEnableOption "setup freescout";
     envFile = lib.mkOption {
@@ -38,11 +40,11 @@
 
       nix-tun.storage.persist.subvolumes."freescout".directories = {
         "/mysql" = {
-          owner = "1000"; #TODO: Set the correct owner and mode
+          owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
         "/data" = {
-          owner = "1000"; #TODO: Set the correct owner and mode
+          owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
       };

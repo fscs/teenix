@@ -1,9 +1,11 @@
-{ lib
-, config
-, inputs
-, pkgs
-, ...
-}: {
+{
+  lib,
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
+{
   options.teenix.services.node_exporter = {
     enable = lib.mkEnableOption "setup node_exporter";
   };

@@ -1,8 +1,10 @@
-{ pkgs
-, lib
-, config
-, ...
-}: {
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+{
   options.teenix.services.matrix-hookshot = {
     enable = lib.mkEnableOption "Enable Matrix Hookshot Service";
     secretFile = lib.mkOption {

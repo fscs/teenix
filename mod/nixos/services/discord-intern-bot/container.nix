@@ -1,9 +1,11 @@
-{ pkgs
-, inputs
-, lib
-, host-config
-, ...
-}: {
+{
+  pkgs,
+  inputs,
+  lib,
+  host-config,
+  ...
+}:
+{
   users.users.discord-intern-bot = {
     home = "/home/discord-intern-bot";
     uid = 1000;
@@ -19,7 +21,9 @@
       Type = "exec";
       User = "discord-intern-bot";
       WorkingDirectory = "/home/discord-intern-bot/";
-      ExecStart = "${inputs.discord-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".default}/bin/discord-intern-bot";
+      ExecStart = "${
+        inputs.discord-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".default
+      }/bin/discord-intern-bot";
       Restart = "always";
       RestartSec = 5;
     };
@@ -39,4 +43,3 @@
 
   system.stateVersion = "23.11";
 }
-

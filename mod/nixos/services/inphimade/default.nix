@@ -1,8 +1,10 @@
-{ lib
-, config
-, pkgs
-, ...
-}: {
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
+{
   options.teenix.services.inphimade =
     let
       t = lib.types;
@@ -43,11 +45,11 @@
 
       nix-tun.storage.persist.subvolumes."inphimade".directories = {
         "/mysql" = {
-          owner = "1000"; #TODO: Set the correct owner and mode
+          owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
         "/wp" = {
-          owner = "1000"; #TODO: Set the correct owner and mode
+          owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
       };

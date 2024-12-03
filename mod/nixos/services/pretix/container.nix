@@ -1,6 +1,7 @@
-{ lib
-, host-config
-, ...
+{
+  lib,
+  host-config,
+  ...
 }:
 let
   opts = host-config.teenix.services.pretix;

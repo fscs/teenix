@@ -1,9 +1,11 @@
-{ lib
-, config
-, inputs
-, pkgs
-, ...
-}: {
+{
+  lib,
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
+{
   options.teenix.services.discord-intern-bot = {
     enable = lib.mkEnableOption "setup discord-intern-bot";
     secretsFile = lib.mkOption {

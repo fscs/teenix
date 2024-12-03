@@ -1,10 +1,12 @@
-{ inputs
-, outputs
-, lib
-, config
-, pkgs
-, ...
-}: {
+{
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}:
+{
   imports = [
     inputs.flake-programs-sqlite.nixosModules.programs-sqlite
   ];
@@ -32,10 +34,7 @@
 
       nix =
         let
-          flakeInputs =
-            lib.filterAttrs
-              (_: lib.isType "flake")
-              inputs;
+          flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
         in
         {
           package = pkgs.nixVersions.latest;

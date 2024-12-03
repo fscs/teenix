@@ -1,9 +1,11 @@
-{ pkgs
-, inputs
-, lib
-, host-config
-, ...
-}: {
+{
+  pkgs,
+  inputs,
+  lib,
+  host-config,
+  ...
+}:
+{
   users.users.matrix-intern-bot = {
     home = "/home/matrix-intern-bot";
     uid = 1000;
@@ -19,7 +21,9 @@
       Type = "exec";
       User = "matrix-intern-bot";
       WorkingDirectory = "/home/matrix-intern-bot/";
-      ExecStart = "${inputs.matrix-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".default}/bin/matrix-intern-bot";
+      ExecStart = "${
+        inputs.matrix-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".default
+      }/bin/matrix-intern-bot";
       Restart = "always";
       RestartSec = 5;
     };
@@ -39,4 +43,3 @@
 
   system.stateVersion = "23.11";
 }
-

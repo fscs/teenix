@@ -1,4 +1,5 @@
-{ config, lib, ... }: {
+{ config, lib, ... }:
+{
 
   options.teenix.services.collabora = {
     enable = lib.mkEnableOption "Enable collabora";

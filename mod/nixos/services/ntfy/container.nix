@@ -1,7 +1,9 @@
-{ lib
-, host-config
-, ...
-}: {
+{
+  lib,
+  host-config,
+  ...
+}:
+{
   networking.hostName = "ntfy";
 
   services.ntfy-sh = {
@@ -28,4 +30,3 @@
 
   system.stateVersion = "23.11";
 }
-

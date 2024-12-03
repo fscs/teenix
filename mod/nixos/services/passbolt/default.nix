@@ -1,8 +1,10 @@
-{ lib
-, config
-, pkgs
-, ...
-}: {
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
+{
   options.teenix.services.passbolt =
     let
       t = lib.types;
@@ -39,19 +41,19 @@
 
       nix-tun.storage.persist.subvolumes."passbolt".directories = {
         "/mariadb" = {
-          owner = "1000"; #TODO: Set the correct owner and mode
+          owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
         "/env" = {
-          owner = "1000"; #TODO: Set the correct owner and mode
+          owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
         "/gpg" = {
-          owner = "1000"; #TODO: Set the correct owner and mode
+          owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
         "/jwtc" = {
-          owner = "1000"; #TODO: Set the correct owner and mode
+          owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
       };
@@ -131,7 +133,14 @@
           "${config.nix-tun.storage.persist.path}/passbolt/gpg:/etc/passbolt/gpg"
           "${config.nix-tun.storage.persist.path}/passbolt/jwtc:/etc/passbolt/jwtc"
         ];
-        cmd = [ "/usr/bin/wait-for.sh" "-t" "0" "mariadb:3306" "--" "/docker-entrypoint.sh" ];
+        cmd = [
+          "/usr/bin/wait-for.sh"
+          "-t"
+          "0"
+          "mariadb:3306"
+          "--"
+          "/docker-entrypoint.sh"
+        ];
         dependsOn = [
           "passbolt-mariadb"
         ];

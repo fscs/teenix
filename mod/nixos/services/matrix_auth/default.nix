@@ -1,9 +1,11 @@
-{ lib
-, config
-, inputs
-, pkgs
-, ...
-}: {
+{
+  lib,
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
+{
   options.teenix.services.matrix-auth = {
     enable = lib.mkEnableOption "setup inphimatrix-auth";
     hostname = lib.mkOption {
@@ -25,7 +27,6 @@
           mode = "0700";
         };
       };
-
 
       containers.inphimatrix-auth = {
         autoStart = true;
@@ -49,8 +50,7 @@
           host-config = config;
         };
 
-        config =
-          import ./container.nix;
+        config = import ./container.nix;
       };
     };
 }

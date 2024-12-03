@@ -1,9 +1,11 @@
-{ lib
-, config
-, inputs
-, pkgs
-, ...
-}: {
+{
+  lib,
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
+{
   options.teenix.services.vaultwarden = {
     enable = lib.mkEnableOption "setup vaultwarden";
     secretsFile = lib.mkOption {
@@ -42,7 +44,6 @@
         };
         servers = [ "http://${config.containers.vaultwarden.config.networking.hostName}:8222" ];
       };
-
 
       containers.vaultwarden = {
         ephemeral = true;

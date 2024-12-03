@@ -1,7 +1,8 @@
-{ pkgs
-, lib
-, host-config
-, ...
+{
+  pkgs,
+  lib,
+  host-config,
+  ...
 }:
 let
   opts = host-config.teenix.services.element-web;

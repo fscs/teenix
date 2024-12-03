@@ -44,11 +44,10 @@
   };
 
   outputs =
-    {
-      self,
-      nixpkgs,
-      nixpkgs-master,
-      ...
+    { self
+    , nixpkgs
+    , nixpkgs-master
+    , ...
     }@inputs:
     let
       inherit (self) outputs;
@@ -140,3 +139,4 @@
       );
     };
 }
+

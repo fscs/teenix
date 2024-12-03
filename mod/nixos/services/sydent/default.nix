@@ -1,7 +1,9 @@
-{ lib
-, config
-, ...
-}: {
+{
+  lib,
+  config,
+  ...
+}:
+{
   options.teenix.services.sydent =
     let
       t = lib.types;
@@ -20,11 +22,11 @@
     lib.mkIf opts.enable {
       nix-tun.storage.persist.subvolumes."sydent".directories = {
         "/db" = {
-          owner = "1000"; #TODO: Set the correct owner and mode
+          owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
         "/drinks" = {
-          owner = "1000"; #TODO: Set the correct owner and mode
+          owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
       };
@@ -60,6 +62,5 @@
         };
       };
     };
-
 
 }

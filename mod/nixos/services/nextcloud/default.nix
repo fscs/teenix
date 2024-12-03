@@ -4,7 +4,8 @@
 , pkgs-master
 , inputs
 , ...
-}: {
+}:
+{
   options.teenix.services.nextcloud =
     let
       t = lib.types;
@@ -47,10 +48,14 @@
         };
       };
 
+      nix-tun.storage.persist.subvolumes."scanner" = { owner = "${builtins.toString config.containers.nextcloud.config.users.users.nextcloud.uid}"; };
       teenix.services.traefik.services."nextcloud" = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.nextcloud.config.networking.hostName}" ];
-        healthCheck = { enable = true; path = "/login"; };
+        healthCheck = {
+          enable = true;
+          path = "/login";
+        };
       };
 
       services.traefik.staticConfigOptions.entryPoints.websecure.proxyProtocol.insecure = true;
@@ -94,6 +99,11 @@
             mountPoint = "/var/lib/nextcloud/data";
             isReadOnly = false;
           };
+          "scanner" = {
+            hostPath = "/persist/scanner";
+            mountPoint = "/var/lib/scanner";
+            isReadOnly = false;
+          };
         };
 
         specialArgs = {
@@ -101,8 +111,7 @@
           host-config = config;
         };
 
-        config =
-          import ./container.nix;
+        config = import ./container.nix;
       };
     };
 }

@@ -1,8 +1,9 @@
-{ lib
-, pkgs
-, host-config
-, config
-, ...
+{
+  lib,
+  pkgs,
+  host-config,
+  config,
+  ...
 }:
 {
   # enable postgres
@@ -29,10 +30,9 @@
   ];
 
   # open the firewall
-  networking.firewall =
-    {
-      allowedTCPPorts = [ ];
-    };
+  networking.firewall = {
+    allowedTCPPorts = [ ];
+  };
 
   system.stateVersion = "23.11";
 }

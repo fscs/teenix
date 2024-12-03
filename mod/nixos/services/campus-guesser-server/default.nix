@@ -1,9 +1,11 @@
-{ lib
-, config
-, inputs
-, pkgs
-, ...
-}: {
+{
+  lib,
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
+{
   options.teenix.services.campus-guesser-server = {
     enable = lib.mkEnableOption "setup campus-guesser-server";
     hostname = lib.mkOption {
@@ -34,10 +36,9 @@
       };
 
       teenix.services.traefik.services."campus_guessser" = {
-        router =
-          {
-            rule = "Host(`${opts.hostname}`)";
-          };
+        router = {
+          rule = "Host(`${opts.hostname}`)";
+        };
         servers = [ "http://${config.containers.campus-guesser-server.config.networking.hostName}:8080" ];
         healthCheck.enable = true;
       };

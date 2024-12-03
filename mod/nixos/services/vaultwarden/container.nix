@@ -1,9 +1,11 @@
-{ lib
-, inputs
-, pkgs
-, host-config
-, ...
-}: {
+{
+  lib,
+  inputs,
+  pkgs,
+  host-config,
+  ...
+}:
+{
   networking.hostName = "vaultwarden";
 
   services.vaultwarden = {

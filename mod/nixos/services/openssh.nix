@@ -1,7 +1,8 @@
 { lib
 , config
 , ...
-}: {
+}:
+{
   options.teenix.services.openssh.enable = lib.mkEnableOption "enable openssh";
 
   config = lib.mkIf config.teenix.services.openssh.enable {

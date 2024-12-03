@@ -1,4 +1,5 @@
-{ ... }: {
+{ ... }:
+{
   imports = [
     ./collabora
     ./authentik
@@ -24,5 +25,6 @@
     ./campus-guesser-server
     ./node_exporter
     ./gitlab-runner.nix
+    ./minecraft.nix
   ];
 }

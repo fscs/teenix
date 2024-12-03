@@ -1,9 +1,10 @@
-{ lib
-, config
-, host-config
-, pkgs
-, pkgs-master
-, ...
+{
+  lib,
+  config,
+  host-config,
+  pkgs,
+  pkgs-master,
+  ...
 }:
 let
   opts = host-config.teenix.services.nextcloud;
@@ -29,12 +30,25 @@ in
     https = true;
 
     hostName = opts.hostname;
-    phpExtraExtensions = all: [ all.pdlib all.bz2 all.smbclient ];
+    phpExtraExtensions = all: [
+      all.pdlib
+      all.bz2
+      all.smbclient
+    ];
 
     database.createLocally = true;
 
-    settings.trusted_domains = [ "134.99.154.48" "192.168.100.11" "192.168.100.10" opts.hostname config.networking.hostName ];
-    settings.trusted_proxies = [ "192.168.100.10" "::1" ];
+    settings.trusted_domains = [
+      "134.99.154.48"
+      "192.168.100.11"
+      "192.168.100.10"
+      opts.hostname
+      config.networking.hostName
+    ];
+    settings.trusted_proxies = [
+      "192.168.100.10"
+      "::1"
+    ];
     config = {
       adminpassFile = host-config.sops.secrets.nextcloud_pass.path;
       dbtype = "mysql";

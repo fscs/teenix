@@ -1,9 +1,11 @@
-{ lib
-, config
-, inputs
-, pkgs
-, ...
-}: {
+{
+  lib,
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
+{
   options.teenix.services.authentik = {
     enable = lib.mkEnableOption "setup authentik";
     hostname = lib.mkOption {
@@ -42,11 +44,10 @@
       };
 
       teenix.services.traefik.services."authentik" = {
-        router =
-          {
-            rule = "Host(`${opts.hostname}`)";
-            priority = 10;
-          };
+        router = {
+          rule = "Host(`${opts.hostname}`)";
+          priority = 10;
+        };
         servers = [ "http://${config.containers.authentik.config.networking.hostName}" ];
         healthCheck.enable = true;
       };
@@ -56,7 +57,9 @@
           rule = "Host(`${opts.hostname}`) && PathPrefix(`/outpost.goauthentik.io/`)";
           priority = 15;
         };
-        servers = [ "http://${config.containers.authentik.config.networking.hostName}:9000/outpost.goauthentik.io" ];
+        servers = [
+          "http://${config.containers.authentik.config.networking.hostName}:9000/outpost.goauthentik.io"
+        ];
       };
 
       containers.authentik = {

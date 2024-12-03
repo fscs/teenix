@@ -1,9 +1,11 @@
-{ lib
-, config
-, inputs
-, pkgs
-, ...
-}: {
+{
+  lib,
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
+{
   options.teenix.services.matrix-intern-bot = {
     enable = lib.mkEnableOption "setup matrix-intern-bot";
     secretsFile = lib.mkOption {

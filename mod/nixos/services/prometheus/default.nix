@@ -1,9 +1,11 @@
-{ lib
-, config
-, pkgs
-, inputs
-, ...
-}: {
+{
+  lib,
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
+{
   options.teenix.services.prometheus = {
     enable = lib.mkEnableOption "setup prometheus";
     hostname = lib.mkOption {

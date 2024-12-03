@@ -4,7 +4,8 @@
 , pkgs
 , lib
 , ...
-}: {
+}:
+{
   imports = [
     ./hardware-configuration.nix
     ../locale.nix
@@ -26,7 +27,10 @@
   ];
 
   networking = {
-    nameservers = [ "134.99.154.201" "134.99.154.228" ];
+    nameservers = [
+      "134.99.154.201"
+      "134.99.154.228"
+    ];
     defaultGateway = {
       address = "134.99.154.1";
       interface = "ens32";
@@ -97,11 +101,6 @@
     };
   };
 
-  networking.firewall =
-    {
-      allowedUDPPortRanges = [{ from = 30000; to = 30010; }];
-    };
-
   networking.firewall.checkReversePath = false;
 
   sops.secrets.traefik = {
@@ -109,7 +108,6 @@
     mode = "444";
     sopsFile = ../secrets/traefik;
   };
-
 
   networking.firewall.logRefusedConnections = true;
 
@@ -131,33 +129,30 @@
   teenix.services.traefik.letsencryptMail = "fscs@hhu.de";
   teenix.services.traefik.logging.enable = true;
 
-  teenix.services.traefik.entrypoints = {
-    web = {
-      port = 80;
-      http = {
-        redirections = {
-          entryPoint = {
-            to = "websecure";
-            scheme = "https";
-          };
-        };
+  teenix.services.traefik.entrypoints =
+    {
+      web = {
+        port = 80;
       };
-    };
-    websecure = {
-      port = 443;
-    };
-    ping = {
-      port = 8082;
-    };
-    metrics = {
-      port = 120;
-    };
-  } //
-  (builtins.foldl'
-    lib.trivial.mergeAttrs
-    { }
-    (builtins.map (i: { "turn_port_udp_${builtins.toString i}" = { port = i; }; })
-      (lib.range 30000 30010)));
+      websecure = {
+        port = 443;
+      };
+      ping = {
+        port = 8082;
+      };
+      metrics = {
+        port = 120;
+      };
+    }
+    // (builtins.foldl' lib.trivial.mergeAttrs { } (
+      builtins.map
+        (i: {
+          "turn_port_udp_${builtins.toString i}" = {
+            port = i;
+          };
+        })
+        (lib.range 30000 30010)
+    ));
 
   # Services
   nix-tun.storage.persist.enable = true;
@@ -173,8 +168,9 @@
     enable = true;
     hostname = "nextcloud.inphima.de";
     secretsFile = ../secrets/nextcloud;
-    extraApps = [
-    ];
+    extraApps =
+      [
+      ];
   };
 
   teenix.services.fscshhude = {

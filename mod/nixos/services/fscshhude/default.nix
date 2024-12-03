@@ -1,9 +1,11 @@
-{ lib
-, config
-, inputs
-, pkgs
-, ...
-}: {
+{
+  lib,
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
+{
   options.teenix.services.fscshhude = {
     enable = lib.mkEnableOption "setup fscshhude";
     secretsFile = lib.mkOption {

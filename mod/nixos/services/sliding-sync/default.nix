@@ -1,9 +1,11 @@
-{ lib
-, config
-, inputs
-, pkgs
-, ...
-}: {
+{
+  lib,
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
+{
   options.teenix.services.sliding-sync = {
     enable = lib.mkEnableOption "setup sliding-sync";
     hostname = lib.mkOption {

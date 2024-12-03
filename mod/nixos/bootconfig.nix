@@ -1,7 +1,9 @@
-{ lib
-, config
-, ...
-}: {
+{
+  lib,
+  config,
+  ...
+}:
+{
   options.teenix.bootconfig = {
     enable = lib.mkEnableOption "auto configure the boot loader";
   };

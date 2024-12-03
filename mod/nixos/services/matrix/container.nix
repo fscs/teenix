@@ -1,8 +1,9 @@
-{ lib
-, pkgs
-, host-config
-, config
-, ...
+{
+  lib,
+  pkgs,
+  host-config,
+  config,
+  ...
 }:
 let
   opts = host-config.teenix.services.matrix;
@@ -69,12 +70,10 @@ in
     };
   };
 
-
   environment.systemPackages = [
     pkgs.python312Packages.authlib
     pkgs.matrix-authentication-service
   ];
-
 
   # enable postgres
   services.postgresql = {
@@ -150,7 +149,10 @@ in
         };
       };
 
-      turn_uris = [ "turn:${config.services.coturn.realm}:30000?transport=udp" "turn:${config.services.coturn.realm}:30000?transport=tcp" ];
+      turn_uris = [
+        "turn:${config.services.coturn.realm}:30000?transport=udp"
+        "turn:${config.services.coturn.realm}:30000?transport=tcp"
+      ];
       turn_shared_secret = "memes";
       turn_user_lifetime = "1h";
 
@@ -170,7 +172,11 @@ in
           x_forwarded = true;
           resources = [
             {
-              names = [ "metrics" "client" "federation" ];
+              names = [
+                "metrics"
+                "client"
+                "federation"
+              ];
               compress = false;
             }
           ];
@@ -198,7 +204,6 @@ in
     wantedBy = [ "multi-user.target" ];
   };
 
-
   # enable coturn
   services.coturn = {
     enable = true;
@@ -217,18 +222,27 @@ in
   # open the firewall
   networking.firewall =
     let
-      range =
-        lib.singleton
-          {
-            from = config.services.coturn.min-port;
-            to = config.services.coturn.max-port;
-          };
+      range = lib.singleton {
+        from = config.services.coturn.min-port;
+        to = config.services.coturn.max-port;
+      };
     in
     {
       allowedUDPPortRanges = range;
-      allowedUDPPorts = [ 3478 5349 ];
+      allowedUDPPorts = [
+        3478
+        5349
+      ];
       allowedTCPPortRanges = [ ];
-      allowedTCPPorts = [ 80 443 8008 8080 3478 5349 9000 ];
+      allowedTCPPorts = [
+        80
+        443
+        8008
+        8080
+        3478
+        5349
+        9000
+      ];
     };
 
   system.stateVersion = "23.11";

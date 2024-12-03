@@ -1,8 +1,10 @@
-{ lib
-, pkgs
-, host-config
-, ...
-}: {
+{
+  lib,
+  pkgs,
+  host-config,
+  ...
+}:
+{
   networking.hostName = "node_exporter";
   users.users.node_exporter = {
     uid = 1033;
@@ -26,7 +28,6 @@
     };
     wantedBy = [ "multi-user.target" ];
   };
-
 
   networking = {
     firewall = {

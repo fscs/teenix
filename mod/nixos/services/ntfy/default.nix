@@ -1,9 +1,11 @@
-{ lib
-, config
-, inputs
-, pkgs
-, ...
-}: {
+{
+  lib,
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
+{
   options.teenix.services.ntfy = {
     enable = lib.mkEnableOption "setup ntfy";
     hostname = lib.mkOption {

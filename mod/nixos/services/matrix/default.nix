@@ -1,9 +1,11 @@
-{ lib
-, config
-, inputs
-, pkgs
-, ...
-}: {
+{
+  lib,
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
+{
   options.teenix.services.matrix = {
     enable = lib.mkEnableOption "setup inphimatrix";
     servername = lib.mkOption {
@@ -144,8 +146,7 @@
           host-config = config;
         };
 
-        config =
-          import ./container.nix;
+        config = import ./container.nix;
       };
     };
 }

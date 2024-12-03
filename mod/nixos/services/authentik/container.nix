@@ -1,8 +1,10 @@
-{ lib
-, inputs
-, host-config
-, ...
-}: {
+{
+  lib,
+  inputs,
+  host-config,
+  ...
+}:
+{
   imports = [
     inputs.authentik-nix.nixosModules.default
   ];
@@ -51,7 +53,11 @@
   networking = {
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 80 9443 9000 ];
+      allowedTCPPorts = [
+        80
+        9443
+        9000
+      ];
     };
     # Use systemd-resolved inside the container
     # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686

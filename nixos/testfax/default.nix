@@ -4,7 +4,8 @@
 , pkgs
 , lib
 , ...
-}: {
+}:
+{
   imports = [
     ./hardware-configuration.nix
     ../locale.nix
@@ -79,47 +80,52 @@
   teenix.services.traefik.letsencryptMail = "fscs@hhu.de";
   teenix.services.traefik.logging.enable = true;
 
-  teenix.services.traefik.entrypoints = {
-    web = {
-      port = 80;
-      http = {
-        redirections = {
-          entryPoint = {
-            to = "websecure";
-            scheme = "https";
+  teenix.services.traefik.entrypoints =
+    {
+      web = {
+        port = 80;
+        http = {
+          redirections = {
+            entryPoint = {
+              to = "websecure";
+              scheme = "https";
+            };
           };
         };
       };
-    };
-    websecure = {
-      port = 443;
-    };
-    ping = {
-      port = 8082;
-    };
-    metrics = {
-      port = 120;
-    };
-  } //
-  (builtins.foldl'
-    lib.trivial.mergeAttrs
-    { }
-    (builtins.map (i: { "turn_port_udp_${builtins.toString i}" = { port = i; }; })
-      (lib.range 30000 30010)));
+      websecure = {
+        port = 443;
+      };
+      ping = {
+        port = 8082;
+      };
+      metrics = {
+        port = 120;
+      };
+    }
+    // (builtins.foldl' lib.trivial.mergeAttrs { } (
+      builtins.map
+        (i: {
+          "turn_port_udp_${builtins.toString i}" = {
+            port = i;
+          };
+        })
+        (lib.range 30000 30010)
+    ));
 
   # Services
   nix-tun.storage.persist.enable = true;
 
-
   teenix.services.node_exporter = {
     enable = true;
   };
-
   teenix.services.element-web = {
-    enable = true; 
-    hostname = "element.minecraft.fsphy.de";
+    enable = true;
+    hostname = "element.dev.hhu-fscs.de";
     matrixUrl = "inphima.de";
   };
+
+  teenix.services.minecraft.enable = true;
 
   security.pam.sshAgentAuth.enable = true;
 

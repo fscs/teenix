@@ -1,9 +1,11 @@
-{ lib
-, inputs
-, pkgs
-, host-config
-, ...
-}: {
+{
+  lib,
+  inputs,
+  pkgs,
+  host-config,
+  ...
+}:
+{
   networking.hostName = "fscshhude";
   users.users.fscs-website = {
     uid = 1033;
@@ -45,7 +47,9 @@
       Type = "exec";
       User = "fscs-website";
       WorkingDirectory = "/home/fscs-website";
-      ExecStart = "${pkgs.caddy}/bin/caddy file-server -r ${inputs.sitzungsverwaltung.packages."${pkgs.stdenv.hostPlatform.system}".default} --listen :8090";
+      ExecStart = "${pkgs.caddy}/bin/caddy file-server -r ${
+        inputs.sitzungsverwaltung.packages."${pkgs.stdenv.hostPlatform.system}".default
+      } --listen :8090";
       Restart = "always";
       RestartSec = 5;
     };
@@ -55,7 +59,10 @@
   networking = {
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 8080 8090 ];
+      allowedTCPPorts = [
+        8080
+        8090
+      ];
     };
     # Use systemd-resolved inside the container
     # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686

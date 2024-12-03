@@ -1,9 +1,11 @@
-{ lib
-, config
-, pkgs
-, inputs
-, ...
-}: {
+{
+  lib,
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
+{
   options.teenix.services.pretix = {
     enable = lib.mkEnableOption "setup pretix";
     hostname = lib.mkOption {
