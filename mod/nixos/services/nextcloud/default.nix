@@ -48,7 +48,7 @@
         };
       };
 
-      nix-tun.storage.persist.subvolumes."scanner" = { owner = "${builtins.toString config.containers.nextcloud.config.users.users.nextcloud.uid}"; };
+      nix-tun.storage.persist.subvolumes."scanner" = { owner = "${builtins.toString config.containers.nextcloud.config.users.users.nextcloud.uid}"; mode = "0777"; };
       teenix.services.traefik.services."nextcloud" = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.nextcloud.config.networking.hostName}" ];
