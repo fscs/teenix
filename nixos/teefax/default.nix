@@ -367,7 +367,7 @@
       sshKeys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKQWRxKckzxJINHlvYuv6GG7yihSd5nxdzrljY+MAH+l huq88dev@hhu.de"
       ];
-    }
+    };
 
     florian = {
       shell = pkgs.fish;
