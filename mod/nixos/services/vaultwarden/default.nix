@@ -1,9 +1,8 @@
-{
-  lib,
-  config,
-  inputs,
-  pkgs,
-  ...
+{ lib
+, config
+, inputs
+, pkgs
+, ...
 }:
 {
   options.teenix.services.vaultwarden = {
@@ -62,7 +61,7 @@
           };
           "db" = {
             hostPath = "${config.nix-tun.storage.persist.path}/vaultwarden/db";
-            mountPoint = "/home/fscs-website/db";
+            mountPoint = "/var/lib/bitwarden_rs";
             isReadOnly = false;
           };
         };
