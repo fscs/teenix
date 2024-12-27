@@ -16,10 +16,9 @@
     outputs.nixosModules.teenix
   ];
 
+  environment.enableAllTerminfo = true;
   environment.systemPackages = [
-    inputs.campus-guesser-server.packages.${pkgs.stdenv.hostPlatform.system}.default
     pkgs.git
-    pkgs.kitty
   ];
 
   nixpkgs.config.permittedInsecurePackages = [
