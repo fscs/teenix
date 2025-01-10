@@ -1,9 +1,8 @@
-{
-  lib,
-  config,
-  pkgs,
-  inputs,
-  ...
+{ lib
+, config
+, pkgs
+, inputs
+, ...
 }:
 {
   options.teenix.services.prometheus = {
@@ -98,7 +97,7 @@
         };
 
         specialArgs = {
-          inherit inputs pkgs;
+          inherit inputs;
           host-config = config;
         };
 

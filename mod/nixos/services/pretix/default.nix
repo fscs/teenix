@@ -1,9 +1,8 @@
-{
-  lib,
-  config,
-  pkgs,
-  inputs,
-  ...
+{ lib
+, config
+, pkgs
+, inputs
+, ...
 }:
 {
   options.teenix.services.pretix = {
@@ -53,7 +52,7 @@
         };
 
         specialArgs = {
-          inherit inputs pkgs;
+          inherit inputs;
           host-config = config;
         };
 

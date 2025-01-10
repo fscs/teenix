@@ -107,7 +107,7 @@
         };
 
         specialArgs = {
-          inherit inputs pkgs pkgs-master;
+          inherit inputs pkgs-master;
           host-config = config;
         };
 

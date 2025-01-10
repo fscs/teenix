@@ -1,9 +1,8 @@
-{
-  lib,
-  config,
-  inputs,
-  pkgs,
-  ...
+{ lib
+, config
+, inputs
+, pkgs
+, ...
 }:
 {
   options.teenix.services.element-web = {
@@ -35,7 +34,7 @@
         localAddress = "192.168.107.11";
 
         specialArgs = {
-          inherit inputs pkgs;
+          inherit inputs;
           host-config = config;
         };
 

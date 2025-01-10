@@ -1,18 +1,19 @@
-{
-  lib,
-  inputs,
-  pkgs,
-  host-config,
-  ...
+{ lib
+, inputs
+, pkgs
+, pkgs-master
+, host-config
+, ...
 }:
 {
   networking.hostName = "vaultwarden";
 
   services.vaultwarden = {
     enable = true;
+    package = pkgs-master.vaultwarden;
     environmentFile = host-config.sops.secrets.vaultwarden.path;
     config = {
-      DOMAIN = "https://vaultwarden.hhu-fscs.de";
+      DOMAIN = "https://vaultwarden.inphima.de";
       SIGNUPS_ALLOWED = false;
       ROCKET_ADDRESS = "0.0.0.0";
       ROCKET_PORT = 8222;
@@ -26,6 +27,7 @@
       SMTP_FROM = "noreply-fscs@hhu.de";
       SMTP_FROM_NAME = "FSCS Password Manager";
       SMTP_USERNAME = "noreply-fscs";
+      EXPERIMENTAL_CLIENT_FEATURE_FLAGS = "autofill-overlay,autofill-v2,browser-fileless-import,extension-refresh,fido2-vault-credentials,ssh-key-vault-item,ssh-agent";
     };
   };
 
