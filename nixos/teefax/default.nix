@@ -300,7 +300,7 @@
   teenix.services.vaultwarden = {
     enable = true;
     secretsFile = ../secrets/vaultwarden;
-    hostname = "vaultwarden.hhu-fscs.de";
+    hostname = "vaultwarden.inphima.de";
   };
 
   teenix.services.ntfy = {
