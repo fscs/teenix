@@ -182,6 +182,12 @@
       mode = "444";
     };
 
+    nix-tun.storage.persist.subvolumes.traefik = {
+      owner = "traefik";
+      group = "traefik";
+      mode = "700";
+    };
+
     services.traefik =
       let
 
@@ -205,6 +211,7 @@
       in
       {
         enable = true;
+        dataDir = "${config.nix-tun.storage.persist.path}/traefik";
 
         environmentFiles = [ config.sops.secrets.traefik_static.path ];
 
