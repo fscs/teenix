@@ -1,9 +1,10 @@
-{ inputs
-, outputs
-, config
-, pkgs
-, lib
-, ...
+{
+  inputs,
+  outputs,
+  config,
+  pkgs,
+  lib,
+  ...
 }:
 {
   imports = [
@@ -50,39 +51,51 @@
     nextcloudHost = "nextcloud.inphima.de";
   };
 
-  teenix.services.traefik.redirects."fscs_go" = {
-    from = "go.hhu-fscs.de";
-    to = "fscs.github.io/go/";
-  };
+  teenix.services.traefik.redirects = {
+    fscs_go = {
+      from = "go.hhu-fscs.de";
+      to = "fscs.github.io/go/";
+    };
 
-  teenix.services.traefik.redirects."essen_inphima" = {
-    from = "essen.inphima.de";
-    to = "www.stw-d.de/gastronomie/speiseplaene/essenausgabe-sued-duesseldorf";
-  };
+    essen_inphima = {
+      from = "essen.inphima.de";
+      to = "www.stw-d.de/gastronomie/speiseplaene/essenausgabe-sued-duesseldorf";
+    };
 
-  teenix.services.traefik.redirects."wiki_inphima_de" = {
-    from = "wiki.inphima.de";
-    to = "wiki.hhu.de/display/INPHIMA/INPhiMa+Startseite";
-  };
+    wiki_inphima_de = {
+      from = "wiki.inphima.de";
+      to = "wiki.hhu.de/display/INPHIMA/INPhiMa+Startseite";
+    };
 
-  teenix.services.traefik.redirects."wiki_fsnawi" = {
-    from = "wiki.fsnawi.de";
-    to = "wiki.hhu.de/display/NAWI/FS+Naturwissenschaften+Startseite";
-  };
+    wiki_fsnawi = {
+      from = "wiki.fsnawi.de";
+      to = "wiki.hhu.de/display/NAWI/FS+Naturwissenschaften+Startseite";
+    };
 
-  teenix.services.traefik.redirects."physik_inphima" = {
-    from = "physik.inphima.de";
-    to = "fsphy.de";
-  };
+    physik_inphima = {
+      from = "physik.inphima.de";
+      to = "fsphy.de";
+    };
 
-  teenix.services.traefik.redirects."status_inphima" = {
-    from = "status.inphima.de";
-    to = "grafana.hhu-fscs.de/public-dashboards/84a25d574e334559b2095f1d5c573be6";
-  };
+    status_inphima = {
+      from = "status.inphima.de";
+      to = "grafana.hhu-fscs.de/public-dashboards/84a25d574e334559b2095f1d5c573be6";
+    };
 
-  teenix.services.traefik.redirects."inphima_discord" = {
-    from = "fscs.hhu.de/discord";
-    to = "discord.gg/K3ddgjh";
+    inphima_discord = {
+      from = "fscs.hhu.de/discord";
+      to = "discord.gg/K3ddgjh";
+    };
+
+    voltwarden = {
+      from = "voltwarden.inphima.de";
+      to = "vaultwarden.inphima.de";
+    };
+
+    matewarden = {
+      from = "matewarden.inphima.de";
+      to = "vaultwarden.inphima.de";
+    };
   };
 
   virtualisation.vmware.guest.enable = true;
@@ -166,13 +179,11 @@
       };
     }
     // (builtins.foldl' lib.trivial.mergeAttrs { } (
-      builtins.map
-        (i: {
-          "turn_port_udp_${builtins.toString i}" = {
-            port = i;
-          };
-        })
-        (lib.range 30000 30010)
+      builtins.map (i: {
+        "turn_port_udp_${builtins.toString i}" = {
+          port = i;
+        };
+      }) (lib.range 30000 30010)
     ));
 
   # Services
@@ -189,9 +200,8 @@
     enable = true;
     hostname = "nextcloud.inphima.de";
     secretsFile = ../secrets/nextcloud;
-    extraApps =
-      [
-      ];
+    extraApps = [
+    ];
   };
 
   teenix.services.fscshhude = {
@@ -320,7 +330,6 @@
 
   security.pam.sshAgentAuth.enable = true;
 
-
   sops.secrets.scanner-pass = {
     format = "binary";
     sopsFile = ../secrets/scanner_pwd;
@@ -347,8 +356,12 @@
   };
 
   networking.firewall.allowedTCPPorts = [ 2121 ];
-  networking.firewall.allowedTCPPortRanges = [{ from = 3000; to = 3100; }];
-
+  networking.firewall.allowedTCPPortRanges = [
+    {
+      from = 3000;
+      to = 3100;
+    }
+  ];
 
   teenix.users = {
     teefax = {
