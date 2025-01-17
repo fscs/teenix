@@ -1,9 +1,10 @@
-{ lib
-, inputs
-, pkgs
-, pkgs-master
-, host-config
-, ...
+{
+  lib,
+  inputs,
+  pkgs,
+  pkgs-master,
+  host-config,
+  ...
 }:
 {
   networking.hostName = "vaultwarden";
@@ -11,6 +12,7 @@
   services.vaultwarden = {
     enable = true;
     package = pkgs-master.vaultwarden;
+    webVaultPackage = pkgs-master.voltwarden-webvault;
     environmentFile = host-config.sops.secrets.vaultwarden.path;
     config = {
       DOMAIN = "https://vaultwarden.inphima.de";
@@ -25,7 +27,7 @@
       SMTP_SECURITY = "force_tls";
 
       SMTP_FROM = "noreply-fscs@hhu.de";
-      SMTP_FROM_NAME = "FSCS Password Manager";
+      SMTP_FROM_NAME = "INPhiMa Password Manager";
       SMTP_USERNAME = "noreply-fscs";
       EXPERIMENTAL_CLIENT_FEATURE_FLAGS = "autofill-overlay,autofill-v2,browser-fileless-import,extension-refresh,fido2-vault-credentials,ssh-key-vault-item,ssh-agent";
     };

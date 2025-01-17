@@ -44,10 +44,11 @@
   };
 
   outputs =
-    { self
-    , nixpkgs
-    , nixpkgs-master
-    , ...
+    {
+      self,
+      nixpkgs,
+      nixpkgs-master,
+      ...
     }@inputs:
     let
       inherit (self) outputs;
@@ -61,11 +62,19 @@
       lib = nixpkgs.lib;
 
       forAllSystems = lib.genAttrs systems;
+
+      specialArgs = {
+        inherit inputs outputs;
+        pkgs-master = import nixpkgs-master {
+          system = "x86_64-linux";
+          overlays = [ self.overlays.additions ];
+        };
+      };
     in
     {
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
 
-      packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      packages = forAllSystems (system: import ./pkgs nixpkgs-master.legacyPackages.${system});
       overlays = import ./overlays.nix { inherit inputs; };
 
       nixosModules.teenix = import ./mod/nixos;
@@ -73,12 +82,7 @@
       colmena = {
         meta = {
           nixpkgs = import nixpkgs { system = "x86_64-linux"; };
-          specialArgs = {
-            inherit inputs outputs;
-            pkgs-master = import nixpkgs-master {
-              system = "x86_64-linux";
-            };
-          };
+          inherit specialArgs;
         };
 
         defaults.deployment = {
@@ -98,22 +102,12 @@
       };
 
       nixosConfigurations.teefax = lib.nixosSystem {
-        specialArgs = {
-          inherit inputs outputs;
-          pkgs-master = import nixpkgs-master {
-            system = "x86_64-linux";
-          };
-        };
+        inherit specialArgs;
         modules = [ ./nixos/teefax ];
       };
 
       nixosConfigurations.testfax = lib.nixosSystem {
-        specialArgs = {
-          inherit inputs outputs;
-          pkgs-master = import nixpkgs-master {
-            system = "x86_64-linux";
-          };
-        };
+        inherit specialArgs;
         modules = [ ./nixos/testfax ];
       };
 
@@ -139,4 +133,3 @@
       );
     };
 }
-
