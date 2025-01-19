@@ -27,6 +27,10 @@
       url = "git+ssh://git@git.hhu.de/fscs/discord-intern-bot.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    inphima-discord-bot = {
+      url = "git+ssh://git@git.hhu.de/inphima/inphima-discord-bot.git";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     matrix-intern-bot = {
       url = "git+ssh://git@git.hhu.de/fscs/matrix-bot.git";
       inputs.nixpkgs.follows = "nixpkgs";
