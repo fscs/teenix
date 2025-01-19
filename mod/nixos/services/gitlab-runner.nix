@@ -18,21 +18,39 @@
       opts = config.teenix.services.gitlab-runner;
     in
     lib.mkIf opts.enable {
-      sops.secrets.gitlab-runner = {
-        sopsFile = opts.secretsFile;
-        format = "binary";
-        mode = "444";
+      sops.secrets = {
+        gitlab-runner-fscs-nix = {
+          sopsFile = opts.secretsFile;
+          format = "yaml";
+          key = "fscs-nix";
+          mode = "444";
+        };
+        gitlab-runner-inphima-nix = {
+          sopsFile = opts.secretsFile;
+          format = "yaml";
+          key = "inphima-nix";
+          mode = "444";
+        };
       };
+
+      sops.templates.gitlab-runner-fscs-nix.content = ''
+        CI_SERVER_URL=https://git.hhu.de
+        CI_SERVER_TOKEN=${config.sops.placeholder.gitlab-runner-fscs-nix}
+      '';
+
+      sops.templates.gitlab-runner-inphima-nix.content = ''
+        CI_SERVER_URL=https://git.hhu.de
+        CI_SERVER_TOKEN=${config.sops.placeholder.gitlab-runner-inphima-nix}
+      '';
 
       boot.kernel.sysctl."net.ipv4.ip_forward" = true;
 
       virtualisation.docker.enable = true;
 
-      services.gitlab-runner = {
-        enable = true;
-        services = {
-          nix = with lib; {
-            authenticationTokenConfigFile = config.sops.secrets.gitlab-runner.path;
+      services.gitlab-runner =
+        let
+          dockerizedNixRunner = authTokenFile: {
+            authenticationTokenConfigFile = authTokenFile;
 
             dockerImage = "alpine";
 
@@ -58,7 +76,7 @@
               ${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixos-unstable nixpkgs
               ${pkgs.nix}/bin/nix-channel --update nixpkgs
               ${pkgs.nix}/bin/nix-env -i ${
-                concatStringsSep " " (
+                lib.concatStringsSep " " (
                   with pkgs;
                   [
                     nixVersions.latest
@@ -78,7 +96,13 @@
               NIX_SSL_CERT_FILE = "/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt";
             };
           };
+        in
+        {
+          enable = true;
+          services = {
+            fscs-nix = dockerizedNixRunner config.sops.templates.gitlab-runner-fscs-nix.path;
+            inphima-nix = dockerizedNixRunner config.sops.templates.gitlab-runner-inphima-nix.path;
+          };
         };
-      };
     };
 }

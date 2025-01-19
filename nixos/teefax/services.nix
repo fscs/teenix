@@ -126,7 +126,7 @@
 
   teenix.services.gitlab-runner = {
     enable = true;
-    secretsFile = ../secrets/gitlab_runner;
+    secretsFile = ../secrets/gitlab_runner.yml;
   };
 
   teenix.services.vaultwarden = {
