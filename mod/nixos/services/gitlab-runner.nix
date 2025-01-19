@@ -7,10 +7,7 @@
 {
   options.teenix.services.gitlab-runner = {
     enable = lib.mkEnableOption "setup the gitlab runner";
-    secretsFile = lib.mkOption {
-      type = lib.types.path;
-      description = "path to the sops secret file for the gitlab runner";
-    };
+    secretsFile = lib.teenix.mkSecretsFileOption "gitlab-runner";
   };
 
   config =

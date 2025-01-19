@@ -7,10 +7,7 @@
 {
   options.teenix.services.matrix-intern-bot = {
     enable = lib.mkEnableOption "setup matrix-intern-bot";
-    secretsFile = lib.mkOption {
-      type = lib.types.path;
-      description = "path to the sops secret file for the matrix-intern-bot";
-    };
+    secretsFile = lib.teenix.mkSecretsFileOption "matrix-intern-bot";
     dbHostPath = lib.mkOption {
       type = lib.types.str;
     };

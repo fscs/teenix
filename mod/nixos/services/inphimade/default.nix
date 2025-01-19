@@ -11,12 +11,8 @@
     in
     {
       enable = lib.mkEnableOption "setup inphimade";
-      hostname = lib.mkOption {
-        type = t.str;
-      };
-      envFile = lib.mkOption {
-        type = t.path;
-      };
+      hostname = lib.teenix.mkHostnameOption;
+      secretsFile = lib.teenix.mkSecretsFileOption "inphimade";
       mariaEnvFile = lib.mkOption {
         type = t.path;
       };
@@ -28,7 +24,7 @@
     in
     lib.mkIf opts.enable {
       sops.secrets.inphimade = {
-        sopsFile = opts.envFile;
+        sopsFile = opts.secretsFile;
         format = "binary";
         mode = "444";
       };

@@ -7,9 +7,7 @@
 {
   options.teenix.services.pretix = {
     enable = lib.mkEnableOption "setup pretix";
-    hostname = lib.mkOption {
-      type = lib.types.str;
-    };
+    hostname = lib.teenix.mkHostnameOption;
     email = lib.mkOption {
       type = lib.types.str;
     };

@@ -9,14 +9,12 @@
     enable = lib.mkEnableOption "Enable the Traefik Reverse Proxy";
     letsencryptMail = lib.mkOption {
       type = lib.types.str;
-      default = null;
       description = ''
         The email address used for letsencrypt certificates
       '';
     };
     dashboardUrl = lib.mkOption {
       type = lib.types.str;
-      default = null;
       description = ''
         The url to which the dashboard should be published to
       '';
@@ -34,12 +32,10 @@
             from = lib.mkOption {
               type = lib.types.str;
               default = "";
-              description = '''';
             };
             to = lib.mkOption {
               type = lib.types.str;
               default = "";
-              description = '''';
             };
           };
         };
@@ -47,7 +43,6 @@
       lib.mkOption {
         type = lib.types.attrsOf redirectOpts;
         default = { };
-        description = '''';
       };
     entrypoints = lib.mkOption {
       type = lib.types.attrs;

@@ -6,19 +6,12 @@
 }:
 {
   options.teenix.services.passbolt =
-    let
-      t = lib.types;
-    in
     {
       enable = lib.mkEnableOption "setup passbolt";
-      hostname = lib.mkOption {
-        type = t.str;
-      };
-      envFile = lib.mkOption {
-        type = t.path;
-      };
+      hostname = lib.teenix.mkHostnameOption;
+      secretsFile = lib.teenix.mkSecretsFileOption "passbolt";
       mariaEnvFile = lib.mkOption {
-        type = t.path;
+        type = lib.types.path;
       };
     };
 
@@ -28,7 +21,7 @@
     in
     lib.mkIf opts.enable {
       sops.secrets.passbolt = {
-        sopsFile = opts.envFile;
+        sopsFile = opts.secretsFile;
         format = "binary";
         mode = "444";
       };

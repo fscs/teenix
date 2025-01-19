@@ -4,16 +4,10 @@
   ...
 }:
 {
-  options.teenix.services.sydent =
-    let
-      t = lib.types;
-    in
-    {
-      enable = lib.mkEnableOption "setup inphimade";
-      hostname = lib.mkOption {
-        type = t.str;
-      };
-    };
+  options.teenix.services.sydent = {
+    enable = lib.mkEnableOption "setup inphimade";
+    hostname = lib.teenix.mkHostnameOption;
+  };
 
   config =
     let

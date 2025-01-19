@@ -7,13 +7,8 @@
 {
   options.teenix.services.campus-guesser-server = {
     enable = lib.mkEnableOption "setup campus-guesser-server";
-    hostname = lib.mkOption {
-      type = lib.types.str;
-    };
-    secretsFile = lib.mkOption {
-      type = lib.types.path;
-      description = "path to the sops secret file for the campusguesser Server";
-    };
+    hostname = lib.teenix.mkHostnameOption;
+    secretsFile = lib.teenix.mkSecretsFileOption "campus-guesser-server";
   };
 
   config =

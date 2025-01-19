@@ -7,21 +7,13 @@
 }:
 {
   options.teenix.services.nextcloud =
-    let
-      t = lib.types;
-    in
     {
       enable = lib.mkEnableOption "setup nextcloud";
-      hostname = lib.mkOption {
-        type = t.str;
-      };
-      secretsFile = lib.mkOption {
-        type = t.path;
-        description = "path to the sops secret file for the adminPass";
-      };
+      hostname = lib.teenix.mkHostnameOption;
+      secretsFile = lib.teenix.mkSecretsFileOption "nextcloud";
       extraApps = lib.mkOption {
         description = "nextcloud apps to install";
-        type = t.listOf t.str;
+        type = lib.types.listOf lib.types.str;
         default = [ ];
       };
     };

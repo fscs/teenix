@@ -8,16 +8,11 @@
 {
   options.teenix.services.freescout = {
     enable = lib.mkEnableOption "setup freescout";
-    envFile = lib.mkOption {
-      type = lib.types.path;
-      description = "path to the sops secret file for the freescout website Server";
-    };
+    secretsFile = lib.teenix.mkSecretsFileOption "freescout";
+    hostname = lib.teenix.mkHostnameOption;
     mariaEnvFile = lib.mkOption {
       type = lib.types.path;
       description = "path to the sops secret file for the freescout website Server";
-    };
-    hostname = lib.mkOption {
-      type = lib.types.str;
     };
   };
 
@@ -27,7 +22,7 @@
     in
     lib.mkIf opts.enable {
       sops.secrets.freescout = {
-        sopsFile = opts.envFile;
+        sopsFile = opts.secretsFile;
         format = "binary";
         mode = "444";
       };

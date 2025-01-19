@@ -1,20 +1,16 @@
-{ lib
-, config
-, inputs
-, pkgs
-, pkgs-master
-, ...
+{
+  lib,
+  config,
+  inputs,
+  pkgs,
+  pkgs-master,
+  ...
 }:
 {
   options.teenix.services.vaultwarden = {
     enable = lib.mkEnableOption "setup vaultwarden";
-    secretsFile = lib.mkOption {
-      type = lib.types.path;
-      description = "path to the sops secret file for the vaultwarden website Server";
-    };
-    hostname = lib.mkOption {
-      type = lib.types.str;
-    };
+    secretsFile = lib.teenix.mkSecretsFileOption "vaultwarden";
+    hostname = lib.teenix.mkHostnameOption;
   };
 
   config =

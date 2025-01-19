@@ -6,19 +6,12 @@
 }:
 {
   options.teenix.services.nawi =
-    let
-      t = lib.types;
-    in
     {
       enable = lib.mkEnableOption "setup nawi";
-      hostname = lib.mkOption {
-        type = t.str;
-      };
-      envFile = lib.mkOption {
-        type = t.path;
-      };
+      hostname = lib.teenix.mkHostnameOption;
+      secretsFile = lib.teenix.mkSecretsFileOption "fsnawide";
       mariaEnvFile = lib.mkOption {
-        type = t.path;
+        type = lib.types.path;
       };
     };
 
@@ -34,7 +27,7 @@
       };
 
       sops.secrets.nawi = {
-        sopsFile = opts.envFile;
+        sopsFile = opts.secretsFile;
         format = "binary";
         mode = "444";
       };

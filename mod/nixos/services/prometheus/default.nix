@@ -7,17 +7,13 @@
 {
   options.teenix.services.prometheus = {
     enable = lib.mkEnableOption "setup prometheus";
-    hostname = lib.mkOption {
-      type = lib.types.str;
-    };
+    hostname = lib.teenix.mkHostnameOption;
+    secretsFile = lib.teenix.mkSecretsFileOption "prometheus";
     grafanaHostname = lib.mkOption {
       type = lib.types.str;
     };
     alertmanagerURL = lib.mkOption {
       type = lib.types.str;
-    };
-    envFile = lib.mkOption {
-      type = lib.types.path;
     };
   };
 
@@ -27,7 +23,7 @@
     in
     lib.mkIf opts.enable {
       sops.secrets.prometheus_env = {
-        sopsFile = opts.envFile;
+        sopsFile = opts.secretsFile;
         format = "binary";
         mode = "444";
       };

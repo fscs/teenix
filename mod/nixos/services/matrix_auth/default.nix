@@ -7,11 +7,6 @@
 {
   options.teenix.services.matrix-auth = {
     enable = lib.mkEnableOption "setup inphimatrix-auth";
-    hostname = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      description = "";
-    };
   };
 
   config =

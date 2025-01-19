@@ -7,10 +7,7 @@
 {
   options.teenix.services.discord-intern-bot = {
     enable = lib.mkEnableOption "setup discord-intern-bot";
-    secretsFile = lib.mkOption {
-      type = lib.types.path;
-      description = "path to the sops secret file for the discord-intern-bot";
-    };
+    secretsFile = lib.teenix.mkSecretsFileOption "discord-intern-bot";
     dbHostPath = lib.mkOption {
       type = lib.types.str;
     };

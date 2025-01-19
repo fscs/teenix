@@ -9,13 +9,9 @@
 {
   options.teenix.services.helfendentool = {
     enable = lib.mkEnableOption "Enable helfendentool";
-    hostname = lib.mkOption {
-      type = lib.types.str;
-    };
+    hostname = lib.teenix.mkHostnameOption;
+    secretsFile = lib.teenix.mkSecretsFileOption "helfendentool";
     rabbitmqSecret = lib.mkOption {
-      type = lib.types.path;
-    };
-    secretsFile = lib.mkOption {
       type = lib.types.path;
     };
   };

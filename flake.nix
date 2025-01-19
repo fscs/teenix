@@ -42,12 +42,16 @@
         "aarch64-darwin"
       ];
 
-      lib = nixpkgs.lib;
+      lib = nixpkgs.lib.extend (
+        final: prev: {
+          teenix = import ./lib { lib = prev; };
+        }
+      );
 
       forAllSystems = lib.genAttrs systems;
 
       specialArgs = {
-        inherit inputs outputs;
+        inherit inputs outputs lib;
         pkgs-master = import nixpkgs-master {
           system = "x86_64-linux";
           overlays = [ self.overlays.additions ];

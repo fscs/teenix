@@ -1,9 +1,4 @@
-{ ... }:
+{ lib, ... }:
 {
-  imports = [
-    ./services
-    ./nixconfig.nix
-    ./bootconfig.nix
-    ./users.nix
-  ];
+  imports = lib.teenix.importAllChildren ./.;
 }

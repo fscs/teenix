@@ -7,9 +7,7 @@
 {
   options.teenix.services.element-web = {
     enable = lib.mkEnableOption "setup element-web";
-    hostname = lib.mkOption {
-      type = lib.types.str;
-    };
+    hostname = lib.teenix.mkHostnameOption;
     matrixUrl = lib.mkOption {
       type = lib.types.str;
     };

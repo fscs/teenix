@@ -3,9 +3,7 @@
 
   options.teenix.services.collabora = {
     enable = lib.mkEnableOption "Enable collabora";
-    hostname = lib.mkOption {
-      type = lib.types.str;
-    };
+    hostname = lib.teenix.mkHostnameOption;
     nextcloudHost = lib.mkOption {
       type = lib.types.str;
     };

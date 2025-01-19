@@ -7,12 +7,8 @@
 {
   options.teenix.services.sliding-sync = {
     enable = lib.mkEnableOption "setup sliding-sync";
-    hostname = lib.mkOption {
-      type = lib.types.str;
-    };
-    envFile = lib.mkOption {
-      type = lib.types.path;
-    };
+    hostname = lib.teenix.mkHostnameOption;
+    secretsFile = lib.teenix.mkSecretsFileOption "sliding-sync";
   };
 
   config =
@@ -21,7 +17,7 @@
     in
     lib.mkIf opts.enable {
       sops.secrets.sliding-sync = {
-        sopsFile = opts.envFile;
+        sopsFile = opts.secretsFile;
         format = "binary";
         mode = "444";
       };

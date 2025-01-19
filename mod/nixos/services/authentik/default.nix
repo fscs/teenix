@@ -7,13 +7,8 @@
 {
   options.teenix.services.authentik = {
     enable = lib.mkEnableOption "setup authentik";
-    hostname = lib.mkOption {
-      type = lib.types.str;
-    };
-    envFile = lib.mkOption {
-      type = lib.types.path;
-      description = "path to the sops secret file for the fscshhude website Server";
-    };
+    hostname = lib.teenix.mkHostnameOption;
+    secretsFile = lib.teenix.mkSecretsFileOption "authentik";
   };
 
   config =
@@ -22,7 +17,7 @@
     in
     lib.mkIf opts.enable {
       sops.secrets.authentik_env = {
-        sopsFile = opts.envFile;
+        sopsFile = opts.secretsFile;
         format = "binary";
         mode = "444";
       };

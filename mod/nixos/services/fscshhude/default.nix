@@ -7,13 +7,8 @@
 {
   options.teenix.services.fscshhude = {
     enable = lib.mkEnableOption "setup fscshhude";
-    secretsFile = lib.mkOption {
-      type = lib.types.path;
-      description = "path to the sops secret file for the fscshhude website Server";
-    };
-    hostname = lib.mkOption {
-      type = lib.types.str;
-    };
+    secretsFile = lib.teenix.mkSecretsFileOption "fscshhude";
+    hostname = lib.teenix.mkHostnameOption;
   };
 
   config =

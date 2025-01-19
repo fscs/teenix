@@ -57,7 +57,7 @@
   teenix.services.authentik = {
     enable = true;
     hostname = "auth.inphima.de";
-    envFile = ../secrets/authentik_env;
+    secretsFile = ../secrets/authentik_env;
   };
 
   teenix.services.prometheus = {
@@ -65,13 +65,13 @@
     hostname = "prometheus.hhu-fscs.de";
     grafanaHostname = "grafana.hhu-fscs.de";
     alertmanagerURL = "alerts.hhu-fscs.de";
-    envFile = ../secrets/prometheus_env;
+    secretsFile = ../secrets/prometheus_env;
   };
 
   teenix.services.passbolt = {
     enable = false;
     hostname = "passbolt.hhu-fscs.de";
-    envFile = ../secrets/passbolt/env;
+    secretsFile = ../secrets/passbolt/env;
     mariaEnvFile = ../secrets/passbolt/maria_env;
   };
 
@@ -91,21 +91,21 @@
   teenix.services.inphimade = {
     enable = true;
     hostname = "inphima.de";
-    envFile = ../secrets/inphimade/env;
+    secretsFile = ../secrets/inphimade/env;
     mariaEnvFile = ../secrets/inphimade/maria_env;
   };
 
   teenix.services.nawi = {
     enable = true;
     hostname = "fsnawi.de";
-    envFile = ../secrets/nawi/env;
+    secretsFile = ../secrets/nawi/env;
     mariaEnvFile = ../secrets/nawi/maria_env;
   };
 
   teenix.services.freescout = {
     enable = true;
     hostname = "tickets.hhu-fscs.de";
-    envFile = ../secrets/freescout/env;
+    secretsFile = ../secrets/freescout/env;
     mariaEnvFile = ../secrets/freescout/maria_env;
   };
 
@@ -148,7 +148,6 @@
   sops.secrets.scanner-pass = {
     format = "binary";
     sopsFile = ../secrets/scanner_pwd;
-    neededForUsers = true;
   };
 
   services.vsftpd = {
