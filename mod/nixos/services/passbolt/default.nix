@@ -5,15 +5,14 @@
   ...
 }:
 {
-  options.teenix.services.passbolt =
-    {
-      enable = lib.mkEnableOption "setup passbolt";
-      hostname = lib.teenix.mkHostnameOption;
-      secretsFile = lib.teenix.mkSecretsFileOption "passbolt";
-      mariaEnvFile = lib.mkOption {
-        type = lib.types.path;
-      };
+  options.teenix.services.passbolt = {
+    enable = lib.mkEnableOption "setup passbolt";
+    hostname = lib.teenix.mkHostnameOption;
+    secretsFile = lib.teenix.mkSecretsFileOption "passbolt";
+    mariaEnvFile = lib.mkOption {
+      type = lib.types.path;
     };
+  };
 
   config =
     let

@@ -4,14 +4,13 @@
   ...
 }:
 {
-  options.teenix.services.mete =
-    {
-      enable = lib.mkEnableOption "setup inphimade";
-      hostname = lib.teenix.mkHostnameOption; 
-      hostname-summary = lib.mkOption {
-        type = lib.types.str;
-      };
+  options.teenix.services.mete = {
+    enable = lib.mkEnableOption "setup inphimade";
+    hostname = lib.teenix.mkHostnameOption;
+    hostname-summary = lib.mkOption {
+      type = lib.types.str;
     };
+  };
 
   config =
     let

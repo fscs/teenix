@@ -1,8 +1,9 @@
-{ lib
-, config
-, inputs
-, pkgs
-, ...
+{
+  lib,
+  config,
+  inputs,
+  pkgs,
+  ...
 }:
 {
   options.teenix.services.authentik = {
@@ -22,7 +23,7 @@
         mode = "444";
       };
 
-      # setup authentik binary cache 
+      # setup authentik binary cache
       nix.settings = {
         substituters = [
           "https://nix-community.cachix.org"

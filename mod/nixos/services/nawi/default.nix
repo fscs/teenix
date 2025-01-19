@@ -5,15 +5,14 @@
   ...
 }:
 {
-  options.teenix.services.nawi =
-    {
-      enable = lib.mkEnableOption "setup nawi";
-      hostname = lib.teenix.mkHostnameOption;
-      secretsFile = lib.teenix.mkSecretsFileOption "fsnawide";
-      mariaEnvFile = lib.mkOption {
-        type = lib.types.path;
-      };
+  options.teenix.services.nawi = {
+    enable = lib.mkEnableOption "setup nawi";
+    hostname = lib.teenix.mkHostnameOption;
+    secretsFile = lib.teenix.mkSecretsFileOption "fsnawide";
+    mariaEnvFile = lib.mkOption {
+      type = lib.types.path;
     };
+  };
 
   config =
     let
@@ -100,7 +99,8 @@
         labels = {
           "traefik.enable" = "true";
           "traefik.http.routers.nawi.entrypoints" = "websecure";
-          "traefik.http.routers.nawi.rule" = "Host(`nawi.inphima.de`) || Host(`${opts.hostname}`) || Host(`www.${opts.hostname}`)";
+          "traefik.http.routers.nawi.rule" =
+            "Host(`nawi.inphima.de`) || Host(`${opts.hostname}`) || Host(`www.${opts.hostname}`)";
           "traefik.http.routers.nawi.tls" = "true";
           "traefik.http.routers.nawi.tls.certresolver" = "letsencrypt";
           "traefik.http.services.nawi.loadbalancer.server.port" = "80";

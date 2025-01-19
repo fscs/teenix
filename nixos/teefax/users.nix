@@ -7,7 +7,7 @@
   users.defaultUserShell = pkgs.fish;
 
   teenix.users = {
-    teefax = {};
+    teefax = { };
 
     felix = {
       sshKeys = [

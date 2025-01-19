@@ -1,9 +1,10 @@
-{ inputs
-, outputs
-, config
-, pkgs
-, lib
-, ...
+{
+  inputs,
+  outputs,
+  config,
+  pkgs,
+  lib,
+  ...
 }:
 {
   imports = [
@@ -104,13 +105,11 @@
       };
     }
     // (builtins.foldl' lib.trivial.mergeAttrs { } (
-      builtins.map
-        (i: {
-          "turn_port_udp_${builtins.toString i}" = {
-            port = i;
-          };
-        })
-        (lib.range 30000 30010)
+      builtins.map (i: {
+        "turn_port_udp_${builtins.toString i}" = {
+          port = i;
+        };
+      }) (lib.range 30000 30010)
     ));
 
   # Services

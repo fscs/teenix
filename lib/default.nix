@@ -1,9 +1,11 @@
 { lib }:
 {
-  mkSecretsFileOption = name: lib.mkOption {
-    type = lib.types.path;
-    description = "path to the secrets file for ${name}";
-  };
+  mkSecretsFileOption =
+    name:
+    lib.mkOption {
+      type = lib.types.path;
+      description = "path to the secrets file for ${name}";
+    };
 
   mkHostnameOption = lib.mkOption {
     type = lib.types.nonEmptyStr;

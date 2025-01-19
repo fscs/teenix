@@ -107,7 +107,8 @@
         labels = {
           "traefik.enable" = "true";
           "traefik.http.routers.inphimadewp1.entrypoints" = "websecure";
-          "traefik.http.routers.inphimadewp1.rule" = "Host(`${opts.hostname}`) || Host(`www.${opts.hostname}`)";
+          "traefik.http.routers.inphimadewp1.rule" =
+            "Host(`${opts.hostname}`) || Host(`www.${opts.hostname}`)";
           "traefik.http.routers.inphimadewp1.tls" = "true";
           "traefik.http.routers.inphimadewp1.priority" = "1";
           "traefik.http.routers.inphimadewp1.tls.certresolver" = "letsencrypt";

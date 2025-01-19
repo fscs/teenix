@@ -48,7 +48,7 @@
         }
       );
 
-      forAllSystems = lib.genAttrs systems;
+      eachSystem = f: lib.genAttrs systems (system: f system nixpkgs.legacyPackages.${system});
 
       specialArgs = {
         inherit inputs outputs lib;
@@ -59,9 +59,14 @@
       };
     in
     {
-      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
+      formatter = eachSystem (
+        system: pkgs:
+        pkgs.writers.writeBashBin "fmt" ''
+          find . -type f -name \*.nix | xargs ${lib.getExe pkgs.nixfmt-rfc-style}
+        ''
+      );
 
-      packages = forAllSystems (system: import ./pkgs nixpkgs-master.legacyPackages.${system});
+      packages = eachSystem (system: _: import ./pkgs nixpkgs-master.legacyPackages.${system});
       overlays = import ./overlays.nix { inherit inputs; };
 
       nixosModules.teenix = import ./mod/nixos;
@@ -98,12 +103,8 @@
         modules = [ ./nixos/testfax ];
       };
 
-      devShells = forAllSystems (
-        system:
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-        in
-        {
+      devShells = eachSystem (
+        system: pkgs: {
           default = pkgs.mkShell {
             sopsPGPKeyDirs = [
               "${toString ./.}/nixos/keys/hosts"

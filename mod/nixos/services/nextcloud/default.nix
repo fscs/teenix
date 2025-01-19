@@ -1,22 +1,22 @@
-{ lib
-, config
-, pkgs
-, pkgs-master
-, inputs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  pkgs-master,
+  inputs,
+  ...
 }:
 {
-  options.teenix.services.nextcloud =
-    {
-      enable = lib.mkEnableOption "setup nextcloud";
-      hostname = lib.teenix.mkHostnameOption;
-      secretsFile = lib.teenix.mkSecretsFileOption "nextcloud";
-      extraApps = lib.mkOption {
-        description = "nextcloud apps to install";
-        type = lib.types.listOf lib.types.str;
-        default = [ ];
-      };
+  options.teenix.services.nextcloud = {
+    enable = lib.mkEnableOption "setup nextcloud";
+    hostname = lib.teenix.mkHostnameOption;
+    secretsFile = lib.teenix.mkSecretsFileOption "nextcloud";
+    extraApps = lib.mkOption {
+      description = "nextcloud apps to install";
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
     };
+  };
 
   config =
     let
@@ -40,7 +40,10 @@
         };
       };
 
-      nix-tun.storage.persist.subvolumes."scanner" = { owner = "${builtins.toString config.containers.nextcloud.config.users.users.nextcloud.uid}"; mode = "0777"; };
+      nix-tun.storage.persist.subvolumes."scanner" = {
+        owner = "${builtins.toString config.containers.nextcloud.config.users.users.nextcloud.uid}";
+        mode = "0777";
+      };
       teenix.services.traefik.services."nextcloud" = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.nextcloud.config.networking.hostName}" ];
