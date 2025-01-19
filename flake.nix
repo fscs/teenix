@@ -5,46 +5,25 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; # NOTE: change channel in gitlab runner when updating this
     nixpkgs-master.url = "github:nixos/nixpkgs";
 
-    sops = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     flake-programs-sqlite = {
       url = "github:wamserma/flake-programs-sqlite";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-tun = {
-      url = "github:nix-tun/nixos-modules";
-      inputs.nixpkgs.follows = "nixpkgs"; # uses unstable internally
-    };
-    authentik-nix = {
-      url = "github:nix-community/authentik-nix";
-      inputs.nixpkgs.follows = "nixpkgs"; # uses unstable internally
-    };
+    sops.url = "github:Mic92/sops-nix";
+    nix-tun.url = "github:nix-tun/nixos-modules";
+    authentik-nix.url = "github:nix-community/authentik-nix";
 
-    discord-intern-bot = {
-      url = "git+ssh://git@git.hhu.de/fscs/discord-intern-bot.git";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    inphima-discord-bot = {
-      url = "git+ssh://git@git.hhu.de/inphima/inphima-discord-bot.git";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    matrix-intern-bot = {
-      url = "git+ssh://git@git.hhu.de/fscs/matrix-bot.git";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    fscshhude = {
-      url = "git+ssh://git@git.hhu.de/fscs/website.git";
-      inputs.nixpkgs.follows = "nixpkgs"; # needs hugo 134
-    };
+    discord-intern-bot.url = "git+ssh://git@git.hhu.de/fscs/discord-intern-bot.git";
+    inphima-discord-bot.url = "git+ssh://git@git.hhu.de/inphima/inphima-discord-bot.git";
+    matrix-intern-bot.url = "git+ssh://git@git.hhu.de/fscs/matrix-bot.git";
+    fscshhude.url = "git+ssh://git@git.hhu.de/fscs/website.git";
+    campus-guesser-server.url = "git+ssh://git@git.hhu.de/fscs/campus-guesser-server.git";
+    sitzungsverwaltung.url = "github:fscs/sitzungsverwaltung-gui";
     mete = {
       url = "github:fscs/mete/wip/fscs";
       flake = false;
     };
-    campus-guesser-server.url = "git+ssh://git@git.hhu.de/fscs/campus-guesser-server.git";
-    sitzungsverwaltung.url = "github:fscs/sitzungsverwaltung-gui";
   };
 
   outputs =
