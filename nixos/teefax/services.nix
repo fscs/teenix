@@ -69,7 +69,7 @@
   };
 
   teenix.services.passbolt = {
-    enable = false;
+    enable = true;
     hostname = "passbolt.hhu-fscs.de";
     secretsFile = ../secrets/passbolt/env;
     mariaEnvFile = ../secrets/passbolt/maria_env;
