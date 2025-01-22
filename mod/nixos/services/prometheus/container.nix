@@ -1,8 +1,8 @@
-{
-  lib,
-  host-config,
-  pkgs,
-  ...
+{ lib
+, host-config
+, pkgs
+, pkgs-stable
+, ...
 }:
 let
   opts = host-config.teenix.services.prometheus;
@@ -139,6 +139,7 @@ in
   };
 
   services.grafana = {
+    package = pkgs-stable.grafana;
     enable = true;
     settings = {
       database = {

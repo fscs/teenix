@@ -915,6 +915,21 @@
         "type": "github"
       }
     },
+    "nixpkgs-stable": {
+      "locked": {
+        "lastModified": 1737497878,
+        "narHash": "sha256-EOhM29WwZrT3lVFmD0R3v9/sYbto1XewQgg/UlJQwLI=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "78c03868ef9f43a3612003bfea203e84dbb3aa55",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs_10": {
       "locked": {
         "lastModified": 1724224976,
@@ -1197,6 +1212,7 @@
         "nix-tun": "nix-tun",
         "nixpkgs": "nixpkgs_12",
         "nixpkgs-master": "nixpkgs-master",
+        "nixpkgs-stable": "nixpkgs-stable",
         "sitzungsverwaltung": "sitzungsverwaltung",
         "sops": "sops"
       }

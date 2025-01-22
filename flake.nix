@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; # NOTE: change channel in gitlab runner when updating this
     nixpkgs-master.url = "github:nixos/nixpkgs";
+    nixpkgs-stable.url = "github:nixos/nixpkgs";
 
     flake-programs-sqlite = {
       url = "github:wamserma/flake-programs-sqlite";
@@ -27,11 +28,11 @@
   };
 
   outputs =
-    {
-      self,
-      nixpkgs,
-      nixpkgs-master,
-      ...
+    { self
+    , nixpkgs
+    , nixpkgs-master
+    , nixpkgs-stable
+    , ...
     }@inputs:
     let
       inherit (self) outputs;
@@ -56,14 +57,18 @@
           system = "x86_64-linux";
           overlays = [ self.overlays.additions ];
         };
+        pkgs-stable = import nixpkgs-stable {
+          system = "x86_64-linux";
+          overlays = [ self.overlays.additions ];
+        };
       };
     in
     {
       formatter = eachSystem (
         system: pkgs:
-        pkgs.writers.writeBashBin "fmt" ''
-          find . -type f -name \*.nix | xargs ${lib.getExe pkgs.nixfmt-rfc-style}
-        ''
+          pkgs.writers.writeBashBin "fmt" ''
+            find . -type f -name \*.nix | xargs ${lib.getExe pkgs.nixfmt-rfc-style}
+          ''
       );
 
       packages = eachSystem (system: _: import ./pkgs nixpkgs-master.legacyPackages.${system});
