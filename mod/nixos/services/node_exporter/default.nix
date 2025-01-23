@@ -1,9 +1,7 @@
-{
-  lib,
-  config,
-  inputs,
-  pkgs,
-  ...
+{ lib
+, config
+, pkgs
+, ...
 }:
 {
   options.teenix.services.node_exporter = {
@@ -16,25 +14,30 @@
     in
     lib.mkIf opts.enable {
 
-      containers.node-exporter = {
-        ephemeral = true;
-        autoStart = true;
-        privateNetwork = true;
-        hostAddress = "192.168.115.10";
-        localAddress = "192.168.115.11";
-        bindMounts = {
-          "resolv" = {
-            hostPath = "/etc/resolv.conf";
-            mountPoint = "/etc/resolv.conf";
-          };
-        };
+      users.users.node_exporter = {
+        uid = 1033;
+        home = "/home/node_exporter";
+        group = "users";
+        shell = pkgs.bash;
+        isNormalUser = true;
+      };
 
-        specialArgs = {
-          inherit inputs;
-          host-config = config;
+      systemd.services.node_exporter-serve = {
+        description = "Start node exporter";
+        after = [ "network.target" ];
+        path = [ pkgs.bash ];
+        serviceConfig = {
+          Type = "exec";
+          User = "node_exporter";
+          WorkingDirectory = "/home/node_exporter";
+          ExecStart = "${pkgs.prometheus-node-exporter}/bin/node_exporter";
+          Restart = "always";
+          RestartSec = 5;
         };
-
-        config = import ./container.nix;
+        wantedBy = [ "multi-user.target" ];
+      };
+      networking.firewall = {
+        allowedTCPPorts = [ 9100 ];
       };
     };
 }

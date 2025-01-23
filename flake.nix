@@ -25,6 +25,7 @@
       url = "github:fscs/mete/wip/fscs";
       flake = false;
     };
+    grafana2ntfy.url = "github:fscs/grafana-to-ntfy";
   };
 
   outputs =

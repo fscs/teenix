@@ -2,6 +2,7 @@
 , host-config
 , pkgs
 , pkgs-stable
+, inputs
 , ...
 }:
 let
@@ -16,39 +17,8 @@ in
 
   services.prometheus = {
     enable = true;
-    globalConfig.scrape_interval = "10s";
+    globalConfig.scrape_interval = "1s";
     ruleFiles = [ ./prometheus_rules.yaml ];
-    alertmanager = {
-      enable = true;
-      webExternalUrl = "https://${opts.alertmanagerURL}";
-      environmentFile = host-config.sops.secrets.prometheus_env.path;
-      checkConfig = false;
-      configText = ''
-        route:
-          group_by: ['alertname', 'job']
-
-          group_wait: 10s
-          group_interval: 10s
-          repeat_interval: 3h
-
-          receiver: discord
-
-        receivers:
-        - name: discord
-          discord_configs:
-          - message: |
-              {{ range .Alerts.Firing }}
-              - {{ .Labels.service }} {{ end }}
-              {{ if and (gt (len .Alerts.Resolved) 0) (gt (len .Alerts.Firing) 0) }}
-              ### Traefik Service is back up
-              {{ end }}
-              {{ range .Alerts.Resolved }}
-              - {{ .Labels.service }} {{ end }}
-            title: 'Traefik Service is {{ if gt (len .Alerts.Firing) 0 }}down {{ else }}back up {{ end }}'
-            send_resolved: true
-            webhook_url: $ENVIRONMENT ''${discord_url}
-      '';
-    };
     alertmanagers = [
       {
         scheme = "http";
@@ -80,7 +50,7 @@ in
         static_configs = [
           {
             targets = [
-              "localhost:9100"
+              "192.168.109.10:9100"
             ];
           }
         ];
@@ -97,45 +67,6 @@ in
         ];
       }
     ];
-  };
-
-  services.loki = {
-    enable = true;
-    configFile = ./loki-local-config.yaml;
-  };
-
-  systemd.services.promtail = {
-    description = "Promtail service for Loki";
-    wantedBy = [ "multi-user.target" ];
-
-    serviceConfig = {
-      ExecStart = ''
-        ${pkgs.grafana-loki}/bin/promtail --config.file ${./promtail.yaml}
-      '';
-    };
-  };
-
-  users.users.node_exporter = {
-    uid = 1033;
-    home = "/home/node_exporter";
-    group = "users";
-    shell = pkgs.bash;
-    isNormalUser = true;
-  };
-
-  systemd.services.node_exporter-serve = {
-    description = "Start node exporter";
-    after = [ "network.target" ];
-    path = [ pkgs.bash ];
-    serviceConfig = {
-      Type = "exec";
-      User = "node_exporter";
-      WorkingDirectory = "/home/node_exporter";
-      ExecStart = "${pkgs.prometheus-node-exporter}/bin/node_exporter";
-      Restart = "always";
-      RestartSec = 5;
-    };
-    wantedBy = [ "multi-user.target" ];
   };
 
   services.grafana = {
@@ -175,6 +106,19 @@ in
       };
 
     };
+  };
+
+  systemd.services."grafana-to-ntfy" = {
+    description = "Grafana to ntfy";
+    after = [ "network.target" ];
+    path = [ pkgs.bash ];
+    script = "${inputs.grafana2ntfy.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/grafana-to-ntfy";
+    serviceConfig = {
+      Restart = "always";
+      RestartSec = 5;
+      EnvironmentFile = host-config.sops.secrets.grafana2ntfy.path;
+    };
+    wantedBy = [ "multi-user.target" ];
   };
 
   services.postgresql = {

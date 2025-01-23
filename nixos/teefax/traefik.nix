@@ -36,11 +36,13 @@
       };
     }
     // (builtins.foldl' lib.trivial.mergeAttrs { } (
-      builtins.map (i: {
-        "turn_port_udp_${builtins.toString i}" = {
-          port = i;
-        };
-      }) (lib.range 30000 30010)
+      builtins.map
+        (i: {
+          "turn_port_udp_${builtins.toString i}" = {
+            port = i;
+          };
+        })
+        (lib.range 30000 30010)
     ));
   teenix.services.traefik.redirects = {
     fscs_go = {
@@ -71,11 +73,6 @@
     status_inphima = {
       from = "status.inphima.de";
       to = "grafana.hhu-fscs.de/public-dashboards/84a25d574e334559b2095f1d5c573be6";
-    };
-
-    inphima_discord = {
-      from = "fscs.hhu.de/discord";
-      to = "discord.gg/K3ddgjh";
     };
 
     voltwarden = {

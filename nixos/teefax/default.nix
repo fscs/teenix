@@ -1,9 +1,8 @@
-{
-  inputs,
-  outputs,
-  pkgs,
-  lib,
-  ...
+{ inputs
+, outputs
+, pkgs
+, lib
+, ...
 }:
 {
   imports = [
@@ -27,6 +26,12 @@
   nixpkgs.config.permittedInsecurePackages = [
     "olm-3.2.16"
   ];
+
+  services.fail2ban = {
+    enable = true;
+    ignoreIP = [ "134.99.0.0/16" ];
+    bantime-increment.enable = true;
+  };
 
   networking = {
     hostName = "teefax";

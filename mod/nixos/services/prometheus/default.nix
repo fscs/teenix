@@ -9,6 +9,7 @@
     enable = lib.mkEnableOption "setup prometheus";
     hostname = lib.teenix.mkHostnameOption;
     secretsFile = lib.teenix.mkSecretsFileOption "prometheus";
+    ntfySecret = lib.teenix.mkSecretsFileOption "grafana2ntfy";
     grafanaHostname = lib.mkOption {
       type = lib.types.str;
     };
@@ -24,6 +25,12 @@
     lib.mkIf opts.enable {
       sops.secrets.prometheus_env = {
         sopsFile = opts.secretsFile;
+        format = "binary";
+        mode = "444";
+      };
+
+      sops.secrets.grafana2ntfy = {
+        sopsFile = opts.ntfySecret;
         format = "binary";
         mode = "444";
       };
@@ -76,6 +83,10 @@
             hostPath = "${config.nix-tun.storage.persist.path}/grafana/grafana";
             mountPoint = "/var/lib/grafana";
             isReadOnly = false;
+          };
+          "grafana-2-ntfy" = {
+            hostPath = config.sops.secrets.grafana2ntfy.path;
+            mountPoint = config.sops.secrets.grafana2ntfy.path;
           };
           "prometheus" = {
             hostPath = "${config.nix-tun.storage.persist.path}/grafana/prometheus";

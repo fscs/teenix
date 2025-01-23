@@ -64,6 +64,7 @@
     enable = true;
     hostname = "prometheus.hhu-fscs.de";
     grafanaHostname = "grafana.hhu-fscs.de";
+    ntfySecret = ../secrets/grafana2ntfy;
     alertmanagerURL = "alerts.hhu-fscs.de";
     secretsFile = ../secrets/prometheus_env;
   };
@@ -141,7 +142,7 @@
   };
 
   teenix.services.matrix-intern-bot = {
-    enable = true;
+    enable = false;
     secretsFile = ../secrets/matrixinternbot;
   };
 
