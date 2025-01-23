@@ -14,15 +14,9 @@ scrape_configs:
    - targets:
       - localhost
      labels:
-      job: campusguesser
+      job: logs
       host: teefax
-      __path__: /var/log/other/campusguesser/*.log
-   - targets:
-      - localhost
-     labels:
-      job: fscshhude
-      host: teefax
-      __path__: /var/log/other/fscshhude/*.log
+      __path__: /var/log/other/*/*.log
    - targets:
       - localhost
      labels:
