@@ -1,10 +1,9 @@
-{
-  inputs,
-  outputs,
-  config,
-  pkgs,
-  lib,
-  ...
+{ inputs
+, outputs
+, config
+, pkgs
+, lib
+, ...
 }:
 {
   imports = [
@@ -105,11 +104,13 @@
       };
     }
     // (builtins.foldl' lib.trivial.mergeAttrs { } (
-      builtins.map (i: {
-        "turn_port_udp_${builtins.toString i}" = {
-          port = i;
-        };
-      }) (lib.range 30000 30010)
+      builtins.map
+        (i: {
+          "turn_port_udp_${builtins.toString i}" = {
+            port = i;
+          };
+        })
+        (lib.range 30000 30010)
     ));
 
   # Services
@@ -118,10 +119,10 @@
   teenix.services.node_exporter = {
     enable = true;
   };
-  teenix.services.element-web = {
+
+  teenix.services.uptime-kuma = {
     enable = true;
-    hostname = "element.dev.hhu-fscs.de";
-    matrixUrl = "inphima.de";
+    hostname = "uptime.minecraft.fsphy.de";
   };
 
   teenix.services.minecraft.enable = true;

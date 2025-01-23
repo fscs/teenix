@@ -1,10 +1,9 @@
-{
-  lib,
-  inputs,
-  outputs,
-  pkgs-master,
-  config,
-  ...
+{ lib
+, inputs
+, outputs
+, pkgs-master
+, config
+, ...
 }:
 {
   options.teenix.containers =
@@ -69,12 +68,14 @@
               default = { };
               type = t.attrsOf (
                 t.submodule {
-                  mountPoint = lib.mkOption {
-                    type = t.nonEmptyStr;
-                  };
-                  isReadOnly = lib.mkOption {
-                    type = t.bool;
-                    default = true;
+                  options = {
+                    mountPoint = lib.mkOption {
+                      type = t.nonEmptyStr;
+                    };
+                    isReadOnly = lib.mkOption {
+                      type = t.bool;
+                      default = true;
+                    };
                   };
                 }
               );
@@ -124,69 +125,75 @@
 
       mkContainer =
         containerName: cfg:
-        lib.recursiveUpdate {
-          autoStart = true;
-          ephemeral = true;
-          privateNetwork = true;
+        lib.recursiveUpdate
+          {
+            autoStart = true;
+            ephemeral = true;
+            privateNetwork = true;
 
-          hostAddress = "192.18.${toString (ipPoolOf containerName)}.10";
-          localAddress = "192.18.${toString (ipPoolOf containerName)}.11";
+            hostAddress = "192.18.${toString (ipPoolOf containerName)}.10";
+            localAddress = "192.18.${toString (ipPoolOf containerName)}.11";
 
-          bindMounts = lib.mkMerge [
-            # resolv conf
-            (lib.mkIf cfg.useResolvConf {
-              resolv = {
-                hostPath = "/etc/resolv.conf";
-                mountPoint = "/etc/resolv.conf";
-              };
-            })
-            # sops mounts
-            (lib.listToAttrs (
-              lib.imap0 (i: v: {
-                name = toString i;
-                value = {
-                  hostPath = v.path;
-                  mountPoint = v.path;
+            bindMounts = lib.mkMerge [
+              # resolv conf
+              (lib.mkIf cfg.useResolvConf {
+                resolv = {
+                  hostPath = "/etc/resolv.conf";
+                  mountPoint = "/etc/resolv.conf";
                 };
-              }) cfg.mounts.sops
-            ))
-            # mysql
-            (lib.mkIf cfg.mounts.mysql.enable {
-              mysql = {
-                hostPath = "${persistPath}/${containerName}/mysql";
-                mountPoint =
-                  lib.defaultTo config.containers.${containerName}.config.services.mysql.dataDir
-                    cfg.mounts.mysql.path;
-              };
-            })
-            # postgresql
-            (lib.mkIf cfg.mounts.postgresql.enable {
-              postgresql = {
-                hostPath = "${persistPath}/${containerName}/postgresql";
-                mountPoint =
-                  lib.defaultTo config.containers.${containerName}.config.services.postgresql.dataDir
-                    cfg.mounts.postgresql.path;
-              };
-            })
-            # logs
-            (lib.genAttrs cfg.mounts.logs.paths (n: {
-              hostPath = "/var/log/containers/${containerName}/${n}";
-              mountPoint = "/var/log/${n}";
-              isReadOnly = false;
-            }))
-            # extra mounts
-            (lib.mapAttrs (n: value: {
-              inherit (value) mountPoint readOnly;
-              hostPath = "${persistPath}/${containerName}/${n}";
-            }) cfg.mounts.extra)
-          ];
+              })
+              # sops mounts
+              (lib.listToAttrs (
+                lib.imap0
+                  (i: v: {
+                    name = toString i;
+                    value = {
+                      hostPath = v.path;
+                      mountPoint = v.path;
+                    };
+                  })
+                  cfg.mounts.sops
+              ))
+              # mysql
+              (lib.mkIf cfg.mounts.mysql.enable {
+                mysql = {
+                  hostPath = "${persistPath}/${containerName}/mysql";
+                  mountPoint =
+                    lib.defaultTo config.containers.${containerName}.config.services.mysql.dataDir
+                      cfg.mounts.mysql.path;
+                };
+              })
+              # postgresql
+              (lib.mkIf cfg.mounts.postgresql.enable {
+                postgresql = {
+                  hostPath = "${persistPath}/${containerName}/postgresql";
+                  mountPoint =
+                    lib.defaultTo config.containers.${containerName}.config.services.postgresql.dataDir
+                      cfg.mounts.postgresql.path;
+                };
+              })
+              # logs
+              (lib.genAttrs cfg.mounts.logs.paths (n: {
+                hostPath = "/var/log/containers/${containerName}/${n}";
+                mountPoint = "/var/log/${n}";
+                isReadOnly = false;
+              }))
+              # extra mounts
+              (lib.traceValSeq (lib.mapAttrs
+                (n: value: {
+                  inherit (value) mountPoint isReadOnly;
+                  hostPath = "${persistPath}/${containerName}/${n}";
+                })
+                cfg.mounts.extra))
+            ];
 
-          config = containerModuleOf containerName cfg;
-          specialArgs = {
-            inherit inputs outputs pkgs-master;
-            host-config = config;
-          };
-        } cfg.extraConfig;
+            config = containerModuleOf containerName cfg;
+            specialArgs = {
+              inherit inputs outputs pkgs-master;
+              host-config = config;
+            };
+          }
+          cfg.extraConfig;
     in
     {
       containers = lib.mapAttrs mkContainer config.teenix.containers;
