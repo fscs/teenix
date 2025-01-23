@@ -44,6 +44,7 @@
         })
         (lib.range 30000 30010)
     ));
+
   teenix.services.traefik.redirects = {
     fscs_go = {
       from = "go.hhu-fscs.de";
@@ -83,6 +84,11 @@
     matewarden = {
       from = "matewarden.inphima.de";
       to = "vaultwarden.inphima.de";
+    };
+
+    inphima_shop = {
+      from = "shop.inphima.de";
+      to = "inphima.myspreadshop.de/";
     };
   };
 }

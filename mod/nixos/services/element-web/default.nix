@@ -25,19 +25,9 @@
         healthCheck.enable = true;
       };
 
-      containers.element-web = {
-        ephemeral = true;
-        autoStart = true;
-        privateNetwork = true;
-        hostAddress = "192.168.107.10";
-        localAddress = "192.168.107.11";
-
-        specialArgs = {
-          inherit inputs;
-          host-config = config;
-        };
-
-        config = import ./container.nix;
+      teenix.containers.element-web = {
+        config = ./container.nix;
+        networking.ports.tcp = [ 80 ];
       };
     };
 }
