@@ -13,32 +13,49 @@
   config =
     let
       opts = config.teenix.services.gitlab-runner;
+
+      runnerConfigFile = token: ''
+        CI_SERVER_URL=https://git.hhu.de
+        CI_SERVER_TOKEN=${token}
+      '';
+
+      placeholder = config.sops.placeholder;
     in
     lib.mkIf opts.enable {
       sops.secrets = {
-        gitlab-runner-fscs-nix = {
+        gitlab-runner-fscs-nix-1 = {
           sopsFile = opts.secretsFile;
           format = "yaml";
-          key = "fscs-nix";
+          key = "fscs-nix-1";
           mode = "444";
         };
-        gitlab-runner-inphima-nix = {
+        gitlab-runner-fscs-nix-2 = {
           sopsFile = opts.secretsFile;
           format = "yaml";
-          key = "inphima-nix";
+          key = "fscs-nix-2";
+          mode = "444";
+        };
+        gitlab-runner-fscs-nix-3 = {
+          sopsFile = opts.secretsFile;
+          format = "yaml";
+          key = "fscs-nix-3";
+          mode = "444";
+        };
+        gitlab-runner-inphima-nix-1 = {
+          sopsFile = opts.secretsFile;
+          format = "yaml";
+          key = "inphima-nix-1";
           mode = "444";
         };
       };
 
-      sops.templates.gitlab-runner-fscs-nix.content = ''
-        CI_SERVER_URL=https://git.hhu.de
-        CI_SERVER_TOKEN=${config.sops.placeholder.gitlab-runner-fscs-nix}
-      '';
+      sops.templates = {
+        gitlab-runner-fscs-nix-1.content = runnerConfigFile placeholder.gitlab-runner-fscs-nix-1;
+        gitlab-runner-fscs-nix-2.content = runnerConfigFile placeholder.gitlab-runner-fscs-nix-2;
+        gitlab-runner-fscs-nix-3.content = runnerConfigFile placeholder.gitlab-runner-fscs-nix-3;
 
-      sops.templates.gitlab-runner-inphima-nix.content = ''
-        CI_SERVER_URL=https://git.hhu.de
-        CI_SERVER_TOKEN=${config.sops.placeholder.gitlab-runner-inphima-nix}
-      '';
+        gitlab-runner-inphima-nix-1.content = runnerConfigFile placeholder.gitlab-runner-inphima-nix-1;
+      };
 
       boot.kernel.sysctl."net.ipv4.ip_forward" = true;
 
@@ -97,8 +114,11 @@
         {
           enable = true;
           services = {
-            fscs-nix = dockerizedNixRunner config.sops.templates.gitlab-runner-fscs-nix.path;
-            inphima-nix = dockerizedNixRunner config.sops.templates.gitlab-runner-inphima-nix.path;
+            fscs-nix-1 = dockerizedNixRunner config.sops.templates.gitlab-runner-fscs-nix-1.path;
+            fscs-nix-2 = dockerizedNixRunner config.sops.templates.gitlab-runner-fscs-nix-2.path;
+            fscs-nix-3 = dockerizedNixRunner config.sops.templates.gitlab-runner-fscs-nix-3.path;
+
+            inphima-nix-1 = dockerizedNixRunner config.sops.templates.gitlab-runner-inphima-nix-1.path;
           };
         };
     };
