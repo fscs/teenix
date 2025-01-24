@@ -1,4 +1,6 @@
 { pkgs, ... }: {
+  system.stateVersion = "23.11";
+
   systemd.services.uptime-kuma = {
     description = "Uptime Kuma";
     after = [ "network.target" ];

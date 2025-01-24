@@ -1,9 +1,7 @@
-{ lib
-, config
-, inputs
-, pkgs
-, pkgs-master
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 {
   options.teenix.services.vaultwarden = {
@@ -17,57 +15,45 @@
       opts = config.teenix.services.vaultwarden;
     in
     lib.mkIf opts.enable {
-      sops.secrets.vaultwarden = {
-        sopsFile = opts.secretsFile;
-        format = "binary";
-        mode = "444";
+      sops = {
+        secrets.vaultwarden-admin-token = {
+          sopsFile = opts.secretsFile;
+          key = "admin-token";
+          mode = "444";
+        };
+        secrets.vaultwarden-smtp-password = {
+          sopsFile = opts.secretsFile;
+          key = "smtp-password";
+          mode = "444";
+        };
+
+        templates.vaultwarden.content = ''
+          ADMIN_TOKEN=${config.sops.placeholder.vaultwarden-admin-token}
+          SMTP_PASSWORD=${config.sops.placeholder.vaultwarden-smtp-password}
+        '';
       };
 
-      nix-tun.storage.persist.subvolumes."vaultwarden".directories = {
-        "/db" = {
-          owner = "${builtins.toString config.containers.vaultwarden.config.users.users.vaultwarden.uid}";
-          mode = "0700";
-        };
+      teenix.services.traefik.services.vaultwarden = {
+        router.rule = "Host(`${opts.hostname}`)";
+        healthCheck.enable = true;
+        servers = [ "http://${config.containers.vaultwarden.config.networking.hostName}:8222" ];
       };
 
-      # teenix.services.traefik.services."vaultwarden" = {
-      #   router = {
-      #     rule = "Host(`${opts.hostname}`)";
-      #   };
-      #   healthCheck = {
-      #     enable = true;
-      #   };
-      #   servers = [ "http://${config.containers.vaultwarden.config.networking.hostName}:8222" ];
-      # };
+      teenix.containers.vaultwarden = {
+        config = ./container.nix;
+        networking.useResolvConf = true;
+        networking.ports.tcp = [ 8222 ];
 
-      containers.vaultwarden = {
-        ephemeral = true;
-        autoStart = true;
-        privateNetwork = true;
-        hostAddress = "192.168.116.10";
-        localAddress = "192.168.116.11";
-        bindMounts = {
-          "resolv" = {
-            hostPath = "/etc/resolv.conf";
-            mountPoint = "/etc/resolv.conf";
-          };
-          "secret" = {
-            hostPath = config.sops.secrets.vaultwarden.path;
-            mountPoint = config.sops.secrets.vaultwarden.path;
-          };
-          "db" = {
-            hostPath = "${config.nix-tun.storage.persist.path}/vaultwarden/db";
-            mountPoint = "/var/lib/bitwarden_rs";
-            isReadOnly = false;
-          };
-        };
+        mounts.logs.enable = true;
+        mounts.logs.paths = [ "vaultwarden" ];
 
-        specialArgs = {
-          inherit inputs pkgs-master;
-          host-config = config;
-        };
+        mounts.sops = [
+          config.sops.templates.vaultwarden
+        ];
 
-        config = import ./container.nix;
+        mounts.data.enable = true;
+        mounts.data.name = "bitwarden_rs";
+        mounts.data.ownerUid = config.containers.vaultwarden.config.users.users.vaultwarden.uid;
       };
     };
 }

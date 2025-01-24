@@ -1,9 +1,8 @@
 {
   lib,
-  inputs,
-  outputs,
   pkgs-master,
   config,
+  specialArgs,
   ...
 }:
 {
@@ -18,18 +17,19 @@
             type = t.deferredModule;
           };
 
-          networking.ports = {
-            tcp = lib.mkOption {
-              type = t.listOf t.port;
-              default = [ ];
-            };
-            udp = lib.mkOption {
-              type = t.listOf t.port;
-              default = [ ];
+          networking = {
+            useResolvConf = lib.mkEnableOption "mount resolv.conf into the container";
+            ports = {
+              tcp = lib.mkOption {
+                type = t.listOf t.port;
+                default = [ ];
+              };
+              udp = lib.mkOption {
+                type = t.listOf t.port;
+                default = [ ];
+              };
             };
           };
-
-          useResolvConf = lib.mkEnableOption "mount resolv.conf into the container";
 
           mounts = {
             mysql.enable = lib.mkEnableOption "mounts mysqls datadir";
@@ -62,6 +62,7 @@
               default = [ ];
               type = t.listOf (
                 t.submodule {
+                  freeformType = t.attrs;
                   path = t.mkOption {
                     type = t.str;
                   };
@@ -140,7 +141,7 @@
 
             bindMounts = lib.mkMerge [
               # resolv conf
-              (lib.mkIf cfg.useResolvConf {
+              (lib.mkIf cfg.networking.useResolvConf {
                 resolv = {
                   hostPath = "/etc/resolv.conf";
                   mountPoint = "/etc/resolv.conf";
@@ -194,8 +195,7 @@
             ];
 
             config = containerModuleOf containerName cfg;
-            specialArgs = {
-              inherit inputs outputs pkgs-master;
+            specialArgs = specialArgs // {
               host-config = config;
             };
           }
@@ -204,6 +204,18 @@
     in
     {
       containers = lib.mapAttrs mkContainer config.teenix.containers;
+
+      systemd.tmpfiles.rules =
+        # map over each container
+        lib.flatten (
+          lib.mapAttrsToList (
+            n: v:
+            # map over the mounted logs
+            lib.map (l: ''
+              d /var/log/containers/${n}/${l} 0755 root users -
+            '') v.mounts.logs.paths
+          ) config.teenix.containers
+        );
 
       nix-tun.storage.persist.subvolumes = lib.mapAttrs (
         name: value:

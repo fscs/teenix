@@ -28,7 +28,7 @@
 
       teenix.containers.uptime-kuma = {
         config = ./container.nix;
-        useResolvConf = true;
+        networking.useResolvConf = true;
         networking.ports.tcp = [ 1301 ];
         mounts.extra.data = {
           mountPoint = "/var/lib/uptime-kuma/";

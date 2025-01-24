@@ -1,21 +1,26 @@
 {
   lib,
-  inputs,
-  pkgs,
   pkgs-master,
   host-config,
   ...
 }:
 {
-  networking.hostName = "vaultwarden";
+  users.users.vaultwarden.uid = 99;
+
+  systemd.services.vaultwarden.serviceConfig = {
+    LogsDirectory = "/var/log/vaultwarden";
+    StandardOutput = "append:/var/log/vaultwarden/vaultwarden.log";
+    StandardError = "append:/var/log/vaultwarden/vaultwarden.log";
+    UMask = lib.mkForce "0000";
+  };
 
   services.vaultwarden = {
     enable = true;
     package = pkgs-master.vaultwarden;
     webVaultPackage = pkgs-master.voltwarden-webvault;
-    environmentFile = host-config.sops.secrets.vaultwarden.path;
+    environmentFile = host-config.sops.templates.vaultwarden.path;
     config = {
-      DOMAIN = "https://vaultwarden.inphima.de";
+      DOMAIN = "https://${host-config.teenix.services.vaultwarden.hostname}";
       SIGNUPS_ALLOWED = false;
       ROCKET_ADDRESS = "0.0.0.0";
       ROCKET_PORT = 8222;
@@ -32,18 +37,6 @@
       EXPERIMENTAL_CLIENT_FEATURE_FLAGS = "autofill-overlay,autofill-v2,browser-fileless-import,extension-refresh,fido2-vault-credentials,ssh-key-vault-item,ssh-agent";
     };
   };
-
-  networking = {
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [ 8222 ];
-    };
-    # Use systemd-resolved inside the container
-    # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
-    useHostResolvConf = lib.mkForce false;
-  };
-
-  services.resolved.enable = true;
 
   system.stateVersion = "23.11";
 }

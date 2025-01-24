@@ -132,7 +132,7 @@
 
   teenix.services.vaultwarden = {
     enable = true;
-    secretsFile = ../secrets/vaultwarden;
+    secretsFile = ../secrets/vaultwarden.yml;
     hostname = "vaultwarden.inphima.de";
   };
 
