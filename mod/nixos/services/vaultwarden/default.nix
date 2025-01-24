@@ -1,10 +1,9 @@
-{
-  lib,
-  config,
-  inputs,
-  pkgs,
-  pkgs-master,
-  ...
+{ lib
+, config
+, inputs
+, pkgs
+, pkgs-master
+, ...
 }:
 {
   options.teenix.services.vaultwarden = {
@@ -31,15 +30,15 @@
         };
       };
 
-      teenix.services.traefik.services."vaultwarden" = {
-        router = {
-          rule = "Host(`${opts.hostname}`)";
-        };
-        healthCheck = {
-          enable = true;
-        };
-        servers = [ "http://${config.containers.vaultwarden.config.networking.hostName}:8222" ];
-      };
+      # teenix.services.traefik.services."vaultwarden" = {
+      #   router = {
+      #     rule = "Host(`${opts.hostname}`)";
+      #   };
+      #   healthCheck = {
+      #     enable = true;
+      #   };
+      #   servers = [ "http://${config.containers.vaultwarden.config.networking.hostName}:8222" ];
+      # };
 
       containers.vaultwarden = {
         ephemeral = true;
