@@ -1,15 +1,12 @@
-{
-  lib,
-  config,
-  inputs,
-  pkgs,
-  ...
+{ lib
+, config
+, ...
 }:
 {
   options.teenix.services.authentik = {
     enable = lib.mkEnableOption "setup authentik";
-    hostname = lib.teenix.mkHostnameOption;
     secretsFile = lib.teenix.mkSecretsFileOption "authentik";
+    hostname = lib.teenix.mkHostnameOption;
   };
 
   config =
@@ -17,10 +14,16 @@
       opts = config.teenix.services.authentik;
     in
     lib.mkIf opts.enable {
-      sops.secrets.authentik_env = {
-        sopsFile = opts.secretsFile;
-        format = "binary";
-        mode = "444";
+      sops = {
+        secrets.authentik-admin-token = {
+          sopsFile = opts.secretsFile;
+          key = "admin-token";
+          mode = "444";
+        };
+
+        templates.authentik.content = ''
+          AUTHENTIK_SECRET_KEY=${config.sops.placeholder.authentik-admin-token}
+        '';
       };
 
       # setup authentik binary cache
@@ -31,61 +34,30 @@
         trusted-public-keys = [ "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
       };
 
-      nix-tun.storage.persist.subvolumes."authentik".directories = {
-        "/postgres" = {
-          owner = "${builtins.toString config.containers.authentik.config.users.users.postgres.uid}";
-          mode = "0700";
-        };
-      };
-
-      teenix.services.traefik.services."authentik" = {
-        router = {
-          rule = "Host(`${opts.hostname}`)";
-          priority = 10;
-        };
+      teenix.services.traefik.services.authentik = {
+        router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.authentik.config.networking.hostName}" ];
         healthCheck.enable = true;
       };
 
-      teenix.services.traefik.services."authentik_auth" = {
-        router = {
-          rule = "Host(`${opts.hostname}`) && PathPrefix(`/outpost.goauthentik.io/`)";
-          priority = 15;
-        };
-        servers = [
-          "http://${config.containers.authentik.config.networking.hostName}:9000/outpost.goauthentik.io"
-        ];
+      teenix.services.traefik.services.authentik_auth = {
+        router.rule = "Host(`${opts.hostname}`) && PathPrefix(`/outpost.goauthentik.io/`)";
+        servers = [ "http://${config.containers.authentik.config.networking.hostName}:9000/outpost.goauthentik.io" ];
       };
 
-      containers.authentik = {
-        ephemeral = true;
-        autoStart = true;
-        privateNetwork = true;
-        hostAddress = "192.168.111.10";
-        localAddress = "192.168.111.11";
-
-        bindMounts = {
-          "secret" = {
-            hostPath = config.sops.secrets.authentik_env.path;
-            mountPoint = config.sops.secrets.authentik_env.path;
-          };
-          "resolv" = {
-            hostPath = "/etc/resolv.conf";
-            mountPoint = "/etc/resolv.conf";
-          };
-          "db" = {
-            hostPath = "${config.nix-tun.storage.persist.path}/authentik/postgres";
-            mountPoint = "/var/lib/postgresql";
-            isReadOnly = false;
-          };
+      teenix.containers.authentik = {
+        config = ./container.nix;
+        networking = {
+          useResolvConf = true;
+          ports.tcp = [ 80 9000 ];
         };
 
-        specialArgs = {
-          inherit inputs;
-          host-config = config;
+        mounts = {
+          logs.enable = true;
+          logs.paths = [ "authentik" ];
+          sops = [ config.sops.templates.authentik ];
+          postgres.enable = true;
         };
-
-        config = import ./container.nix;
       };
     };
 }

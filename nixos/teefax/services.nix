@@ -57,7 +57,7 @@
   teenix.services.authentik = {
     enable = true;
     hostname = "auth.inphima.de";
-    secretsFile = ../secrets/authentik_env;
+    secretsFile = ../secrets/authentik.yml;
   };
 
   teenix.services.prometheus = {

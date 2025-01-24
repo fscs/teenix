@@ -1,9 +1,8 @@
-{
-  lib,
-  pkgs-master,
-  config,
-  specialArgs,
-  ...
+{ lib
+, pkgs-master
+, config
+, specialArgs
+, ...
 }:
 {
   options.teenix.containers =
@@ -33,7 +32,7 @@
 
           mounts = {
             mysql.enable = lib.mkEnableOption "mounts mysqls datadir";
-            postgresql.enable = lib.mkEnableOption "mounts postgres' datadir";
+            postgres.enable = lib.mkEnableOption "mounts postgres' datadir";
 
             data = {
               enable = lib.mkEnableOption "mount /var/lib/<containerName>";
@@ -149,13 +148,15 @@
               })
               # sops mounts
               (lib.listToAttrs (
-                lib.imap0 (i: v: {
-                  name = toString i;
-                  value = {
-                    hostPath = v.path;
-                    mountPoint = v.path;
-                  };
-                }) cfg.mounts.sops
+                lib.imap0
+                  (i: v: {
+                    name = toString i;
+                    value = {
+                      hostPath = v.path;
+                      mountPoint = v.path;
+                    };
+                  })
+                  cfg.mounts.sops
               ))
               # data
               (lib.mkIf cfg.mounts.data.enable {
@@ -174,10 +175,10 @@
                 };
               })
               # postgresql
-              (lib.mkIf cfg.mounts.postgresql.enable {
-                postgresql = {
+              (lib.mkIf cfg.mounts.postgres.enable {
+                postgres = {
                   isReadOnly = false;
-                  hostPath = "${persistPath}/${containerName}/postgresql";
+                  hostPath = "${persistPath}/${containerName}/postgres";
                   mountPoint = config.containers.${containerName}.config.services.postgresql.dataDir;
                 };
               })
@@ -188,10 +189,12 @@
                 isReadOnly = false;
               }))
               # extra mounts
-              (lib.mapAttrs (n: value: {
-                inherit (value) mountPoint isReadOnly;
-                hostPath = "${persistPath}/${containerName}/${n}";
-              }) cfg.mounts.extra)
+              (lib.mapAttrs
+                (n: value: {
+                  inherit (value) mountPoint isReadOnly;
+                  hostPath = "${persistPath}/${containerName}/${n}";
+                })
+                cfg.mounts.extra)
             ];
 
             config = containerModuleOf containerName cfg;
@@ -208,42 +211,48 @@
       systemd.tmpfiles.rules =
         # map over each container
         lib.flatten (
-          lib.mapAttrsToList (
-            n: v:
-            # map over the mounted logs
-            lib.map (l: ''
-              d /var/log/containers/${n}/${l} 0755 root users -
-            '') v.mounts.logs.paths
-          ) config.teenix.containers
+          lib.mapAttrsToList
+            (
+              n: v:
+                # map over the mounted logs
+                lib.map
+                  (l: ''
+                    d /var/log/containers/${n}/${l} 0755 root users -
+                  '')
+                  v.mounts.logs.paths
+            )
+            config.teenix.containers
         );
 
-      nix-tun.storage.persist.subvolumes = lib.mapAttrs (
-        name: value:
-        let
-          enablePsql = value.mounts.postgresql.enable;
-          enableMysql = value.mounts.mysql.enable;
-          enableData = value.mounts.data.enable;
+      nix-tun.storage.persist.subvolumes = lib.mapAttrs
+        (
+          name: value:
+            let
+              enablePsql = value.mounts.postgres.enable;
+              enableMysql = value.mounts.mysql.enable;
+              enableData = value.mounts.data.enable;
 
-          containerCfg = config.containers.${name}.config;
+              containerCfg = config.containers.${name}.config;
 
-          enableSubvolume = enablePsql || enableMysql || enableData;
-        in
-        lib.mkIf enableSubvolume {
-          directories = {
-            postgresql = lib.mkIf enablePsql {
-              owner = containerCfg.users.postgres.uid;
-              mode = "0700";
-            };
-            mysql = lib.mkIf enableMysql {
-              owner = containerCfg.users.${containerCfg.services.mysql.user}.uid;
-              mode = "0700";
-            };
-            data = lib.mkIf value.mounts.data.enable {
-              owner = toString value.mounts.data.ownerUid;
-              mode = "0700";
-            };
-          };
-        }
-      ) config.teenix.containers;
+              enableSubvolume = enablePsql || enableMysql || enableData;
+            in
+            lib.mkIf enableSubvolume {
+              directories = {
+                postgres = lib.mkIf enablePsql {
+                  owner = toString containerCfg.users.users.postgres.uid;
+                  mode = "0700";
+                };
+                mysql = lib.mkIf enableMysql {
+                  owner = toString containerCfg.users.users.${containerCfg.services.mysql.user}.uid;
+                  mode = "0700";
+                };
+                data = lib.mkIf value.mounts.data.enable {
+                  owner = toString value.mounts.data.ownerUid;
+                  mode = "0700";
+                };
+              };
+            }
+        )
+        config.teenix.containers;
     };
 }
