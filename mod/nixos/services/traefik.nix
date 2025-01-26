@@ -45,6 +45,12 @@
         type = lib.types.attrsOf redirectOpts;
         default = { };
       };
+    withDocker = lib.mkEnableOption {
+      default = false;
+      description = ''
+        Enable the docker provider for traefik
+      '';
+    };
     entrypoints = lib.mkOption {
       type = lib.types.attrs;
       default = {
@@ -331,7 +337,7 @@
             addServicesLabels = true;
           };
           providers.file.directory = configDir;
-          providers.docker = {
+          providers.docker = lib.mkIf config.teenix.services.traefik.withDocker {
             exposedByDefault = false;
             watch = true;
           };

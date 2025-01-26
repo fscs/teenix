@@ -8,9 +8,10 @@
 
   teenix.services.traefik.enable = true;
   teenix.services.traefik.staticConfigPath = ../secrets/traefik_static;
-  teenix.services.traefik.dashboardUrl = "traefik1.hhu-fscs.de";
+  teenix.services.traefik.dashboardUrl = "traefik1.inphima.de";
   teenix.services.traefik.letsencryptMail = "fscs@hhu.de";
   teenix.services.traefik.logging.enable = true;
+  teenix.services.traefik.withDocker = true;
 
   teenix.services.traefik.entrypoints =
     {
