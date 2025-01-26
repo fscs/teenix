@@ -26,6 +26,7 @@
       flake = false;
     };
     grafana2ntfy.url = "github:fscs/grafana-to-ntfy";
+    colmena.url = "github:zhaofengli/colmena";
   };
 
   outputs =
@@ -120,7 +121,7 @@
             nativeBuildInputs = with pkgs; [
               (callPackage inputs.sops { }).sops-import-keys-hook
               nixos-rebuild
-              colmena
+              inputs.colmena.packages.${system}.colmena
             ];
           };
         }
