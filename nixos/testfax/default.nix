@@ -125,6 +125,11 @@
     hostname = "uptime.dev.hhu-fscs.de";
   };
 
+  teenix.services.ntfy = {
+    enable = true;
+    hostname = "ntfy.dev.hhu-fscs.de";
+  };
+
   teenix.services.minecraft.enable = true;
 
   security.pam.sshAgentAuth.enable = true;
