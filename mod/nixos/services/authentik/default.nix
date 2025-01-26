@@ -53,7 +53,6 @@
         };
 
         mounts = {
-          logs.enable = true;
           logs.paths = [ "authentik" ];
           sops = [ config.sops.templates.authentik ];
           postgres.enable = true;

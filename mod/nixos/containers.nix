@@ -1,38 +1,47 @@
-{ lib
-, pkgs-master
-, config
-, specialArgs
-, ...
+{
+  lib,
+  config,
+  options,
+  specialArgs,
+  ...
 }:
 {
   options.teenix.containers =
     let
       t = lib.types;
 
+      elemTypeOf = o: o.type.nestedTypes.elemType;
+
       containerType = t.submodule {
         options = {
           config = lib.mkOption {
-            description = "container configuration file";
+            description = "The container's NixOS configuration";
             type = t.deferredModule;
           };
 
           networking = {
-            useResolvConf = lib.mkEnableOption "mount resolv.conf into the container";
+            useResolvConf = lib.mkEnableOption ''
+              Mount the hosts resolv.conf into the container.
+
+              This is required if the container wants to do dns lookups.
+            '';
             ports = {
               tcp = lib.mkOption {
+                description = "TCP Ports to open in the containers firewall";
                 type = t.listOf t.port;
                 default = [ ];
               };
               udp = lib.mkOption {
                 type = t.listOf t.port;
+                description = "UDP Ports to open in the containers firewall";
                 default = [ ];
               };
             };
           };
 
           mounts = {
-            mysql.enable = lib.mkEnableOption "mounts mysqls datadir";
-            postgres.enable = lib.mkEnableOption "mounts postgres' datadir";
+            mysql.enable = lib.mkEnableOption "Mount the container's mysql data dir into the hosts /persist";
+            postgres.enable = lib.mkEnableOption "Mount the container's postgresql data dir into the hosts /persist";
 
             data = {
               enable = lib.mkEnableOption "mount /var/lib/<containerName>";
@@ -47,26 +56,16 @@
               };
             };
 
-            logs = {
-              enable = lib.mkEnableOption "mount logs";
-              paths = lib.mkOption {
-                description = "directory names in /var/log to mount to the log dir";
-                type = t.listOf t.str;
-                default = [ ];
-              };
+            logs.paths = lib.mkOption {
+              description = "directory names in /var/log to mount to the log dir";
+              type = t.listOf t.str;
+              default = [ ];
             };
 
             sops = lib.mkOption {
               description = "sops secrets/templates to mount into the container";
               default = [ ];
-              type = t.listOf (
-                t.submodule {
-                  freeformType = t.attrs;
-                  path = t.mkOption {
-                    type = t.str;
-                  };
-                }
-              );
+              type = t.listOf (t.either (elemTypeOf options.sops.templates) (elemTypeOf options.sops.secrets));
             };
 
             extra = lib.mkOption {
@@ -106,13 +105,23 @@
 
       containerModuleOf =
         name: cfg:
-        { ... }:
+        { config, options, lib, ... }:
         {
           imports = [ cfg.config ];
 
+          assertions = lib.singleton {
+            assertion = options.system.stateVersion.highestPrio != (lib.mkOptionDefault { }).priority;
+            message = "system.stateVersion is not set for container ${config.networking.hostName}. this is a terrible idea, as it can cause random breakage.";
+          };
+
+          environment.systemPackages = lib.concatLists [
+            (lib.optional cfg.mounts.postgres.enable config.services.postgresql.package)
+            (lib.optional cfg.mounts.mysql.enable config.services.mysql.package)
+          ];
+
           nix.settings.experimental-features = "nix-command flakes";
 
-          networking.useHostResolvConf = lib.mkForce false;
+          networking.useHostResolvConf = false;
           networking.firewall = {
             enable = true;
             allowedTCPPorts = cfg.networking.ports.tcp;
@@ -148,15 +157,13 @@
               })
               # sops mounts
               (lib.listToAttrs (
-                lib.imap0
-                  (i: v: {
-                    name = toString i;
-                    value = {
-                      hostPath = v.path;
-                      mountPoint = v.path;
-                    };
-                  })
-                  cfg.mounts.sops
+                lib.imap0 (i: v: {
+                  name = toString i;
+                  value = {
+                    hostPath = v.path;
+                    mountPoint = v.path;
+                  };
+                }) cfg.mounts.sops
               ))
               # data
               (lib.mkIf cfg.mounts.data.enable {
@@ -189,12 +196,10 @@
                 isReadOnly = false;
               }))
               # extra mounts
-              (lib.mapAttrs
-                (n: value: {
-                  inherit (value) mountPoint isReadOnly;
-                  hostPath = "${persistPath}/${containerName}/${n}";
-                })
-                cfg.mounts.extra)
+              (lib.mapAttrs (n: value: {
+                inherit (value) mountPoint isReadOnly;
+                hostPath = "${persistPath}/${containerName}/${n}";
+              }) cfg.mounts.extra)
             ];
 
             config = containerModuleOf containerName cfg;
@@ -211,48 +216,42 @@
       systemd.tmpfiles.rules =
         # map over each container
         lib.flatten (
-          lib.mapAttrsToList
-            (
-              n: v:
-                # map over the mounted logs
-                lib.map
-                  (l: ''
-                    d /var/log/containers/${n}/${l} 0755 root users -
-                  '')
-                  v.mounts.logs.paths
-            )
-            config.teenix.containers
+          lib.mapAttrsToList (
+            n: v:
+            # map over the mounted logs
+            lib.map (l: ''
+              d /var/log/containers/${n}/${l} 0755 root users -
+            '') v.mounts.logs.paths
+          ) config.teenix.containers
         );
 
-      nix-tun.storage.persist.subvolumes = lib.mapAttrs
-        (
-          name: value:
-            let
-              enablePsql = value.mounts.postgres.enable;
-              enableMysql = value.mounts.mysql.enable;
-              enableData = value.mounts.data.enable;
+      nix-tun.storage.persist.subvolumes = lib.mapAttrs (
+        name: value:
+        let
+          enablePsql = value.mounts.postgres.enable;
+          enableMysql = value.mounts.mysql.enable;
+          enableData = value.mounts.data.enable;
 
-              containerCfg = config.containers.${name}.config;
+          containerCfg = config.containers.${name}.config;
 
-              enableSubvolume = enablePsql || enableMysql || enableData;
-            in
-            lib.mkIf enableSubvolume {
-              directories = {
-                postgres = lib.mkIf enablePsql {
-                  owner = toString containerCfg.users.users.postgres.uid;
-                  mode = "0700";
-                };
-                mysql = lib.mkIf enableMysql {
-                  owner = toString containerCfg.users.users.${containerCfg.services.mysql.user}.uid;
-                  mode = "0700";
-                };
-                data = lib.mkIf value.mounts.data.enable {
-                  owner = toString value.mounts.data.ownerUid;
-                  mode = "0700";
-                };
-              };
-            }
-        )
-        config.teenix.containers;
+          enableSubvolume = enablePsql || enableMysql || enableData;
+        in
+        lib.mkIf enableSubvolume {
+          directories = {
+            postgres = lib.mkIf enablePsql {
+              owner = toString containerCfg.users.users.postgres.uid;
+              mode = "0700";
+            };
+            mysql = lib.mkIf enableMysql {
+              owner = toString containerCfg.users.users.${containerCfg.services.mysql.user}.uid;
+              mode = "0700";
+            };
+            data = lib.mkIf value.mounts.data.enable {
+              owner = toString value.mounts.data.ownerUid;
+              mode = "0700";
+            };
+          };
+        }
+      ) config.teenix.containers;
     };
 }

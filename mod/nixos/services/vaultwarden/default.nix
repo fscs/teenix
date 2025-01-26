@@ -44,7 +44,6 @@
         networking.useResolvConf = true;
         networking.ports.tcp = [ 8222 ];
 
-        mounts.logs.enable = true;
         mounts.logs.paths = [ "vaultwarden" ];
 
         mounts.sops = [
