@@ -6,6 +6,7 @@
     nixpkgs-master.url = "github:nixos/nixpkgs";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
 
+    colmena.url = "github:zhaofengli/colmena";
     flake-programs-sqlite = {
       url = "github:wamserma/flake-programs-sqlite";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -26,7 +27,6 @@
       flake = false;
     };
     grafana2ntfy.url = "github:fscs/grafana-to-ntfy";
-    colmena.url = "github:zhaofengli/colmena";
   };
 
   outputs =
@@ -34,6 +34,7 @@
     , nixpkgs
     , nixpkgs-master
     , nixpkgs-stable
+    , colmena
     , ...
     }@inputs:
     let
@@ -78,6 +79,7 @@
 
       nixosModules.teenix = import ./mod/nixos;
 
+      colmenaHive = colmena.lib.makeHive self.outputs.colmena;
       colmena = {
         meta = {
           nixpkgs = import nixpkgs { system = "x86_64-linux"; };
@@ -121,7 +123,8 @@
             nativeBuildInputs = with pkgs; [
               (callPackage inputs.sops { }).sops-import-keys-hook
               nixos-rebuild
-              inputs.colmena.packages.${system}.colmena
+            ] ++ [
+              colmena.packages.${system}.colmena
             ];
           };
         }

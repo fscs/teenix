@@ -62,10 +62,17 @@
               default = [ ];
             };
 
-            sops = lib.mkOption {
-              description = "sops secrets/templates to mount into the container";
-              default = [ ];
-              type = t.listOf (t.either (elemTypeOf options.sops.templates) (elemTypeOf options.sops.secrets));
+            sops = {
+              secrets = lib.mkOption {
+                description = "sops secrets to mount into the container";
+                default = [ ];
+                type = t.listOf (elemTypeOf options.sops.secrets);
+              };
+              templates = lib.mkOption {
+                description = "sops secrets/templates to mount into the container";
+                default = [ ];
+                type = t.listOf (elemTypeOf options.sops.templates);
+              };
             };
 
             extra = lib.mkOption {
@@ -73,6 +80,10 @@
               type = t.attrsOf (
                 t.submodule {
                   options = {
+                    ownerUid = lib.mkOption {
+                      description = "owner of mounted directory";
+                      type = t.int;
+                    };
                     mountPoint = lib.mkOption {
                       type = t.nonEmptyStr;
                     };
@@ -105,7 +116,12 @@
 
       containerModuleOf =
         name: cfg:
-        { config, options, lib, ... }:
+        {
+          config,
+          options,
+          lib,
+          ...
+        }:
         {
           imports = [ cfg.config ];
 
@@ -155,7 +171,7 @@
                   mountPoint = "/etc/resolv.conf";
                 };
               })
-              # sops mounts
+              # sops secrets
               (lib.listToAttrs (
                 lib.imap0 (i: v: {
                   name = toString i;
@@ -163,7 +179,17 @@
                     hostPath = v.path;
                     mountPoint = v.path;
                   };
-                }) cfg.mounts.sops
+                }) cfg.mounts.sops.secrets
+              ))
+              # sops templates
+              (lib.listToAttrs (
+                lib.imap0 (i: v: {
+                  name = toString i;
+                  value = {
+                    hostPath = v.path;
+                    mountPoint = v.path;
+                  };
+                }) cfg.mounts.sops.templates
               ))
               # data
               (lib.mkIf cfg.mounts.data.enable {
@@ -226,31 +252,38 @@
         );
 
       nix-tun.storage.persist.subvolumes = lib.mapAttrs (
-        name: value:
+        containerName: value:
         let
           enablePsql = value.mounts.postgres.enable;
           enableMysql = value.mounts.mysql.enable;
           enableData = value.mounts.data.enable;
+          enableExtra = value.mounts.extra != { };
 
-          containerCfg = config.containers.${name}.config;
+          containerCfg = config.containers.${containerName}.config;
 
-          enableSubvolume = enablePsql || enableMysql || enableData;
+          enableSubvolume = enablePsql || enableMysql || enableData || enableExtra;
         in
         lib.mkIf enableSubvolume {
-          directories = {
-            postgres = lib.mkIf enablePsql {
-              owner = toString containerCfg.users.users.postgres.uid;
+          directories = lib.mkMerge [
+            {
+              postgres = lib.mkIf enablePsql {
+                owner = toString containerCfg.users.users.postgres.uid;
+                mode = "0700";
+              };
+              mysql = lib.mkIf enableMysql {
+                owner = toString containerCfg.users.users.${containerCfg.services.mysql.user}.uid;
+                mode = "0700";
+              };
+              data = lib.mkIf enableData {
+                owner = toString value.mounts.data.ownerUid;
+                mode = "0700";
+              };
+            }
+            (lib.mapAttrs (_: v: {
+              owner = toString v.ownerUid;
               mode = "0700";
-            };
-            mysql = lib.mkIf enableMysql {
-              owner = toString containerCfg.users.users.${containerCfg.services.mysql.user}.uid;
-              mode = "0700";
-            };
-            data = lib.mkIf value.mounts.data.enable {
-              owner = toString value.mounts.data.ownerUid;
-              mode = "0700";
-            };
-          };
+            }) value.mounts.extra)
+          ];
         }
       ) config.teenix.containers;
     };

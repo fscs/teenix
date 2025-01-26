@@ -1,70 +1,43 @@
-{ lib
-, host-config
-, pkgs
-, pkgs-stable
-, inputs
-, ...
-}:
-let
-  opts = host-config.teenix.services.prometheus;
-in
 {
-  networking.hostName = "prometheus";
-  networking.nameservers = [
-    "134.99.154.201"
-    "134.99.154.228"
-  ];
-
+  lib,
+  host-config,
+  pkgs,
+  pkgs-stable,
+  inputs,
+  ...
+}:
+{
   services.prometheus = {
     enable = true;
+    stateDir = "prometheus";
     globalConfig.scrape_interval = "1s";
-    ruleFiles = [ ./prometheus_rules.yaml ];
-    alertmanagers = [
-      {
-        scheme = "http";
-        path_prefix = "/";
-        static_configs = [
-          {
-            targets = [
-              "localhost:9093"
-            ];
-          }
-        ];
-      }
-    ];
     scrapeConfigs = [
       {
         job_name = "traefik";
         metrics_path = "/metrics";
-        static_configs = [
-          {
-            targets = [
-              "192.168.109.10:120"
-            ];
-          }
-        ];
+        static_configs = lib.singleton {
+          targets = [
+            "${host-config.containers.prometheus.hostAddress}:120"
+          ];
+        };
       }
       {
         job_name = "node_exporter";
         metrics_path = "/metrics";
-        static_configs = [
-          {
-            targets = [
-              "192.168.109.10:9100"
-            ];
-          }
-        ];
+        static_configs = lib.singleton {
+          targets = [
+            "${host-config.containers.prometheus.hostAddress}:9100"
+          ];
+        };
       }
       {
         job_name = "matrix";
         metrics_path = "/_synapse/metrics";
-        static_configs = [
-          {
-            targets = [
-              "matrix.inphima.de"
-            ];
-          }
-        ];
+        static_configs = lib.singleton {
+          targets = [
+            "matrix.inphima.de"
+          ];
+        };
       }
     ];
   };
@@ -124,11 +97,11 @@ in
     };
   };
 
-  systemd.services."grafana-to-ntfy" = {
+  systemd.services.grafana-to-ntfy = {
     description = "Grafana to ntfy";
     after = [ "network.target" ];
     path = [ pkgs.bash ];
-    script = "${inputs.grafana2ntfy.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/grafana-to-ntfy";
+    script = "${lib.getExe inputs.grafana2ntfy.packages.${pkgs.stdenv.hostPlatform.system}.default}";
     serviceConfig = {
       Restart = "always";
       RestartSec = 5;
@@ -139,34 +112,15 @@ in
 
   services.postgresql = {
     enable = true;
-    ensureDatabases = [
-      "grafana"
-    ];
-    ensureUsers = [
-      {
-        name = "grafana";
-        ensureDBOwnership = true;
-      }
-    ];
-    dataDir = "/var/lib/postgres";
-    authentication = lib.mkOverride 10 ''
+    ensureDatabases = [ "grafana" ];
+    ensureUsers = lib.singleton {
+      name = "grafana";
+      ensureDBOwnership = true;
+    };
+    authentication = lib.mkForce ''
       local all       all     trust
       host  all       all     all trust
     '';
-  };
-
-  networking = {
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [
-        9090
-        80
-        9093
-      ];
-    };
-    # Use systemd-resolved inside the container
-    # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
-    useHostResolvConf = lib.mkForce false;
   };
 
   system.stateVersion = "23.11";

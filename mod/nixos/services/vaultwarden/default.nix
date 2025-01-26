@@ -41,18 +41,23 @@
 
       teenix.containers.vaultwarden = {
         config = ./container.nix;
-        networking.useResolvConf = true;
-        networking.ports.tcp = [ 8222 ];
 
-        mounts.logs.paths = [ "vaultwarden" ];
+        networking = {
+          useResolvConf = true;
+          ports.tcp = [ 8222 ];
+        };
 
-        mounts.sops = [
-          config.sops.templates.vaultwarden
-        ];
-
-        mounts.data.enable = true;
-        mounts.data.name = "bitwarden_rs";
-        mounts.data.ownerUid = config.containers.vaultwarden.config.users.users.vaultwarden.uid;
+        mounts = {
+          logs.paths = [ "vaultwarden" ];
+          sops.templates = [
+            config.sops.templates.vaultwarden
+          ];
+          data = {
+            enable = true;
+            name = "bitwarden_rs";
+            ownerUid = config.containers.vaultwarden.config.users.users.vaultwarden.uid;
+          };
+        };
       };
     };
 }

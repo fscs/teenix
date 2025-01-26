@@ -64,9 +64,7 @@
     enable = true;
     hostname = "prometheus.hhu-fscs.de";
     grafanaHostname = "grafana.hhu-fscs.de";
-    ntfySecret = ../secrets/grafana2ntfy;
-    alertmanagerURL = "alerts.hhu-fscs.de";
-    secretsFile = ../secrets/prometheus_env;
+    secretsFile = ../secrets/prometheus.yml;
   };
 
   teenix.services.passbolt = {
