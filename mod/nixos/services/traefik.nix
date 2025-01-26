@@ -345,14 +345,14 @@
             letsencrypt = {
               acme = {
                 email = config.teenix.services.traefik.letsencryptMail;
-                storage = "/var/lib/traefik/acme.json";
+                storage = "${config.services.traefik.dataDir}/letsencrypt.json";
                 tlsChallenge = { };
               };
             };
             uniintern = {
               acme = {
                 email = config.teenix.services.traefik.letsencryptMail;
-                storage = "/var/lib/traefik/acme2.json";
+                storage = "${config.services.traefik.dataDir}/hhucerts.json";
                 tlsChallenge = { };
                 caServer = ''$TRAEFIK_CERTIFICATESRESOLVERS_uniintern_ACME_CASERVER'';
                 eab = {
@@ -389,6 +389,7 @@
 
           api = {
             dashboard = true;
+            debug = true;
           };
         };
       };
