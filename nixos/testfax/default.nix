@@ -76,7 +76,7 @@
   };
   teenix.services.traefik.enable = true;
   teenix.services.traefik.staticConfigPath = ../secrets/traefik_static;
-  teenix.services.traefik.dashboardUrl = "traefik.minecraft.fsphy.de";
+  teenix.services.traefik.dashboardUrl = "traefik.dev.hhu-fscs.de";
   teenix.services.traefik.letsencryptMail = "fscs@hhu.de";
   teenix.services.traefik.logging.enable = true;
 
@@ -122,7 +122,7 @@
 
   teenix.services.uptime-kuma = {
     enable = true;
-    hostname = "uptime.minecraft.fsphy.de";
+    hostname = "uptime.dev.hhu-fscs.de";
   };
 
   teenix.services.minecraft.enable = true;
