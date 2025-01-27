@@ -1,18 +1,10 @@
 {
-  lib,
   pkgs-master,
   host-config,
   ...
 }:
 {
   users.users.vaultwarden.uid = 99;
-
-  systemd.services.vaultwarden.serviceConfig = {
-    LogsDirectory = "/var/log/vaultwarden";
-    StandardOutput = "append:/var/log/vaultwarden/vaultwarden.log";
-    StandardError = "append:/var/log/vaultwarden/vaultwarden.log";
-    UMask = lib.mkForce "0000";
-  };
 
   services.vaultwarden = {
     enable = true;

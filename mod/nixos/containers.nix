@@ -56,12 +56,6 @@
               };
             };
 
-            logs.paths = lib.mkOption {
-              description = "directory names in /var/log to mount to the log dir";
-              type = t.listOf t.str;
-              default = [ ];
-            };
-
             sops = {
               secrets = lib.mkOption {
                 description = "sops secrets to mount into the container";
@@ -113,6 +107,7 @@
   config =
     let
       persistPath = config.nix-tun.storage.persist.path;
+      containersDir = "/var/lib/nixos-containers";
 
       containerModuleOf =
         name: cfg:
@@ -215,17 +210,19 @@
                   mountPoint = config.containers.${containerName}.config.services.postgresql.dataDir;
                 };
               })
-              # logs
-              (lib.genAttrs cfg.mounts.logs.paths (n: {
-                hostPath = "/var/log/containers/${containerName}/${n}";
-                mountPoint = "/var/log/${n}";
-                isReadOnly = false;
-              }))
               # extra mounts
               (lib.mapAttrs (n: value: {
                 inherit (value) mountPoint isReadOnly;
                 hostPath = "${persistPath}/${containerName}/${n}";
               }) cfg.mounts.extra)
+              # journal
+              {
+                journal = {
+                  isReadOnly = false;
+                  hostPath = "/var/log/containers/${containerName}";
+                  mountPoint = "/var/log/journal";
+                };
+              }
             ];
 
             config = containerModuleOf containerName cfg;
@@ -239,17 +236,29 @@
     {
       containers = lib.mapAttrs mkContainer config.teenix.containers;
 
-      systemd.tmpfiles.rules =
-        # map over each container
-        lib.flatten (
-          lib.mapAttrsToList (
-            n: v:
-            # map over the mounted logs
-            lib.map (l: ''
-              d /var/log/containers/${n}/${l} 0755 root users -
-            '') v.mounts.logs.paths
-          ) config.teenix.containers
-        );
+      systemd.tmpfiles.rules = lib.map (containerName: ''
+        d /var/log/containers/${containerName} 0755 root systemd-journal -
+      '') (lib.attrNames config.teenix.containers);
+
+      teenix.services.alloy.extraConfig = lib.concatStringsSep "\n" (
+        lib.imap0 (i: containerName: ''
+          // ${toString i}: ${containerName}
+          loki.relabel "container_${toString i}_journal" {
+            forward_to = []
+
+            rule {
+              source_labels = ["__journal__systemd_unit"]
+              target_label  = "unit"
+            }
+          }
+
+          loki.source.journal "container_${toString i}_journal"  {
+            forward_to    = [ loki.write.${config.teenix.services.alloy.loki.exporterName}.receiver ]
+            relabel_rules = loki.relabel.container_${toString i}_journal.rules
+            labels        = { container = "${containerName}"}
+          }         
+        '') (lib.attrNames config.teenix.containers)
+      );
 
       nix-tun.storage.persist.subvolumes = lib.mapAttrs (
         containerName: value:

@@ -47,17 +47,6 @@
     configFile = ./loki-local-config.yaml;
   };
 
-  systemd.services.promtail = {
-    description = "Promtail service for Loki";
-    wantedBy = [ "multi-user.target" ];
-
-    serviceConfig = {
-      ExecStart = ''
-        ${pkgs.grafana-loki}/bin/promtail --config.file ${./promtail.yaml}
-      '';
-    };
-  };
-
   services.grafana = {
     package = pkgs-stable.grafana;
     enable = true;
@@ -98,7 +87,6 @@
   };
 
   systemd.services.grafana-to-ntfy = {
-    description = "Grafana to ntfy";
     after = [ "network.target" ];
     path = [ pkgs.bash ];
     script = "${lib.getExe inputs.grafana2ntfy.packages.${pkgs.stdenv.hostPlatform.system}.default}";

@@ -40,6 +40,7 @@
           useResolvConf = true;
           ports.tcp = [
             80
+            3100
             9090
             9093
           ];

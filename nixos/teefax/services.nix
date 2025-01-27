@@ -60,6 +60,11 @@
     secretsFile = ../secrets/authentik.yml;
   };
 
+  teenix.services.alloy = {
+    enable = true;
+    loki.exporterUrl = "${config.containers.prometheus.localAddress}:3100";
+  };
+
   teenix.services.prometheus = {
     enable = true;
     hostname = "prometheus.hhu-fscs.de";

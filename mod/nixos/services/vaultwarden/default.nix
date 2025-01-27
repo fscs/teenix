@@ -48,7 +48,6 @@
         };
 
         mounts = {
-          logs.paths = [ "vaultwarden" ];
           sops.templates = [
             config.sops.templates.vaultwarden
           ];
