@@ -68,7 +68,7 @@
 
   boot.initrd.postDeviceCommands = lib.mkAfter ''
     mkdir /btrfs_tmp
-    mount /dev/disk/by-uuid/2867fb9e-96a7-4da3-870f-d15a18b49454/root /btrfs_tmp
+    mount -o subvol=/ /dev/disk/by-uuid/f312acc1-a543-4513-a487-ca7d8f302a8b /btrfs_tmp
     if [[ -e /btrfs_tmp/root ]]; then
         mkdir -p /btrfs_tmp/old_roots
         timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%-d_%H:%M:%S")
