@@ -74,16 +74,20 @@
               type = t.attrsOf (
                 t.submodule {
                   options = {
-                    ownerUid = lib.mkOption {
-                      description = "owner of mounted directory";
-                      type = t.int;
-                    };
                     mountPoint = lib.mkOption {
                       type = t.nonEmptyStr;
                     };
                     isReadOnly = lib.mkOption {
                       type = t.bool;
                       default = true;
+                    };
+                    ownerUid = lib.mkOption {
+                      description = "owner of mounted directory";
+                      type = t.int;
+                    };
+                    mode = lib.mkOption {
+                      type = t.nonEmptyStr;
+                      default = "0700";
                     };
                   };
                 }
@@ -221,6 +225,7 @@
                   };
                 }) cfg.mounts.sops.templates
               ))
+
               # extra mounts
               (lib.mapAttrs (n: value: {
                 inherit (value) mountPoint isReadOnly;
@@ -272,8 +277,8 @@
               };
             }
             (lib.mapAttrs (_: v: {
+              inherit (v) mode;
               owner = toString v.ownerUid;
-              mode = "0700";
             }) value.mounts.extra)
           ];
         }
