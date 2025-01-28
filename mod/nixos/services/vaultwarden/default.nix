@@ -53,7 +53,6 @@
           ];
           data = {
             enable = true;
-            name = "bitwarden_rs";
             ownerUid = config.containers.vaultwarden.config.users.users.vaultwarden.uid;
           };
         };
