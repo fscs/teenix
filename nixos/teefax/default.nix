@@ -7,9 +7,9 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./users.nix
     ./traefik.nix
     ./services.nix
+    ../users.nix
     ../locale.nix
 
     inputs.sops.nixosModules.sops
