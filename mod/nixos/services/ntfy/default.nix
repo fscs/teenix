@@ -1,8 +1,6 @@
 {
   lib,
   config,
-  inputs,
-  pkgs,
   ...
 }:
 {
@@ -16,43 +14,38 @@
       opts = config.teenix.services.ntfy;
     in
     lib.mkIf opts.enable {
-      teenix.services.traefik.services."ntfy" = {
+      teenix.services.traefik.services.ntfy = {
         router.rule = "Host(`${opts.hostname}`)";
         healthCheck.enable = true;
         servers = [ "http://${config.containers.ntfy.localAddress}:8080" ];
       };
 
-      nix-tun.storage.persist.subvolumes."ntfy".directories = {
-        "/db" = {
-          owner = "${builtins.toString config.containers.ntfy.config.users.users.ntfy-sh.uid}";
-          mode = "0777";
-        };
-      };
-
-      containers.ntfy = {
-        ephemeral = true;
-        autoStart = true;
-        privateNetwork = true;
-        hostAddress = "192.168.117.10";
-        localAddress = "192.168.117.11";
-        bindMounts = {
-          "resolv" = {
-            hostPath = "/etc/resolv.conf";
-            mountPoint = "/etc/resolv.conf";
+      teenix.containers.ntfy = {
+        config = {
+          users.users.ntfy-sh.uid = 99;
+        
+          services.ntfy-sh = {
+            enable = true;
+            settings = {
+              listen-http = ":8080";
+              base-url = "https://${config.teenix.services.ntfy.hostname}";
+              auth-default-access = "deny-all";
+              auth-file = "/var/lib/ntfy/user.db";
+            };
           };
-          "db" = {
-            hostPath = "${config.nix-tun.storage.persist.path}/ntfy/db";
-            mountPoint = "/var/lib/ntfy";
-            isReadOnly = false;
-          };
+
+          system.stateVersion = "23.11";
         };
 
-        specialArgs = {
-          inherit inputs;
-          host-config = config;
+        networking = {
+          useResolvConf = true;
+          ports.tcp = [ 8080 ];
         };
 
-        config = import ./container.nix;
+        mounts.data = {
+          enable = true;
+          ownerUid = config.containers.ntfy.config.users.users.ntfy-sh.uid;
+        };
       };
     };
 }
