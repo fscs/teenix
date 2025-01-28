@@ -51,6 +51,7 @@
       auth_enabled = false;
 
       server.http_listen_port = 3100;
+      server.grpc_server_max_recv_msg_size = 8388608;
 
       common = {
         replication_factor = 1;

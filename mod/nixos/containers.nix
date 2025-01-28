@@ -169,13 +169,38 @@
             localAddress = "192.18.${toString (ipPoolOf containerName)}.11";
 
             bindMounts = lib.mkMerge [
-              # resolv conf
-              (lib.mkIf cfg.networking.useResolvConf {
-                resolv = {
+              {
+                # resolv conf
+                resolv = lib.mkIf cfg.networking.useResolvConf {
                   hostPath = "/etc/resolv.conf";
                   mountPoint = "/etc/resolv.conf";
                 };
-              })
+                # data
+                data = lib.mkIf cfg.mounts.data.enable {
+                  isReadOnly = false;
+                  hostPath = "${persistPath}/${containerName}/data";
+                  mountPoint = "/var/lib/${lib.defaultTo containerName cfg.mounts.data.name}";
+                };
+                # mysql
+                mysql = lib.mkIf cfg.mounts.mysql.enable {
+                  isReadOnly = false;
+                  hostPath = "${persistPath}/${containerName}/mysql";
+                  mountPoint = config.containers.${containerName}.config.services.mysql.dataDir;
+                };
+                # postgresql
+                postgres = lib.mkIf cfg.mounts.postgres.enable {
+                  isReadOnly = false;
+                  hostPath = "${persistPath}/${containerName}/postgres";
+                  mountPoint = config.containers.${containerName}.config.services.postgresql.dataDir;
+                };
+                # journal
+                journal = {
+                  isReadOnly = false;
+                  hostPath = "/var/log/containers/${containerName}";
+                  mountPoint = "/var/log/journal";
+                };
+              }
+
               # sops secrets
               (lib.listToAttrs (
                 lib.imap0 (i: v: {
@@ -196,43 +221,11 @@
                   };
                 }) cfg.mounts.sops.templates
               ))
-              # data
-              (lib.mkIf cfg.mounts.data.enable {
-                data = {
-                  isReadOnly = false;
-                  hostPath = "${persistPath}/${containerName}/data";
-                  mountPoint = "/var/lib/${lib.defaultTo containerName cfg.mounts.data.name}";
-                };
-              })
-              # mysql
-              (lib.mkIf cfg.mounts.mysql.enable {
-                mysql = {
-                  isReadOnly = false;
-                  hostPath = "${persistPath}/${containerName}/mysql";
-                  mountPoint = config.containers.${containerName}.config.services.mysql.dataDir;
-                };
-              })
-              # postgresql
-              (lib.mkIf cfg.mounts.postgres.enable {
-                postgres = {
-                  isReadOnly = false;
-                  hostPath = "${persistPath}/${containerName}/postgres";
-                  mountPoint = config.containers.${containerName}.config.services.postgresql.dataDir;
-                };
-              })
               # extra mounts
               (lib.mapAttrs (n: value: {
                 inherit (value) mountPoint isReadOnly;
                 hostPath = "${persistPath}/${containerName}/${n}";
               }) cfg.mounts.extra)
-              # journal
-              {
-                journal = {
-                  isReadOnly = false;
-                  hostPath = "/var/log/containers/${containerName}";
-                  mountPoint = "/var/log/journal";
-                };
-              }
             ];
 
             config = containerModuleOf containerName cfg;
