@@ -33,7 +33,7 @@
 
       teenix.services.traefik.services.nextcloud = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = [ "http://${config.containers.nextcloud.config.networking.hostName}" ];
+        servers = [ "http://${config.containers.nextcloud.localAddress}" ];
         healthCheck = {
           enable = true;
           path = "/login";

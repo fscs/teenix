@@ -36,13 +36,13 @@
 
       teenix.services.traefik.services.authentik = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = [ "http://${config.containers.authentik.config.networking.hostName}" ];
+        servers = [ "http://${config.containers.authentik.localAddress}" ];
         healthCheck.enable = true;
       };
 
       teenix.services.traefik.services.authentik_auth = {
         router.rule = "Host(`${opts.hostname}`) && PathPrefix(`/outpost.goauthentik.io/`)";
-        servers = [ "http://${config.containers.authentik.config.networking.hostName}:9000/outpost.goauthentik.io" ];
+        servers = [ "http://${config.containers.authentik.localAddress}:9000/outpost.goauthentik.io" ];
       };
 
       teenix.containers.authentik = {

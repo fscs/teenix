@@ -32,7 +32,7 @@
 
       teenix.services.traefik.services."sliding-sync" = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = [ "http://${config.containers.sliding-sync.config.networking.hostName}:8009" ];
+        servers = [ "http://${config.containers.sliding-sync.localAddress}:8009" ];
       };
 
       containers.sliding-sync = {

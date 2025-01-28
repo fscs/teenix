@@ -21,7 +21,7 @@
     lib.mkIf opts.enable {
       teenix.services.traefik.services."element-web" = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = [ "http://${config.containers.element-web.config.networking.hostName}:80" ];
+        servers = [ "http://${config.containers.element-web.localAddress}:80" ];
         healthCheck.enable = true;
       };
 

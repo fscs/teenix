@@ -21,7 +21,7 @@
     lib.mkIf opts.enable {
       teenix.services.traefik.services."pretix" = {
         router.rule = "Host(`${opts.hostname}`)";
-        servers = [ "http://${config.containers.pretix.config.networking.hostName}" ];
+        servers = [ "http://${config.containers.pretix.localAddress}" ];
         # healthCheck.enable = true;
       };
 

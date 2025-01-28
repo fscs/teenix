@@ -77,19 +77,19 @@
           rule = "Host(`matrix.${opts.servername}`) || (Host(`${opts.servername}`) && (PathPrefix(`/_matrix`) || PathPrefix(`/_synapse`) || Path(`/.well-known/matrix/server`) || Path(`/.well-known/matrix/client`)))";
           priority = 10;
         };
-        servers = [ "http://${config.containers.inphimatrix.config.networking.hostName}:8008" ];
+        servers = [ "http://${config.containers.inphimatrix.localAddress}:8008" ];
       };
 
       teenix.services.traefik.services.inphimatrix_auth = {
         router = {
           rule = "Host(`matrixauth.${opts.servername}`) || (( Host(`matrix.${opts.servername}`) || Host(`${opts.servername}`)) && PathRegexp(`^/_matrix/client/.*/(login|logout|refresh)`) )";
         };
-        servers = [ "http://${config.containers.inphimatrix.config.networking.hostName}:8080" ];
+        servers = [ "http://${config.containers.inphimatrix.localAddress}:8080" ];
       };
 
       teenix.services.traefik.services.matrix-hookshot = {
         router.rule = "Host(`hookshot.${opts.servername}`)";
-        servers = [ "http://${config.containers.inphimatrix.config.networking.hostName}:9000" ];
+        servers = [ "http://${config.containers.inphimatrix.localAddress}:9000" ];
       };
 
       containers.inphimatrix = {

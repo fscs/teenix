@@ -38,7 +38,7 @@
         router = {
           rule = "Host(`sitzungen.${opts.hostname}`)";
         };
-        servers = [ "http://${config.containers.fscshhude.config.networking.hostName}:8090" ];
+        servers = [ "http://${config.containers.fscshhude.localAddress}:8090" ];
       };
 
       teenix.services.traefik.services."fscshhude" = {
@@ -47,7 +47,7 @@
           enable = true;
           path = "/de/";
         };
-        servers = [ "http://${config.containers.fscshhude.config.networking.hostName}:8080" ];
+        servers = [ "http://${config.containers.fscshhude.localAddress}:8080" ];
       };
 
       containers.fscshhude = {
