@@ -61,6 +61,12 @@
             mountPoint = config.containers.prometheus.config.services.grafana.dataDir;
             isReadOnly = false;
           };
+
+          extra.loki-data = {
+            ownerUid = config.containers.prometheus.config.users.users.loki.uid;
+            mountPoint = config.containers.prometheus.config.services.loki.dataDir;
+            isReadOnly = false;
+          };
         };
       };
     };

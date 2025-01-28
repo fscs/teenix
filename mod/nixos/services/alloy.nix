@@ -1,7 +1,9 @@
-{ lib
-, config
-, ...
-}: {
+{
+  lib,
+  config,
+  ...
+}:
+{
   options.teenix.services.alloy =
     let
       t = lib.types;
@@ -28,9 +30,12 @@
       cfg = config.teenix.services.alloy;
     in
     lib.mkIf cfg.enable {
-      services.alloy.enable = true;
+      services.alloy = {
+        enable = true;
+        extraFlags = [ "--disable-reporting" ];
+      };
 
-      teenix.services.alloy.extraConfig = lib.mkAfter ''
+      teenix.services.alloy.extraConfig = ''
         loki.write "${cfg.loki.exporterName}" {
           endpoint {
             url ="http://${cfg.loki.exporterUrl}/loki/api/v1/push"

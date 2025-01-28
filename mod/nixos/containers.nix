@@ -240,25 +240,28 @@
         d /var/log/containers/${containerName} 0755 root systemd-journal -
       '') (lib.attrNames config.teenix.containers);
 
-      teenix.services.alloy.extraConfig = lib.concatStringsSep "\n" (
-        lib.imap0 (i: containerName: ''
-          // ${toString i}: ${containerName}
-          loki.relabel "container_${toString i}_journal" {
-            forward_to = []
+      teenix.services.alloy.extraConfig = ''
+        loki.relabel "nixos_container_journal" {
+          forward_to = []
 
-            rule {
-              source_labels = ["__journal__systemd_unit"]
-              target_label  = "unit"
-            }
+          rule {
+            source_labels = ["__journal__systemd_unit"]
+            target_label  = "unit"
           }
+        }
 
-          loki.source.journal "container_${toString i}_journal"  {
-            forward_to    = [ loki.write.${config.teenix.services.alloy.loki.exporterName}.receiver ]
-            relabel_rules = loki.relabel.container_${toString i}_journal.rules
-            labels        = { container = "${containerName}"}
-          }         
-        '') (lib.attrNames config.teenix.containers)
-      );
+        ${lib.concatStringsSep "\n" (
+          lib.imap0 (i: containerName: ''
+            // ${containerName}
+            loki.source.journal "container_${toString i}_journal"  {
+              path          = "/var/log/containers/${containerName}"
+              forward_to    = [ loki.write.${config.teenix.services.alloy.loki.exporterName}.receiver ]
+              relabel_rules = loki.relabel.nixos_container_journal.rules
+              labels        = { container = "${containerName}"}
+            }         
+          '') (lib.attrNames config.teenix.containers)
+        )}
+      '';
 
       nix-tun.storage.persist.subvolumes = lib.mapAttrs (
         containerName: value:

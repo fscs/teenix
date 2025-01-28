@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   host-config,
   pkgs,
   pkgs-stable,
@@ -42,9 +43,42 @@
     ];
   };
 
+  users.users.loki.uid = 99;
+
   services.loki = {
     enable = true;
-    configFile = ./loki-local-config.yaml;
+    configuration = {
+      auth_enabled = false;
+
+      server.http_listen_port = 3100;
+
+      common = {
+        replication_factor = 1;
+        path_prefix = config.services.loki.dataDir;
+
+        ring = {
+          instance_addr = "127.0.0.1";
+          kvstore.store = "inmemory";
+        };
+
+        storage.filesystem = {
+          chunks_directory = "${config.services.loki.dataDir}/chunks";
+          rules_directory = "${config.services.loki.dataDir}/rules";
+        };
+      };
+
+      schema_config.configs = lib.singleton {
+        from = "2025-01-01";
+        store = "tsdb";
+        object_store = "filesystem";
+        schema = "v13";
+        index = {
+          prefix = "index_";
+          period = "24h";
+        };
+      };
+
+    };
   };
 
   services.grafana = {
