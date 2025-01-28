@@ -35,13 +35,13 @@ in
     settings = {
       trusted_domains = [
         "134.99.154.48"
-        "192.168.100.11"
-        "192.168.100.10"
+        "192.18.6.11"
+        "192.18.6.10"
         opts.hostname
         config.networking.hostName
       ];
       trusted_proxies = [
-        "192.168.100.10"
+        "192.18.6.10"
         "::1"
       ];
     };

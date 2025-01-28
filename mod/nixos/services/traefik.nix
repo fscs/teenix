@@ -1,6 +1,6 @@
 { config
 , pkgs
-, pkgs-master
+, pkgs-stable
 , sops
 , lib
 , ...
@@ -215,7 +215,7 @@
         enable = true;
         dataDir = "${config.nix-tun.storage.persist.path}/traefik";
 
-        package = pkgs-master.traefik;
+        package = pkgs-stable.traefik;
 
         environmentFiles = [ config.sops.secrets.traefik_static.path ];
 
