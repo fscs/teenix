@@ -31,6 +31,10 @@
       teenix.services.traefik.services.grafana = {
         router.rule = "Host(`${opts.grafanaHostname}`)";
         servers = [ "http://${config.containers.prometheus.localAddress}:80" ];
+        healthCheck = {
+          enable = true;
+          path = "/login";
+        };
       };
 
       teenix.containers.prometheus = {
@@ -48,7 +52,7 @@
 
         mounts = {
           postgres.enable = true;
-          
+
           data.enable = true;
           data.ownerUid = config.containers.prometheus.config.users.users.prometheus.uid;
 

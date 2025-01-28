@@ -1,7 +1,8 @@
-{ inputs
-, outputs
-, pkgs
-, ...
+{
+  inputs,
+  outputs,
+  pkgs,
+  ...
 }:
 {
   imports = [
@@ -26,7 +27,7 @@
 
   networking = {
     hostName = "testfax";
-    
+
     nameservers = [ "134.99.128.2" ];
 
     defaultGateway = {

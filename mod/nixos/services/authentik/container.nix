@@ -1,6 +1,7 @@
-{ inputs
-, host-config
-, ...
+{
+  inputs,
+  host-config,
+  ...
 }:
 {
   imports = [

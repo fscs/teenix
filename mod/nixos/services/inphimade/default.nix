@@ -113,6 +113,7 @@
           "traefik.http.routers.inphimadewp1.priority" = "1";
           "traefik.http.routers.inphimadewp1.tls.certresolver" = "letsencrypt";
           "traefik.http.services.inphimadewp1.loadbalancer.server.port" = "80";
+          "traefik.http.services.inphimadewp1.loadbalancer.healthCheck.path" = "/";
         };
         environmentFiles = [ config.sops.secrets.inphimade.path ];
         volumes = [

@@ -83,10 +83,10 @@
           mysql.enable = true;
 
           data = {
-            enable = true; 
+            enable = true;
             ownerUid = config.containers.nextcloud.config.users.users.nextcloud.uid;
           };
-          
+
           sops.secrets = [
             config.sops.secrets.nextcloud-admin-pass
           ];

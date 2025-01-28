@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 {
   options.teenix.services.authentik = {
@@ -49,7 +50,11 @@
         config = ./container.nix;
         networking = {
           useResolvConf = true;
-          ports.tcp = [ 80 9000 9443 ];
+          ports.tcp = [
+            80
+            9000
+            9443
+          ];
         };
 
         mounts = {

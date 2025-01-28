@@ -30,12 +30,13 @@
   };
 
   outputs =
-    { self
-    , nixpkgs
-    , nixpkgs-master
-    , nixpkgs-stable
-    , colmena
-    , ...
+    {
+      self,
+      nixpkgs,
+      nixpkgs-master,
+      nixpkgs-stable,
+      colmena,
+      ...
     }@inputs:
     let
       inherit (self) outputs;
@@ -69,9 +70,9 @@
     {
       formatter = eachSystem (
         system: pkgs:
-          pkgs.writers.writeBashBin "fmt" ''
-            find . -type f -name \*.nix | xargs ${lib.getExe pkgs.nixfmt-rfc-style}
-          ''
+        pkgs.writers.writeBashBin "fmt" ''
+          find . -type f -name \*.nix | xargs ${lib.getExe pkgs.nixfmt-rfc-style}
+        ''
       );
 
       packages = eachSystem (system: _: import ./pkgs nixpkgs-master.legacyPackages.${system});
@@ -120,12 +121,15 @@
               "${toString ./.}/nixos/keys/users"
             ];
 
-            nativeBuildInputs = with pkgs; [
-              (callPackage inputs.sops { }).sops-import-keys-hook
-              nixos-rebuild
-            ] ++ [
-              colmena.packages.${system}.colmena
-            ];
+            nativeBuildInputs =
+              with pkgs;
+              [
+                (callPackage inputs.sops { }).sops-import-keys-hook
+                nixos-rebuild
+              ]
+              ++ [
+                colmena.packages.${system}.colmena
+              ];
           };
         }
       );

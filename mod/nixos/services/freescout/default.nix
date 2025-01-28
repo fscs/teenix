@@ -109,6 +109,7 @@
           "traefik.http.routers.freescout.tls" = "true";
           "traefik.http.routers.freescout.tls.certresolver" = "letsencrypt";
           "traefik.http.services.freescout.loadbalancer.server.port" = "80";
+          "traefik.http.services.freescout.loadbalancer.healthCheck.path" = "/";
         };
         environmentFiles = [ config.sops.secrets.freescout.path ];
         volumes = [

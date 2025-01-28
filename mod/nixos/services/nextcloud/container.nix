@@ -1,8 +1,9 @@
-{ lib
-, config
-, host-config
-, pkgs-master
-, ...
+{
+  lib,
+  config,
+  host-config,
+  pkgs-master,
+  ...
 }:
 let
   opts = host-config.teenix.services.nextcloud;

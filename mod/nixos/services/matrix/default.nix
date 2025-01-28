@@ -77,12 +77,19 @@
           rule = "Host(`matrix.${opts.servername}`) || (Host(`${opts.servername}`) && (PathPrefix(`/_matrix`) || PathPrefix(`/_synapse`) || Path(`/.well-known/matrix/server`) || Path(`/.well-known/matrix/client`)))";
           priority = 10;
         };
+        healthCheck = {
+          enable = true;
+          path = "_matrix/static/";
+        };
         servers = [ "http://${config.containers.inphimatrix.localAddress}:8008" ];
       };
 
       teenix.services.traefik.services.inphimatrix_auth = {
         router = {
           rule = "Host(`matrixauth.${opts.servername}`) || (( Host(`matrix.${opts.servername}`) || Host(`${opts.servername}`)) && PathRegexp(`^/_matrix/client/.*/(login|logout|refresh)`) )";
+        };
+        healthCheck = {
+          enable = true;
         };
         servers = [ "http://${config.containers.inphimatrix.localAddress}:8080" ];
       };
