@@ -74,6 +74,7 @@ in
       "pm.start_servers" = "50";
     };
   };
+  users.users.nginx.group = "nextcloud";
   services.nginx.virtualHosts."nextcloud.inphima.de".extraConfig = lib.mkForce ''
     index index.php index.html /index.php$request_uri;
     add_header X-XSS-Protection "1; mode=block" always;
