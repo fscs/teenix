@@ -1,8 +1,6 @@
 {
   lib,
   config,
-  inputs,
-  pkgs,
   ...
 }:
 {
@@ -17,64 +15,41 @@
       opts = config.teenix.services.campus-guesser-server;
     in
     lib.mkIf opts.enable {
-      sops.secrets.campusguesser = {
+      sops.secrets.campus-guesser-server-oauth-secret = {
         sopsFile = opts.secretsFile;
-        format = "binary";
         mode = "444";
+        key = "oauth-secret";
       };
 
-      nix-tun.storage.persist.subvolumes."campus-guesser-server".directories = {
-        "/data" = {
-          owner = "${builtins.toString config.containers.campus-guesser-server.config.users.users.campus-guesser-server.uid}";
-          mode = "0700";
-        };
-      };
+      sops.templates.campus-guesser-server.content = ''
+        OAUTH_SECRET=${config.sops.placeholder.campus-guesser-server-oauth-secret}
+      '';
 
-      teenix.services.traefik.services."campus_guessser" = {
-        router = {
-          rule = "Host(`${opts.hostname}`)";
-        };
+      teenix.services.traefik.services.campus-guessser-server = {
+        router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.campus-guesser-server.localAddress}:8080" ];
         healthCheck.enable = true;
       };
 
-      containers.campus-guesser-server = {
-        autoStart = true;
-        privateNetwork = true;
-        hostAddress = "192.168.114.10";
-        localAddress = "192.168.114.11";
-        bindMounts = {
-          "db" = {
-            hostPath = "${config.nix-tun.storage.persist.path}/campus-guesser-server/postgres";
-            mountPoint = "/var/lib/postgresql";
-            isReadOnly = false;
-          };
-          "images" = {
-            hostPath = "${config.nix-tun.storage.persist.path}/campus-guesser-server/data";
-            mountPoint = "/var/lib/campus-guesser/images";
-            isReadOnly = false;
-          };
-          "secret" = {
-            hostPath = config.sops.secrets.campusguesser.path;
-            mountPoint = config.sops.secrets.campusguesser.path;
-          };
-          "resolv" = {
-            hostPath = "/etc/resolv.conf";
-            mountPoint = "/etc/resolv.conf";
-          };
-          "logs" = {
-            hostPath = "/var/log/campusguesser";
-            mountPoint = "/var/log/campusguesser";
-            isReadOnly = false;
-          };
+      teenix.containers.campus-guesser-server = {
+        config = ./container.nix;
+
+        networking = {
+          useResolvConf = true;
+          ports.tcp = [ 8080 ];
         };
 
-        specialArgs = {
-          inherit inputs;
-          host-config = config;
-        };
+        mounts = {
+          postgres.enable = true; 
+          data =  {
+            enable = true;          
+            ownerUid = config.containers.campus-guesser-server.config.users.users.campus-guesser-server.uid;
+          };
 
-        config = import ./container.nix;
+          sops.templates = [
+            config.sops.templates.campus-guesser-server 
+          ];
+        };
       };
     };
 }

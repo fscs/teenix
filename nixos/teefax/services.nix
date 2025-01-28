@@ -119,7 +119,7 @@
   teenix.services.campus-guesser-server = {
     enable = true;
     hostname = "campusguesser.inphima.de";
-    secretsFile = ../secrets/campusguesser;
+    secretsFile = ../secrets/campus-guesser-server.yml;
   };
 
   teenix.services.node_exporter = {
