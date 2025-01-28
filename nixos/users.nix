@@ -2,7 +2,12 @@
 {
   security.pam.sshAgentAuth.enable = true;
 
-  programs.fish.enable = true;
+  programs.fish = {
+    enable = true;
+    shellInit = ''
+      set fish_greeting 
+    '';
+  };
 
   users.defaultUserShell = pkgs.fish;
 

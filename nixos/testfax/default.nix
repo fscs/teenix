@@ -42,7 +42,7 @@
       enableIPv6 = true;
     };
 
-    networking.interfaces.ens160 = {
+    interfaces.ens160 = {
       ipv4 = {
         addresses = [
           {

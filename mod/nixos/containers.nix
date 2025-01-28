@@ -107,12 +107,12 @@
   config =
     let
       persistPath = config.nix-tun.storage.persist.path;
-      containersDir = "/var/lib/nixos-containers";
 
       containerModuleOf =
         name: cfg:
         {
           config,
+          pkgs,
           options,
           lib,
           ...
@@ -129,6 +129,16 @@
             (lib.optional cfg.mounts.postgres.enable config.services.postgresql.package)
             (lib.optional cfg.mounts.mysql.enable config.services.mysql.package)
           ];
+
+          users.defaultUserShell = pkgs.fish;
+          programs.fish = {
+            enable = true;
+            shellInit = ''
+              function fish_greeting
+                echo Entering container (set_color green)${name}
+              end
+            '';
+          };
 
           nix.settings.experimental-features = "nix-command flakes";
 
