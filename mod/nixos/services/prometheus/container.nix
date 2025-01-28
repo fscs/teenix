@@ -1,17 +1,17 @@
-{
-  lib,
-  config,
-  host-config,
-  pkgs,
-  pkgs-stable,
-  inputs,
-  ...
+{ lib
+, config
+, host-config
+, pkgs
+, pkgs-stable
+, inputs
+, ...
 }:
 {
   services.prometheus = {
     enable = true;
     stateDir = "prometheus";
     globalConfig.scrape_interval = "1s";
+    retentionTime = "30d";
     scrapeConfigs = [
       {
         job_name = "traefik";
