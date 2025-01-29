@@ -5,26 +5,20 @@
   ...
 }:
 {
-  options.teenix.services.minecraft = {
-    enable = lib.mkEnableOption "setup minecraft";
-  };
+  options.teenix.services.minecraft.enable = lib.mkEnableOption "setup a minecraft server";
 
-  config =
-    let
-      opts = config.teenix.services.minecraft;
-    in
-    lib.mkIf opts.enable {
-      nix-tun.storage.persist.subvolumes."minecraft" = {
-        owner = "minecraft";
-      };
-
-      services.minecraft-server = {
-        enable = true;
-        package = pkgs.papermcServers.papermc-1_21_1;
-        eula = true;
-        openFirewall = true;
-        dataDir = "/persist/minecraft";
-        jvmOpts = "";
-      };
+  config = lib.mkIf config.teenix.services.minecraft.enable {
+    nix-tun.storage.persist.subvolumes.minecraft = {
+      owner = "minecraft";
     };
+
+    services.minecraft-server = {
+      enable = true;
+      package = pkgs.papermcServers.papermc-1_21_1;
+      eula = true;
+      openFirewall = true;
+      dataDir = "${config.nix-tun.storage.persist.path}/minecraft";
+      jvmOpts = "";
+    };
+  };
 }
