@@ -129,6 +129,7 @@
             message = "system.stateVersion is not set for container ${config.networking.hostName}. this is a terrible idea, as it can cause random breakage.";
           };
 
+          environment.enableAllTerminfo = true;
           environment.systemPackages = lib.concatLists [
             (lib.optional cfg.mounts.postgres.enable config.services.postgresql.package)
             (lib.optional cfg.mounts.mysql.enable config.services.mysql.package)
