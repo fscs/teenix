@@ -243,6 +243,11 @@
         ];
     in
     {
+      assertions = lib.singleton {
+        assertion = (lib.length (lib.attrNames config.teenix.containers) > 255);
+        message = "the ip pool for teenix.containers has overflown. i dont know how we ended up with this many containers, but here we are. you now need to think of a way to move some containers to a different ip range, have fun.";
+      };
+    
       containers = lib.mapAttrs mkContainer config.teenix.containers;
 
       systemd.tmpfiles.rules = lib.map (containerName: ''
