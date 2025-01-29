@@ -42,7 +42,7 @@
           }
         } 
 
-        loki.relabel "nixos_container_journal" {
+        loki.relabel "journal" {
           forward_to = []
 
           rule {
@@ -51,14 +51,20 @@
           }
         }
 
+        loki.source.journal "host" {
+          forward_to    = [ loki.write.${config.teenix.services.alloy.loki.exporterName}.receiver ]
+          relabel_rules = loki.relabel.journal.rules
+          labels        = { host = "${config.networking.hostName}" }
+        }
+
         ${lib.concatStringsSep "\n" (
           lib.imap0 (i: containerName: ''
             // ${containerName}
             loki.source.journal "container_${toString i}_journal"  {
               path          = "/var/log/containers/${containerName}"
               forward_to    = [ loki.write.${config.teenix.services.alloy.loki.exporterName}.receiver ]
-              relabel_rules = loki.relabel.nixos_container_journal.rules
-              labels        = { container = "${containerName}"}
+              relabel_rules = loki.relabel.journal.rules
+              labels        = { host = "${config.networking.hostName}", container = "${containerName}"}
             }         
           '') (lib.attrNames config.teenix.containers)
         )}
