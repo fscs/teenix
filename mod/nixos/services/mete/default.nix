@@ -17,7 +17,7 @@
       opts = config.teenix.services.mete;
     in
     lib.mkIf opts.enable {
-      nix-tun.storage.persist.subvolumes."mete".directories = {
+      nix-tun.storage.persist.subvolumes.mete.directories = {
         "/db" = {
           owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";

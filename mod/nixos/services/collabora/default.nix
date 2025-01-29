@@ -10,8 +10,7 @@
   };
 
   config = lib.mkIf config.teenix.services.collabora.enable {
-
-    virtualisation.oci-containers.containers."collabora" = {
+    virtualisation.oci-containers.containers.collabora = {
       image = "collabora/code:latest";
       environment = {
         aliasgroup1 = "https://${config.teenix.services.collabora.nextcloudHost}:443";
