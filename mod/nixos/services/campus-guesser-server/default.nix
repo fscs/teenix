@@ -40,14 +40,14 @@
         };
 
         mounts = {
-          postgres.enable = true; 
-          data =  {
-            enable = true;          
+          postgres.enable = true;
+          data = {
+            enable = true;
             ownerUid = config.containers.campus-guesser-server.config.users.users.campus-guesser-server.uid;
           };
 
           sops.templates = [
-            config.sops.templates.campus-guesser-server 
+            config.sops.templates.campus-guesser-server
           ];
         };
       };

@@ -162,8 +162,8 @@
       listen_port=2121
       pasv_min_port=3000
       pasv_max_port=3100
-      rsa_cert_file=/home/scanner/vsftpd.pem
-      rsa_private_key_file=/home/scanner/vsftpd.pem
+      # rsa_cert_file=/home/scanner/vsftpd.pem
+      # rsa_private_key_file=/home/scanner/vsftpd.pem
       ssl_enable=YES
       anonymous_enable=NO
       local_umask=011

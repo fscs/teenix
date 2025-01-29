@@ -23,7 +23,7 @@
       teenix.containers.ntfy = {
         config = {
           users.users.ntfy-sh.uid = 99;
-        
+
           services.ntfy-sh = {
             enable = true;
             settings = {
