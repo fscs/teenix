@@ -70,13 +70,6 @@
     secretsFile = ../secrets/prometheus.yml;
   };
 
-  teenix.services.passbolt = {
-    enable = false;
-    hostname = "passbolt.hhu-fscs.de";
-    secretsFile = ../secrets/passbolt/env;
-    mariaEnvFile = ../secrets/passbolt/maria_env;
-  };
-
   teenix.services.discord-intern-bot = {
     enable = true;
     secretsFile = ../secrets/discord-intern-bot.yml;
@@ -147,27 +140,8 @@
     secretsFile = ../secrets/matrixinternbot;
   };
 
-  sops.secrets.scanner-pass = {
-    format = "binary";
-    sopsFile = ../secrets/scanner_pwd;
-  };
-
-  services.vsftpd = {
-    enable = true;
-    localUsers = true;
-    writeEnable = true;
-    allowWriteableChroot = true;
-    localRoot = "/persist/scanner";
-    extraConfig = ''
-      listen_port=2121
-      pasv_min_port=3000
-      pasv_max_port=3100
-      # rsa_cert_file=/home/scanner/vsftpd.pem
-      # rsa_private_key_file=/home/scanner/vsftpd.pem
-      ssl_enable=YES
-      anonymous_enable=NO
-      local_umask=011
-      file_open_mode=0777
-    '';
+  teenix.services.scanner = {
+    enable = true; 
+    secretsFile = ../secrets/scanner.yml;
   };
 }
