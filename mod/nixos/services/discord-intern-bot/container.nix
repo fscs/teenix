@@ -7,9 +7,7 @@
 }:
 {
   users.users.discord-intern-bot = {
-    home = "/home/discord-intern-bot";
     uid = 1000;
-    group = "users";
     isNormalUser = true;
   };
 
@@ -17,29 +15,18 @@
     description = "Serve discord intern bot";
     after = [ "network.target" ];
     serviceConfig = {
-      EnvironmentFile = host-config.sops.secrets.discord-intern-bot.path;
+      EnvironmentFile = host-config.sops.secrets.discord-intern-bot-env.path;
       Type = "exec";
       User = "discord-intern-bot";
-      WorkingDirectory = "/home/discord-intern-bot/";
-      ExecStart = "${
-        inputs.discord-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".default
-      }/bin/discord-intern-bot";
+      WorkingDirectory = "/var/lib/discord-intern-bot/";
+      StateDirectory = "/var/lib/discord-intern-bot";
+      ExecStart = lib.getExe
+        inputs.discord-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".default;
       Restart = "always";
       RestartSec = 5;
     };
     wantedBy = [ "multi-user.target" ];
   };
-
-  networking = {
-    firewall = {
-      enable = true;
-    };
-    # Use systemd-resolved inside the container
-    # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
-    useHostResolvConf = lib.mkForce false;
-  };
-
-  services.resolved.enable = true;
 
   system.stateVersion = "23.11";
 }

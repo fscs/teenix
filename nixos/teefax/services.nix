@@ -79,7 +79,7 @@
 
   teenix.services.discord-intern-bot = {
     enable = true;
-    secretsFile = ../secrets/discordinternbot;
+    secretsFile = ../secrets/discord-intern-bot.yml;
   };
 
   teenix.services.traefik.services.onlyoffice = config.nix-tun.services.traefik.services.onlyoffice;
