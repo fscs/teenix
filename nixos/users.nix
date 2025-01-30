@@ -22,6 +22,7 @@
      \  .-'''-.  /
       '-\__Y__/-'
          `---`
+
   '';
 
   users.defaultUserShell = pkgs.fish;
