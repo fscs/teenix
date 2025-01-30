@@ -144,4 +144,10 @@
     enable = true; 
     secretsFile = ../secrets/scanner.yml;
   };
+
+  teenix.services.atticd = {
+    enable = true;
+    secretsFile = ../secrets/attic.yml;
+    hostname = "attic.hhu-fscs.de";
+  };
 }
