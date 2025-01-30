@@ -58,6 +58,7 @@
         config = ./container.nix;
 
         networking = {
+          id = "192.168.255";
           useResolvConf = true;
           ports.tcp = [ 80 ];
         };

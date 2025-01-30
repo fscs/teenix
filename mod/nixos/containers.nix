@@ -25,6 +25,14 @@
 
               This is required if the container wants to do dns lookups.
             '';
+            id = lib.mkOption {
+              description = "network id this container should be placed in, e.g. 192.168.1";
+              type = t.nullOr t.nonEmptyStr;
+              default = null;
+            };
+            hostAddress = lib.mkOption {
+              type = t.nonEmptyStr;
+            };
             ports = {
               tcp = lib.mkOption {
                 description = "TCP Ports to open in the containers firewall";
@@ -112,6 +120,8 @@
     let
       persistPath = config.nix-tun.storage.persist.path;
 
+      defaultContainerNetworkId = "192.18";
+
       containerModuleOf =
         name: cfg:
         {
@@ -165,88 +175,109 @@
       mkContainer =
         containerName: cfg:
         lib.mkMerge [
-          {
-            autoStart = true;
-            ephemeral = true;
-            privateNetwork = true;
+          (
+            let
+              networkId = lib.defaultTo "${toString defaultContainerNetworkId}.${toString (ipPoolOf containerName)}" cfg.networking.id;
+            in
+            {
+              autoStart = true;
+              ephemeral = true;
+              privateNetwork = true;
 
-            hostAddress = "192.18.${toString (ipPoolOf containerName)}.10";
-            localAddress = "192.18.${toString (ipPoolOf containerName)}.11";
+              hostAddress = "${networkId}.10";
+              localAddress = "${networkId}.11";
 
-            bindMounts = lib.mkMerge [
-              {
-                # resolv conf
-                resolv = lib.mkIf cfg.networking.useResolvConf {
-                  hostPath = "/etc/resolv.conf";
-                  mountPoint = "/etc/resolv.conf";
-                };
-                # data
-                data = lib.mkIf cfg.mounts.data.enable {
-                  isReadOnly = false;
-                  hostPath = "${persistPath}/${containerName}/data";
-                  mountPoint = "/var/lib/${lib.defaultTo containerName cfg.mounts.data.name}";
-                };
-                # mysql
-                mysql = lib.mkIf cfg.mounts.mysql.enable {
-                  isReadOnly = false;
-                  hostPath = "${persistPath}/${containerName}/mysql";
-                  mountPoint = config.containers.${containerName}.config.services.mysql.dataDir;
-                };
-                # postgresql
-                postgres = lib.mkIf cfg.mounts.postgres.enable {
-                  isReadOnly = false;
-                  hostPath = "${persistPath}/${containerName}/postgres";
-                  mountPoint = config.containers.${containerName}.config.services.postgresql.dataDir;
-                };
-                # journal
-                journal = {
-                  isReadOnly = false;
-                  hostPath = "/var/log/containers/${containerName}";
-                  mountPoint = "/var/log/journal";
-                };
-              }
-
-              # sops secrets
-              (lib.listToAttrs (
-                lib.imap0 (i: v: {
-                  name = toString i;
-                  value = {
-                    hostPath = v.path;
-                    mountPoint = v.path;
+              bindMounts = lib.mkMerge [
+                {
+                  # resolv conf
+                  resolv = lib.mkIf cfg.networking.useResolvConf {
+                    hostPath = "/etc/resolv.conf";
+                    mountPoint = "/etc/resolv.conf";
                   };
-                }) cfg.mounts.sops.secrets
-              ))
-              # sops templates
-              (lib.listToAttrs (
-                lib.imap0 (i: v: {
-                  name = toString i;
-                  value = {
-                    hostPath = v.path;
-                    mountPoint = v.path;
+                  # data
+                  data = lib.mkIf cfg.mounts.data.enable {
+                    isReadOnly = false;
+                    hostPath = "${persistPath}/${containerName}/data";
+                    mountPoint = "/var/lib/${lib.defaultTo containerName cfg.mounts.data.name}";
                   };
-                }) cfg.mounts.sops.templates
-              ))
+                  # mysql
+                  mysql = lib.mkIf cfg.mounts.mysql.enable {
+                    isReadOnly = false;
+                    hostPath = "${persistPath}/${containerName}/mysql";
+                    mountPoint = config.containers.${containerName}.config.services.mysql.dataDir;
+                  };
+                  # postgresql
+                  postgres = lib.mkIf cfg.mounts.postgres.enable {
+                    isReadOnly = false;
+                    hostPath = "${persistPath}/${containerName}/postgres";
+                    mountPoint = config.containers.${containerName}.config.services.postgresql.dataDir;
+                  };
+                  # journal
+                  journal = {
+                    isReadOnly = false;
+                    hostPath = "/var/log/containers/${containerName}";
+                    mountPoint = "/var/log/journal";
+                  };
+                }
 
-              # extra mounts
-              (lib.mapAttrs (n: value: {
-                inherit (value) mountPoint isReadOnly;
-                hostPath = "${persistPath}/${containerName}/${n}";
-              }) cfg.mounts.extra)
-            ];
+                # sops secrets
+                (lib.listToAttrs (
+                  lib.imap0 (i: v: {
+                    name = toString i;
+                    value = {
+                      hostPath = v.path;
+                      mountPoint = v.path;
+                    };
+                  }) cfg.mounts.sops.secrets
+                ))
+                # sops templates
+                (lib.listToAttrs (
+                  lib.imap0 (i: v: {
+                    name = toString i;
+                    value = {
+                      hostPath = v.path;
+                      mountPoint = v.path;
+                    };
+                  }) cfg.mounts.sops.templates
+                ))
 
-            config = containerModuleOf containerName cfg;
-            specialArgs = specialArgs // {
-              host-config = config;
-            };
-          }
+                # extra mounts
+                (lib.mapAttrs (n: value: {
+                  inherit (value) mountPoint isReadOnly;
+                  hostPath = "${persistPath}/${containerName}/${n}";
+                }) cfg.mounts.extra)
+              ];
+
+              config = containerModuleOf containerName cfg;
+              specialArgs = specialArgs // {
+                host-config = config;
+              };
+            }
+          )
           cfg.extraConfig
         ];
     in
     {
-      assertions = lib.singleton {
-        assertion = (lib.length (lib.attrNames config.teenix.containers) < 255);
-        message = "the ip pool for teenix.containers has overflown. i dont know how we ended up with this many containers, but here we are. you now need to think of a way to move some containers to a different ip range, have fun.";
-      };
+      assertions = [
+        {
+          assertion = (lib.length (lib.attrNames config.teenix.containers) < 255);
+          message = "the ip pool for teenix.containers has overflown. i dont know how we ended up with this many containers, but here we are. you now need to think of a way to move some containers to a different ip range, have fun.";
+        }
+        {
+          assertion = lib.pipe config.teenix.containers [
+            (lib.filterAttrs (n: v: v.networking.id == null))
+            lib.attrNames
+            (lib.removeAttrs config.containers)
+            lib.attrsToList
+            (lib.all (
+              x:
+              !(lib.hasPrefix defaultContainerNetworkId x.value.hostAddress)
+              && !(lib.hasPrefix defaultContainerNetworkId x.value.localAddress)
+            ))
+          ];
+          message = "a manually specified container ip address overlaps with the reserved range for automatic address allocation. please remove it from the '${defaultContainerNetworkId}' range";
+        }
+      ];
 
       containers = lib.mapAttrs mkContainer config.teenix.containers;
 

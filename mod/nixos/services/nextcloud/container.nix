@@ -36,13 +36,13 @@ in
     settings = {
       trusted_domains = [
         "134.99.154.48"
-        "192.18.6.11"
-        "192.18.6.10"
+        "${host-config.containers.nextcloud.localAddress}"
+        "${host-config.containers.nextcloud.hostAddress}"
         opts.hostname
         config.networking.hostName
       ];
       trusted_proxies = [
-        "192.18.6.10"
+        "${host-config.containers.nextcloud.hostAddress}"
         "::1"
       ];
     };
