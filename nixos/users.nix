@@ -13,6 +13,17 @@
     '';
   };
 
+  services.openssh.settings.PrintMotd = true;
+  users.motd = ''
+     __         __
+    /  \.-"""-./  \
+    \    -   -    /
+     |   o   o   |
+     \  .-'''-.  /
+      '-\__Y__/-'
+         `---`
+  '';
+
   users.defaultUserShell = pkgs.fish;
 
   teenix.users = {
@@ -62,11 +73,6 @@
       sshKeys = [
         "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDiu4iPkKfORYXnpTBiU+MQGPZ8jQ3a8BXxfmXoD1irlB5ej0r/GM034YcoxBG18ZoK0kf8zsLhfP8GkLr65XZBaRD29IBs0nAjm8oGo+ZMoETFbJj2ChZx/+fCUqKzCDOp8RcackQlBQ+u01HDtbwMHvIwx6pew7Z6n52A9pjSh7khEUSDTzh/wRzbN3lhaGWSmA3HFgR1TNTZT3r4lKq3A6+49OXD34NReAHIoAu7gkfpreS5icdYBS+B92O/coaOXiqtQWlLbseBoTHBaw5o/5pAyxpIUm3L98xTnGHKLz+KQUDTN6fRvLE2OZ9eKbakfRWYpg2J9i75AXhWzXWBCsylFDnP64ZO6IkBHQ5JSdIwwQOYuhZbIo+1nTnzCL1YXiy39b9aySBf1b9kvItIrSr1hpqVQuVX4Z8t5U5z3molSR4ylyzaS++ZQAXMBjSroc9EU/zq5Jiywj0c4jqzYN6O1ejGv/yo7BPw2HNJS16saAkmZ7kWmqXBNKPXXbs= teefax"
       ];
-    };
-
-    scanner = {
-      hosts = [ "teefax" ];
-      shell = pkgs.bash;
     };
   };
 }
