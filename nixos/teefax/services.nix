@@ -75,14 +75,6 @@
     secretsFile = ../secrets/discord-intern-bot.yml;
   };
 
-  teenix.services.traefik.services.onlyoffice = config.nix-tun.services.traefik.services.onlyoffice;
-
-  nix-tun.services.containers.onlyoffice = {
-    enable = true;
-    hostname = "office.inphima.de";
-    jwtSecretFile = ../secrets/onlyoffice;
-  };
-
   teenix.services.inphimade = {
     enable = true;
     hostname = "inphima.de";
