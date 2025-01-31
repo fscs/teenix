@@ -88,5 +88,10 @@
       from = "awareness.inphima.de";
       to = "nextcloud.inphima.de/s/jTay3AMBRt8dQwD";
     };
+
+    slinky = {
+      from = "slinky.inphima.de";
+      to = "www.amazon.de/Legami-Das-Federspiel-Spirale-Ø/dp/B07FN8GHG4";
+    };
   };
 }
