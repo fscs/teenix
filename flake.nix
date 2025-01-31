@@ -12,7 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    sops.url = "github:Mic92/sops-nix";
+    sops-nix.url = "github:Mic92/sops-nix";
     nix-tun.url = "github:nix-tun/nixos-modules";
     authentik-nix.url = "github:nix-community/authentik-nix";
 
@@ -35,6 +35,7 @@
       nixpkgs,
       nixpkgs-master,
       nixpkgs-stable,
+      sops-nix,
       colmena,
       ...
     }@inputs:
@@ -121,15 +122,11 @@
               "${toString ./.}/nixos/keys/users"
             ];
 
-            nativeBuildInputs =
-              with pkgs;
-              [
-                (callPackage inputs.sops { }).sops-import-keys-hook
-                nixos-rebuild
-              ]
-              ++ [
-                colmena.packages.${system}.colmena
-              ];
+            nativeBuildInputs = [
+              pkgs.nixos-rebuild
+              sops-nix.packages.${system}.sops-import-keys-hook
+              colmena.packages.${system}.colmena
+            ];
           };
         }
       );

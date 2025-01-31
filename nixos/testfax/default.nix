@@ -10,7 +10,7 @@
     ../locale.nix
     ../users.nix
 
-    inputs.sops.nixosModules.sops
+    inputs.sops-nix.nixosModules.sops
     inputs.nix-tun.nixosModules.nix-tun
 
     outputs.nixosModules.teenix
