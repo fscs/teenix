@@ -1,11 +1,10 @@
-{
-  lib,
-  config,
-  host-config,
-  pkgs,
-  pkgs-stable,
-  inputs,
-  ...
+{ lib
+, config
+, host-config
+, pkgs
+, pkgs-stable
+, inputs
+, ...
 }:
 {
   services.prometheus = {
@@ -28,7 +27,7 @@
         metrics_path = "/metrics";
         static_configs = lib.singleton {
           targets = [
-            "${host-config.containers.prometheus.hostAddress}:9100"
+            "teefax:9100"
           ];
         };
       }

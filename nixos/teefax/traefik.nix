@@ -29,10 +29,12 @@
       metrics.port = 120;
     }
     (lib.listToAttrs (
-      map (i: {
-        name = "turn_port_udp_${toString i}";
-        value.port = i;
-      }) (lib.range 30000 30010)
+      map
+        (i: {
+          name = "turn_port_udp_${toString i}";
+          value.port = i;
+        })
+        (lib.range 30000 30010)
     ))
   ];
 
@@ -64,7 +66,7 @@
 
     status_inphima = {
       from = "status.inphima.de";
-      to = "grafana.hhu-fscs.de/public-dashboards/84a25d574e334559b2095f1d5c573be6";
+      to = "uptime.dev.hhu-fscs.de/status/inphima";
     };
 
     voltwarden = {
@@ -80,6 +82,11 @@
     inphima_shop = {
       from = "shop.inphima.de";
       to = "inphima.myspreadshop.de/";
+    };
+
+    inphima_awareness = {
+      from = "awareness.inphima.de";
+      to = "nextcloud.inphima.de/s/jTay3AMBRt8dQwD";
     };
   };
 }

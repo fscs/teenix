@@ -1,9 +1,8 @@
-{
-  lib,
-  config,
-  options,
-  specialArgs,
-  ...
+{ lib
+, config
+, options
+, specialArgs
+, ...
 }:
 {
   options.teenix.containers =
@@ -124,12 +123,12 @@
 
       containerModuleOf =
         name: cfg:
-        {
-          config,
-          pkgs,
-          options,
-          lib,
-          ...
+        { config
+        , host-config
+        , pkgs
+        , options
+        , lib
+        , ...
         }:
         {
           imports = [ cfg.config ];
@@ -162,6 +161,9 @@
             enable = true;
             allowedTCPPorts = cfg.networking.ports.tcp;
             allowedUDPPorts = cfg.networking.ports.tcp;
+          };
+          networking.hosts = {
+            "${host-config.containers.${name}.hostAddress}" = [ host-config.networking.hostName ];
           };
 
           services.resolved.enable = true;
@@ -222,30 +224,36 @@
 
                 # sops secrets
                 (lib.listToAttrs (
-                  lib.imap0 (i: v: {
-                    name = toString i;
-                    value = {
-                      hostPath = v.path;
-                      mountPoint = v.path;
-                    };
-                  }) cfg.mounts.sops.secrets
+                  lib.imap0
+                    (i: v: {
+                      name = toString i;
+                      value = {
+                        hostPath = v.path;
+                        mountPoint = v.path;
+                      };
+                    })
+                    cfg.mounts.sops.secrets
                 ))
                 # sops templates
                 (lib.listToAttrs (
-                  lib.imap0 (i: v: {
-                    name = toString i;
-                    value = {
-                      hostPath = v.path;
-                      mountPoint = v.path;
-                    };
-                  }) cfg.mounts.sops.templates
+                  lib.imap0
+                    (i: v: {
+                      name = toString i;
+                      value = {
+                        hostPath = v.path;
+                        mountPoint = v.path;
+                      };
+                    })
+                    cfg.mounts.sops.templates
                 ))
 
                 # extra mounts
-                (lib.mapAttrs (n: value: {
-                  inherit (value) mountPoint isReadOnly;
-                  hostPath = "${persistPath}/${containerName}/${n}";
-                }) cfg.mounts.extra)
+                (lib.mapAttrs
+                  (n: value: {
+                    inherit (value) mountPoint isReadOnly;
+                    hostPath = "${persistPath}/${containerName}/${n}";
+                  })
+                  cfg.mounts.extra)
               ];
 
               config = containerModuleOf containerName cfg;
@@ -281,44 +289,50 @@
 
       containers = lib.mapAttrs mkContainer config.teenix.containers;
 
-      systemd.tmpfiles.rules = lib.map (containerName: ''
-        d /var/log/containers/${containerName} 0755 root systemd-journal -
-      '') (lib.attrNames config.teenix.containers);
+      systemd.tmpfiles.rules = lib.map
+        (containerName: ''
+          d /var/log/containers/${containerName} 0755 root systemd-journal -
+        '')
+        (lib.attrNames config.teenix.containers);
 
-      nix-tun.storage.persist.subvolumes = lib.mapAttrs (
-        containerName: value:
-        let
-          enablePsql = value.mounts.postgres.enable;
-          enableMysql = value.mounts.mysql.enable;
-          enableData = value.mounts.data.enable;
-          enableExtra = value.mounts.extra != { };
+      nix-tun.storage.persist.subvolumes = lib.mapAttrs
+        (
+          containerName: value:
+            let
+              enablePsql = value.mounts.postgres.enable;
+              enableMysql = value.mounts.mysql.enable;
+              enableData = value.mounts.data.enable;
+              enableExtra = value.mounts.extra != { };
 
-          containerCfg = config.containers.${containerName}.config;
+              containerCfg = config.containers.${containerName}.config;
 
-          enableSubvolume = enablePsql || enableMysql || enableData || enableExtra;
-        in
-        lib.mkIf enableSubvolume {
-          directories = lib.mkMerge [
-            {
-              postgres = lib.mkIf enablePsql {
-                owner = toString containerCfg.users.users.postgres.uid;
-                mode = "0700";
-              };
-              mysql = lib.mkIf enableMysql {
-                owner = toString containerCfg.users.users.${containerCfg.services.mysql.user}.uid;
-                mode = "0700";
-              };
-              data = lib.mkIf enableData {
-                owner = toString value.mounts.data.ownerUid;
-                mode = "0700";
-              };
+              enableSubvolume = enablePsql || enableMysql || enableData || enableExtra;
+            in
+            lib.mkIf enableSubvolume {
+              directories = lib.mkMerge [
+                {
+                  postgres = lib.mkIf enablePsql {
+                    owner = toString containerCfg.users.users.postgres.uid;
+                    mode = "0700";
+                  };
+                  mysql = lib.mkIf enableMysql {
+                    owner = toString containerCfg.users.users.${containerCfg.services.mysql.user}.uid;
+                    mode = "0700";
+                  };
+                  data = lib.mkIf enableData {
+                    owner = toString value.mounts.data.ownerUid;
+                    mode = "0700";
+                  };
+                }
+                (lib.mapAttrs
+                  (_: v: {
+                    inherit (v) mode;
+                    owner = toString v.ownerUid;
+                  })
+                  value.mounts.extra)
+              ];
             }
-            (lib.mapAttrs (_: v: {
-              inherit (v) mode;
-              owner = toString v.ownerUid;
-            }) value.mounts.extra)
-          ];
-        }
-      ) config.teenix.containers;
+        )
+        config.teenix.containers;
     };
 }

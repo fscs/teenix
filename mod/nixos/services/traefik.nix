@@ -1,10 +1,9 @@
-{
-  config,
-  pkgs,
-  pkgs-stable,
-  sops,
-  lib,
-  ...
+{ config
+, pkgs
+, pkgs-stable
+, sops
+, lib
+, ...
 }:
 {
   options.teenix.services.traefik = {
@@ -173,9 +172,11 @@
 
   config = lib.mkIf config.teenix.services.traefik.enable {
     users.users.traefik.extraGroups = [ "docker" ];
-    networking.firewall.allowedTCPPorts = lib.attrsets.mapAttrsToList (
-      name: value: value.port
-    ) config.teenix.services.traefik.entrypoints;
+    networking.firewall.allowedTCPPorts = lib.attrsets.mapAttrsToList
+      (
+        name: value: value.port
+      )
+      config.teenix.services.traefik.entrypoints;
 
     sops.secrets.traefik_static = {
       sopsFile = config.teenix.services.traefik.staticConfigPath;
@@ -221,29 +222,33 @@
         dynamicConfigOptions = {
           http = {
             routers =
-              (lib.attrsets.mapAttrs (
-                name: value:
-                lib.mkMerge [
-                  {
-                    rule = value.router.rule;
-                    priority = value.router.priority;
-                    middlewares = value.router.middlewares;
-                    service = name;
-                    entryPoints = value.router.entryPoints;
-                  }
-                  (lib.mkIf value.router.tls.enable {
-                    tls = value.router.tls.options;
-                  })
-                ]
-              ) config.teenix.services.traefik.services)
-              // lib.attrsets.mapAttrs (name: value: {
-                service = "blank";
-                priority = 10;
-                rule = "Host(`${builtins.replaceStrings [ "." ] [ "\." ] value.from}`)";
-                middlewares = name;
-                tls.certResolver = "letsencrypt";
-                entryPoints = [ "websecure" ];
-              }) config.teenix.services.traefik.redirects
+              (lib.attrsets.mapAttrs
+                (
+                  name: value:
+                    lib.mkMerge [
+                      {
+                        rule = value.router.rule;
+                        priority = value.router.priority;
+                        middlewares = value.router.middlewares;
+                        service = name;
+                        entryPoints = value.router.entryPoints;
+                      }
+                      (lib.mkIf value.router.tls.enable {
+                        tls = value.router.tls.options;
+                      })
+                    ]
+                )
+                config.teenix.services.traefik.services)
+              // lib.attrsets.mapAttrs
+                (name: value: {
+                  service = "blank";
+                  priority = 10;
+                  rule = "Host(`${builtins.replaceStrings [ "." ] [ "\." ] value.from}`)";
+                  middlewares = name;
+                  tls.certResolver = "letsencrypt";
+                  entryPoints = [ "websecure" ];
+                })
+                config.teenix.services.traefik.redirects
               // {
                 dashboard = {
                   rule = "Host(`${config.teenix.services.traefik.dashboardUrl}`)";
@@ -257,13 +262,15 @@
                 };
               };
             middlewares =
-              lib.attrsets.mapAttrs (name: value: {
-                redirectRegex = {
-                  regex = "(www\\.)?${builtins.replaceStrings [ "." ] [ "\." ] value.from}/?";
-                  replacement = value.to;
-                  permanent = true;
-                };
-              }) config.teenix.services.traefik.redirects
+              lib.attrsets.mapAttrs
+                (name: value: {
+                  redirectRegex = {
+                    regex = "(www\\.)?${builtins.replaceStrings [ "." ] [ "\." ] value.from}/?";
+                    replacement = value.to;
+                    permanent = true;
+                  };
+                })
+                config.teenix.services.traefik.redirects
               // {
                 meteredirect.redirectregex = {
                   regex = "https://mete.hhu-fscs.de/(.*?)((/deposit)|(/retrieve)|(/transaction))(.*)";
@@ -289,21 +296,25 @@
                 };
               };
             services =
-              lib.attrsets.mapAttrs (name: value: {
-                loadBalancer = lib.mkMerge [
-                  {
-                    servers = builtins.map (value: {
-                      url = value;
-                    }) value.servers;
-                  }
-                  (lib.mkIf value.healthCheck.enable {
-                    healthCheck = {
-                      path = value.healthCheck.path;
-                      interval = value.healthCheck.interval;
-                    };
-                  })
-                ];
-              }) config.teenix.services.traefik.services
+              lib.attrsets.mapAttrs
+                (name: value: {
+                  loadBalancer = lib.mkMerge [
+                    {
+                      servers = builtins.map
+                        (value: {
+                          url = value;
+                        })
+                        value.servers;
+                    }
+                    (lib.mkIf value.healthCheck.enable {
+                      healthCheck = {
+                        path = value.healthCheck.path;
+                        interval = value.healthCheck.interval;
+                      };
+                    })
+                  ];
+                })
+                config.teenix.services.traefik.services
               // {
                 blank = {
                   loadBalancer = {
@@ -339,6 +350,10 @@
           accesslog = lib.mkIf config.teenix.services.traefik.logging.enable {
             filePath = config.teenix.services.traefik.logging.filePath;
           };
+          experimental.plugins.fail2ban = {
+            moduleName = "github.com/tomMoulard/fail2ban";
+            version = "v0.8.3";
+          };
           certificatesResolvers = {
             letsencrypt = {
               acme = {
@@ -362,20 +377,23 @@
           };
 
           entryPoints =
-            lib.attrsets.filterAttrs (n: v: n != "port") (
-              lib.attrsets.mapAttrs (
-                name: value:
-                lib.attrsets.mergeAttrsList [
-                  {
-                    address = ":${toString value.port}";
-                  }
-                  value
-                  {
-                    port = null;
-                  }
-                ]
-              ) config.teenix.services.traefik.entrypoints
-            )
+            lib.attrsets.filterAttrs (n: v: n != "port")
+              (
+                lib.attrsets.mapAttrs
+                  (
+                    name: value:
+                      lib.attrsets.mergeAttrsList [
+                        {
+                          address = ":${toString value.port}";
+                        }
+                        value
+                        {
+                          port = null;
+                        }
+                      ]
+                  )
+                  config.teenix.services.traefik.entrypoints
+              )
             // {
               udp_30001 = {
                 address = ":30001/udp";
