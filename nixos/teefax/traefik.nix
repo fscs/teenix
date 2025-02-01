@@ -29,12 +29,10 @@
       metrics.port = 120;
     }
     (lib.listToAttrs (
-      map
-        (i: {
-          name = "turn_port_udp_${toString i}";
-          value.port = i;
-        })
-        (lib.range 30000 30010)
+      map (i: {
+        name = "turn_port_udp_${toString i}";
+        value.port = i;
+      }) (lib.range 30000 30010)
     ))
   ];
 

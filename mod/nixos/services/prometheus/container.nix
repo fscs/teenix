@@ -1,10 +1,11 @@
-{ lib
-, config
-, host-config
-, pkgs
-, pkgs-stable
-, inputs
-, ...
+{
+  lib,
+  config,
+  host-config,
+  pkgs,
+  pkgs-stable,
+  inputs,
+  ...
 }:
 {
   services.prometheus = {

@@ -1,6 +1,6 @@
 { lib, host-config, ... }:
 {
-  users.groups.atticd = {};
+  users.groups.atticd = { };
   users.users.atticd = {
     isSystemUser = true;
     group = "atticd";

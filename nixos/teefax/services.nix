@@ -133,7 +133,7 @@
   };
 
   teenix.services.scanner = {
-    enable = true; 
+    enable = true;
     secretsFile = ../secrets/scanner.yml;
   };
 
