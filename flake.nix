@@ -105,7 +105,7 @@
         };
 
         testfax = {
-          deployment.targetHost = "minecraft.fsphy.de";
+          deployment.targetHost = "dev.hhu-fscs.de";
           imports = [ ./nixos/testfax ];
         };
       };
