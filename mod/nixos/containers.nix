@@ -12,7 +12,7 @@
 
       elemTypeOf = o: o.type.nestedTypes.elemType;
 
-      containerType = t.submodule {
+      containerType = t.submodule ({name, ...}: {
         options = {
           config = lib.mkOption {
             description = "The container's NixOS configuration";
@@ -29,9 +29,6 @@
               description = "network id this container should be placed in, e.g. 192.168.1";
               type = t.nullOr t.nonEmptyStr;
               default = null;
-            };
-            hostAddress = lib.mkOption {
-              type = t.nonEmptyStr;
             };
             ports = {
               tcp = lib.mkOption {
@@ -59,8 +56,8 @@
               };
               name = lib.mkOption {
                 description = "change the folder name under /var/lib";
-                type = t.nullOr t.nonEmptyStr;
-                default = null;
+                type = t.nonEmptyStr;
+                default = name;
               };
             };
 
@@ -109,7 +106,7 @@
             default = { };
           };
         };
-      };
+      });
     in
     lib.mkOption {
       type = t.attrsOf containerType;
@@ -202,7 +199,7 @@
                   data = lib.mkIf cfg.mounts.data.enable {
                     isReadOnly = false;
                     hostPath = "${persistPath}/${containerName}/data";
-                    mountPoint = "/var/lib/${lib.defaultTo containerName cfg.mounts.data.name}";
+                    mountPoint = "/var/lib/${cfg.mounts.data.name}";
                   };
                   # mysql
                   mysql = lib.mkIf cfg.mounts.mysql.enable {
