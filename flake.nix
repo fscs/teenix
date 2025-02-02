@@ -82,7 +82,7 @@
         ''
       );
 
-      packages = eachSystem (system: _: import ./pkgs nixpkgs-master.legacyPackages.${system});
+      packages = eachSystem (system: pkgs: import ./pkgs pkgs);
       overlays = import ./overlays.nix { inherit inputs; };
 
       nixosModules.teenix = import ./mod/nixos;

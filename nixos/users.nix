@@ -2,10 +2,6 @@
 {
   security.pam.sshAgentAuth.enable = true;
 
-  environment.systemPackages = [
-    pkgs.fish-nixos-container
-  ];
-
   programs.fish = {
     enable = true;
     shellInit = ''
