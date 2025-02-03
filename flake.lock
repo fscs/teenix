@@ -939,11 +939,11 @@
         "nixpkgs": "nixpkgs_8"
       },
       "locked": {
-        "lastModified": 1737029853,
-        "narHash": "sha256-h0XLSRYQuT8Ku7XvFMBmJaI6LePDAg6VVL5amteb+xM=",
+        "lastModified": 1738594342,
+        "narHash": "sha256-bc+SL+Bspru9k8U5Rq5Rv19q27rc1pyZp3Nhk5HznIo=",
         "owner": "nix-tun",
         "repo": "nixos-modules",
-        "rev": "45968f63874a1c4aa5bf0d3cf75d6620cb5bae97",
+        "rev": "bfcbe684e39fd387d1aa973ca3e122d4cfc852b1",
         "type": "github"
       },
       "original": {

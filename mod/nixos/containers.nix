@@ -12,101 +12,110 @@
 
       elemTypeOf = o: o.type.nestedTypes.elemType;
 
-      containerType = t.submodule ({name, ...}: {
-        options = {
-          config = lib.mkOption {
-            description = "The container's NixOS configuration";
-            type = t.deferredModule;
-          };
-
-          networking = {
-            useResolvConf = lib.mkEnableOption ''
-              Mount the hosts resolv.conf into the container.
-
-              This is required if the container wants to do dns lookups.
-            '';
-            id = lib.mkOption {
-              description = "network id this container should be placed in, e.g. 192.168.1";
-              type = t.nullOr t.nonEmptyStr;
-              default = null;
+      containerType = t.submodule (
+        { name, ... }:
+        {
+          options = {
+            config = lib.mkOption {
+              description = "The container's NixOS configuration";
+              type = t.deferredModule;
             };
-            ports = {
-              tcp = lib.mkOption {
-                description = "TCP Ports to open in the containers firewall";
-                type = t.listOf t.port;
-                default = [ ];
-              };
-              udp = lib.mkOption {
-                type = t.listOf t.port;
-                description = "UDP Ports to open in the containers firewall";
-                default = [ ];
-              };
+
+            machineId = lib.mkOption {
+              description = "The containers machine-id. Used for mounting journals";
+              type = t.strMatching "^[a-f0-9]{32}\n$";
+              default = "${lib.substring 0 32 (builtins.hashString "sha256" name)}\n";
             };
-          };
 
-          mounts = {
-            mysql.enable = lib.mkEnableOption "Mount the container's mysql data dir into the hosts /persist";
-            postgres.enable = lib.mkEnableOption "Mount the container's postgresql data dir into the hosts /persist";
+            networking = {
+              useResolvConf = lib.mkEnableOption ''
+                Mount the hosts resolv.conf into the container.
 
-            data = {
-              enable = lib.mkEnableOption "mount /var/lib/<containerName>";
-              ownerUid = lib.mkOption {
-                description = "owner of the data dir";
-                type = t.int;
+                This is required if the container wants to do dns lookups.
+              '';
+              id = lib.mkOption {
+                description = "network id this container should be placed in, e.g. 192.168.1";
+                type = t.nullOr t.nonEmptyStr;
+                default = null;
               };
-              name = lib.mkOption {
-                description = "change the folder name under /var/lib";
-                type = t.nonEmptyStr;
-                default = name;
+              ports = {
+                tcp = lib.mkOption {
+                  description = "TCP Ports to open in the containers firewall";
+                  type = t.listOf t.port;
+                  default = [ ];
+                };
+                udp = lib.mkOption {
+                  type = t.listOf t.port;
+                  description = "UDP Ports to open in the containers firewall";
+                  default = [ ];
+                };
               };
             };
 
-            sops = {
-              secrets = lib.mkOption {
-                description = "sops secrets to mount into the container";
-                default = [ ];
-                type = t.listOf (elemTypeOf options.sops.secrets);
+            mounts = {
+              mysql.enable = lib.mkEnableOption "Mount the container's mysql data dir into the hosts /persist";
+              postgres.enable = lib.mkEnableOption "Mount the container's postgresql data dir into the hosts /persist";
+
+              data = {
+                enable = lib.mkEnableOption "mount /var/lib/<containerName>";
+                ownerUid = lib.mkOption {
+                  description = "owner of the data dir";
+                  type = t.int;
+                };
+                name = lib.mkOption {
+                  description = "change the folder name under /var/lib";
+                  type = t.nonEmptyStr;
+                  default = name;
+                };
               };
-              templates = lib.mkOption {
-                description = "sops secrets/templates to mount into the container";
-                default = [ ];
-                type = t.listOf (elemTypeOf options.sops.templates);
+
+              sops = {
+                secrets = lib.mkOption {
+                  description = "sops secrets to mount into the container";
+                  default = [ ];
+                  type = t.listOf (elemTypeOf options.sops.secrets);
+                };
+                templates = lib.mkOption {
+                  description = "sops secrets/templates to mount into the container";
+                  default = [ ];
+                  type = t.listOf (elemTypeOf options.sops.templates);
+                };
+              };
+
+              extra = lib.mkOption {
+                default = { };
+                type = t.attrsOf (
+                  t.submodule {
+                    options = {
+                      mountPoint = lib.mkOption {
+                        type = t.nonEmptyStr;
+                      };
+                      isReadOnly = lib.mkOption {
+                        type = t.bool;
+                        default = true;
+                      };
+                      ownerUid = lib.mkOption {
+                        description = "owner of mounted directory";
+                        type = t.int;
+                      };
+                      mode = lib.mkOption {
+                        type = t.nonEmptyStr;
+                        default = "0700";
+                      };
+                    };
+                  }
+                );
               };
             };
 
-            extra = lib.mkOption {
+            extraConfig = lib.mkOption {
+              description = "extra options/overrides to pass to the container";
+              type = t.attrs;
               default = { };
-              type = t.attrsOf (
-                t.submodule {
-                  options = {
-                    mountPoint = lib.mkOption {
-                      type = t.nonEmptyStr;
-                    };
-                    isReadOnly = lib.mkOption {
-                      type = t.bool;
-                      default = true;
-                    };
-                    ownerUid = lib.mkOption {
-                      description = "owner of mounted directory";
-                      type = t.int;
-                    };
-                    mode = lib.mkOption {
-                      type = t.nonEmptyStr;
-                      default = "0700";
-                    };
-                  };
-                }
-              );
             };
           };
-
-          extraConfig = lib.mkOption {
-            description = "extra options/overrides to pass to the container";
-            type = t.attrs;
-            default = { };
-          };
-        };
-      });
+        }
+      );
     in
     lib.mkOption {
       type = t.attrsOf containerType;
@@ -115,8 +124,6 @@
 
   config =
     let
-      persistPath = config.nix-tun.storage.persist.path;
-
       defaultContainerNetworkId = "192.18";
 
       containerModuleOf =
@@ -155,14 +162,17 @@
 
           nix.settings.experimental-features = "nix-command flakes";
 
-          networking.useHostResolvConf = false;
-          networking.firewall = {
-            enable = true;
-            allowedTCPPorts = cfg.networking.ports.tcp;
-            allowedUDPPorts = cfg.networking.ports.tcp;
-          };
-          networking.hosts = {
-            "${host-config.containers.${name}.hostAddress}" = [ host-config.networking.hostName ];
+          networking = {
+            hostId = lib.substring 0 8 cfg.machineId;
+            useHostResolvConf = false;
+            firewall = {
+              enable = true;
+              allowedTCPPorts = cfg.networking.ports.tcp;
+              allowedUDPPorts = cfg.networking.ports.tcp;
+            };
+            hosts = {
+              "${host-config.containers.${name}.hostAddress}" = [ host-config.networking.hostName ];
+            };
           };
 
           services.resolved.enable = true;
@@ -188,43 +198,43 @@
               hostAddress = "${networkId}.10";
               localAddress = "${networkId}.11";
 
+              extraFlags = lib.concatLists [
+                (lib.singleton "--uuid=${cfg.machineId}")
+                (lib.optional cfg.networking.useResolvConf "--resolv-conf=bind-host")
+              ];
+
               bindMounts = lib.mkMerge [
                 {
-                  # resolv conf
-                  resolv = lib.mkIf cfg.networking.useResolvConf {
-                    hostPath = "/etc/resolv.conf";
-                    mountPoint = "/etc/resolv.conf";
-                  };
                   # data
                   data = lib.mkIf cfg.mounts.data.enable {
                     isReadOnly = false;
-                    hostPath = "${persistPath}/${containerName}/data";
+                    hostPath = "${config.nix-tun.storage.persist.subvolumes.${containerName}.path}/data";
                     mountPoint = "/var/lib/${cfg.mounts.data.name}";
                   };
                   # mysql
                   mysql = lib.mkIf cfg.mounts.mysql.enable {
                     isReadOnly = false;
-                    hostPath = "${persistPath}/${containerName}/mysql";
+                    hostPath = "${config.nix-tun.storage.persist.subvolumes.${containerName}.path}/mysql";
                     mountPoint = config.containers.${containerName}.config.services.mysql.dataDir;
                   };
                   # postgresql
                   postgres = lib.mkIf cfg.mounts.postgres.enable {
                     isReadOnly = false;
-                    hostPath = "${persistPath}/${containerName}/postgres";
+                    hostPath = "${config.nix-tun.storage.persist.subvolumes.${containerName}.path}/postgres";
                     mountPoint = config.containers.${containerName}.config.services.postgresql.dataDir;
                   };
                   # journal
                   journal = {
                     isReadOnly = false;
                     hostPath = "/var/log/containers/${containerName}";
-                    mountPoint = "/var/log/journal";
+                    mountPoint = "/var/log/journal/${cfg.machineId}";
                   };
                 }
 
                 # sops secrets
                 (lib.listToAttrs (
                   lib.imap0 (i: v: {
-                    name = toString i;
+                    name = "secret-${toString i}";
                     value = {
                       hostPath = v.path;
                       mountPoint = v.path;
@@ -234,7 +244,7 @@
                 # sops templates
                 (lib.listToAttrs (
                   lib.imap0 (i: v: {
-                    name = toString i;
+                    name = "template-${toString i}";
                     value = {
                       hostPath = v.path;
                       mountPoint = v.path;
@@ -245,7 +255,7 @@
                 # extra mounts
                 (lib.mapAttrs (n: value: {
                   inherit (value) mountPoint isReadOnly;
-                  hostPath = "${persistPath}/${containerName}/${n}";
+                  hostPath = "${config.nix-tun.storage.persist.subvolumes.${containerName}.path}/${n}";
                 }) cfg.mounts.extra)
               ];
 
