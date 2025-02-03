@@ -22,6 +22,9 @@ vaultwarden.webvault.overrideAttrs (
       rm vaultwarden-admin-console-logo.svg
       ln -s ${./vaultwarden-admin-console-logo.svg} vaultwarden-admin-console-logo.svg
 
+      rm vaultwarden-icon.svg
+      ln -s ${./vaultwarden-icon.svg} vaultwarden-icon.svg
+
       cd src/images
 
       rm icon-{dark,white}.png
