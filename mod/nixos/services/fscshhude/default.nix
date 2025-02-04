@@ -37,12 +37,13 @@
 
       teenix.containers.fscshhude = {
         config = {
-          imports = [ inputs.fscs-website-server.nixosModules.fscs-website-server ];
+          imports = [ inputs.fscshhude.inputs.server.nixosModules.fscs-website-server ];
 
           users.users.fscs-website-server.uid = 1000;
 
           services.fscs-website-server = {
             enable = true;
+            package = inputs.fscshhude.inputs.server.packages.${pkgs.stdenv.system}.default;
             content = inputs.fscshhude.packages.${pkgs.stdenv.system}.default;
             environmentFile = config.sops.secrets.fscshhude-env.path;
             authUrl = "https://${config.teenix.services.authentik.hostname}/application/o/authorize/";
