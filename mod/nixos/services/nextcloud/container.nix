@@ -1,9 +1,8 @@
-{
-  lib,
-  config,
-  host-config,
-  pkgs-master,
-  ...
+{ lib
+, config
+, host-config
+, pkgs-master
+, ...
 }:
 let
   opts = host-config.teenix.services.nextcloud;
@@ -57,6 +56,7 @@ in
       "opcache.revalidate_freq" = "60";
       "opcache.interned_strings_buffer" = "16";
       "opcache.jit_buffer_size" = "128M";
+      "apc.shm_size" = "1G";
     };
 
     extraApps = lib.attrsets.getAttrs opts.extraApps config.services.nextcloud.package.packages.apps;
