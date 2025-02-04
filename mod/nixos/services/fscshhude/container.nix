@@ -3,73 +3,79 @@
   inputs,
   pkgs,
   host-config,
+  config,
   ...
 }:
 {
-  networking.hostName = "fscshhude";
-  users.users.fscs-website = {
-    uid = 1033;
-    home = "/home/fscs-website";
-    group = "users";
-    shell = pkgs.bash;
+  users.users.fscs-website-server = {
     isNormalUser = true;
+    uid = 1000; # todo: remove me
   };
 
-  environment.systemPackages = [
-    inputs.fscshhude.packages."${pkgs.stdenv.hostPlatform.system}".serve
-    pkgs.postgresql
-    pkgs.bash
-  ];
+  services.postgresql = {
+    enable = true;
+    ensureDatabases = [ config.users.users.fscs-website-server.name ];
+    ensureUsers = lib.singleton {
+      name = config.users.users.fscs-website-server.name;
+      ensureDBOwnership = true;
+    };
+  };
 
   systemd.services.fscs-website-serve = {
-    description = "Serve FSCS website";
     after = [ "network.target" ];
-    path = [ pkgs.bash ];
+    wantedBy = [ "multi-user.target" ];
+    script = ''
+      ${lib.getExe inputs.fscs-website-server.packages.${pkgs.stdenv.system}.default} \
+        --host 0.0.0.0 \
+        --port 8080 \
+        --database-url "postgresql:///${config.users.users.fscs-website-server.name}?host=/run/postgresql&port=5432" \
+        --content-dir "${inputs.fscshhude.packages.${pkgs.stdenv.system}.default}" \
+        --auth-url "https://auth.inphima.de/application/o/authorize/" \
+        --token-url "https://auth.inphima.de/application/o/token/" \
+        --user-info "https://auth.inphima.de/application/o/userinfo/" \
+    '';
     serviceConfig = {
-      EnvironmentFile = host-config.sops.secrets.fscshhude.path;
+      EnvironmentFile = host-config.sops.secrets.fscshhude-env.path;
       Type = "exec";
-      User = "fscs-website";
-      WorkingDirectory = "/home/fscs-website";
-      ExecStart = "${inputs.fscshhude.packages."${pkgs.stdenv.hostPlatform.system}".serve}/bin/serve";
+      User = config.users.users.fscs-website-server.name;
       Restart = "always";
       RestartSec = 5;
-      StandardOutput = "append:/var/log/fscshhude/log.log";
-      StandardError = "append:/var/log/fscshhude/log.log";
-    };
-    wantedBy = [ "multi-user.target" ];
-  };
-
-  systemd.services.sitzungsverwaltung = {
-    description = "Serve FSCS sitzungsverwaltung";
-    after = [ "network.target" ];
-    path = [ pkgs.bash ];
-    serviceConfig = {
-      Type = "exec";
-      User = "fscs-website";
-      WorkingDirectory = "/home/fscs-website";
-      ExecStart = "${pkgs.caddy}/bin/caddy file-server -r ${
-        inputs.sitzungsverwaltung.packages."${pkgs.stdenv.hostPlatform.system}".default
-      } --listen :8090";
-      Restart = "always";
-      RestartSec = 5;
-    };
-    wantedBy = [ "multi-user.target" ];
-  };
-
-  networking = {
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [
-        8080
-        8090
+      CapabilityBoundingSet = [ "" ];
+      DeviceAllow = [ "" ];
+      DevicePolicy = "closed";
+      LockPersonality = true;
+      MemoryDenyWriteExecute = true;
+      NoNewPrivileges = true;
+      PrivateDevices = true;
+      PrivateTmp = true;
+      PrivateUsers = true;
+      ProcSubset = "pid";
+      ProtectClock = true;
+      ProtectControlGroups = true;
+      ProtectHome = true;
+      ProtectHostname = true;
+      ProtectKernelLogs = true;
+      ProtectKernelModules = true;
+      ProtectKernelTunables = true;
+      ProtectProc = "noaccess";
+      ProtectSystem = "strict";
+      RemoveIPC = true;
+      RestrictAddressFamilies = [
+        "AF_INET"
+        "AF_INET6"
+        "AF_UNIX"
       ];
+      RestrictNamespaces = true;
+      RestrictRealtime = true;
+      RestrictSUIDSGID = true;
+      SystemCallArchitectures = "native";
+      SystemCallFilter = [
+        "@system-service"
+        "~@privileged"
+      ];
+      UMask = "0077";
     };
-    # Use systemd-resolved inside the container
-    # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
-    useHostResolvConf = lib.mkForce false;
   };
 
-  services.resolved.enable = true;
-
-  system.stateVersion = "23.11";
+  system.stateVersion = "24.11";
 }

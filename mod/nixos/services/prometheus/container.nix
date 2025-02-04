@@ -125,7 +125,7 @@
   systemd.services.grafana-to-ntfy = {
     after = [ "network.target" ];
     path = [ pkgs.bash ];
-    script = "${lib.getExe inputs.grafana2ntfy.packages.${pkgs.stdenv.hostPlatform.system}.default}";
+    script = "${lib.getExe inputs.grafana2ntfy.packages.${pkgs.stdenv.system}.default}";
     serviceConfig = {
       Restart = "always";
       RestartSec = 5;

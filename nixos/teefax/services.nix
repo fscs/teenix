@@ -21,8 +21,12 @@
 
   teenix.services.fscshhude = {
     enable = true;
-    hostname = "hhu-fscs.de";
-    secretsFile = ../secrets/fscshhude;
+    secretsFile = ../secrets/fscshhude.yml;
+  };
+
+  teenix.services.sitzungsverwaltung = {
+    enable = true;
+    hostname = "sitzungen.hhu-fscs.de";
   };
 
   teenix.services.matrix = {

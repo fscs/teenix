@@ -22,7 +22,7 @@
       User = "matrix-intern-bot";
       WorkingDirectory = "/home/matrix-intern-bot/";
       ExecStart = "${
-        inputs.matrix-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".default
+        inputs.matrix-intern-bot.packages."${pkgs.stdenv.system}".default
       }/bin/matrix-intern-bot";
       Restart = "always";
       RestartSec = 5;

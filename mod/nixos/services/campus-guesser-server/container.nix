@@ -21,7 +21,7 @@
       name = config.users.users.campus-guesser-server.name;
       ensureDBOwnership = true;
     };
-    authentication = pkgs.lib.mkOverride 10 ''
+    authentication = ''
       local all       all     trust
       host  all       all     all trust
     '';
@@ -37,7 +37,7 @@
       User = "campus-guesser-server";
       ExecStart =
         lib.getExe
-          inputs.campus-guesser-server.packages."${pkgs.stdenv.hostPlatform.system}".default;
+          inputs.campus-guesser-server.packages."${pkgs.stdenv.system}".default;
       Restart = "always";
       RestartSec = 5;
     };

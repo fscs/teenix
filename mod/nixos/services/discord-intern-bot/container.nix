@@ -20,9 +20,7 @@
       User = "discord-intern-bot";
       WorkingDirectory = "/var/lib/discord-intern-bot/";
       StateDirectory = "/var/lib/discord-intern-bot";
-      ExecStart =
-        lib.getExe
-          inputs.discord-intern-bot.packages."${pkgs.stdenv.hostPlatform.system}".default;
+      ExecStart = lib.getExe inputs.discord-intern-bot.packages."${pkgs.stdenv.system}".default;
       Restart = "always";
       RestartSec = 5;
     };
