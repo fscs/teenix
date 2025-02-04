@@ -144,11 +144,20 @@
             message = "system.stateVersion is not set for container ${config.networking.hostName}. this is a terrible idea, as it can cause random breakage.";
           };
 
-          environment.enableAllTerminfo = true;
-          environment.systemPackages = lib.concatLists [
-            (lib.optional cfg.mounts.postgres.enable config.services.postgresql.package)
-            (lib.optional cfg.mounts.mysql.enable config.services.mysql.package)
-          ];
+          environment = {
+            enableAllTerminfo = true;
+            systemPackages = lib.concatLists [
+              (lib.optional cfg.mounts.postgres.enable config.services.postgresql.package)
+              (lib.optional cfg.mounts.mysql.enable config.services.mysql.package)
+            ];
+            shellAliases = rec {
+              ls = "${lib.getExe pkgs.eza} -F --sort extension --group-directories-first --git --icons -Mo --hyperlink --git-repos-no-status --color-scale=size --no-permissions ";
+              ll = ls + "-l ";
+              la = ll + "-a ";
+              l = ll;
+              gls = ll + "--git-ignore ";
+            };
+          };
 
           users.defaultUserShell = pkgs.fish;
           programs.fish = {

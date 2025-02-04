@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   security.pam.sshAgentAuth.enable = true;
 
@@ -20,6 +20,14 @@
          `---`
 
   '';
+
+  environment.shellAliases = rec {
+    ls = "${lib.getExe pkgs.eza} -F --sort extension --group-directories-first --git --icons -Mo --hyperlink --git-repos-no-status --color-scale=size --no-permissions ";
+    ll = ls + "-l ";
+    la = ll + "-a ";
+    l = ll;
+    gls = ll + "--git-ignore ";
+  };
 
   users.defaultUserShell = pkgs.fish;
 
