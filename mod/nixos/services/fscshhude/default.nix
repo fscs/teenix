@@ -1,5 +1,7 @@
 {
   lib,
+  inputs,
+  pkgs,
   config,
   ...
 }:
@@ -34,7 +36,22 @@
       };
 
       teenix.containers.fscshhude = {
-        config = ./container.nix;
+        config = {
+          imports = [ inputs.fscs-website-server.nixosModules.fscs-website-server ];
+
+          users.users.fscs-website-server.uid = 1000;
+
+          services.fscs-website-server = {
+            enable = true;
+            content = inputs.fscshhude.packages.${pkgs.stdenv.system}.default;
+            environmentFile = config.sops.secrets.fscshhude-env.path;
+            authUrl = "https://${config.teenix.services.authentik.hostname}/application/o/authorize/";
+            tokenUrl = "https://${config.teenix.services.authentik.hostname}/application/o/token/";
+            userInfoUrl = "https://${config.teenix.services.authentik.hostname}/application/o/userinfo/";
+          };
+
+          system.stateVersion = "24.11";
+        };
 
         networking = {
           useResolvConf = true;
