@@ -1,7 +1,5 @@
 {
   lib,
-  inputs,
-  pkgs,
   config,
   ...
 }:
@@ -19,7 +17,6 @@
       sops.secrets.fscshhude-env = {
         sopsFile = opts.secretsFile;
         key = "env";
-        mode = "444";
       };
 
       services.traefik.dynamicConfigOptions = {
@@ -36,23 +33,7 @@
       };
 
       teenix.containers.fscshhude = {
-        config = {
-          imports = [ inputs.fscshhude.inputs.server.nixosModules.fscs-website-server ];
-
-          users.users.fscs-website-server.uid = 1000;
-
-          services.fscs-website-server = {
-            enable = true;
-            package = inputs.fscshhude.inputs.server.packages.${pkgs.stdenv.system}.default;
-            content = inputs.fscshhude.packages.${pkgs.stdenv.system}.default;
-            environmentFile = config.sops.secrets.fscshhude-env.path;
-            authUrl = "https://${config.teenix.services.authentik.hostname}/application/o/authorize/";
-            tokenUrl = "https://${config.teenix.services.authentik.hostname}/application/o/token/";
-            userInfoUrl = "https://${config.teenix.services.authentik.hostname}/application/o/userinfo/";
-          };
-
-          system.stateVersion = "24.11";
-        };
+        config = ./container.nix;
 
         networking = {
           useResolvConf = true;
