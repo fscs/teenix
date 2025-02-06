@@ -628,11 +628,11 @@
         "theme": "theme"
       },
       "locked": {
-        "lastModified": 1738712060,
-        "narHash": "sha256-EFhhOfsgwP3uluz9gLvG2/j6a0RFnPpmfxSEZv2T+S0=",
+        "lastModified": 1738873912,
+        "narHash": "sha256-TaQsz9UOXO5qCYcOX7nrIs7c1BvdFWWNDiF0AZGi9JE=",
         "ref": "refs/heads/main",
-        "rev": "f32dc5092f6f50b5fcb0fdc069b92d841d0fe30c",
-        "revCount": 511,
+        "rev": "50cf5e781a54847b589b1785dfa372d0520f2697",
+        "revCount": 517,
         "type": "git",
         "url": "ssh://git@git.hhu.de/fscs/website.git"
       },
