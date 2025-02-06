@@ -1,8 +1,9 @@
-{ lib
-, config
-, host-config
-, pkgs-master
-, ...
+{
+  lib,
+  config,
+  host-config,
+  pkgs-master,
+  ...
 }:
 let
   opts = host-config.teenix.services.nextcloud;
@@ -15,6 +16,10 @@ in
     groups.nextcloud.gid = 33;
   };
 
+  environment.systemPackages = [
+    config.services.nextcloud.occ
+  ];
+
   services.nextcloud = {
     enable = true;
     package = pkgs-master.nextcloud30;
@@ -22,13 +27,14 @@ in
     hostName = opts.hostname;
 
     https = true;
-    notify_push.enable = false;
+    notify_push.enable = true;
 
-    phpExtraExtensions = all: [
-      all.pdlib
-      all.bz2
-      all.smbclient
-    ];
+    phpExtraExtensions =
+      all: with all; [
+        pdlib
+        bz2
+        smbclient
+      ];
 
     database.createLocally = true;
 

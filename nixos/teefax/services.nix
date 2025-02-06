@@ -17,6 +17,18 @@
     enable = true;
     hostname = "nextcloud.inphima.de";
     secretsFile = ../secrets/nextcloud.yml;
+    extraApps = [
+      "forms"
+      "groupfolders"
+      "calendar"
+      "contacts"
+      "deck"
+      "polls"
+      "tasks"
+      "notify_push"
+      "onlyoffice"
+      "richdocuments"
+    ];
   };
 
   teenix.services.fscshhude = {
