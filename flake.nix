@@ -21,7 +21,7 @@
     matrix-intern-bot.url = "git+ssh://git@git.hhu.de/fscs/matrix-bot.git";
     fscshhude.url = "git+ssh://git@git.hhu.de/fscs/website.git";
     campus-guesser-server.url = "git+ssh://git@git.hhu.de/fscs/campus-guesser-server.git";
-    sitzungsverwaltung.url = "github:fscs/sitzungsverwaltung-gui";
+    sitzungsverwaltung.url = "git+ssh://git@github.com/fscs/sitzungsverwaltung-gui";
     mete = {
       url = "github:fscs/mete/wip/fscs";
       flake = false;
@@ -36,14 +36,13 @@
   };
 
   outputs =
-    {
-      self,
-      nixpkgs,
-      nixpkgs-master,
-      nixpkgs-stable,
-      sops-nix,
-      colmena,
-      ...
+    { self
+    , nixpkgs
+    , nixpkgs-master
+    , nixpkgs-stable
+    , sops-nix
+    , colmena
+    , ...
     }@inputs:
     let
       inherit (self) outputs;
@@ -77,9 +76,9 @@
     {
       formatter = eachSystem (
         system: pkgs:
-        pkgs.writers.writeBashBin "fmt" ''
-          find . -type f -name \*.nix | xargs ${lib.getExe pkgs.nixfmt-rfc-style}
-        ''
+          pkgs.writers.writeBashBin "fmt" ''
+            find . -type f -name \*.nix | xargs ${lib.getExe pkgs.nixfmt-rfc-style}
+          ''
       );
 
       packages = eachSystem (system: pkgs: import ./pkgs pkgs);

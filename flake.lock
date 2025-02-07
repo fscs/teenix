@@ -1338,15 +1338,15 @@
       "locked": {
         "lastModified": 1732703945,
         "narHash": "sha256-Y6kTSO53hZr3PfwkkWR19ebJ6tSpGfhofvQXAdFeJkc=",
-        "owner": "fscs",
-        "repo": "sitzungsverwaltung-gui",
+        "ref": "refs/heads/master",
         "rev": "9fa3b1b69dcc14c3543c69d27c065c26af835231",
-        "type": "github"
+        "revCount": 53,
+        "type": "git",
+        "url": "ssh://git@github.com/fscs/sitzungsverwaltung-gui"
       },
       "original": {
-        "owner": "fscs",
-        "repo": "sitzungsverwaltung-gui",
-        "type": "github"
+        "type": "git",
+        "url": "ssh://git@github.com/fscs/sitzungsverwaltung-gui"
       }
     },
     "sops-nix": {
