@@ -37,6 +37,8 @@ in
       enable = true;
       dbuser = lib.mkForce "nextcloud";
       dbhost = lib.mkForce "localhost:/run/mysqld/mysqld.sock";
+      bendDomainToLocalhost = true;
+      nextcloudUrl = "http://${host-config.containers.nextcloud.localAddress}";
     };
 
     phpExtraExtensions =
