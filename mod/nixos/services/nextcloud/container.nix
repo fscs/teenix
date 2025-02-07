@@ -1,9 +1,8 @@
-{
-  lib,
-  config,
-  host-config,
-  pkgs-master,
-  ...
+{ lib
+, config
+, host-config
+, pkgs-master
+, ...
 }:
 let
   opts = host-config.teenix.services.nextcloud;
@@ -20,6 +19,13 @@ in
     config.services.nextcloud.occ
   ];
 
+  services.mysql.settings = {
+    mysqld = {
+      innodb_buffer_pool_size = "3G";
+      innodb_io_capacity = 4000;
+    };
+  };
+
   services.nextcloud = {
     enable = true;
     package = pkgs-master.nextcloud30;
@@ -27,7 +33,11 @@ in
     hostName = opts.hostname;
 
     https = true;
-    notify_push.enable = true;
+    notify_push = {
+      enable = true;
+      dbuser = lib.mkForce "nextcloud";
+      dbhost = lib.mkForce "localhost:/run/mysqld/mysqld.sock";
+    };
 
     phpExtraExtensions =
       all: with all; [

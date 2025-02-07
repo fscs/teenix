@@ -26,7 +26,6 @@
       "polls"
       "tasks"
       "notify_push"
-      "onlyoffice"
       "richdocuments"
     ];
   };
