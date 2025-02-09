@@ -65,11 +65,9 @@
         inherit inputs outputs lib;
         pkgs-master = import nixpkgs-master {
           system = "x86_64-linux";
-          overlays = [ self.overlays.additions ];
         };
         pkgs-stable = import nixpkgs-stable {
           system = "x86_64-linux";
-          overlays = [ self.overlays.additions ];
         };
       };
     in
