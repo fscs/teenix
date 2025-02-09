@@ -89,7 +89,7 @@
 
     slinky = {
       from = "slinky.inphima.de";
-      to = "www.amazon.de/Legami-Das-Federspiel-Spirale-Ø/dp/B07FN8GHG4";
+      to = "www.legami.com/de_de/magic-spring-VSL0001.html";
     };
   };
 }
