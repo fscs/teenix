@@ -90,6 +90,11 @@
     secretsFile = ../secrets/discord-intern-bot.yml;
   };
 
+  teenix.services.discord-inphima-bot = {
+    enable = true;
+    secretsFile = ../secrets/discord-inphima-bot.yml;
+  };
+
   teenix.services.inphimade = {
     enable = true;
     hostname = "inphima.de";

@@ -235,10 +235,31 @@
         "type": "github"
       }
     },
+    "discord-inphima-bot": {
+      "inputs": {
+        "flake-utils": "flake-utils_5",
+        "gradle2nix": "gradle2nix_2",
+        "nixpkgs": "nixpkgs_5",
+        "nixpkgs-openjdk15": "nixpkgs-openjdk15"
+      },
+      "locked": {
+        "lastModified": 1739368029,
+        "narHash": "sha256-1zYSv4Ph/XyHWpj7f1yUc9LPiBd0jZApEp9S2JabphU=",
+        "ref": "refs/heads/master",
+        "rev": "4e0581493d6d10268ce145b5791aa916bc9619af",
+        "revCount": 354,
+        "type": "git",
+        "url": "ssh://git@git.hhu.de/inphima/inphima-discord-bot.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@git.hhu.de/inphima/inphima-discord-bot.git"
+      }
+    },
     "discord-intern-bot": {
       "inputs": {
         "crane": "crane",
-        "flake-utils": "flake-utils_5",
+        "flake-utils": "flake-utils_7",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -571,11 +592,11 @@
         "systems": "systems_6"
       },
       "locked": {
-        "lastModified": 1710146030,
-        "narHash": "sha256-SZ5L6eA7HJ/nmkzGG7/ISclqe6oZdOZTNoesiInkXPQ=",
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "b1d9ab70662946ef0850d488da1c9019f3a9752a",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
         "type": "github"
       },
       "original": {
@@ -607,11 +628,11 @@
         "systems": "systems_8"
       },
       "locked": {
-        "lastModified": 1731533236,
-        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "lastModified": 1710146030,
+        "narHash": "sha256-SZ5L6eA7HJ/nmkzGG7/ISclqe6oZdOZTNoesiInkXPQ=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "rev": "b1d9ab70662946ef0850d488da1c9019f3a9752a",
         "type": "github"
       },
       "original": {
@@ -622,8 +643,8 @@
     },
     "fscshhude": {
       "inputs": {
-        "flake-utils": "flake-utils_6",
-        "nixpkgs": "nixpkgs_4",
+        "flake-utils": "flake-utils_8",
+        "nixpkgs": "nixpkgs_6",
         "server": "server",
         "theme": "theme"
       },
@@ -663,8 +684,8 @@
     },
     "gradle2nix_2": {
       "inputs": {
-        "flake-utils": "flake-utils_10",
-        "nixpkgs": "nixpkgs_5"
+        "flake-utils": "flake-utils_6",
+        "nixpkgs": "nixpkgs_4"
       },
       "locked": {
         "lastModified": 1737146267,
@@ -684,7 +705,7 @@
     "grafana2ntfy": {
       "inputs": {
         "crane": "crane_4",
-        "flake-utils": "flake-utils_8",
+        "flake-utils": "flake-utils_10",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -749,27 +770,6 @@
         "owner": "nix-community",
         "repo": "impermanence",
         "type": "github"
-      }
-    },
-    "inphima-discord-bot": {
-      "inputs": {
-        "flake-utils": "flake-utils_9",
-        "gradle2nix": "gradle2nix_2",
-        "nixpkgs": "nixpkgs_6",
-        "nixpkgs-openjdk15": "nixpkgs-openjdk15"
-      },
-      "locked": {
-        "lastModified": 1737300896,
-        "narHash": "sha256-zAhpheUNtW5Yo/GUV/ohnEQELqgED82qaeYEu2lMBNw=",
-        "ref": "refs/heads/master",
-        "rev": "5b44e0a708ebebaf5dc3499bbef8c1dbce2e5f37",
-        "revCount": 349,
-        "type": "git",
-        "url": "ssh://git@git.hhu.de/inphima/inphima-discord-bot.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "ssh://git@git.hhu.de/inphima/inphima-discord-bot.git"
       }
     },
     "matrix-intern-bot": {
@@ -1105,22 +1105,6 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1738644632,
-        "narHash": "sha256-DyvJjOOGmTSkkEfHq0oWkwtZOgejYIB5S865wmf/qos=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "95ea544c84ebed84a31896b0ecea2570e5e0e236",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_5": {
-      "locked": {
         "lastModified": 1733940404,
         "narHash": "sha256-Pj39hSoUA86ZePPF/UXiYHHM7hMIkios8TYG29kQT4g=",
         "owner": "NixOS",
@@ -1135,7 +1119,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_6": {
+    "nixpkgs_5": {
       "locked": {
         "lastModified": 1735563628,
         "narHash": "sha256-OnSAY7XDSx7CtDoqNh8jwVwh4xNL/2HaJxGjryLWzX8=",
@@ -1147,6 +1131,22 @@
       "original": {
         "owner": "nixos",
         "ref": "nixos-24.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_6": {
+      "locked": {
+        "lastModified": 1738644632,
+        "narHash": "sha256-DyvJjOOGmTSkkEfHq0oWkwtZOgejYIB5S865wmf/qos=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "95ea544c84ebed84a31896b0ecea2570e5e0e236",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -1265,11 +1265,11 @@
         "authentik-nix": "authentik-nix",
         "campus-guesser-server": "campus-guesser-server",
         "colmena": "colmena",
+        "discord-inphima-bot": "discord-inphima-bot",
         "discord-intern-bot": "discord-intern-bot",
         "flake-programs-sqlite": "flake-programs-sqlite",
         "fscshhude": "fscshhude",
         "grafana2ntfy": "grafana2ntfy",
-        "inphima-discord-bot": "inphima-discord-bot",
         "matrix-intern-bot": "matrix-intern-bot",
         "mete": "mete",
         "nix-tun": "nix-tun",
@@ -1309,7 +1309,7 @@
     "server_2": {
       "inputs": {
         "crane": "crane_3",
-        "flake-utils": "flake-utils_7",
+        "flake-utils": "flake-utils_9",
         "nixpkgs": [
           "fscshhude",
           "theme",

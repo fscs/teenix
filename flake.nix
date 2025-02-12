@@ -17,7 +17,7 @@
     authentik-nix.url = "github:nix-community/authentik-nix";
 
     discord-intern-bot.url = "git+ssh://git@git.hhu.de/fscs/discord-intern-bot.git";
-    inphima-discord-bot.url = "git+ssh://git@git.hhu.de/inphima/inphima-discord-bot.git";
+    discord-inphima-bot.url = "git+ssh://git@git.hhu.de/inphima/inphima-discord-bot.git";
     matrix-intern-bot.url = "git+ssh://git@git.hhu.de/fscs/matrix-bot.git";
     fscshhude.url = "git+ssh://git@git.hhu.de/fscs/website.git";
     campus-guesser-server.url = "git+ssh://git@git.hhu.de/fscs/campus-guesser-server.git";
