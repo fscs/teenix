@@ -162,4 +162,9 @@
     secretsFile = ../secrets/attic.yml;
     hostname = "attic.hhu-fscs.de";
   };
+
+  teenix.services.docnix = {
+    enable = true;
+    hostname = "docnix.hhu-fscs.de";
+  };
 }
