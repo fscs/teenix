@@ -36,13 +36,14 @@
   };
 
   outputs =
-    { self
-    , nixpkgs
-    , nixpkgs-master
-    , nixpkgs-stable
-    , sops-nix
-    , colmena
-    , ...
+    {
+      self,
+      nixpkgs,
+      nixpkgs-master,
+      nixpkgs-stable,
+      sops-nix,
+      colmena,
+      ...
     }@inputs:
     let
       inherit (self) outputs;
@@ -74,12 +75,18 @@
     {
       formatter = eachSystem (
         system: pkgs:
-          pkgs.writers.writeBashBin "fmt" ''
-            find . -type f -name \*.nix | xargs ${lib.getExe pkgs.nixfmt-rfc-style}
-          ''
+        pkgs.writers.writeBashBin "fmt" ''
+          find . -type f -name \*.nix | xargs ${lib.getExe pkgs.nixfmt-rfc-style}
+        ''
       );
 
-      packages = eachSystem (system: pkgs: import ./pkgs pkgs);
+      packages = eachSystem (
+        system: pkgs:
+        (import ./pkgs pkgs)
+        // {
+          doc = pkgs.callPackage ./doc { };
+        }
+      );
       overlays = import ./overlays.nix { inherit inputs; };
 
       nixosModules.teenix = import ./mod/nixos;
@@ -125,11 +132,19 @@
               "${toString ./.}/nixos/keys/users"
             ];
 
-            nativeBuildInputs = [
-              pkgs.nixos-rebuild
-              sops-nix.packages.${system}.sops-import-keys-hook
-              colmena.packages.${system}.colmena
-            ];
+            nativeBuildInputs =
+              with pkgs;
+              [
+                nixos-rebuild
+                mdbook
+                mdbook-alerts
+                mdbook-emojicodes
+                mdbook-footnote
+              ]
+              ++ [
+                sops-nix.packages.${system}.sops-import-keys-hook
+                colmena.packages.${system}.colmena
+              ];
           };
         }
       );

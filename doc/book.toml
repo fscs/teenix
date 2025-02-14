@@ -1,0 +1,13 @@
+[book]
+language = "de"
+multilingual = false
+src = "src"
+title = "Teenix Doku"
+
+[output.html]
+smart-punctuation = true
+git-repository-url = "https://github.com/fscs/teenix"
+
+[preprocessor.alerts]
+[preprocessor.footnote]
+[preprocessor.emojicodes]
