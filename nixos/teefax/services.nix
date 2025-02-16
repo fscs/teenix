@@ -3,7 +3,7 @@
   teenix.services.collabora = {
     enable = true;
     hostname = "collabora.inphima.de";
-    nextcloudHost = "nextcloud.inphima.de";
+    nextcloudHost = config.teenix.services.nextcloud.hostname;
   };
 
   teenix.services.helfendentool = {

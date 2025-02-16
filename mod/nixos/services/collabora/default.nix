@@ -1,6 +1,5 @@
 { config, lib, ... }:
 {
-
   options.teenix.services.collabora = {
     enable = lib.mkEnableOption "Enable collabora";
     hostname = lib.teenix.mkHostnameOption;
@@ -9,24 +8,47 @@
     };
   };
 
-  config = lib.mkIf config.teenix.services.collabora.enable {
-    virtualisation.oci-containers.containers.collabora = {
-      image = "collabora/code:latest";
-      environment = {
-        aliasgroup1 = "https://${config.teenix.services.collabora.nextcloudHost}:443";
-        server_name = "${config.teenix.services.collabora.hostname}";
-        extra_params = "--o:ssl.enable=true --o:remote_font_config.url=https://nextcloud.inphima.de/apps/richdocuments/settings/fonts.json";
+  config =
+    let
+      cfg = config.teenix.services.collabora;
+    in
+    lib.mkIf cfg.enable {
+      teenix.services.traefik.services.collabora = {
+        router.rule = "Host(`${cfg.hostname}`)";
+        healthCheck.enable = true;
+
+        servers = [
+          "http://${config.containers.collabora.localAddress}:${toString config.containers.collabora.config.services.collabora-online.port}"
+        ];
       };
-      labels = {
-        "traefik.enable" = "true";
-        "traefik.http.routers.collabora.entrypoints" = "websecure";
-        "traefik.http.routers.collabora.rule" = "Host(`${config.teenix.services.collabora.hostname}`)";
-        "traefik.http.routers.collabora.tls" = "true";
-        "traefik.http.routers.collabora.tls.certresolver" = "letsencrypt";
-        "traefik.http.services.collabora.loadbalancer.server.port" = "9980";
-        "traefik.http.services.collabora.loadbalancer.server.scheme" = "https";
-        "traefik.http.services.collabora.loadbalancer.healthCheck.path" = "/";
+
+      teenix.containers.collabora = {
+        config = {
+          systemd.services.coolwsd.environment.server_name = config.teenix.services.collabora.hostname;
+          services.collabora-online = {
+            enable = true;
+            aliasGroups = lib.singleton {
+              host = "https://${config.teenix.services.collabora.nextcloudHost}:443";
+            };
+            settings = {
+              net.post_allow.host = "::ffff:${
+                lib.replaceStrings [ "." ] [ "\\." ] config.containers.collabora.localAddress
+              }";
+              net.proto = "IPv4";
+              ssl.enable = false;
+              ssl.termination = true;
+              ssl_verification = false;
+              remote_font_config.url = "https://${cfg.nextcloudHost}/apps/richdocuments/settings/fonts.json";
+            };
+          };
+
+          system.stateVersion = "24.11";
+        };
+
+        networking = {
+          useResolvConf = true;
+          ports.tcp = [ config.containers.collabora.config.services.collabora-online.port ];
+        };
       };
     };
-  };
 }
