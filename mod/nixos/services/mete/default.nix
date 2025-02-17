@@ -14,18 +14,23 @@
 
   config =
     let
-      opts = config.teenix.services.mete;
+      cfg = config.teenix.services.mete;
     in
-    lib.mkIf opts.enable {
+    lib.mkIf cfg.enable {
       nix-tun.storage.persist.subvolumes.mete.directories = {
-        "/db" = {
+        db = {
           owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
-        "/drinks" = {
+        drinks = {
           owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
+      };
+
+      teenix.services.traefik.middlewares.meteredirect.redirectregex = {
+        regex = "https://${cfg.hostname}/(.*?)((/deposit)|(/retrieve)|(/transaction))(.*)";
+        replacement = "https://${cfg.hostname}/$1";
       };
 
       virtualisation.docker.rootless = {

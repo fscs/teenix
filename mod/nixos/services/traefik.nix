@@ -5,119 +5,137 @@
   lib,
   ...
 }:
-{
-  options.teenix.services.traefik =
-    let
-      t = lib.types;
-    in
-    {
-      enable = lib.mkEnableOption "Enable the Traefik Reverse Proxy";
-      letsencryptMail = lib.mkOption {
-        type = t.nonEmptyStr;
-        description = "The email address used for letsencrypt certificates";
-      };
-      dashboardUrl = lib.mkOption {
-        type = t.nonEmptyStr;
-        description = "The url to which the dashboard should be published to";
-      };
-      secretsFile = lib.teenix.mkSecretsFileOption "traefik";
-      redirects = lib.mkOption {
-        type = t.attrsOf t.nonEmptyStr;
-      };
-      dockerProvider.enable = lib.mkEnableOption {
-        default = false;
-        description = "Enable the docker provider for traefik";
-      };
-      entrypoints = lib.mkOption {
-        type = pkgs.formats.yaml;
-        default = { };
-        description = ''
-          Traefiks's entrypoints.
+let
+  t = lib.types;
 
-          80 (web) and 443 (websecure) are added by default.
+  ruleType = t.attrTag {
+    expr = lib.mkOption {
+      description = "Raw routing rule expression for this router.";
+      type = t.nonEmptyStr;
+    };
+    host = lib.mkOption {
+      description = "Shorthand for a 'Host()' rule.";
+      type = t.nonEmptyStr;
+    };
+  };
+
+  mkRouterRule = rule: if rule ? "host" then "Host(`${rule.host}`)" else rule.expr;
+
+  serviceType = t.submodule {
+    options = {
+      router = {
+        rule = lib.mkOption {
+          type = ruleType;
+          description = "Define the rule for this router";
+        };
+        tls = {
+          enable = lib.mkEnableOption {
+            default = true;
+            description = "Enable tls for the router";
+          };
+          extraConfig = lib.mkOption {
+            type = pkgs.formats.yaml;
+            default = {
+              certResolver = "letsencrypt";
+            };
+            description = ''
+              Options for tls, default is to use the letsencrypt certResolver
+            '';
+          };
+        };
+        middlewares = lib.mkOption {
+          type = t.listOf t.nonEmptyStr;
+          default = [ ];
+          description = ''
+            The middlewares applied to the router, the middlewares are applied in order.
+          '';
+        };
+        entryPoints = lib.mkOption {
+          type = t.listOf t.nonEmptyStr;
+          default = [ "websecure" ];
+          description = ''
+            The Entrypoint of the service, default is 443 (websecure)
+          '';
+        };
+        extraConfig = lib.mkOption {
+          type = pkgs.formats.yaml;
+          default = { };
+          description = "Extra settings for this router";
+        };
+      };
+      servers = lib.mkOption {
+        type = t.listOf t.nonEmptyStr;
+        default = [ ];
+        description = ''
+          The hosts of the service
         '';
       };
-      accessLog = {
-        enable = lib.mkEnableOption "enable traefik's accesslog";
-        filePath = lib.mkOption {
+      healthCheck = {
+        enable = lib.mkEnableOption "Healthcheck this service";
+        path = lib.mkOption {
           type = t.nonEmptyStr;
-          default = "/var/log/traefik.log";
+          default = "/";
+          description = "Path to healthcheck on";
+        };
+        interval = lib.mkOption {
+          type = t.nonEmptyStr;
+          default = "10s";
+          description = "Time interval to healthcheck on";
+        };
+        extraConfig = lib.mkOption {
+          type = pkgs.formats.yaml;
+          default = { };
+          description = "Extra settings for the healthcheck";
         };
       };
-      services =
-        let
-          serviceOpts = t.submodule {
-            options = {
-              router = {
-                rule = lib.mkOption {
-                  type = t.str;
-                  default = "";
-                  description = ''
-                    The routing rule for this service. The rules are defined here: https://doc.traefik.io/traefik/routing/routers/
-                  '';
-                };
-                priority = lib.mkOption {
-                  type = t.int;
-                  default = 0;
-                };
-                tls = {
-                  enable = lib.mkEnableOption {
-                    default = true;
-                    description = "Enable tls for the router";
-                  };
-                  options = lib.mkOption {
-                    type = pkgs.formats.yaml;
-                    default = {
-                      certResolver = "letsencrypt";
-                    };
-                    description = ''
-                      Options for tls, default is to use the letsencrypt certResolver
-                    '';
-                  };
-                };
-                middlewares = lib.mkOption {
-                  type = t.listOf t.nonEmptyStr;
-                  default = [ ];
-                  description = ''
-                    The middlewares applied to the router, the middlewares are applied in order.
-                  '';
-                };
-                entryPoints = lib.mkOption {
-                  type = t.listOf t.nonEmptyStr;
-                  default = [ "websecure" ];
-                  description = ''
-                    The Entrypoint of the service, default is 443 (websecure)
-                  '';
-                };
-              };
-              servers = lib.mkOption {
-                type = t.listOf t.nonEmptyStr;
-                default = [ ];
-                description = ''
-                  The hosts of the service
-                '';
-              };
-              healthCheck = {
-                enable = lib.mkEnableOption "Healthcheck this service";
-                path = lib.mkOption {
-                  type = t.nonEmptyStr;
-                  default = "/";
-                  description = "Path to healthcheck on";
-                };
-                interval = lib.mkOption {
-                  type = t.nonEmptyStr;
-                  default = "10s";
-                  description = "Time interval to healthcheck on";
-                };
-              };
-            };
-          };
-        in
-        lib.mkOption {
-          type = t.attrsOf serviceOpts;
-          default = { };
-        };
     };
+  };
+in
+{
+  options.teenix.services.traefik = {
+    enable = lib.mkEnableOption "Enable the Traefik Reverse Proxy";
+    letsencryptMail = lib.mkOption {
+      type = t.nonEmptyStr;
+      description = "The email address used for letsencrypt certificates";
+    };
+    dashboardUrl = lib.mkOption {
+      type = t.nonEmptyStr;
+      description = "The url to which the dashboard should be published to";
+    };
+    secretsFile = lib.teenix.mkSecretsFileOption "traefik";
+    redirects = lib.mkOption {
+      type = t.attrsOf t.nonEmptyStr;
+    };
+    dockerProvider.enable = lib.mkEnableOption {
+      default = false;
+      description = "Enable the docker provider for traefik";
+    };
+    entrypoints = lib.mkOption {
+      type = pkgs.formats.yaml;
+      default = { };
+      description = ''
+        Traefiks' entrypoints.
+
+        80 (web) and 443 (websecure) are added by default.
+      '';
+    };
+    middlewares = lib.mkOption {
+      type = pkgs.formats.yaml;
+      default = { };
+      description = "Traefiks' middlewares.";
+    };
+    accessLog = {
+      enable = lib.mkEnableOption "enable traefik's accesslog";
+      filePath = lib.mkOption {
+        type = t.nonEmptyStr;
+        default = "/var/log/traefik.log";
+      };
+    };
+    services = lib.mkOption {
+      type = t.attrsOf serviceType;
+      default = { };
+    };
+  };
 
   config =
     let
@@ -140,22 +158,43 @@
         mode = "700";
       };
 
-      teenix.services.traefik.entrypoints = {
-        web = {
-          port = 80;
-          http.redirections.entryPoint = {
-            to = "websecure";
-            scheme = "https";
+      teenix.services.traefik = {
+        entrypoints = {
+          web = {
+            port = 80;
+            http.redirections.entryPoint = {
+              to = "websecure";
+              scheme = "https";
+            };
+          };
+          websecure = {
+            port = 443;
           };
         };
-        websecure = {
-          port = 443;
+
+        middlewares = lib.mapAttrs' (
+          name: value:
+          lib.nameValuePair "redirect-${name}" {
+            redirectRegex = {
+              regex = "(www\\.)?${lib.replaceStrings [ "." ] [ "\." ] value.from}/?";
+              replacement = value.to;
+              permanent = true;
+            };
+          }
+        ) cfg.redirects;
+
+        services."api@internal" = {
+          rule.host = cfg.dashboardUrl;
+          middlewares = [ "authentik" ];
+          entryPoints = [
+            "web"
+            "websecure"
+          ];
         };
       };
 
       services.traefik =
         let
-
           dynamicConfig =
             pkgs.runCommand "config.toml"
               {
@@ -176,7 +215,7 @@
         in
         {
           enable = true;
-          dataDir = "${config.nix-tun.storage.persist.path}/traefik";
+          dataDir = config.nix-tun.storage.subvolumes.traefik.path;
 
           package = pkgs-stable.traefik;
 
@@ -184,91 +223,53 @@
 
           dynamicConfigOptions = {
             http = {
-              routers =
+              inherit (cfg) middlewares;
+
+              routers = lib.mkMerge [
+                # routers for services
                 (lib.attrsets.mapAttrs (
-                  name: value:
+                  service: serviceCfg:
                   lib.mkMerge [
                     {
-                      rule = value.router.rule;
-                      priority = value.router.priority;
-                      middlewares = value.router.middlewares;
-                      service = name;
-                      entryPoints = value.router.entryPoints;
+                      inherit service;
+                      rule = mkRouterRule serviceCfg.router.rule;
+                      middlewares = serviceCfg.router.middlewares;
+                      entryPoints = serviceCfg.router.entryPoints;
+                      tls = lib.mkIf serviceCfg.router.tls.enable serviceCfg.router.tls.options;
                     }
-                    (lib.mkIf value.router.tls.enable {
-                      tls = value.router.tls.options;
-                    })
+                    serviceCfg.extraConfig
                   ]
-                ) config.teenix.services.traefik.services)
-                // lib.attrsets.mapAttrs (name: value: {
+                ) cfg.services)
+
+                # redirects
+                (lib.mapAttrs (name: value: {
                   service = "blank";
                   priority = 10;
                   rule = "Host(`${builtins.replaceStrings [ "." ] [ "\." ] value.from}`)";
-                  middlewares = name;
+                  middlewares = "redirect-${name}";
                   tls.certResolver = "letsencrypt";
                   entryPoints = [ "websecure" ];
-                }) config.teenix.services.traefik.redirects
-                // {
-                  dashboard = {
-                    rule = "Host(`${config.teenix.services.traefik.dashboardUrl}`)";
-                    service = "api@internal";
-                    entryPoints = [
-                      "web"
-                      "websecure"
-                    ];
-                    middlewares = [ "authentik" ];
-                    tls.certResolver = "letsencrypt";
-                  };
-                };
-              middlewares =
-                lib.attrsets.mapAttrs (name: value: {
-                  redirectRegex = {
-                    regex = "(www\\.)?${builtins.replaceStrings [ "." ] [ "\." ] value.from}/?";
-                    replacement = value.to;
-                    permanent = true;
-                  };
-                }) config.teenix.services.traefik.redirects
-                // {
-                  meteredirect.redirectregex = {
-                    regex = "https://mete.hhu-fscs.de/(.*?)((/deposit)|(/retrieve)|(/transaction))(.*)";
-                    replacement = "https://mete.hhu-fscs.de/$1";
-                  };
-                  authentik.forwardAuth = {
-                    address = "https://authentik:9443/outpost.goauthentik.io/auth/traefik";
-                    trustForwardHeader = true;
-                    tls.insecureSkipVerify = true;
-                    authResponseHeaders = [
-                      "X-authentik-username"
-                      "X-authentik-groups"
-                      "X-authentik-email"
-                      "X-authentik-name"
-                      "X-authentik-uid"
-                      "X-authentik-jwt"
-                      "X-authentik-meta-jwks"
-                      "X-authentik-meta-outpost"
-                      "X-authentik-meta-provider"
-                      "X-authentik-meta-app"
-                      "X-authentik-meta-version"
+                }) cfg.redirects)
+              ];
+
+              services = lib.mkMerge [
+                (lib.mapAttrs (name: serviceCfg: {
+                  loadBalancer = {
+                    servers = map (value: {
+                      url = value;
+                    }) serviceCfg.servers;
+
+                    healthCheck = lib.mkIf serviceCfg.healthCheck.enable lib.mkMerge [
+                      {
+                        inherit (serviceCfg.healthCheck) path interval;
+                      }
+                      serviceCfg.healthCheck.extraConfig
                     ];
                   };
-                };
-              services =
-                lib.attrsets.mapAttrs (name: value: {
-                  loadBalancer = lib.mkMerge [
-                    {
-                      servers = builtins.map (value: {
-                        url = value;
-                      }) value.servers;
-                    }
-                    (lib.mkIf value.healthCheck.enable {
-                      healthCheck = {
-                        path = value.healthCheck.path;
-                        interval = value.healthCheck.interval;
-                      };
-                    })
-                  ];
-                }) config.teenix.services.traefik.services
-                // {
+                }) cfg.services)
+
+                # blank services, needed for redirects
+                {
                   blank = {
                     loadBalancer = {
                       servers = {
@@ -276,9 +277,11 @@
                       };
                     };
                   };
-                };
+                }
+              ];
             };
           };
+
           staticConfigOptions = {
             serversTransport.insecureSkipVerify = true;
             metrics.prometheus = {

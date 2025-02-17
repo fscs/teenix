@@ -35,15 +35,36 @@
         trusted-public-keys = [ "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
       };
 
-      teenix.services.traefik.services.authentik = {
-        router.rule = "Host(`${opts.hostname}`)";
-        servers = [ "http://${config.containers.authentik.localAddress}" ];
-        healthCheck.enable = true;
-      };
+      teenix.services.traefik = {
+        services.authentik = {
+          router.rule = "Host(`${opts.hostname}`)";
+          servers = [ "http://${config.containers.authentik.localAddress}" ];
+          healthCheck.enable = true;
+        };
 
-      teenix.services.traefik.services.authentik_auth = {
-        router.rule = "Host(`${opts.hostname}`) && PathPrefix(`/outpost.goauthentik.io/`)";
-        servers = [ "http://${config.containers.authentik.localAddress}:9000/outpost.goauthentik.io" ];
+        services.authentik_auth = {
+          router.rule = "Host(`${opts.hostname}`) && PathPrefix(`/outpost.goauthentik.io/`)";
+          servers = [ "http://${config.containers.authentik.localAddress}:9000/outpost.goauthentik.io" ];
+        };
+
+        middlewares.authentik.forwardAuth = {
+          address = "https://${config.containers.authentik.localAddress}:9443/outpost.goauthentik.io/auth/traefik";
+          trustForwardHeader = true;
+          tls.insecureSkipVerify = true;
+          authResponseHeaders = [
+            "X-authentik-username"
+            "X-authentik-groups"
+            "X-authentik-email"
+            "X-authentik-name"
+            "X-authentik-uid"
+            "X-authentik-jwt"
+            "X-authentik-meta-jwks"
+            "X-authentik-meta-outpost"
+            "X-authentik-meta-provider"
+            "X-authentik-meta-app"
+            "X-authentik-meta-version"
+          ];
+        };
       };
 
       teenix.containers.authentik = {
