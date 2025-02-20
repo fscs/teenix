@@ -21,12 +21,28 @@
 
   '';
 
-  environment.shellAliases = rec {
-    ls = "${lib.getExe pkgs.eza} -F --sort extension --group-directories-first --git --icons -Mo --hyperlink --git-repos-no-status --color-scale=size --no-permissions ";
-    ll = ls + "-l ";
-    la = ll + "-a ";
-    l = ll;
-    gls = ll + "--git-ignore ";
+  environment = {
+    enableAllTerminfo = true;
+
+    shellAliases = rec {
+      ls = "${lib.getExe pkgs.eza} -F --sort extension --group-directories-first --git --icons -Mo --hyperlink --git-repos-no-status --color-scale=size --no-permissions ";
+      ll = ls + "-l ";
+      la = ll + "-a ";
+      l = ll;
+      gls = ll + "--git-ignore ";
+    };
+
+    systemPackages = with pkgs; [
+      bat
+      btop
+      duf
+      file
+      git
+      jq
+      psmisc
+      ripgrep
+      xcp
+    ];
   };
 
   users.defaultUserShell = pkgs.fish;

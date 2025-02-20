@@ -19,11 +19,6 @@
     outputs.nixosModules.teenix
   ];
 
-  environment.enableAllTerminfo = true;
-  environment.systemPackages = [
-    pkgs.git
-  ];
-
   nixpkgs.config.permittedInsecurePackages = [
     "olm-3.2.16"
   ];
