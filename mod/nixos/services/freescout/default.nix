@@ -97,7 +97,7 @@
           DB_HOST = "freescout-db";
           DB_NAME = "freescout";
           SITE_URL = "https://${opts.hostname}";
-          ADMIN_EMAIL = "admin@admin.com";
+          ADMIN_EMAIL = "fscs@hhu.de";
           ENABLE_SSL_PROXY = "false";
           DISPLAY_ERRORS = "false";
           TIMEZONE = "Europe/Berlin";

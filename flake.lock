@@ -1293,11 +1293,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1739894002,
-        "narHash": "sha256-derkWUKNLk9h8VsO/b8nKoqiUJNVC1srYnWTP7TRo8o=",
+        "lastModified": 1739889920,
+        "narHash": "sha256-M6Ul4KNUxe0xYlvNipe231zRTnRG9Dnsg9WbQMpPa/Y=",
         "owner": "fscs",
         "repo": "website-server",
-        "rev": "400f0a7bc109f3a11c74965e44b85192bb75956d",
+        "rev": "501247d1f8a365cf0ce465f74f7e412f1a19e89c",
         "type": "github"
       },
       "original": {
