@@ -7,11 +7,10 @@
 }:
 {
   imports = [
+    ../share
     ./hardware-configuration.nix
     ./traefik.nix
     ./services.nix
-    ../users.nix
-    ../locale.nix
 
     inputs.sops-nix.nixosModules.sops
     inputs.nix-tun.nixosModules.nix-tun
