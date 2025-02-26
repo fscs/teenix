@@ -159,6 +159,8 @@
             };
           };
 
+          services.journald.extraConfig = "MaxFileSec=1 month";
+
           users.defaultUserShell = pkgs.fish;
           programs.fish = {
             enable = true;
