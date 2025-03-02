@@ -167,4 +167,9 @@
     enable = true;
     hostname = "docnix.hhu-fscs.de";
   };
+
+  teenix.services.hockeypuck = {
+    enable = true; 
+    hostname = "pgp.inphima.de";
+  };
 }
