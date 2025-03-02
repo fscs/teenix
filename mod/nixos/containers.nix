@@ -60,7 +60,8 @@
                 enable = lib.mkEnableOption "mount /var/lib/<containerName>";
                 ownerUid = lib.mkOption {
                   description = "owner of the data dir";
-                  type = t.int;
+                  type = t.nullOr t.int;
+                  default = null;
                 };
                 name = lib.mkOption {
                   description = "change the folder name under /var/lib";
@@ -331,7 +332,7 @@
                 mode = "0700";
               };
               data = lib.mkIf enableData {
-                owner = toString value.mounts.data.ownerUid;
+                owner = toString (lib.defaultTo ":root" value.mounts.data.ownerUid);
                 mode = "0700";
               };
             }
