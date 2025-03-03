@@ -10,8 +10,6 @@
     let
       t = lib.types;
 
-      elemTypeOf = o: o.type.nestedTypes.elemType;
-
       containerType = t.submodule (
         { name, ... }:
         {
@@ -74,12 +72,12 @@
                 secrets = lib.mkOption {
                   description = "sops secrets to mount into the container";
                   default = [ ];
-                  type = t.listOf (elemTypeOf options.sops.secrets);
+                  type = t.listOf (lib.teenix.elemTypeOf options.sops.secrets);
                 };
                 templates = lib.mkOption {
-                  description = "sops secrets/templates to mount into the container";
+                  description = "sops templates to mount into the container";
                   default = [ ];
-                  type = t.listOf (elemTypeOf options.sops.templates);
+                  type = t.listOf (lib.teenix.elemTypeOf options.sops.templates);
                 };
               };
 
@@ -91,13 +89,18 @@
                       mountPoint = lib.mkOption {
                         type = t.nonEmptyStr;
                       };
+                      hostPath = lib.mkOption {
+                        type = t.nullOr t.nonEmptyStr;
+                        default = null;
+                      };
                       isReadOnly = lib.mkOption {
                         type = t.bool;
                         default = true;
                       };
                       ownerUid = lib.mkOption {
                         description = "owner of mounted directory";
-                        type = t.int;
+                        type = t.nullOr t.int;
+                        default = null;
                       };
                       mode = lib.mkOption {
                         type = t.nonEmptyStr;
@@ -267,7 +270,7 @@
                 # extra mounts
                 (lib.mapAttrs (n: value: {
                   inherit (value) mountPoint isReadOnly;
-                  hostPath = "${config.nix-tun.storage.persist.subvolumes.${containerName}.path}/${n}";
+                  hostPath = lib.defaultTo "${config.nix-tun.storage.persist.subvolumes.${containerName}.path}/${n}" value.hostPath;
                 }) cfg.mounts.extra)
               ];
 
@@ -338,8 +341,8 @@
             }
             (lib.mapAttrs (_: v: {
               inherit (v) mode;
-              owner = toString v.ownerUid;
-            }) value.mounts.extra)
+              owner = toString (lib.defaultTo ":root" v.ownerUid);
+            }) (lib.filterAttrs (_: v: v.hostPath != null) value.mounts.extra))
           ];
         }
       ) config.teenix.containers;
