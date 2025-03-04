@@ -4,6 +4,7 @@
   mdbook-alerts,
   mdbook-emojicodes,
   mdbook-footnote,
+  mdbook-toc,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "teenix-doc";
@@ -13,9 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     mdbook
-    mdbook-alerts     
-    mdbook-emojicodes 
-    mdbook-footnote   
+    mdbook-alerts
+    mdbook-emojicodes
+    mdbook-footnote
+    mdbook-toc
   ];
 
   buildPhase = ''

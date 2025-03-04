@@ -11,3 +11,7 @@ git-repository-url = "https://github.com/fscs/teenix"
 [preprocessor.alerts]
 [preprocessor.footnote]
 [preprocessor.emojicodes]
+
+[preprocessor.toc]
+command = "mdbook-toc"
+renderer = ["html"]
