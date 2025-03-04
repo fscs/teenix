@@ -22,6 +22,7 @@
     fscshhude.url = "git+ssh://git@git.hhu.de/fscs/website.git";
     campus-guesser-server.url = "git+ssh://git@git.hhu.de/fscs/campus-guesser-server.git";
     sitzungsverwaltung.url = "git+ssh://git@github.com/fscs/sitzungsverwaltung-gui";
+    ultrastar-queue.url = "git+file:///home/makrele/src/fachschaft/ultrastar-queue";
     mete = {
       url = "github:fscs/mete/wip/fscs";
       flake = false;

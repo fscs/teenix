@@ -172,4 +172,9 @@
     enable = true; 
     hostname = "pgp.inphima.de";
   };
+
+  teenix.services.ultrastar-queue = {
+    enable = false;
+    secretsFile = ../secrets/ultrastar-queue.yml;
+  };
 }
