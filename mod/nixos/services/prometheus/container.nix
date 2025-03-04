@@ -44,7 +44,6 @@
     ];
   };
 
-  systemd.services.loki.serviceConfig.StateDirectory = "loki";
   services.loki = {
     enable = true;
     configuration = {
