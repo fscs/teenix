@@ -44,8 +44,7 @@
     ];
   };
 
-  users.users.loki.uid = 99;
-
+  systemd.services.loki.serviceConfig.StateDirectory = "loki";
   services.loki = {
     enable = true;
     configuration = {
@@ -79,7 +78,6 @@
           period = "24h";
         };
       };
-
     };
   };
 

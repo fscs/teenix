@@ -22,15 +22,13 @@
 
       teenix.containers.ntfy = {
         config = {
-          users.users.ntfy-sh.uid = 99;
-
+          systemd.services.ntfy-sh.serviceConfig.DynamicUser = lib.mkForce false;
           services.ntfy-sh = {
             enable = true;
             settings = {
               listen-http = ":8080";
               base-url = "https://${config.teenix.services.ntfy.hostname}";
               auth-default-access = "deny-all";
-              auth-file = "/var/lib/ntfy/user.db";
             };
           };
 
@@ -44,7 +42,7 @@
 
         mounts.data = {
           enable = true;
-          ownerUid = config.containers.ntfy.config.users.users.ntfy-sh.uid;
+          name = "ntfy-sh";
         };
       };
     };

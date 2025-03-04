@@ -33,14 +33,9 @@
         networking.ports.tcp = [ 8080 ];
 
         mounts = {
-          sops.templates = [
-            config.sops.templates.atticd
-          ];
+          sops.templates = [ config.sops.templates.atticd ];
 
-          data = {
-            enable = true;
-            ownerUid = config.containers.atticd.config.users.users.atticd.uid;
-          };
+          data.enable = true;
         };
       };
     };

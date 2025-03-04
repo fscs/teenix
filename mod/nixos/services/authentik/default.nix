@@ -19,7 +19,6 @@
         secrets.authentik-admin-token = {
           sopsFile = opts.secretsFile;
           key = "admin-token";
-          mode = "444";
         };
 
         templates.authentik.content = ''

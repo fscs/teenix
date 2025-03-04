@@ -7,9 +7,10 @@
   ...
 }:
 {
+  users.groups.campus-guesser-server = {};
   users.users.campus-guesser-server = {
-    isNormalUser = true;
-    uid = 1000;
+    isSystemUser = true;
+    group = "campus-guesser-server";
   };
 
   services.postgresql = {

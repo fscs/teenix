@@ -54,20 +54,17 @@
           postgres.enable = true;
 
           data.enable = true;
-          data.ownerUid = config.containers.prometheus.config.users.users.prometheus.uid;
 
           sops.secrets = [
             config.sops.secrets.grafana2ntfy
           ];
 
           extra.grafana-data = {
-            ownerUid = config.containers.prometheus.config.users.users.grafana.uid;
             mountPoint = config.containers.prometheus.config.services.grafana.dataDir;
             isReadOnly = false;
           };
 
           extra.loki-data = {
-            ownerUid = config.containers.prometheus.config.users.users.loki.uid;
             mountPoint = config.containers.prometheus.config.services.loki.dataDir;
             isReadOnly = false;
           };

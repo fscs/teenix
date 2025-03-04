@@ -6,8 +6,6 @@
   ...
 }:
 {
-  users.users.vaultwarden.uid = 99;
-
   services.vaultwarden = {
     enable = true;
     package = pkgs-master.vaultwarden;

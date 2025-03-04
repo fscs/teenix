@@ -17,7 +17,6 @@
     lib.mkIf opts.enable {
       sops.secrets.campus-guesser-server-oauth-secret = {
         sopsFile = opts.secretsFile;
-        mode = "444";
         key = "oauth-secret";
       };
 
@@ -41,10 +40,7 @@
 
         mounts = {
           postgres.enable = true;
-          data = {
-            enable = true;
-            ownerUid = config.containers.campus-guesser-server.config.users.users.campus-guesser-server.uid;
-          };
+          data.enable = true;
 
           sops.templates = [
             config.sops.templates.campus-guesser-server

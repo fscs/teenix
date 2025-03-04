@@ -22,12 +22,12 @@
       teenix.containers.uptime-kuma = {
         config = ./container.nix;
 
-        networking.useResolvConf = true;
-        networking.ports.tcp = [ 3001 ];
-        mounts.data = {
-          enable = true;
-          ownerUid = config.containers.uptime-kuma.config.users.users.root.uid;
+        networking = {
+          useResolvConf = true;
+          ports.tcp = [ 3001 ];
         };
+
+        mounts.data.enable = true;
       };
     };
 }

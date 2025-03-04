@@ -19,12 +19,10 @@
         secrets.vaultwarden-admin-token = {
           sopsFile = opts.secretsFile;
           key = "admin-token";
-          mode = "444";
         };
         secrets.vaultwarden-smtp-password = {
           sopsFile = opts.secretsFile;
           key = "smtp-password";
-          mode = "444";
         };
 
         templates.vaultwarden.content = ''
@@ -48,13 +46,9 @@
         };
 
         mounts = {
-          sops.templates = [
-            config.sops.templates.vaultwarden
-          ];
-          data = {
-            enable = true;
-            ownerUid = config.containers.vaultwarden.config.users.users.vaultwarden.uid;
-          };
+          sops.templates = [ config.sops.templates.vaultwarden ];
+
+          data.enable = true;
         };
       };
     };

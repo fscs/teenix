@@ -19,4 +19,6 @@
       (lib.remove "default.nix")
       (lib.map (name: "${path}/${name}"))
     ];
+
+  elemTypeOf = o: o.type.nestedTypes.elemType;
 }

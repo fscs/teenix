@@ -27,7 +27,7 @@
       };
 
       nix-tun.storage.persist.subvolumes.scanner = {
-        owner = "${builtins.toString config.containers.nextcloud.config.users.users.nextcloud.uid}";
+        owner = toString config.containers.nextcloud.config.users.users.nextcloud.uid;
         mode = "0777";
       };
 
@@ -63,22 +63,8 @@
           ports.tcp = [ 80 ];
         };
 
-        extraConfig = {
-          # in case nextcloud migrates its db
-          timeoutStartSec = "15min";
-
-          bindMounts.scanner = {
-            hostPath = "${config.nix-tun.storage.persist.path}/scanner";
-            mountPoint = "/var/lib/scanner";
-            isReadOnly = false;
-          };
-
-          bindMounts.netapp = {
-            hostPath = "/mnt/netapp/Nextcloud";
-            mountPoint = "/var/lib/nextcloud/data";
-            isReadOnly = false;
-          };
-        };
+        # in case nextcloud migrates its db
+        extraConfig.timeoutStartSec = "15min";
 
         mounts = {
           mysql.enable = true;
@@ -86,6 +72,20 @@
           data = {
             enable = true;
             ownerUid = config.containers.nextcloud.config.users.users.nextcloud.uid;
+          };
+
+          extra = {
+            scanner = {
+              hostPath = config.nix-tun.storage.persist.subvolumes.scanner.path;
+              mountPoint = "/var/lib/scanner";
+              isReadOnly = false;
+            };
+
+            netapp = {
+              hostPath = "/mnt/netapp/Nextcloud";
+              mountPoint = "/var/lib/nextcloud/data";
+              isReadOnly = false;
+            };
           };
 
           sops.secrets = [
