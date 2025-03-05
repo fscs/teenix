@@ -1,8 +1,9 @@
-{ lib
-, config
-, host-config
-, pkgs-master
-, ...
+{
+  lib,
+  config,
+  host-config,
+  pkgs,
+  ...
 }:
 let
   opts = host-config.teenix.services.nextcloud;
@@ -28,7 +29,7 @@ in
 
   services.nextcloud = {
     enable = true;
-    package = pkgs-master.nextcloud30;
+    package = pkgs.nextcloud31;
 
     hostName = opts.hostname;
 

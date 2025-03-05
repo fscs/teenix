@@ -63,7 +63,8 @@
           ports.tcp = [ 80 ];
         };
 
-        # in case nextcloud migrates its db
+        # dont EVER lower this value. on startup, nextcloud might migrate its database and if that
+        # process is interrupted we are screwed
         extraConfig.timeoutStartSec = "15min";
 
         mounts = {
