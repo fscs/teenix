@@ -25,6 +25,26 @@
               default = "${lib.substring 0 32 (builtins.hashString "sha256" name)}\n";
             };
 
+            privateUsers = lib.mkOption {
+              description = ''
+                Whether to give the container its own private UIDs/GIDs space (user namespacing).
+                This greatly enhances security.
+
+                In addition to the options provided by nixos containers, this option also takes a boolean.
+                If true, privateUsers is set to "pick", If set to false, privateUsers is set to "no"
+              '';
+              type = t.either t.bool (
+                t.either t.ints.u32 (
+                  t.enum [
+                    "no"
+                    "identity"
+                    "pick"
+                  ]
+                )
+              );
+              default = false;
+            };
+
             networking = {
               useResolvConf = lib.mkEnableOption ''
                 Mount the hosts resolv.conf into the container.
@@ -209,6 +229,15 @@
               autoStart = true;
               ephemeral = true;
               privateNetwork = true;
+
+              # if private users is a bool map it to "pick" or "no", else just pass thru
+              privateUsers =
+                if cfg.privateUsers == true then
+                  "pick"
+                else if cfg.privateUsers == false then
+                  "no"
+                else
+                  cfg.privateUsers;
 
               hostAddress = "${networkId}.10";
               localAddress = "${networkId}.11";
