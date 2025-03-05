@@ -40,10 +40,6 @@
         };
       };
 
-      services.traefik.staticConfigOptions.entryPoints = {
-        websecure.proxyProtocol.insecure = true;
-      };
-
       teenix.services.traefik.redirects.cloud_inphima = {
         from = "cloud.inphima.de";
         to = "nextcloud.inphima.de";

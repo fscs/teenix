@@ -18,15 +18,18 @@
     hostname = "nextcloud.inphima.de";
     secretsFile = ../secrets/nextcloud.yml;
     extraApps = [
-      "forms"
-      "groupfolders"
       "calendar"
       "contacts"
       "deck"
-      "polls"
-      "tasks"
+      "files_automatedtagging"
+      "files_retention"
+      "forms"
+      "groupfolders"
       "notify_push"
+      "polls"
       "richdocuments"
+      "sociallogin"
+      "tasks"
     ];
   };
 
