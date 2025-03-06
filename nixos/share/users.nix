@@ -66,6 +66,18 @@
       ];
     };
 
+
+    jonas = {
+      hosts = [
+        "teefax"
+        "testfax"
+      ];
+      sshKeys = [
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCtxP7ouSpUZNPHJJOCRp8cpk1Ruf7BZQnNNwMNb+y2fNkg/2TDcuMAGr+joYGm5ayiZnlOCbgPSEhfR5JGDsa2Oz+AsKFtGUX03pZ0J3TgZfiz+yPrxFMsS4mNn/Yud12qDUC2VqEZ1DCu3XIYleXb2K9ZKjpsdgCHoFE90p+G98wJC2ifoDg94P955aYtU4JfMLJBbZV2zfYOToqAQPKHgLlQ6rfg4UdMYnt5N13BGZ/Jx0PXxbgWvFBwvvW1WKqYa2TpSfE2h9awpDX7JeptrGJji/JLfNnNJD7ASsSbzMsQcv3zDig7s6yPugfrq/3d6OsTmSkeH75cIeOibDS7qtC2TGziOLIMIgNOzf8eZ3Fy6XAzyug3zH7MjZjhQdQs4NodCbJOUqMpYXL1BY807GpNdcYPUVTyx9Docb2PcSycQikHa11MU4MxsnPU1APqhrd+zaDZE/dpCfD/C385v1IlGKqWX1n7AE2idFIGhR+mN+SOWui/2a0hdBeVNSE= yim04bib@hhu.de"
+      ];
+    }; 
+
+
     robert = {
       hosts = [
         "teefax"
