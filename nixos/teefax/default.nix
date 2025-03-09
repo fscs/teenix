@@ -1,7 +1,7 @@
 {
   inputs,
   outputs,
-  pkgs,
+  config,
   lib,
   ...
 }:
@@ -88,10 +88,15 @@
     };
   };
 
+  sops.secrets.teefax-root-passwd = {
+    sopsFile = ../secrets/passwords.yml; 
+    neededForUsers = true;
+  };
+
+  users.users.root.hashedPasswordFile = config.sops.secrets.teefax-root-passwd.path;
+
   virtualisation.vmware.guest.enable = true;
 
-  teenix.nixconfig.enable = true;
-  teenix.nixconfig.allowUnfree = true;
   teenix.bootconfig.enable = true;
 
   teenix.services.openssh.enable = true;
