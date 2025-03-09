@@ -1,4 +1,9 @@
-{ config, lib, pkgs-stable, ... }:
+{
+  config,
+  lib,
+  pkgs-stable,
+  ...
+}:
 {
   options.teenix.services.collabora = {
     enable = lib.mkEnableOption "Enable collabora";

@@ -76,7 +76,7 @@
       formatter = eachSystem (
         system: pkgs:
         pkgs.writers.writeBashBin "fmt" ''
-          find . -type f -name \*.nix | xargs ${lib.getExe pkgs.nixfmt-rfc-style}
+          find . -type f -name \*.nix -exec ${lib.getExe pkgs.nixfmt-rfc-style} {} \;
         ''
       );
 

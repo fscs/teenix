@@ -172,7 +172,7 @@
   };
 
   teenix.services.hockeypuck = {
-    enable = true; 
+    enable = true;
     hostname = "pgp.inphima.de";
   };
 }
