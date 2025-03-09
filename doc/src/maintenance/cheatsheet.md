@@ -91,3 +91,13 @@ sudo journalctl -xeM <container>
 ```
 
 (Oder im Grafana)
+
+## Sops
+
+### Secret Keys updaten
+
+Synchronisiert alle secrets mit `.sops.yaml` und rotiert ihre encryption keys
+
+```
+find nixos/secrets -type f -exec sops updatekeys --yes {} \; -exec sops rotate -i {} \;
+```
