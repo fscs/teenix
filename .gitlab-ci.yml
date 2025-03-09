@@ -4,24 +4,27 @@ default:
   before_script: |
     mkdir -p ~/.ssh
     chmod 700 ~/.ssh
+
     # import private key into ssh agent
     eval $(ssh-agent -s)
     chmod 400 "$SSH_PRIVATE_KEY"
     ssh-add "$SSH_PRIVATE_KEY"
-    # install known_kosts
+
+    # install known_kosts and ssh config
     cp "$SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
-    chmod 644 ~/.ssh/known_hosts
-    # install ssh config
     cp "$SSH_CONFIG" ~/.ssh/config
-    chmod 644 ~/.ssh/config
+    chmod 644 ~/.ssh/known_hosts ~/.ssh/config
+
     # enable flakes and nix command
     mkdir -p ~/.config/nix
     echo 'experimental-features = nix-command flakes' > ~/.config/nix/nix.conf
+
     # set git user info
     git config --global user.email "fscs@hhu.de"
     git config --global user.name "Knut"
+
     # correct git origin
-    git remote set-url origin git@git.hhu.de:fscs/teenix
+    git remote set-url origin git@git.hhu.de:fscs/raete/teenix
     
 lock-update:
   stage: build
@@ -39,18 +42,15 @@ deploy:
   only:
     - main
   script: |
-    nix develop -c nixos-rebuild switch \
-      --flake . \
-      --build-host gitlab@fscs.hhu.de \
-      --target-host gitlab@fscs.hhu.de \
-      --use-remote-sudo
+    # dont auto deploy testfax, its for testing after all
+    nix develop -c colmena apply --on teefax
 
 commit-lockfile:
   stage: .post
   rules:
     - if: $CI_PIPELINE_SOURCE == "pipeline" && $CI_COMMIT_BRANCH == "main"
   script: |
-    # if nothing changed, dont commit (this might be cause by the website auto deploy)
+    # if nothing changed, dont try to commit
     if git diff -s --exit-code flake.lock; then echo "lockfile unchanged, not commiting"; exit; fi
     # git commit
     git add flake.lock
