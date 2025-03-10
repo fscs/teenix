@@ -25,7 +25,7 @@ default:
 
     # correct git origin
     git remote set-url origin git@git.hhu.de:fscs/raete/teenix
-    
+
 lock-update:
   stage: build
   rules:
@@ -43,7 +43,9 @@ deploy:
     - main
   script: |
     # dont auto deploy testfax, its for testing after all
-    nix develop -c colmena apply --on teefax
+    nix develop -c colmena apply \
+      --experimental-flake-eval \
+      --on teefax
 
 commit-lockfile:
   stage: .post
