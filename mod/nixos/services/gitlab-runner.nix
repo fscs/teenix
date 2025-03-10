@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
+{ lib
+, config
+, pkgs
+, ...
 }:
 {
   options.teenix.services.gitlab-runner = {
@@ -97,6 +96,9 @@
                     cacert
                     git
                     openssh
+                    bash
+                    curl
+                    ncurses
                   ]
                 )
               }
