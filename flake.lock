@@ -1346,11 +1346,11 @@
         "nixpkgs": "nixpkgs_10"
       },
       "locked": {
-        "lastModified": 1740493269,
-        "narHash": "sha256-K7AXXRVvlEnwlWE5u6tuOdkJRGBxZNrid0F8BaM4Gug=",
+        "lastModified": 1741734556,
+        "narHash": "sha256-HGuRFoCBMfFtg3YmnyD1PTDTq5NdgVqlebq1xGfPqNs=",
         "ref": "refs/heads/master",
-        "rev": "068a0df1021b6c6b7e38c92ed1f2806621bfe5ae",
-        "revCount": 57,
+        "rev": "8859ff808639daedf60128c2daa0f0c4974365f8",
+        "revCount": 65,
         "type": "git",
         "url": "ssh://git@github.com/fscs/sitzungsverwaltung-gui"
       },
