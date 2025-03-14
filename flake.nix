@@ -132,20 +132,20 @@
               "${toString ./.}/nixos/keys/users"
             ];
 
-            nativeBuildInputs =
-              with pkgs;
-              [
-                mdbook
-                mdbook-alerts
-                mdbook-emojicodes
-                mdbook-footnote
-                mdbook-toc
-                nixos-rebuild
-              ]
-              ++ [
-                sops-nix.packages.${system}.sops-import-keys-hook
-                colmena.packages.${system}.colmena
-              ];
+            nativeBuildInputs = [
+              sops-nix.packages.${system}.sops-import-keys-hook
+              colmena.packages.${system}.colmena
+            ];
+          };
+
+          mdbook = pkgs.mkShell {
+            nativeBuildInputs = with pkgs; [
+              mdbook
+              mdbook-alerts
+              mdbook-emojicodes
+              mdbook-footnote
+              mdbook-toc
+            ];
           };
         }
       );
