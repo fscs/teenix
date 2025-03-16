@@ -654,11 +654,11 @@
         "theme": "theme"
       },
       "locked": {
-        "lastModified": 1742132441,
-        "narHash": "sha256-EFh7zZI4g5WmFO3RnrXnxO0RalHDBpeSkEhDRxP3vag=",
+        "lastModified": 1742137369,
+        "narHash": "sha256-FUxPPzofza1xLjC/9bVHA4Mxn28xxn4jacxYpVoHdHA=",
         "ref": "refs/heads/main",
-        "rev": "365a634a55875290ba0426f35fa1f3f6db98712e",
-        "revCount": 589,
+        "rev": "ec70d9af4caa1451cae3ee599e0f3187ba46261c",
+        "revCount": 590,
         "type": "git",
         "url": "ssh://git@git.hhu.de/fscs/website.git"
       },
