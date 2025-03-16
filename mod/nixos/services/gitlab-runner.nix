@@ -118,7 +118,7 @@
           enable = true;
 
           settings = {
-            concurrent = 10;
+            concurrent = 3;
           };
 
           services = {
