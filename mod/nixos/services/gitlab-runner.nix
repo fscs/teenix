@@ -1,7 +1,8 @@
-{ lib
-, config
-, pkgs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  ...
 }:
 {
   options.teenix.services.gitlab-runner = {
@@ -115,6 +116,11 @@
         in
         {
           enable = true;
+
+          settings = {
+            concurrent = 10;
+          };
+
           services = {
             fscs-nix-1 = dockerizedNixRunner config.sops.templates.gitlab-runner-fscs-nix-1.path;
             fscs-nix-2 = dockerizedNixRunner config.sops.templates.gitlab-runner-fscs-nix-2.path;
