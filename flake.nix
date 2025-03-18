@@ -21,7 +21,7 @@
     matrix-intern-bot.url = "git+ssh://git@git.hhu.de/fscs/matrix-bot.git";
     fscshhude.url = "git+ssh://git@git.hhu.de/fscs/website.git";
     campus-guesser-server.url = "git+ssh://git@git.hhu.de/fscs/campus-guesser-server.git";
-    sitzungsverwaltung.url = "git+ssh://git@github.com/fscs/sitzungsverwaltung-gui";
+    sitzungsverwaltung.url = "git+ssh://git@git.hhu.de/fscs/sitzungsverwaltung";
     mete = {
       url = "github:fscs/mete/wip/fscs";
       flake = false;

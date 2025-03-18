@@ -1346,17 +1346,17 @@
         "nixpkgs": "nixpkgs_10"
       },
       "locked": {
-        "lastModified": 1741964194,
-        "narHash": "sha256-HDdq6VHzXJuWnwHP645Dv9X1qK6km8M7RjQMYX3tekw=",
+        "lastModified": 1742309363,
+        "narHash": "sha256-9wsWObzU+44m4YFt2nOocOhfK+ZhEBlFMNSFtC9pVF4=",
         "ref": "refs/heads/master",
-        "rev": "1a9ebd744e3ab88f5635462bd484182deb7392ee",
-        "revCount": 84,
+        "rev": "79f17f2d3b0a68a54716c8406f77199ca120e2f2",
+        "revCount": 91,
         "type": "git",
-        "url": "ssh://git@github.com/fscs/sitzungsverwaltung-gui"
+        "url": "ssh://git@git.hhu.de/fscs/sitzungsverwaltung"
       },
       "original": {
         "type": "git",
-        "url": "ssh://git@github.com/fscs/sitzungsverwaltung-gui"
+        "url": "ssh://git@git.hhu.de/fscs/sitzungsverwaltung"
       }
     },
     "sops-nix": {
