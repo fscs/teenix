@@ -29,10 +29,14 @@
     grafana2ntfy.url = "github:fscs/grafana-to-ntfy";
 
     # follows
-    discord-intern-bot.inputs.nixpkgs.follows = "nixpkgs";
-    matrix-intern-bot.inputs.nixpkgs.follows = "nixpkgs";
     campus-guesser-server.inputs.nixpkgs.follows = "nixpkgs";
+    colmena.inputs.nixpkgs.follows = "nixpkgs";
+    discord-inphima-bot.inputs.nixpkgs.follows = "nixpkgs";
+    discord-intern-bot.inputs.nixpkgs.follows = "nixpkgs";
+    fscshhude.inputs.nixpkgs.follows = "nixpkgs";
     grafana2ntfy.inputs.nixpkgs.follows = "nixpkgs";
+    matrix-intern-bot.inputs.nixpkgs.follows = "nixpkgs";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
