@@ -19,6 +19,7 @@
     content = config.services.fscs-website-setup.dataDir;
     environmentFile = host-config.sops.secrets.fscshhude-env.path;
 
+    oauthSourceName = "authentik";
     authUrl = "https://${host-config.teenix.services.authentik.hostname}/application/o/authorize/";
     tokenUrl = "https://${host-config.teenix.services.authentik.hostname}/application/o/token/";
     userInfoUrl = "https://${host-config.teenix.services.authentik.hostname}/application/o/userinfo/";
