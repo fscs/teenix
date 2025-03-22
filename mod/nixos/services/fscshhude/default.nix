@@ -43,6 +43,11 @@
         mounts = {
           postgres.enable = true;
           sops.secrets = [ config.sops.secrets.fscshhude-env ];
+
+          data = {
+            enable = true;    
+            name = "fscs-website-server";
+          };
         };
       };
     };
