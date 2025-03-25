@@ -270,8 +270,7 @@
                   replacement = "https://mete.hhu-fscs.de/$1";
                 };
                 authentik.forwardAuth = {
-                  address = "https://authentik:9443/outpost.goauthentik.io/auth/traefik";
-                  trustForwardHeader = true;
+                  address = "https://auth.inphima.de/outpost.goauthentik.io/auth/traefik";
                   tls.insecureSkipVerify = true;
                   authResponseHeaders = [
                     "X-authentik-username"

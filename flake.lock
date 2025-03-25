@@ -28,11 +28,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1740601740,
-        "narHash": "sha256-YQ8lMeT/KkMDavXrqPvoO6pKQdfSSAZBcNp/Cer4vWc=",
+        "lastModified": 1742246110,
+        "narHash": "sha256-bjJDxW3Z3clNIkgwEktWhFSpU9UyftisDfK3XYzdRps=",
         "owner": "nix-community",
         "repo": "authentik-nix",
-        "rev": "bfcad34becd76d148e1ad537b5dcbd58d858a5bb",
+        "rev": "04f5e14643b8b37304966767074fbe0efcadab9f",
         "type": "github"
       },
       "original": {
@@ -69,16 +69,16 @@
     "authentik-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1740599692,
-        "narHash": "sha256-KZalpsM9rvki9GD+urf8idHOEnvBJtkSvE1b2b4KL/4=",
+        "lastModified": 1742236492,
+        "narHash": "sha256-Uz7qldS44pxduLcYKf+cCq4WvjoslDR4PwRqivY/4uI=",
         "owner": "goauthentik",
         "repo": "authentik",
-        "rev": "31fe0e59234e487a42012510d1a4e4819b9aba26",
+        "rev": "3adf79c4939276e108c25c719843b6174e9e22fd",
         "type": "github"
       },
       "original": {
         "owner": "goauthentik",
-        "ref": "version/2025.2.1",
+        "ref": "version/2025.2.2",
         "repo": "authentik",
         "type": "github"
       }
@@ -660,11 +660,11 @@
         "theme": "theme"
       },
       "locked": {
-        "lastModified": 1742896418,
-        "narHash": "sha256-ZFIom91LXxJG3o1a2anzln70eUbD2HqkxCN+ywCKDPk=",
+        "lastModified": 1742905740,
+        "narHash": "sha256-0NErsV+dalkpHMhIRanLQWFYdxxFKQbAlrVvcb+VAI0=",
         "ref": "refs/heads/main",
-        "rev": "afd9917d3c03fed697a4cb7babfbee9d443fc537",
-        "revCount": 608,
+        "rev": "aa24693703d7f138f711163419ab37bfa176a7cf",
+        "revCount": 609,
         "type": "git",
         "url": "ssh://git@git.hhu.de/fscs/website.git"
       },
