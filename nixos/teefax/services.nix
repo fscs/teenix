@@ -170,4 +170,11 @@
     enable = true;
     hostname = "docnix.hhu-fscs.de";
   };
+
+  teenix.services.rally = {
+    enable = true;
+    hostname = "doodle.inphima.de";
+    secretsFile = ../secrets/rally/env;
+    postgresEnvFile = ../secrets/rally/mariaEnv;
+  };
 }
