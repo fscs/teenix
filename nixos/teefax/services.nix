@@ -151,7 +151,7 @@
   };
 
   teenix.services.matrix-intern-bot = {
-    enable = false;
+    enable = true;
     secretsFile = ../secrets/matrixinternbot;
   };
 
