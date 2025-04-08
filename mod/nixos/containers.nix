@@ -369,13 +369,12 @@
                 mode = "0700";
               };
               data = lib.mkIf enableData {
-                owner = toString (lib.defaultTo ":root" value.mounts.data.ownerUid);
+                inherit (value.mounts.data) owner;
                 mode = "0700";
               };
             }
             (lib.mapAttrs (_: v: {
-              inherit (v) mode;
-              owner = toString (lib.defaultTo ":root" v.ownerUid);
+              inherit (v) mode owner;
             }) (lib.filterAttrs (_: v: v.hostPath != null) value.mounts.extra))
           ];
         }

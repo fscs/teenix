@@ -5,7 +5,11 @@
   ...
 }:
 let
-  opts = config.teenix.persist;
+  cfg = config.teenix.persist;
+
+  t = lib.types;
+
+  defaultToString = default: x: toString (lib.defaultTo default x);
 in
 {
   imports = [ inputs.impermanence.nixosModules.impermanence ];
@@ -20,75 +24,76 @@ in
       *Note*: For systems that use more than one (logical) drive, simply mount more
     '';
     path = lib.mkOption {
-      type = lib.types.str;
+      type = t.nonEmptyStr;
       default = "/persist";
       description = ''
         The root directory for all of non generated persistent storage, except /nix and /boot.
       '';
     };
     subvolumes = lib.mkOption {
-      type = lib.types.attrsOf (
-        lib.types.submodule (
+      type = t.attrsOf (
+        t.submodule (
           { name, ... }:
           {
             options = {
               owner = lib.mkOption {
-                type = lib.types.str;
+                type = t.nullOr (t.either t.int t.nonEmptyStr);
                 default = "root";
                 description = ''
-                  The owner of the subvolume
+                  The owner of the subvolume. If set to null, the owner will not be enforced
                 '';
               };
               group = lib.mkOption {
-                type = lib.types.str;
+                type = t.nullOr (t.either t.int t.nonEmptyStr);
                 default = "root";
                 description = ''
-                  The group of the subvolume
+                  The group of the subvolume. If set to null, the group will not be enforced
                 '';
               };
               mode = lib.mkOption {
-                type = lib.types.str;
+                type = t.nullOr t.nonEmptyStr;
                 default = "0755";
-                description = "The mode of the subvolume, default is 0755";
+                description = "The mode of the subvolume, default is 0755. If set to null, the mode will not be enforced";
               };
               backup = lib.mkOption {
-                type = lib.types.bool;
+                type = t.bool;
                 default = true;
                 description = "Whether this subvolume should be backuped, default is true";
               };
               bindMountDirectories = lib.mkOption {
-                type = lib.types.bool;
+                type = t.bool;
                 default = false;
                 description = ''
                   Should all directories inside this subvolume be bind-mounted to their respective paths in / (according to their name).
                 '';
               };
               path = lib.mkOption {
-                type = lib.types.str;
+                type = t.nonEmptyStr;
                 default = "${config.teenix.persist.path}/${name}";
+                readOnly = true;
                 description = "Path this subvolume will be mounted at";
               };
               directories = lib.mkOption {
-                type = lib.types.attrsOf (
-                  lib.types.submodule (
-                    { ... }:
-                    {
-                      options = {
-                        owner = lib.mkOption {
-                          type = lib.types.str;
-                          default = "root";
-                        };
-                        group = lib.mkOption {
-                          type = lib.types.str;
-                          default = "root";
-                        };
-                        mode = lib.mkOption {
-                          type = lib.types.str;
-                          default = "0755";
-                        };
+                type = t.attrsOf (
+                  t.submodule {
+                    options = {
+                      owner = lib.mkOption {
+                        type = t.nullOr (t.either t.int t.nonEmptyStr);
+                        description = "Owner for this directory. If set to null, the owner will not be enforced";
+                        default = "root";
                       };
-                    }
-                  )
+                      group = lib.mkOption {
+                        type = t.nullOr (t.either t.int t.nonEmptyStr);
+                        description = "Group for this directory. If set to null, the group will not be enforced";
+                        default = "root";
+                      };
+                      mode = lib.mkOption {
+                        type = t.nullOr t.nonEmptyStr;
+                        description = "Mode for this directory. If set to null, the mode will not be enforced";
+                        default = "0755";
+                      };
+                    };
+                  }
                 );
                 default = { };
                 description = ''
@@ -106,7 +111,7 @@ in
     };
   };
 
-  config = lib.mkIf opts.enable {
+  config = lib.mkIf cfg.enable {
     # Default Persistent Subvolumes, these are normally needed for all Systems
     teenix.persist.subvolumes = {
       system = {
@@ -116,30 +121,26 @@ in
           "/var/log" = { };
           "/var/lib/nixos" = { }; # For Correct User Mapping
           "/var/lib/systemd/coredump" = { };
-          "/etc/NetworkManager/system-connections/" = lib.mkIf config.networking.networkmanager.enable {
-            mode = "0700";
-          };
         };
         bindMountDirectories = true;
       };
       # Storage for the SSH Host Keys - Are not part of the backup
-      ssh-keys = {
-        backup = false;
-      };
+      ssh-keys.backup = false;
     };
 
     # Generates the Directories inside the impermanence module
-    systemd.tmpfiles.rules = builtins.concatLists (
+    systemd.tmpfiles.rules = lib.concatLists (
       lib.attrsets.mapAttrsToList (
         name: value:
         [
-          "v '${opts.path}/${name}' ${value.mode} ${value.owner} ${value.group} -"
-          (lib.mkIf value.backup "d '${opts.path}/${name}/.snapshots' ${value.mode} ${value.owner} ${value.group} -")
+          "v ${cfg.path}/${name} ${defaultToString ":0755" value.mode} ${defaultToString ":root" value.owner} ${defaultToString ":root" value.group} -"
+          (lib.mkIf value.backup "d ${value.path}/.snapshots ${value.mode} ${value.owner} ${value.group} -")
         ]
         ++ lib.attrsets.mapAttrsToList (
-          n: v: "d '${opts.path}/${name}/${n}' ${v.mode} ${v.owner} ${v.group} -"
+          n: v:
+          "d '${value.path}/${n}' ${defaultToString ":0755" value.mode} ${defaultToString ":root" value.owner} ${defaultToString ":root" value.group} -"
         ) value.directories
-      ) opts.subvolumes
+      ) cfg.subvolumes
     );
 
     environment.persistence = lib.mapAttrs' (name: value: {
@@ -148,18 +149,15 @@ in
         hideMounts = true;
         directories = lib.mapAttrsToList (name: value: {
           directory = name;
-          user = value.owner;
-          group = value.group;
-          mode = value.mode;
+          user = defaultToString "root" value.owner;
+          group = lib.defaultTo "root" value.group;
+          mode = lib.defaultTo "0755" value.mode;
         }) value.directories;
-        files = [
-        ];
       };
-    }) (lib.attrsets.filterAttrs (name: value: value.bindMountDirectories) opts.subvolumes);
+    }) (lib.attrsets.filterAttrs (name: value: value.bindMountDirectories) cfg.subvolumes);
 
     # Automatically snapshots the Persistent Subvolumes
     services.btrbk.instances.btrbk = {
-
       onCalendar = "hourly";
       settings = {
         snapshot_preserve = "6h 7d 1w 1m";
@@ -167,12 +165,12 @@ in
         timestamp_format = "long-iso";
 
         volume = lib.attrsets.mapAttrs' (name: value: {
-          name = "${opts.path}/${name}";
+          name = value.path;
           value = {
-            subvolume = "${opts.path}/${name}";
+            subvolume = value.path;
             snapshot_dir = ".snapshots";
           };
-        }) (lib.attrsets.filterAttrs (name: value: value.backup) opts.subvolumes);
+        }) (lib.attrsets.filterAttrs (name: value: value.backup) cfg.subvolumes);
       };
     };
 
@@ -181,13 +179,13 @@ in
       {
         bits = 4096;
         openSSHFormat = true;
-        path = "${opts.path}/ssh-keys/ssh_host_rsa_key";
+        path = "${cfg.path}/ssh-keys/ssh_host_rsa_key";
         rounds = 100;
         type = "rsa";
       }
       {
         comment = "key comment";
-        path = "${opts.path}/ssh-keys/ssh_host_ed25519_key";
+        path = "${cfg.path}/ssh-keys/ssh_host_ed25519_key";
         rounds = 100;
         type = "ed25519";
       }
