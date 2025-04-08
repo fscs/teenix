@@ -7,9 +7,10 @@
   ...
 }:
 {
+  users.groups.campus-guesser-server = { };
   users.users.campus-guesser-server = {
-    isNormalUser = true;
-    uid = 1000;
+    isSystemUser = true;
+    group = "campus-guesser-server";
   };
 
   services.postgresql = {
@@ -35,9 +36,7 @@
       Environment = "SPRING_DATASOURCE_USERNAME='campus-guesser-server' SPRING_DATASOURCE_URL='jdbc:postgresql://localhost:5432/campus-guesser-server'";
       EnvironmentFile = host-config.sops.templates.campus-guesser-server.path;
       User = "campus-guesser-server";
-      ExecStart =
-        lib.getExe
-          inputs.campus-guesser-server.packages."${pkgs.stdenv.system}".default;
+      ExecStart = lib.getExe inputs.campus-guesser-server.packages."${pkgs.stdenv.system}".default;
       Restart = "always";
       RestartSec = 5;
     };

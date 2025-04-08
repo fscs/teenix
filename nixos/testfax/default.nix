@@ -1,14 +1,14 @@
 {
   inputs,
   outputs,
+  config,
   pkgs,
   ...
 }:
 {
   imports = [
+    ../share
     ./hardware-configuration.nix
-    ../locale.nix
-    ../users.nix
 
     inputs.sops-nix.nixosModules.sops
     inputs.nix-tun.nixosModules.nix-tun
@@ -62,8 +62,6 @@
 
   virtualisation.vmware.guest.enable = true;
 
-  teenix.nixconfig.enable = true;
-  teenix.nixconfig.allowUnfree = true;
   teenix.bootconfig.enable = true;
 
   teenix.services.openssh.enable = true;
@@ -96,6 +94,13 @@
     enable = true;
     hostname = "ntfy.dev.hhu-fscs.de";
   };
+
+  sops.secrets.testfax-root-passwd = {
+    sopsFile = ../secrets/passwords.yml;
+    neededForUsers = true;
+  };
+
+  users.users.root.hashedPasswordFile = config.sops.secrets.testfax-root-passwd.path;
 
   teenix.services.minecraft.enable = true;
 

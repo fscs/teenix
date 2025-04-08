@@ -97,6 +97,9 @@
                     cacert
                     git
                     openssh
+                    bash
+                    curl
+                    ncurses
                   ]
                 )
               }
@@ -113,6 +116,11 @@
         in
         {
           enable = true;
+
+          settings = {
+            concurrent = 3;
+          };
+
           services = {
             fscs-nix-1 = dockerizedNixRunner config.sops.templates.gitlab-runner-fscs-nix-1.path;
             fscs-nix-2 = dockerizedNixRunner config.sops.templates.gitlab-runner-fscs-nix-2.path;

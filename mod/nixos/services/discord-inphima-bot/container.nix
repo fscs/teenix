@@ -6,9 +6,9 @@
   ...
 }:
 {
-  users.groups.discord-inphima-bot = {};
+  users.groups.discord-inphima-bot = { };
   users.users.discord-inphima-bot = {
-    isSystemUser = true; 
+    isSystemUser = true;
     uid = 999;
     group = "discord-inphima-bot";
   };

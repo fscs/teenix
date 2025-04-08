@@ -21,7 +21,7 @@
     matrix-intern-bot.url = "git+ssh://git@git.hhu.de/fscs/matrix-bot.git";
     fscshhude.url = "git+ssh://git@git.hhu.de/fscs/website.git";
     campus-guesser-server.url = "git+ssh://git@git.hhu.de/fscs/campus-guesser-server.git";
-    sitzungsverwaltung.url = "git+ssh://git@github.com/fscs/sitzungsverwaltung-gui";
+    sitzungsverwaltung.url = "git+ssh://git@git.hhu.de/fscs/sitzungsverwaltung";
     mete = {
       url = "github:fscs/mete/wip/fscs";
       flake = false;
@@ -29,10 +29,14 @@
     grafana2ntfy.url = "github:fscs/grafana-to-ntfy";
 
     # follows
-    discord-intern-bot.inputs.nixpkgs.follows = "nixpkgs";
-    matrix-intern-bot.inputs.nixpkgs.follows = "nixpkgs";
     campus-guesser-server.inputs.nixpkgs.follows = "nixpkgs";
+    colmena.inputs.nixpkgs.follows = "nixpkgs";
+    discord-inphima-bot.inputs.nixpkgs.follows = "nixpkgs";
+    discord-intern-bot.inputs.nixpkgs.follows = "nixpkgs";
+    fscshhude.inputs.nixpkgs.follows = "nixpkgs";
     grafana2ntfy.inputs.nixpkgs.follows = "nixpkgs";
+    matrix-intern-bot.inputs.nixpkgs.follows = "nixpkgs";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -76,7 +80,7 @@
       formatter = eachSystem (
         system: pkgs:
         pkgs.writers.writeBashBin "fmt" ''
-          find . -type f -name \*.nix | xargs ${lib.getExe pkgs.nixfmt-rfc-style}
+          find . -type f -name \*.nix -exec ${lib.getExe pkgs.nixfmt-rfc-style} {} \;
         ''
       );
 
@@ -132,19 +136,20 @@
               "${toString ./.}/nixos/keys/users"
             ];
 
-            nativeBuildInputs =
-              with pkgs;
-              [
-                nixos-rebuild
-                mdbook
-                mdbook-alerts
-                mdbook-emojicodes
-                mdbook-footnote
-              ]
-              ++ [
-                sops-nix.packages.${system}.sops-import-keys-hook
-                colmena.packages.${system}.colmena
-              ];
+            nativeBuildInputs = [
+              sops-nix.packages.${system}.sops-import-keys-hook
+              colmena.packages.${system}.colmena
+            ];
+          };
+
+          mdbook = pkgs.mkShell {
+            nativeBuildInputs = with pkgs; [
+              mdbook
+              mdbook-alerts
+              mdbook-emojicodes
+              mdbook-footnote
+              mdbook-toc
+            ];
           };
         }
       );

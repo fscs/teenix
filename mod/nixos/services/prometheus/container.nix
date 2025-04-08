@@ -44,8 +44,6 @@
     ];
   };
 
-  users.users.loki.uid = 99;
-
   services.loki = {
     enable = true;
     configuration = {
@@ -79,7 +77,6 @@
           period = "24h";
         };
       };
-
     };
   };
 

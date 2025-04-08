@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs-stable,
+  ...
+}:
 {
   options.teenix.services.collabora = {
     enable = lib.mkEnableOption "Enable collabora";
@@ -27,6 +32,7 @@
           systemd.services.coolwsd.environment.server_name = config.teenix.services.collabora.hostname;
           services.collabora-online = {
             enable = true;
+            package = pkgs-stable.collabora-online;
             aliasGroups = lib.singleton {
               host = "https://${config.teenix.services.collabora.nextcloudHost}:443";
             };

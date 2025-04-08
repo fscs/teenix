@@ -15,6 +15,10 @@
     withDocker = true;
   };
 
+  services.traefik.staticConfigOptions.entryPoints = {
+    websecure.proxyProtocol.insecure = true;
+  };
+
   teenix.services.traefik.entrypoints = lib.mkMerge [
     {
       web = {
@@ -24,7 +28,9 @@
           scheme = "https";
         };
       };
-      websecure.port = 443;
+      websecure = {
+        port = 443;
+      };
       ping.port = 8082;
       metrics.port = 120;
     }

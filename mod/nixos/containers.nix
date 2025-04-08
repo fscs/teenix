@@ -10,8 +10,6 @@
     let
       t = lib.types;
 
-      elemTypeOf = o: o.type.nestedTypes.elemType;
-
       containerType = t.submodule (
         { name, ... }:
         {
@@ -25,6 +23,26 @@
               description = "The containers machine-id. Used for mounting journals";
               type = t.strMatching "^[a-f0-9]{32}\n$";
               default = "${lib.substring 0 32 (builtins.hashString "sha256" name)}\n";
+            };
+
+            privateUsers = lib.mkOption {
+              description = ''
+                Whether to give the container its own private UIDs/GIDs space (user namespacing).
+                This greatly enhances security.
+
+                In addition to the options provided by nixos containers, this option also takes a boolean.
+                If true, privateUsers is set to "pick", If set to false, privateUsers is set to "no"
+              '';
+              type = t.either t.bool (
+                t.either t.ints.u32 (
+                  t.enum [
+                    "no"
+                    "identity"
+                    "pick"
+                  ]
+                )
+              );
+              default = false;
             };
 
             networking = {
@@ -60,7 +78,8 @@
                 enable = lib.mkEnableOption "mount /var/lib/<containerName>";
                 ownerUid = lib.mkOption {
                   description = "owner of the data dir";
-                  type = t.int;
+                  type = t.nullOr t.int;
+                  default = null;
                 };
                 name = lib.mkOption {
                   description = "change the folder name under /var/lib";
@@ -73,12 +92,12 @@
                 secrets = lib.mkOption {
                   description = "sops secrets to mount into the container";
                   default = [ ];
-                  type = t.listOf (elemTypeOf options.sops.secrets);
+                  type = t.listOf (lib.teenix.elemTypeOf options.sops.secrets);
                 };
                 templates = lib.mkOption {
-                  description = "sops secrets/templates to mount into the container";
+                  description = "sops templates to mount into the container";
                   default = [ ];
-                  type = t.listOf (elemTypeOf options.sops.templates);
+                  type = t.listOf (lib.teenix.elemTypeOf options.sops.templates);
                 };
               };
 
@@ -90,13 +109,18 @@
                       mountPoint = lib.mkOption {
                         type = t.nonEmptyStr;
                       };
+                      hostPath = lib.mkOption {
+                        type = t.nullOr t.nonEmptyStr;
+                        default = null;
+                      };
                       isReadOnly = lib.mkOption {
                         type = t.bool;
                         default = true;
                       };
                       ownerUid = lib.mkOption {
                         description = "owner of mounted directory";
-                        type = t.int;
+                        type = t.nullOr t.int;
+                        default = null;
                       };
                       mode = lib.mkOption {
                         type = t.nonEmptyStr;
@@ -159,6 +183,8 @@
             };
           };
 
+          services.journald.extraConfig = "MaxFileSec=1 month";
+
           users.defaultUserShell = pkgs.fish;
           programs.fish = {
             enable = true;
@@ -203,6 +229,15 @@
               autoStart = true;
               ephemeral = true;
               privateNetwork = true;
+
+              # if private users is a bool map it to "pick" or "no", else just pass thru
+              privateUsers =
+                if cfg.privateUsers == true then
+                  "pick"
+                else if cfg.privateUsers == false then
+                  "no"
+                else
+                  cfg.privateUsers;
 
               hostAddress = "${networkId}.10";
               localAddress = "${networkId}.11";
@@ -264,7 +299,7 @@
                 # extra mounts
                 (lib.mapAttrs (n: value: {
                   inherit (value) mountPoint isReadOnly;
-                  hostPath = "${config.nix-tun.storage.persist.subvolumes.${containerName}.path}/${n}";
+                  hostPath = lib.defaultTo "${config.nix-tun.storage.persist.subvolumes.${containerName}.path}/${n}" value.hostPath;
                 }) cfg.mounts.extra)
               ];
 
@@ -329,14 +364,14 @@
                 mode = "0700";
               };
               data = lib.mkIf enableData {
-                owner = toString value.mounts.data.ownerUid;
+                owner = toString (lib.defaultTo ":root" value.mounts.data.ownerUid);
                 mode = "0700";
               };
             }
             (lib.mapAttrs (_: v: {
               inherit (v) mode;
-              owner = toString v.ownerUid;
-            }) value.mounts.extra)
+              owner = toString (lib.defaultTo ":root" v.ownerUid);
+            }) (lib.filterAttrs (_: v: v.hostPath != null) value.mounts.extra))
           ];
         }
       ) config.teenix.containers;

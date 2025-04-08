@@ -318,18 +318,62 @@ in
                   tlsChallenge = { };
                 };
               };
-              uniintern = {
-                acme = {
-                  email = config.teenix.services.traefik.letsencryptMail;
-                  storage = "${config.services.traefik.dataDir}/hhucerts.json";
-                  tlsChallenge = { };
-                  caServer = ''$TRAEFIK_CERTIFICATESRESOLVERS_uniintern_ACME_CASERVER'';
-                  eab = {
-                    kid = ''$TRAEFIK_CERTIFICATESRESOLVERS_uniintern_ACME_EAB_KID'';
-                    hmacEncoded = ''$TRAEFIK_CERTIFICATESRESOLVERS_uniintern_ACME_EAB_HMACENCODED'';
+              middlewares =
+                lib.attrsets.mapAttrs (name: value: {
+                  redirectRegex = {
+                    regex = "(www\\.)?${builtins.replaceStrings [ "." ] [ "\." ] value.from}/?";
+                    replacement = value.to;
+                    permanent = true;
+                  };
+                }) config.teenix.services.traefik.redirects
+                // {
+                  meteredirect.redirectregex = {
+                    regex = "https://mete.hhu-fscs.de/(.*?)((/deposit)|(/retrieve)|(/transaction))(.*)";
+                    replacement = "https://mete.hhu-fscs.de/$1";
+                  };
+                  authentik.forwardAuth = {
+                    address = "https://auth.inphima.de/outpost.goauthentik.io/auth/traefik";
+                    tls.insecureSkipVerify = true;
+                    authResponseHeaders = [
+                      "X-authentik-username"
+                      "X-authentik-groups"
+                      "X-authentik-email"
+                      "X-authentik-name"
+                      "X-authentik-uid"
+                      "X-authentik-jwt"
+                      "X-authentik-meta-jwks"
+                      "X-authentik-meta-outpost"
+                      "X-authentik-meta-provider"
+                      "X-authentik-meta-app"
+                      "X-authentik-meta-version"
+                    ];
                   };
                 };
-              };
+              services =
+                lib.attrsets.mapAttrs (name: value: {
+                  loadBalancer = lib.mkMerge [
+                    {
+                      servers = builtins.map (value: {
+                        url = value;
+                      }) value.servers;
+                    }
+                    (lib.mkIf value.healthCheck.enable {
+                      healthCheck = {
+                        path = value.healthCheck.path;
+                        interval = value.healthCheck.interval;
+                      };
+                    })
+                  ];
+                }) config.teenix.services.traefik.services
+                // {
+                  blank = {
+                    loadBalancer = {
+                      servers = {
+                        url = "about:blank";
+                      };
+                    };
+                  };
+                };
             };
 
             entryPoints =

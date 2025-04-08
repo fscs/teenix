@@ -2,6 +2,12 @@
 {
   system.stateVersion = "23.11";
 
+  users.groups.uptime-kuma = { };
+  users.users.uptime-kuma = {
+    isSystemUser = true;
+    group = "uptime-kuma";
+  };
+
   systemd.services.uptime-kuma = {
     description = "Uptime Kuma";
     after = [ "network.target" ];
@@ -17,8 +23,9 @@
       Type = "exec";
       ExecStart = "${pkgs.uptime-kuma}/bin/uptime-kuma-server";
       Restart = "always";
-      User = "root";
+      User = "uptime-kuma";
       WorkingDirectory = "/var/lib/uptime-kuma";
+      StateDirectroy = "uptime-kuma";
       RestartSec = 5;
     };
   };

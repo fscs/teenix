@@ -18,15 +18,18 @@
     hostname = "nextcloud.inphima.de";
     secretsFile = ../secrets/nextcloud.yml;
     extraApps = [
-      "forms"
-      "groupfolders"
       "calendar"
       "contacts"
       "deck"
-      "polls"
-      "tasks"
+      "files_automatedtagging"
+      "files_retention"
+      "forms"
+      "groupfolders"
       "notify_push"
+      "polls"
       "richdocuments"
+      "sociallogin"
+      "tasks"
     ];
   };
 
@@ -148,7 +151,7 @@
   };
 
   teenix.services.matrix-intern-bot = {
-    enable = false;
+    enable = true;
     secretsFile = ../secrets/matrixinternbot;
   };
 
@@ -166,5 +169,12 @@
   teenix.services.docnix = {
     enable = true;
     hostname = "docnix.hhu-fscs.de";
+  };
+
+  teenix.services.rally = {
+    enable = true;
+    hostname = "doodle.inphima.de";
+    secretsFile = ../secrets/rally/env;
+    postgresEnvFile = ../secrets/rally/mariaEnv;
   };
 }

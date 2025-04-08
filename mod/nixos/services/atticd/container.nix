@@ -4,7 +4,6 @@
   users.users.atticd = {
     isSystemUser = true;
     group = "atticd";
-    uid = 99;
   };
 
   systemd.services.atticd.serviceConfig.DynamicUser = lib.mkForce false;
