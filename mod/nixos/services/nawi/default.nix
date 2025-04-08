@@ -31,7 +31,7 @@
         mode = "444";
       };
 
-      nix-tun.storage.persist.subvolumes.nawi.directories = {
+      teenix.persist.subvolumes.nawi.directories = {
         "/mysql" = {
           owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
@@ -59,7 +59,7 @@
         };
         environmentFiles = [ config.sops.secrets.nawi_mariadb.path ];
         volumes = [
-          "${config.nix-tun.storage.persist.path}/nawi/mysql:/var/lib/mysql"
+          "${config.teenix.persist.path}/nawi/mysql:/var/lib/mysql"
         ];
         log-driver = "journald";
         extraOptions = [
@@ -108,7 +108,7 @@
         };
         environmentFiles = [ config.sops.secrets.nawi.path ];
         volumes = [
-          "${config.nix-tun.storage.persist.path}/nawi/wp:/var/www/html"
+          "${config.teenix.persist.path}/nawi/wp:/var/www/html"
         ];
         log-driver = "journald";
         extraOptions = [

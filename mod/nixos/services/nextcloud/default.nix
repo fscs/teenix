@@ -26,7 +26,7 @@
         mode = "444";
       };
 
-      nix-tun.storage.persist.subvolumes.scanner = {
+      teenix.persist.subvolumes.scanner = {
         owner = toString config.containers.nextcloud.config.users.users.nextcloud.uid;
         mode = "0777";
       };
@@ -73,7 +73,7 @@
 
           extra = {
             scanner = {
-              hostPath = config.nix-tun.storage.persist.subvolumes.scanner.path;
+              hostPath = config.teenix.persist.subvolumes.scanner.path;
               mountPoint = "/var/lib/scanner";
               isReadOnly = false;
             };

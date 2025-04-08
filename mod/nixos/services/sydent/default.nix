@@ -14,7 +14,7 @@
       opts = config.teenix.services.sydent;
     in
     lib.mkIf opts.enable {
-      nix-tun.storage.persist.subvolumes."sydent".directories = {
+      teenix.persist.subvolumes."sydent".directories = {
         "/db" = {
           owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
@@ -44,7 +44,7 @@
               "traefik.http.services.sydent.loadbalancer.server.port" = "8090";
             };
             volumes = [
-              "${config.nix-tun.storage.persist.path}/sydent/data:/data"
+              "${config.teenix.persist.path}/sydent/data:/data"
             ];
             environment = {
               SYDENT_SERVER_NAME = "inphima-sydent";

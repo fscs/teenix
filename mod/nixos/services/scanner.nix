@@ -39,7 +39,7 @@
         localUsers = true;
         writeEnable = true;
         allowWriteableChroot = true;
-        localRoot = "${config.nix-tun.storage.persist.path}/scanner";
+        localRoot = "${config.teenix.persist.path}/scanner";
         extraConfig = ''
           listen_port=2121
           pasv_min_port=3000

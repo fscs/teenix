@@ -13,7 +13,6 @@
     ./services.nix
 
     inputs.sops-nix.nixosModules.sops
-    inputs.nix-tun.nixosModules.nix-tun
 
     outputs.nixosModules.teenix
   ];
@@ -22,7 +21,7 @@
     "olm-3.2.16"
   ];
 
-  nix-tun.storage.persist.subvolumes.system.directories = {
+  teenix.persist.subvolumes.system.directories = {
     "/var/lib/fail2ban" = {
       mode = "0750";
     };
@@ -101,7 +100,7 @@
 
   teenix.services.openssh.enable = true;
 
-  nix-tun.storage.persist.enable = true;
+  teenix.persist.enable = true;
 
   system.stateVersion = "23.11";
 }

@@ -39,7 +39,7 @@
         to = "discord.gg/K3ddgjh";
       };
 
-      nix-tun.storage.persist.subvolumes.inphimade.directories = {
+      teenix.persist.subvolumes.inphimade.directories = {
         "/mysql" = {
           owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
@@ -67,7 +67,7 @@
         };
         environmentFiles = [ config.sops.secrets.inphimade_mariadb.path ];
         volumes = [
-          "${config.nix-tun.storage.persist.path}/inphimade/mysql:/var/lib/mysql"
+          "${config.teenix.persist.path}/inphimade/mysql:/var/lib/mysql"
         ];
         log-driver = "journald";
         extraOptions = [
@@ -117,7 +117,7 @@
         };
         environmentFiles = [ config.sops.secrets.inphimade.path ];
         volumes = [
-          "${config.nix-tun.storage.persist.path}/inphimade/wp:/var/www/html"
+          "${config.teenix.persist.path}/inphimade/wp:/var/www/html"
         ];
         log-driver = "journald";
         extraOptions = [

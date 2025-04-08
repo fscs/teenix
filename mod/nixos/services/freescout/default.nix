@@ -33,7 +33,7 @@
         mode = "444";
       };
 
-      nix-tun.storage.persist.subvolumes.freescout.directories = {
+      teenix.persist.subvolumes.freescout.directories = {
         "/mysql" = {
           owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
@@ -62,7 +62,7 @@
         log-driver = "journald";
         environmentFiles = [ config.sops.secrets.freescout_mariadb.path ];
         volumes = [
-          "${config.nix-tun.storage.persist.path}/freescout/mysql:/var/lib/mysql"
+          "${config.teenix.persist.path}/freescout/mysql:/var/lib/mysql"
         ];
         extraOptions = [
           "--network-alias=freescout-db"
@@ -113,7 +113,7 @@
         };
         environmentFiles = [ config.sops.secrets.freescout.path ];
         volumes = [
-          "${config.nix-tun.storage.persist.path}/freescout/data:/data"
+          "${config.teenix.persist.path}/freescout/data:/data"
         ];
         log-driver = "journald";
         extraOptions = [

@@ -43,7 +43,7 @@
       to = "helfendentool.inphima.de";
     };
 
-    nix-tun.storage.persist.subvolumes.helfendentool.directories = {
+    teenix.persist.subvolumes.helfendentool.directories = {
       "data" = {
         mode = "0777";
       };
@@ -66,9 +66,9 @@
       image = "ghcr.io/fscs/helfertool:dockertest";
       volumes = [
         "${config.sops.secrets.helfendentool.path}:/config/helfertool.yaml"
-        "${config.nix-tun.storage.persist.path}/helfendentool/data:/data"
-        "${config.nix-tun.storage.persist.path}/helfendentool/log:/log"
-        "${config.nix-tun.storage.persist.path}/helfendentool/run:/run"
+        "${config.teenix.persist.path}/helfendentool/data:/data"
+        "${config.teenix.persist.path}/helfendentool/log:/log"
+        "${config.teenix.persist.path}/helfendentool/run:/run"
       ];
       dependsOn = [
         "helfendentool-postgressql"
@@ -116,7 +116,7 @@
         "POSTGRES_USER" = "helfertool";
       };
       volumes = [
-        "${config.nix-tun.storage.persist.path}/helfendentool/postgres:/var/lib/postgresql/data"
+        "${config.teenix.persist.path}/helfendentool/postgres:/var/lib/postgresql/data"
       ];
       log-driver = "journald";
       extraOptions = [

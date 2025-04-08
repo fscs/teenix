@@ -31,7 +31,7 @@
         mode = "444";
       };
 
-      nix-tun.storage.persist.subvolumes.rally.directories = {
+      teenix.persist.subvolumes.rally.directories = {
         "/postgres" = {
           owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
@@ -100,7 +100,7 @@
         image = "postgres:14.2";
         environmentFiles = [ config.sops.secrets.rally_db.path ];
         volumes = [
-          "${config.nix-tun.storage.persist.path}/rally/postgres:/var/www/html"
+          "${config.teenix.persist.path}/rally/postgres:/var/www/html"
         ];
         log-driver = "journald";
         extraOptions = [

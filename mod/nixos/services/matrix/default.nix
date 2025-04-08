@@ -57,7 +57,7 @@
         mode = "444";
       };
 
-      nix-tun.storage.persist.subvolumes."inphimatrix".directories = {
+      teenix.persist.subvolumes."inphimatrix".directories = {
         "/postgres" = {
           owner = "${builtins.toString config.containers.inphimatrix.config.users.users.postgres.uid}";
           mode = "0700";
@@ -127,12 +127,12 @@
             mountPoint = config.sops.secrets.matrix_env.path;
           };
           "synapse" = {
-            hostPath = "${config.nix-tun.storage.persist.path}/inphimatrix/data";
+            hostPath = "${config.teenix.persist.path}/inphimatrix/data";
             mountPoint = "/var/lib/matrix-synapse";
             isReadOnly = false;
           };
           "auth" = {
-            hostPath = "${config.nix-tun.storage.persist.path}/inphimatrix/auth";
+            hostPath = "${config.teenix.persist.path}/inphimatrix/auth";
             mountPoint = "/var/lib/matrix-auth";
             isReadOnly = false;
           };
@@ -142,7 +142,7 @@
             isReadOnly = false;
           };
           "db" = {
-            hostPath = "${config.nix-tun.storage.persist.path}/inphimatrix/postgres";
+            hostPath = "${config.teenix.persist.path}/inphimatrix/postgres";
             mountPoint = "/var/lib/postgres";
             isReadOnly = false;
           };

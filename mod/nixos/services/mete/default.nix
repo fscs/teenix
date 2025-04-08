@@ -17,7 +17,7 @@
       opts = config.teenix.services.mete;
     in
     lib.mkIf opts.enable {
-      nix-tun.storage.persist.subvolumes.mete.directories = {
+      teenix.persist.subvolumes.mete.directories = {
         "/db" = {
           owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
@@ -51,8 +51,8 @@
               "traefik.http.routers.metesecure.middlewares" = "authentik@file";
             };
             volumes = [
-              "${config.nix-tun.storage.persist.path}/mete/db:/app/var"
-              "${config.nix-tun.storage.persist.path}/mete/drinks:/app/public/system/drinks"
+              "${config.teenix.persist.path}/mete/db:/app/var"
+              "${config.teenix.persist.path}/mete/drinks:/app/public/system/drinks"
             ];
             ports = [
               "8080"
@@ -61,7 +61,7 @@
           gorden-summary = {
             image = "ghcr.io/fscs/gorden-summary:master";
             volumes = [
-              "${config.nix-tun.storage.persist.path}/mete/db:/var/docker-services/gorden/var:ro"
+              "${config.teenix.persist.path}/mete/db:/var/docker-services/gorden/var:ro"
             ];
             ports = [
               "5000"

@@ -70,6 +70,10 @@
               };
             };
 
+            backup = lib.mkEnableOption "backup this containers persisted subvolume" // {
+              default = true;
+            };
+
             mounts = {
               mysql.enable = lib.mkEnableOption "Mount the container's mysql data dir into the hosts /persist";
               postgres.enable = lib.mkEnableOption "Mount the container's postgresql data dir into the hosts /persist";
@@ -252,19 +256,19 @@
                   # data
                   data = lib.mkIf cfg.mounts.data.enable {
                     isReadOnly = false;
-                    hostPath = "${config.nix-tun.storage.persist.subvolumes.${containerName}.path}/data";
+                    hostPath = "${config.teenix.persist.subvolumes.${containerName}.path}/data";
                     mountPoint = "/var/lib/${cfg.mounts.data.name}";
                   };
                   # mysql
                   mysql = lib.mkIf cfg.mounts.mysql.enable {
                     isReadOnly = false;
-                    hostPath = "${config.nix-tun.storage.persist.subvolumes.${containerName}.path}/mysql";
+                    hostPath = "${config.teenix.persist.subvolumes.${containerName}.path}/mysql";
                     mountPoint = config.containers.${containerName}.config.services.mysql.dataDir;
                   };
                   # postgresql
                   postgres = lib.mkIf cfg.mounts.postgres.enable {
                     isReadOnly = false;
-                    hostPath = "${config.nix-tun.storage.persist.subvolumes.${containerName}.path}/postgres";
+                    hostPath = "${config.teenix.persist.subvolumes.${containerName}.path}/postgres";
                     mountPoint = config.containers.${containerName}.config.services.postgresql.dataDir;
                   };
                   # journal
@@ -299,7 +303,7 @@
                 # extra mounts
                 (lib.mapAttrs (n: value: {
                   inherit (value) mountPoint isReadOnly;
-                  hostPath = lib.defaultTo "${config.nix-tun.storage.persist.subvolumes.${containerName}.path}/${n}" value.hostPath;
+                  hostPath = lib.defaultTo "${config.teenix.persist.subvolumes.${containerName}.path}/${n}" value.hostPath;
                 }) cfg.mounts.extra)
               ];
 
@@ -340,7 +344,7 @@
         d /var/log/containers/${containerName} 0755 root systemd-journal -
       '') (lib.attrNames config.teenix.containers);
 
-      nix-tun.storage.persist.subvolumes = lib.mapAttrs (
+      teenix.persist.subvolumes = lib.mapAttrs (
         containerName: value:
         let
           enablePsql = value.mounts.postgres.enable;
@@ -353,6 +357,7 @@
           enableSubvolume = enablePsql || enableMysql || enableData || enableExtra;
         in
         lib.mkIf enableSubvolume {
+          inherit (value) backup;
           directories = lib.mkMerge [
             {
               postgres = lib.mkIf enablePsql {

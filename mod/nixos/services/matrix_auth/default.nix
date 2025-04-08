@@ -16,7 +16,7 @@
     in
     lib.mkIf opts.enable {
 
-      nix-tun.storage.persist.subvolumes."inphimatrix-auth".directories = {
+      teenix.persist.subvolumes."inphimatrix-auth".directories = {
         "/postgres" = {
           owner = "${builtins.toString config.containers.inphimatrix-auth.config.users.users.postgres.uid}";
           mode = "0700";
@@ -34,7 +34,7 @@
             mountPoint = "/etc/resolv.conf";
           };
           "db" = {
-            hostPath = "${config.nix-tun.storage.persist.path}/inphimatrix-auth/postgres";
+            hostPath = "${config.teenix.persist.path}/inphimatrix-auth/postgres";
             mountPoint = "/var/lib/postgres";
             isReadOnly = false;
           };

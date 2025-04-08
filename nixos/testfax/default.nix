@@ -11,7 +11,6 @@
     ./hardware-configuration.nix
 
     inputs.sops-nix.nixosModules.sops
-    inputs.nix-tun.nixosModules.nix-tun
 
     outputs.nixosModules.teenix
   ];
@@ -67,7 +66,7 @@
   teenix.services.openssh.enable = true;
 
   # Services
-  nix-tun.storage.persist.enable = true;
+  teenix.persist.enable = true;
 
   sops.secrets.traefik = {
     format = "binary";

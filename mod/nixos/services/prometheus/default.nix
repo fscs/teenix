@@ -50,6 +50,8 @@
           ];
         };
 
+        backup = false;
+
         mounts = {
           postgres.enable = true;
 

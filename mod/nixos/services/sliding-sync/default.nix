@@ -23,7 +23,7 @@
         mode = "444";
       };
 
-      nix-tun.storage.persist.subvolumes."sliding-sync".directories = {
+      teenix.persist.subvolumes."sliding-sync".directories = {
         "/db" = {
           owner = "1000";
           mode = "0700";
@@ -51,7 +51,7 @@
             mountPoint = config.sops.secrets.sliding-sync.path;
           };
           "db" = {
-            hostPath = "${config.nix-tun.storage.persist.path}/sliding-sync/db";
+            hostPath = "${config.teenix.persist.path}/sliding-sync/db";
             mountPoint = "/var/lib/postgres";
             isReadOnly = false;
           };

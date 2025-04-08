@@ -25,7 +25,7 @@
         mode = "444";
       };
 
-      nix-tun.storage.persist.subvolumes."matrix-intern-bot".directories = {
+      teenix.persist.subvolumes."matrix-intern-bot".directories = {
         "/db" = {
           owner = "${builtins.toString config.containers.matrix-intern-bot.config.users.users.matrix-intern-bot.uid}";
           mode = "0700";
@@ -47,7 +47,7 @@
             mountPoint = config.sops.secrets.matrix-intern-bot.path;
           };
           "home" = {
-            hostPath = "${config.nix-tun.storage.persist.path}/matrix-intern-bot/db";
+            hostPath = "${config.teenix.persist.path}/matrix-intern-bot/db";
             mountPoint = "/home/matrix-intern-bot/";
             isReadOnly = false;
           };

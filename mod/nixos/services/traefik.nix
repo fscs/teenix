@@ -183,7 +183,7 @@
       mode = "444";
     };
 
-    nix-tun.storage.persist.subvolumes.traefik = {
+    teenix.persist.subvolumes.traefik = {
       owner = "traefik";
       group = "traefik";
       mode = "700";
@@ -212,7 +212,7 @@
       in
       {
         enable = true;
-        dataDir = "${config.nix-tun.storage.persist.path}/traefik";
+        dataDir = "${config.teenix.persist.path}/traefik";
 
         package = pkgs-stable.traefik;
 

@@ -13,7 +13,7 @@
     };
 
     sops-nix.url = "github:Mic92/sops-nix";
-    nix-tun.url = "github:nix-tun/nixos-modules";
+    impermanence.url = "github:nix-community/impermanence";
     authentik-nix.url = "github:nix-community/authentik-nix";
 
     discord-intern-bot.url = "git+ssh://git@git.hhu.de/fscs/discord-intern-bot.git";
