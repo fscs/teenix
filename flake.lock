@@ -1028,11 +1028,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1744062087,
-        "narHash": "sha256-BaXW8S0KYIDHSEr5Wesxw94D4JP2C8JjymV9FEkoBgg=",
+        "lastModified": 1744117308,
+        "narHash": "sha256-TatON6zbqOXCLWQNficZ4o6ImxnlMIROdpd3FjJMkIE=",
         "ref": "refs/heads/master",
-        "rev": "59deca71f892deacd24910f683ad47e2c3a77c15",
-        "revCount": 99,
+        "rev": "35453074f99aa265313f3fcda40f8a59c9550798",
+        "revCount": 100,
         "type": "git",
         "url": "ssh://git@git.hhu.de/fscs/sitzungsverwaltung"
       },
