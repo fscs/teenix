@@ -4,7 +4,7 @@
   options,
   specialArgs,
   ...
-}:
+}@host:
 {
   options.teenix.containers =
     let
@@ -23,6 +23,7 @@
               description = "The containers machine-id. Used for mounting journals";
               type = t.strMatching "^[a-f0-9]{32}\n$";
               default = "${lib.substring 0 32 (builtins.hashString "sha256" name)}\n";
+              defaultText = "derived from the containers name, first 32 digits of the name's sha256 hash";
             };
 
             privateUsers = lib.mkOption {
@@ -52,7 +53,7 @@
                 This is required if the container wants to do dns lookups.
               '';
               id = lib.mkOption {
-                description = "network id this container should be placed in, e.g. 192.168.1";
+                description = "Network id this container should be placed in, e.g. 192.168.1";
                 type = t.nullOr t.nonEmptyStr;
                 default = null;
               };
@@ -70,23 +71,33 @@
               };
             };
 
-            backup = lib.mkEnableOption "backup this containers persisted subvolume" // {
+            backup = lib.mkEnableOption null // {
               default = true;
+              example = false;
+              description = "Backup this containers persisted subvolume";
             };
 
             mounts = {
-              mysql.enable = lib.mkEnableOption "Mount the container's mysql data dir into the hosts /persist";
-              postgres.enable = lib.mkEnableOption "Mount the container's postgresql data dir into the hosts /persist";
+              mysql.enable = lib.mkEnableOption null // {
+                description = "Mount the container's mysql data dir into persisted storage";
+              };
+
+              postgres.enable = lib.mkEnableOption null // {
+                description = "Mount the container's postgesql data dir into persisted storage";
+              };
 
               data = {
-                enable = lib.mkEnableOption "mount /var/lib/<containerName>";
+                enable = lib.mkEnableOption null // {
+                  description = "Mount /var/lib/<containerName> into persisted storage";
+                };
+
                 ownerUid = lib.mkOption {
-                  description = "owner of the data dir";
+                  description = "Owner of the data dir";
                   type = t.nullOr t.int;
                   default = null;
                 };
                 name = lib.mkOption {
-                  description = "change the folder name under /var/lib";
+                  description = "Change the folder name under /var/lib";
                   type = t.nonEmptyStr;
                   default = name;
                 };
@@ -94,12 +105,14 @@
 
               sops = {
                 secrets = lib.mkOption {
-                  description = "sops secrets to mount into the container";
+                  description = "Sops secrets to mount into the container";
+                  visible = "shallow";
                   default = [ ];
                   type = t.listOf (lib.teenix.elemTypeOf options.sops.secrets);
                 };
                 templates = lib.mkOption {
-                  description = "sops templates to mount into the container";
+                  description = "Sops templates to mount into the container";
+                  visible = "shallow";
                   default = [ ];
                   type = t.listOf (lib.teenix.elemTypeOf options.sops.templates);
                 };
@@ -107,26 +120,31 @@
 
               extra = lib.mkOption {
                 default = { };
+                description = "Additional Mounts for the container";
                 type = t.attrsOf (
                   t.submodule {
                     options = {
                       mountPoint = lib.mkOption {
+                        description = "Path inside the container to mount to";
                         type = t.nonEmptyStr;
                       };
                       hostPath = lib.mkOption {
+                        description = "Path on the host to mount from";
                         type = t.nullOr t.nonEmptyStr;
                         default = null;
                       };
                       isReadOnly = lib.mkOption {
+                        description = "Mount read-only";
                         type = t.bool;
                         default = true;
                       };
                       ownerUid = lib.mkOption {
-                        description = "owner of mounted directory";
+                        description = "Owner's UID of the Mounted Directory";
                         type = t.nullOr t.int;
                         default = null;
                       };
                       mode = lib.mkOption {
+                        description = "Mode of the Mounted Directory";
                         type = t.nonEmptyStr;
                         default = "0700";
                       };
@@ -147,12 +165,18 @@
     in
     lib.mkOption {
       type = t.attrsOf containerType;
+      description = "";
       default = { };
     };
 
   config =
     let
       defaultContainerNetworkId = "192.18";
+
+      # ugly hack to generate a unique ip for the container
+      ipPoolOf =
+        name:
+        lib.lists.findFirstIndex (x: x == name) (throw "unreachable") (lib.attrNames config.containers);
 
       containerModuleOf =
         name: cfg:
@@ -217,10 +241,17 @@
           services.resolved.enable = true;
         };
 
-      # ugly hack to generate a unique ip for the container
-      ipPoolOf =
-        name:
-        lib.lists.findFirstIndex (x: x == name) (throw "unreachable") (lib.attrNames config.containers);
+      sopsToMounts =
+        typeName: objs:
+        lib.listToAttrs (
+          lib.imap0 (i: v: {
+            name = "${typeName}-${toString i}";
+            value = {
+              hostPath = v.path;
+              mountPoint = v.path;
+            };
+          }) objs
+        );
 
       mkContainer =
         containerName: cfg:
@@ -280,25 +311,8 @@
                 }
 
                 # sops secrets
-                (lib.listToAttrs (
-                  lib.imap0 (i: v: {
-                    name = "secret-${toString i}";
-                    value = {
-                      hostPath = v.path;
-                      mountPoint = v.path;
-                    };
-                  }) cfg.mounts.sops.secrets
-                ))
-                # sops templates
-                (lib.listToAttrs (
-                  lib.imap0 (i: v: {
-                    name = "template-${toString i}";
-                    value = {
-                      hostPath = v.path;
-                      mountPoint = v.path;
-                    };
-                  }) cfg.mounts.sops.templates
-                ))
+                (sopsToMounts "sops-secret" cfg.mounts.sops.secrets)
+                (sopsToMounts "sops-template" cfg.mounts.sops.templates)
 
                 # extra mounts
                 (lib.mapAttrs (n: value: {
@@ -309,7 +323,7 @@
 
               config = containerModuleOf containerName cfg;
               specialArgs = specialArgs // {
-                host-config = config;
+                host-config = host.config;
               };
             }
           )

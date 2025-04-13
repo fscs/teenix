@@ -1,5 +1,4 @@
 {
-  inputs,
   outputs,
   config,
   lib,
@@ -11,8 +10,6 @@
     ./hardware-configuration.nix
     ./traefik.nix
     ./services.nix
-
-    inputs.sops-nix.nixosModules.sops
 
     outputs.nixosModules.teenix
   ];
@@ -88,7 +85,7 @@
   };
 
   sops.secrets.teefax-root-passwd = {
-    sopsFile = ../secrets/passwords.yml; 
+    sopsFile = ../secrets/passwords.yml;
     neededForUsers = true;
   };
 

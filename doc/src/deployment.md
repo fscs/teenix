@@ -52,7 +52,7 @@ genutz werden, damit alle Keys der User als auch die von Teefax geladen werden.
 Um die Verwaltung der NixOS Container zu verbessern, haben wir ein eigenes Container Module
 geschrieben. dieses verwaltet die IP Pools und sämtliche Grundfunktionen, die die meisten
 unserer Container brauchen. Dies erspart Gehirnschmalz und Tipparbeit.
-[Doku zum Modul](./Modules/Container)
+[Doku zum Modul](./modules/containers.md)
 
 
 ### Docker Container

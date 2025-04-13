@@ -84,14 +84,18 @@
         ''
       );
 
+      overlays = import ./overlays.nix { inherit inputs; };
       packages = eachSystem (
         system: pkgs:
         (import ./pkgs pkgs)
         // {
-          doc = pkgs.callPackage ./doc { };
+          doc = pkgs.callPackage ./doc {
+            inherit lib;
+            teenix-module = self.nixosModules.teenix;
+            teenix-specialArgs = specialArgs;
+          };
         }
       );
-      overlays = import ./overlays.nix { inherit inputs; };
 
       nixosModules.teenix = import ./mod/nixos;
 

@@ -10,8 +10,6 @@
     ../share
     ./hardware-configuration.nix
 
-    inputs.sops-nix.nixosModules.sops
-
     outputs.nixosModules.teenix
   ];
 
