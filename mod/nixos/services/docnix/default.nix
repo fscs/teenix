@@ -16,9 +16,9 @@
       cfg = config.teenix.services.docnix;
     in
     lib.mkIf cfg.enable {
-      teenix.services.traefik.services.teedoc = {
+      teenix.services.traefik.services.docnix = {
         router.rule = "Host(`${cfg.hostname}`)";
-        servers = [ "http://${config.containers.docnix.localAddress}:80" ];
+        servers = [ "http://${config.containers.docnix.localAddress}:8000" ];
         healthCheck.enable = true;
       };
 
@@ -27,9 +27,7 @@
           systemd.services.docnix-serve = {
             after = [ "network.target" ];
             wantedBy = [ "multi-user.target" ];
-            script = ''
-              ${lib.getExe pkgs.caddy} file-server -r ${outputs.packages.${pkgs.stdenv.system}.doc} --listen :80
-            '';
+            script = lib.getExe outputs.packages.${pkgs.stdenv.system}.doc;
             serviceConfig = {
               Type = "exec";
               Restart = "always";
@@ -40,7 +38,7 @@
           system.stateVersion = "24.11";
         };
 
-        networking.ports.tcp = [ 80 ];
+        networking.ports.tcp = [ 8000 ];
       };
     };
 }
