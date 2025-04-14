@@ -27,6 +27,7 @@
       };
 
       teenix.persist.subvolumes.scanner = {
+        backup = false;
         owner = toString config.containers.nextcloud.config.users.users.nextcloud.uid;
         mode = "0777";
       };
