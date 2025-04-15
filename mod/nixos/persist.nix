@@ -224,7 +224,7 @@ in
                 
                 for unit in ${toString value.backupUnitTriggers};
                 do 
-                  if grep -Fx $unit $path; then
+                  if grep -qFx $unit $path; then
                     BACKUP_LIST+=(${name})
                   fi
                 done
