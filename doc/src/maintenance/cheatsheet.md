@@ -101,3 +101,13 @@ Synchronisiert alle secrets mit `.sops.yaml` und rotiert ihre encryption keys
 ```
 find nixos/secrets -type f -exec sops updatekeys --yes {} \; -exec sops rotate -i {} \;
 ```
+
+## Aufräumen
+
+### Subvolumes die nicht deklariert sind
+
+Dieser Command printet ordner in /persist, die nicht in teenix deklariert sind.
+
+```
+bash -c 'comm -3 <(find /persist/ -maxdepth 1 -mindepth 1 -type d| sort) <(cat /etc/teenix-persistence.json | jq -r "keys|sort|.[]")'
+```
