@@ -39,9 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patchPhase = ''
-    cat ${containerOptionsDoc.optionsCommonMark} >> src/modules/containers.md 
-
-    sed -i '/\*Declared by:\*/,+2d' src/modules/containers.md 
+    cat ${containerOptionsDoc.optionsCommonMark} | \
+      sed -e 's/^##/###/g' -e '/\*Declared by:\*/,+2d' \
+      >> src/modules/containers.md
   '';
 
   buildPhase = ''
