@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  utils,
   inputs,
   ...
 }:
@@ -10,6 +11,14 @@ let
   t = lib.types;
 
   defaultToString = default: x: toString (lib.defaultTo default x);
+
+  backupSubvolumes = lib.filterAttrs (name: value: value.backup) cfg.subvolumes;
+
+  sharedBtrbkSettings = {
+    snapshot_preserve = "6h 7d 1w 1m";
+    snapshot_preserve_min = "6h";
+    timestamp_format = "long-iso";
+  };
 in
 {
   imports = [ inputs.impermanence.nixosModules.impermanence ];
@@ -43,6 +52,7 @@ in
                   The owner of the subvolume. If set to null, the owner will not be enforced
                 '';
               };
+
               group = lib.mkOption {
                 type = t.nullOr (t.either t.int t.nonEmptyStr);
                 default = "root";
@@ -50,29 +60,38 @@ in
                   The group of the subvolume. If set to null, the group will not be enforced
                 '';
               };
+
               mode = lib.mkOption {
                 type = t.nullOr t.nonEmptyStr;
                 default = "0755";
-                description = "The mode of the subvolume, default is 0755. If set to null, the mode will not be enforced";
+                description = "The mode of the subvolume. If set to null, the mode will not be enforced";
               };
-              backup = lib.mkOption {
-                type = t.bool;
+
+              backup = lib.mkEnableOption "automatic snapshotting of this subvolume" // {
                 default = true;
-                description = "Whether this subvolume should be backuped, default is true";
               };
-              bindMountDirectories = lib.mkOption {
-                type = t.bool;
-                default = false;
+
+              backupUnitTriggers = lib.mkOption {
+                type = t.listOf utils.systemdUtils.lib.unitNameType;
+                default = [ ];
                 description = ''
-                  Should all directories inside this subvolume be bind-mounted to their respective paths in / (according to their name).
+                  List of unit names. If any of these units get started or restarted during activation, backup this subvolume.
                 '';
               };
+
+              bindMountDirectories = lib.mkEnableOption null // {
+                description = ''
+                  Whether all directories inside this subvolume should be bind-mounted to their respective paths in / (according to their name).
+                '';
+              };
+
               path = lib.mkOption {
                 type = t.nonEmptyStr;
                 default = "${config.teenix.persist.path}/${name}";
                 readOnly = true;
                 description = "Path this subvolume will be mounted at";
               };
+
               directories = lib.mkOption {
                 type = t.attrsOf (
                   t.submodule {
@@ -157,24 +176,92 @@ in
     }) (lib.attrsets.filterAttrs (name: value: value.bindMountDirectories) cfg.subvolumes);
 
     # Automatically snapshots the Persistent Subvolumes
-    services.btrbk.instances.btrbk = {
-      onCalendar = "hourly";
-      settings = {
-        snapshot_preserve = "6h 7d 1w 1m";
-        snapshot_preserve_min = "6h";
-        timestamp_format = "long-iso";
+    services.btrbk.instances = lib.mkMerge [
+      # default instance, snapshotting everything
+      {
+        btrbk = {
+          onCalendar = "hourly";
+          settings = {
+            volume = lib.attrsets.mapAttrs' (_: value: {
+              name = value.path;
+              value = {
+                subvolume = value.path;
+                snapshot_dir = ".snapshots";
+              };
+            }) backupSubvolumes;
+          } // sharedBtrbkSettings;
+        };
+      }
 
-        volume = lib.attrsets.mapAttrs' (name: value: {
-          name = value.path;
-          value = {
+      # seperate instances for each subvolume
+      (lib.mapAttrs (_: value: {
+        onCalendar = null;
+        settings = {
+          volume.${value.path} = {
             subvolume = value.path;
             snapshot_dir = ".snapshots";
           };
-        }) (lib.attrsets.filterAttrs (name: value: value.backup) cfg.subvolumes);
+        } // sharedBtrbkSettings;
+      }) backupSubvolumes)
+    ];
+
+    system.activationScripts = {
+      queue-snapshots = {
+        supportsDryActivation = true;
+        text = # bash
+          ''
+            UNIT_START_FILE=/run/nixos/start-list
+            UNIT_RESTART_FILE=/run/nixos/restart-list
+
+            ACTIVATION_RESTART_FILE=$([ $NIXOS_ACTION == "dry-activate" ] && echo "/run/nixos/dry-activation-restart-list" || echo "/run/nixos/activation-restart-list")
+
+            declare -a BACKUP_LIST=()
+
+            ${lib.concatMapAttrsStringSep "\n" (name: value: ''
+              for path in $UNIT_START_FILE $UNIT_RESTART_FILE; 
+              do 
+                [ ! -f $path ] && continue
+                
+                for unit in ${toString value.backupUnitTriggers};
+                do 
+                  if grep -Fx $unit $path; then
+                    BACKUP_LIST+=(${name})
+                  fi
+                done
+              done
+            '') cfg.subvolumes}
+
+            if [ ''${#BACKUP_LIST[@]} -gt 0 ]; then
+              if [ $NIXOS_ACTION == "dry-activate" ]; then
+                echo would snapshot the following subvolumes: ''${BACKUP_LIST[@]}
+              else 
+                echo snapshotting the following subvolumes: ''${BACKUP_LIST[@]}
+              fi
+
+              printf 'btrbk-%s.service\n' "''${BACKUP_LIST[@]}" >> $ACTIVATION_RESTART_FILE
+            fi
+          '';
       };
     };
 
-    # Exists always because it is needed for SOPS and openssh
+    systemd.services = lib.mapAttrs' (name: value: {
+      name = "btrbk-${name}";
+      value = {
+        before = value.backupUnitTriggers;
+      };
+    }) backupSubvolumes;
+
+    # generate a report of what subvolumes are declared to be persistent, useful for cleaning up
+    environment.etc."teenix-persistence.json".text = builtins.toJSON (
+      lib.mapAttrs' (_: value: {
+        name = value.path;
+        value = {
+          directories = lib.attrNames value.directories;
+        };
+      }) cfg.subvolumes
+    );
+
+    # Always exists because it is needed for SOPS and openssh
     services.openssh.hostKeys = [
       {
         bits = 4096;

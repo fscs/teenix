@@ -23,7 +23,7 @@
               description = "The containers machine-id. Used for mounting journals";
               type = t.strMatching "^[a-f0-9]{32}\n$";
               default = "${lib.substring 0 32 (builtins.hashString "sha256" name)}\n";
-              defaultText = "derived from the containers name, first 32 digits of the name's sha256 hash";
+              defaultText = ''''${lib.substring 0 32 (builtins.hashString "sha256" name)}\n'';
             };
 
             privateUsers = lib.mkOption {
@@ -372,6 +372,7 @@
         in
         lib.mkIf enableSubvolume {
           inherit (value) backup;
+          backupUnitTriggers = [ "container@${containerName}.service" ];
           directories = lib.mkMerge [
             {
               postgres = lib.mkIf enablePsql {
