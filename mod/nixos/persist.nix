@@ -229,7 +229,7 @@ in
                   fi
                 done
               done
-            '') cfg.subvolumes}
+            '') backupSubvolumes}
 
             if [ ''${#BACKUP_LIST[@]} -gt 0 ]; then
               if [ $NIXOS_ACTION == "dry-activate" ]; then

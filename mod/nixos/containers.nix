@@ -352,6 +352,7 @@
         }
       ];
 
+      # generate the underlying container options
       containers = lib.mapAttrs mkContainer config.teenix.containers;
 
       systemd.tmpfiles.rules = lib.map (containerName: ''
@@ -390,7 +391,7 @@
             }
             (lib.mapAttrs (_: v: {
               inherit (v) mode owner;
-            }) (lib.filterAttrs (_: v: v.hostPath != null) value.mounts.extra))
+            }) (lib.filterAttrs (_: v: v.hostPath == null) value.mounts.extra))
           ];
         }
       ) config.teenix.containers;

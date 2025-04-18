@@ -43,21 +43,6 @@
     hostname = "sitzungen.hhu-fscs.de";
   };
 
-  teenix.services.matrix = {
-    enable = true;
-    servername = "inphima.de";
-    secretsFile = ../secrets/test_pwd;
-    configFile = ../secrets/matrix_config;
-    masSecrets = ../secrets/masconfig_yaml;
-    hookshotSecrets = ../secrets/matrix-hookshot;
-  };
-
-  teenix.services.element-web = {
-    enable = true;
-    hostname = "element.inphima.de";
-    matrixUrl = "inphima.de";
-  };
-
   teenix.services.pretix = {
     enable = true;
     hostname = "pretix.inphima.de";
@@ -119,11 +104,6 @@
     mariaEnvFile = ../secrets/freescout/maria_env;
   };
 
-  teenix.services.sydent = {
-    enable = true;
-    hostname = "sydent.inphima.de";
-  };
-
   teenix.services.campus-guesser-server = {
     enable = true;
     hostname = "campusguesser.inphima.de";
@@ -151,7 +131,7 @@
   };
 
   teenix.services.matrix-intern-bot = {
-    enable = true;
+    enable = false;
     secretsFile = ../secrets/matrixinternbot;
   };
 
@@ -177,4 +157,18 @@
     secretsFile = ../secrets/rally/env;
     postgresEnvFile = ../secrets/rally/mariaEnv;
   };
+
+  teenix.services.matrix = {
+    enable = true;
+    secretsFile = ../secrets/matrix.yml;
+    hostnames = rec {
+      homeserver = "inphima.de";
+      matrix = "matrix.${homeserver}";
+      mas = "matrixauth.${homeserver}";
+      hookshot = "hookshot.${homeserver}";
+      sydent = "sydent.${homeserver}";
+      element-web = "element.${homeserver}";
+    };
+  };
+
 }
