@@ -8,7 +8,6 @@
   options.teenix.services.matrix = {
     enable = lib.mkEnableOption "matrix";
     secretsFile = lib.teenix.mkSecretsFileOption "matrix";
-    deinemuddah = lib.teenix.mkSecretsFileOption "hallow";
     hostnames = {
       homeserver = lib.teenix.mkHostnameOption;
       matrix = lib.teenix.mkHostnameOption;
@@ -38,7 +37,6 @@
         "matrix-turn-secret"
         "matrix-hookshot-as-token"
         "matrix-hookshot-hs-token"
-        "matrix-immad"
       ];
 
       yaml_generate =
@@ -69,7 +67,7 @@
 
         matrix-config-file = {
           mode = "0444";
-          file = yaml_generate "matrix-config" config.containers.matrix.config.teenix.services.synapse.secretSettings;
+          file = yaml_generate "matrix-config" config.containers.matrix.config.teenix.services.synapse.settings;
         };
 
         matrix-hookshot-registration-file = {
@@ -86,7 +84,6 @@
           router = {
             rule = "Host(`${cfg.hostnames.matrix}`) || (Host(`${cfg.hostnames.homeserver}`) && (PathPrefix(`/_matrix`) || PathPrefix(`/_synapse`) || Path(`/.well-known/matrix/server`) || Path(`/.well-known/matrix/client`)))";
             priority = 10;
-            middlewares = [ "onlyhhudy" ];
           };
           healthCheck = {
             enable = true;
@@ -98,7 +95,6 @@
         mas = {
           router = {
             rule = "Host(`${cfg.hostnames.mas}`) || (( Host(`${cfg.hostnames.matrix}`) || Host(`${cfg.hostnames.homeserver}`)) && PathRegexp(`^/_matrix/client/.*/(login|logout|refresh)`) )";
-            middlewares = [ "onlyhhudy" ];
           };
           healthCheck = {
             enable = true;
@@ -108,13 +104,11 @@
 
         hookshot = {
           router.rule = "Host(`${cfg.hostnames.hookshot}`)";
-          router.middlewares = [ "onlyhhudy" ];
           servers = [ "http://${config.containers.matrix.localAddress}:9000" ];
         };
 
         element-web = {
           router.rule = "Host(`${cfg.hostnames.element-web}`)";
-          router.middlewares = [ "onlyhhudy" ];
           servers = [ "http://${config.containers.matrix.localAddress}:8000" ];
           healthCheck.enable = true;
         };

@@ -159,9 +159,8 @@
   };
 
   teenix.services.matrix = {
-    enable = true; 
+    enable = true;
     secretsFile = ../secrets/matrix.yml;
-    deinemuddah = ../secrets/matrix_config;
     hostnames = rec {
       homeserver = "inphima.de";
       matrix = "matrix.${homeserver}";
@@ -171,4 +170,5 @@
       element-web = "element.${homeserver}";
     };
   };
+
 }

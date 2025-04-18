@@ -17,7 +17,7 @@
     let
       cfg = config.teenix.services.mas;
 
-      msc3861Config = config.services.matrix-synapse.settings.experimental_features.msc3861;
+      msc3861Config = config.teenix.services.synapse.settings.experimental_features.msc3861;
     in
     lib.mkIf cfg.enable {
       teenix.services.mas.settings = {
