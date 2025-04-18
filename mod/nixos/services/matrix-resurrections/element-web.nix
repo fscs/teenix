@@ -5,19 +5,17 @@
   ...
 }:
 let
-  element =
-    let
-      conf = {
-        default_server_config = {
-          "m.homeserver" = {
-            base_url = "https://${host-config.services.matrix.hostnames.homeserver}";
-            server_name = host-config.services.matrix.hostnames.homeserver;
-          };
-          "m.identity_server".base_url = host-config.services.matrix.hostnames.sydent;
+  element = pkgs.element-web.override {
+    conf = {
+      default_server_config = {
+        "m.homeserver" = {
+          base_url = "https://${host-config.teenix.services.matrix.hostnames.homeserver}";
+          server_name = host-config.teenix.services.matrix.hostnames.homeserver;
         };
+        "m.identity_server".base_url = host-config.teenix.services.matrix.hostnames.sydent;
       };
-    in
-    pkgs.element-web.override { inherit conf; };
+    };
+  };
 in
 {
   systemd.services.element-web = {

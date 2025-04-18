@@ -99,12 +99,6 @@
 
         turn_user_lifetime = "1h";
 
-        extra_well_known_client_content = {
-          "org.matrix.msc3575.proxy" = {
-            url = "https://syncv3.inphima.de";
-          };
-        };
-
         server_name = host-config.teenix.services.matrix.hostnames.homeserver;
 
         listeners = lib.singleton {
