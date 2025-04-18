@@ -20,7 +20,7 @@ let
     pkgs.element-web.override { inherit conf; };
 in
 {
-  systemd.services.element-web-serve = {
+  systemd.services.element-web = {
     description = "Serve element-web";
     after = [ "network.target" ];
     serviceConfig = {

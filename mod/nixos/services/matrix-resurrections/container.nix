@@ -9,6 +9,7 @@
     ./mas.nix
     ./hookshot.nix
     ./synapse.nix
+    ./element-web.nix
   ];
 
   environment.systemPackages = [ pkgs.python312Packages.authlib ];
