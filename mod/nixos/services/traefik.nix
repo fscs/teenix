@@ -252,7 +252,7 @@
                     "web"
                     "websecure"
                   ];
-                  middlewares = [ "authentik" ];
+                  middlewares = [ "onlyhhudy" ];
                   tls.certResolver = "letsencrypt";
                 };
               };
@@ -286,6 +286,12 @@
                     "X-authentik-meta-version"
                   ];
                 };
+                onlyhhudy.ipAllowList.sourceRange = [
+                  "134.99.147.40"
+                  "134.99.147.42"
+                  "134.99.154.84"
+                  "192.18.8.11"
+                ];
               };
             services =
               lib.attrsets.mapAttrs (name: value: {
