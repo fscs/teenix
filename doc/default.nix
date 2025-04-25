@@ -6,7 +6,7 @@
   mdbook-emojicodes,
   mdbook-footnote,
   mdbook-toc,
-  simple-http-server,
+  caddy,
   teenix-module,
   teenix-specialArgs,
   nixosOptionsDoc,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     cat << EOF > $out/bin/teenix-doc
     #!/usr/bin/env bash
-    ${lib.getExe simple-http-server} -ip "\''${1:-8000}" $out/share/teenix-doc
+    ${lib.getExe caddy} file-server -r $out/share/teenix-doc --listen ":\''${1:-8000}"
     EOF
 
     chmod +x $out/bin/teenix-doc
