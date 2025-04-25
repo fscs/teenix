@@ -42,9 +42,7 @@
           postgres.enable = true;
           data.enable = true;
 
-          sops.templates = [
-            config.sops.templates.campus-guesser-server
-          ];
+          sops.templates = [ "campus-guesser-server" ];
         };
       };
     };

@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  options,
   specialArgs,
   ...
 }@host:
@@ -15,15 +14,24 @@
         {
           options = {
             config = lib.mkOption {
-              description = "The container's NixOS configuration";
+              description = ''
+                The containers NixOS configuration, specified as a file, attribute set or NixOS Module function.
+
+                The special arg "host-config" can be used to access the hosts configuration from within the container.
+              '';
+              example = { 
+                services.postgresql.enable = true;
+
+                system.stateVersion = "24.11";
+              };
               type = t.deferredModule;
             };
 
             machineId = lib.mkOption {
               description = "The containers machine-id. Used for mounting journals";
               type = t.strMatching "^[a-f0-9]{32}\n$";
-              default = "${lib.substring 0 32 (builtins.hashString "sha256" name)}\n";
-              defaultText = ''''${lib.substring 0 32 (builtins.hashString "sha256" name)}\n'';
+              default = lib.substring 0 32 (builtins.hashString "sha256" name) + "\n";
+              defaultText = lib.literalExpression ''lib.substring 0 32 (builtins.hashString "sha256" name) + "\n"'';
             };
 
             privateUsers = lib.mkOption {
@@ -74,7 +82,7 @@
             backup = lib.mkEnableOption null // {
               default = true;
               example = false;
-              description = "Backup this containers persisted subvolume";
+              description = "Automatically snapshot this containers persisted subvolume";
             };
 
             mounts = {
@@ -105,16 +113,24 @@
 
               sops = {
                 secrets = lib.mkOption {
-                  description = "Sops secrets to mount into the container";
-                  visible = "shallow";
+                  description = ''
+                    Names of sops-nix secrets to mount into the container
+
+                    Use `host-config.sops.secrets.my-secret.path` to access the path within the container
+                  '';
+                  example = lib.literalExpression ''[ "my-secret" ]'';
                   default = [ ];
-                  type = t.listOf (lib.teenix.elemTypeOf options.sops.secrets);
+                  type = t.listOf t.nonEmptyStr;
                 };
                 templates = lib.mkOption {
-                  description = "Sops templates to mount into the container";
-                  visible = "shallow";
+                  description = ''
+                    Names of sops-nix templates to mount into the container
+
+                    Use `host-config.sops.templates.my-template.path` to access the path within the container
+                  '';
+                  example = lib.literalExpression ''[ "my-template" ]'';
                   default = [ ];
-                  type = t.listOf (lib.teenix.elemTypeOf options.sops.templates);
+                  type = t.listOf t.nonEmptyStr;
                 };
               };
 
@@ -242,7 +258,7 @@
         };
 
       sopsToMounts =
-        typeName: objs:
+        typeName: names: cfg:
         lib.listToAttrs (
           lib.imap0 (i: v: {
             name = "${typeName}-${toString i}";
@@ -250,7 +266,7 @@
               hostPath = v.path;
               mountPoint = v.path;
             };
-          }) objs
+          }) (lib.attrValues (lib.getAttrs names cfg))
         );
 
       mkContainer =
@@ -311,8 +327,8 @@
                 }
 
                 # sops secrets
-                (sopsToMounts "sops-secret" cfg.mounts.sops.secrets)
-                (sopsToMounts "sops-template" cfg.mounts.sops.templates)
+                (sopsToMounts "sops-secret" cfg.mounts.sops.secrets config.sops.secrets)
+                (sopsToMounts "sops-template" cfg.mounts.sops.templates config.sops.templates)
 
                 # extra mounts
                 (lib.mapAttrs (n: value: {
@@ -352,13 +368,34 @@
         }
       ];
 
+      # make sure the container restarts if its secrets change
+      sops =
+        let
+          sopsRestartUnits =
+            scope:
+            lib.mkMerge (
+              lib.mapAttrsToList (
+                containerName: containerCfg:
+                lib.genAttrs containerCfg.mounts.sops.${scope} (_: {
+                  restartUnits = [ "container@${containerName}.service" ];
+                })
+              ) config.teenix.containers
+            );
+        in
+        {
+          secrets = sopsRestartUnits "secrets";
+          templates = sopsRestartUnits "templates";
+        };
+
       # generate the underlying container options
       containers = lib.mapAttrs mkContainer config.teenix.containers;
 
+      # create folders in /var/log where the containers journal will be mounted
       systemd.tmpfiles.rules = lib.map (containerName: ''
         d /var/log/containers/${containerName} 0755 root systemd-journal -
       '') (lib.attrNames config.teenix.containers);
 
+      # create the /persist subvolume
       teenix.persist.subvolumes = lib.mapAttrs (
         containerName: value:
         let

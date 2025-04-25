@@ -142,11 +142,11 @@
           postgres.enable = true;
 
           sops = {
-            secrets = lib.attrVals secrets config.sops.secrets;
+            inherit secrets;
             templates = [
-              config.sops.templates.matrix-mas-config
-              config.sops.templates.matrix-config-file
-              config.sops.templates.matrix-hookshot-registration-file
+              "matrix-mas-config"
+              "matrix-config-file"
+              "matrix-hookshot-registration-file"
             ];
           };
 

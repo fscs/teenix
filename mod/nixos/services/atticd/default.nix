@@ -33,7 +33,7 @@
         networking.ports.tcp = [ 8080 ];
 
         mounts = {
-          sops.templates = [ config.sops.templates.atticd ];
+          sops.templates = [ "atticd" ];
 
           data.enable = true;
         };

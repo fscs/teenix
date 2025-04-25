@@ -41,7 +41,7 @@
           data.enable = true;
           data.ownerUid = config.containers.discord-inphima-bot.config.users.users.discord-inphima-bot.uid;
 
-          sops.templates = [ config.sops.templates.discord-inphima-bot ];
+          sops.templates = [ "discord-inphima-bot" ];
         };
       };
     };

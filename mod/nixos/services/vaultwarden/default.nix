@@ -46,7 +46,7 @@
         };
 
         mounts = {
-          sops.templates = [ config.sops.templates.vaultwarden ];
+          sops.templates = [ "vaultwarden" ];
 
           data.enable = true;
         };

@@ -42,7 +42,7 @@
 
         mounts = {
           postgres.enable = true;
-          sops.secrets = [ config.sops.secrets.fscshhude-env ];
+          sops.secrets = [ "fscshhude-env" ];
 
           data = {
             enable = true;    

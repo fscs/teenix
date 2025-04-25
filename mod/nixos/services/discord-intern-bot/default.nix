@@ -34,9 +34,7 @@
             ownerUid = config.containers.discord-intern-bot.config.users.users.discord-intern-bot.uid;
           };
 
-          sops.secrets = [
-            config.sops.secrets.discord-intern-bot-env
-          ];
+          sops.secrets = [ "discord-intern-bot-env" ];
         };
       };
     };

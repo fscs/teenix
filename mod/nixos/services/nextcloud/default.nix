@@ -86,9 +86,7 @@
             };
           };
 
-          sops.secrets = [
-            config.sops.secrets.nextcloud-admin-pass
-          ];
+          sops.secrets = [ "nextcloud-admin-pass" ];
         };
       };
     };

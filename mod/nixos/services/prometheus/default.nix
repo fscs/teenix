@@ -57,9 +57,7 @@
 
           data.enable = true;
 
-          sops.secrets = [
-            config.sops.secrets.grafana2ntfy
-          ];
+          sops.secrets = [ "grafana2ntfy" ];
 
           extra.grafana-data = {
             mountPoint = config.containers.prometheus.config.services.grafana.dataDir;

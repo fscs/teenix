@@ -57,7 +57,7 @@
         };
 
         mounts = {
-          sops.templates = [ config.sops.templates.authentik ];
+          sops.templates = [ "authentik" ];
           postgres.enable = true;
         };
       };
