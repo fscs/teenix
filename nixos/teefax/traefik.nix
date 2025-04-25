@@ -48,7 +48,7 @@
       to = "fscs.github.io/go/";
     };
 
-    nextcloud-PhyNIx ={
+    nextcloud_phynix = {
       from = "nextcloud.phynix-hhu.de";
       to = "nextcloud.inphima.de";
     };
