@@ -48,6 +48,11 @@
       to = "fscs.github.io/go/";
     };
 
+    nextcloud-PhyNIx ={
+      from = "nextcloud.phynix-hhu.de";
+      to = "nextcloud.inphima.de";
+    };
+
     essen_inphima = {
       from = "essen.inphima.de";
       to = "www.stw-d.de/gastronomie/speiseplaene/essenausgabe-sued-duesseldorf";
