@@ -422,7 +422,7 @@
                 mode = "0700";
               };
               data = lib.mkIf enableData {
-                inherit (value.mounts.data) owner;
+                owner = value.mounts.data.ownerUid;
                 mode = "0700";
               };
             }
