@@ -19,7 +19,7 @@
 
                 The special arg "host-config" can be used to access the hosts configuration from within the container.
               '';
-              example = { 
+              example = {
                 services.postgresql.enable = true;
 
                 system.stateVersion = "24.11";
@@ -427,7 +427,8 @@
               };
             }
             (lib.mapAttrs (_: v: {
-              inherit (v) mode owner;
+              inherit (v) mode;
+              owner = v.ownerUid;
             }) (lib.filterAttrs (_: v: v.hostPath == null) value.mounts.extra))
           ];
         }
