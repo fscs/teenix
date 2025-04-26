@@ -150,30 +150,30 @@ in
     # Generates the Directories inside the impermanence module
     systemd.tmpfiles.rules = lib.concatLists (
       lib.attrsets.mapAttrsToList (
-        name: value:
+        subvolumeName: subvolumeCfg:
         [
-          "v ${cfg.path}/${name} ${defaultToString ":0755" value.mode} ${defaultToString ":root" value.owner} ${defaultToString ":root" value.group} -"
-          (lib.mkIf value.backup "d ${value.path}/.snapshots ${value.mode} ${value.owner} ${value.group} -")
+          "v ${cfg.path}/${subvolumeName} ${defaultToString ":0755" subvolumeCfg.mode} ${defaultToString ":root" subvolumeCfg.owner} ${defaultToString ":root" subvolumeCfg.group} -"
+          (lib.mkIf subvolumeCfg.backup "d ${subvolumeCfg.path}/.snapshots ${subvolumeCfg.mode} ${subvolumeCfg.owner} ${subvolumeCfg.group} -")
         ]
         ++ lib.attrsets.mapAttrsToList (
-          n: v:
-          "d '${value.path}/${n}' ${defaultToString ":0755" value.mode} ${defaultToString ":root" value.owner} ${defaultToString ":root" value.group} -"
-        ) value.directories
+          dirName: dirCfg:
+          "d '${subvolumeCfg.path}/${dirName}' ${defaultToString ":0755" dirCfg.mode} ${defaultToString ":root" dirCfg.owner} ${defaultToString ":root" dirCfg.group} -"
+        ) subvolumeCfg.directories
       ) cfg.subvolumes
     );
 
-    environment.persistence = lib.mapAttrs' (name: value: {
-      name = value.path;
+    environment.persistence = lib.mapAttrs' (subvolumeName: subvolumeCfg: {
+      name = subvolumeCfg.path;
       value = {
         hideMounts = true;
-        directories = lib.mapAttrsToList (name: value: {
-          directory = name;
-          user = defaultToString "root" value.owner;
-          group = lib.defaultTo "root" value.group;
-          mode = lib.defaultTo "0755" value.mode;
-        }) value.directories;
+        directories = lib.mapAttrsToList (dirName: dirCfg: {
+          directory = dirName;
+          user = defaultToString "root" dirCfg.owner;
+          group = lib.defaultTo "root" dirCfg.group;
+          mode = lib.defaultTo "0755" dirCfg.mode;
+        }) subvolumeCfg.directories;
       };
-    }) (lib.attrsets.filterAttrs (name: value: value.bindMountDirectories) cfg.subvolumes);
+    }) (lib.attrsets.filterAttrs (subvolumeName: subvolumeCfg: subvolumeCfg.bindMountDirectories) cfg.subvolumes);
 
     # Automatically snapshots the Persistent Subvolumes
     services.btrbk.instances = lib.mkMerge [
@@ -194,11 +194,11 @@ in
       }
 
       # seperate instances for each subvolume
-      (lib.mapAttrs (_: value: {
+      (lib.mapAttrs (_: subvolumeCfg: {
         onCalendar = null;
         settings = {
-          volume.${value.path} = {
-            subvolume = value.path;
+          volume.${subvolumeCfg.path} = {
+            subvolume = subvolumeCfg.path;
             snapshot_dir = ".snapshots";
           };
         } // sharedBtrbkSettings;
@@ -217,15 +217,15 @@ in
 
             declare -a BACKUP_LIST=()
 
-            ${lib.concatMapAttrsStringSep "\n" (name: value: ''
+            ${lib.concatMapAttrsStringSep "\n" (subvolumeName: subvolumeCfg: ''
               for path in $UNIT_START_FILE $UNIT_RESTART_FILE; 
               do 
                 [ ! -f $path ] && continue
                 
-                for unit in ${toString value.backupUnitTriggers};
+                for unit in ${toString subvolumeCfg.backupUnitTriggers};
                 do 
                   if grep -qFx $unit $path; then
-                    BACKUP_LIST+=(${name})
+                    BACKUP_LIST+=(${subvolumeName})
                   fi
                 done
               done
@@ -244,10 +244,10 @@ in
       };
     };
 
-    systemd.services = lib.mapAttrs' (name: value: {
-      name = "btrbk-${name}";
+    systemd.services = lib.mapAttrs' (subvolumeName: subvolumeCfg: {
+      name = "btrbk-${subvolumeName}";
       value = {
-        before = value.backupUnitTriggers;
+        before = subvolumeCfg.backupUnitTriggers;
       };
     }) backupSubvolumes;
 
