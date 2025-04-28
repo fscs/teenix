@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, config, ... }:
 {
   sops.secrets.traefik = {
     format = "binary";
@@ -80,12 +80,12 @@
 
     voltwarden = {
       from = "voltwarden.inphima.de";
-      to = "vaultwarden.inphima.de";
+      to = config.teenix.services.vaultwarden.hostname;
     };
 
     matewarden = {
       from = "matewarden.inphima.de";
-      to = "vaultwarden.inphima.de";
+      to = config.teenix.services.vaultwarden.hostname;
     };
 
     inphima_shop = {
@@ -101,6 +101,11 @@
     slinky = {
       from = "slinky.inphima.de";
       to = "www.legami.com/de_de/magic-spring-VSL0001.html";
+    };
+
+    wanntripper = {
+      from = "wanntripper.inphima.de";
+      to = config.teenix.services.crabfit.hostnames.frontend;
     };
   };
 }

@@ -27,7 +27,7 @@
       flake = false;
     };
     grafana2ntfy.url = "github:fscs/grafana-to-ntfy";
-    bahn.url = "github:fscs/fscs-monitor-plus";
+    fscs-monitor-plus.url = "github:fscs/fscs-monitor-plus";
 
     # follows
     campus-guesser-server.inputs.nixpkgs.follows = "nixpkgs";

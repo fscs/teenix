@@ -175,4 +175,12 @@
     enable = true;
     hostname = "bahn.inphima.de";
   };
+
+  teenix.services.crabfit = {
+    enable = true;
+    hostnames = rec {
+      frontend = "crabfit.inphima.de";
+      backend = "api.${frontend}";
+    };
+  };
 }

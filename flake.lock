@@ -74,28 +74,6 @@
         "type": "github"
       }
     },
-    "bahn": {
-      "inputs": {
-        "advisory-db": "advisory-db",
-        "crane": "crane",
-        "fenix": "fenix",
-        "flake-utils": "flake-utils_2",
-        "nixpkgs": "nixpkgs_2"
-      },
-      "locked": {
-        "lastModified": 1745625432,
-        "narHash": "sha256-Zw4atVhPM1gA6+Z1+abP+4MowgWnS22RaIIqKjlRtrc=",
-        "owner": "fscs",
-        "repo": "fscs-monitor-plus",
-        "rev": "54a6cb3461456710bc0a07c7cfd0928c948767a1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "fscs",
-        "repo": "fscs-monitor-plus",
-        "type": "github"
-      }
-    },
     "bootstrap": {
       "flake": false,
       "locked": {
@@ -115,7 +93,7 @@
     },
     "campus-guesser-server": {
       "inputs": {
-        "flake-utils": "flake-utils_3",
+        "flake-utils": "flake-utils_2",
         "gradle2nix": "gradle2nix",
         "nixpkgs": [
           "nixpkgs"
@@ -138,7 +116,7 @@
     "colmena": {
       "inputs": {
         "flake-compat": "flake-compat_2",
-        "flake-utils": "flake-utils_5",
+        "flake-utils": "flake-utils_4",
         "nix-github-actions": "nix-github-actions_2",
         "nixpkgs": [
           "nixpkgs"
@@ -161,11 +139,11 @@
     },
     "crane": {
       "locked": {
-        "lastModified": 1744386647,
-        "narHash": "sha256-DXwQEJllxpYeVOiSlBhQuGjfvkoGHTtILLYO2FvcyzQ=",
+        "lastModified": 1737689766,
+        "narHash": "sha256-ivVXYaYlShxYoKfSo5+y5930qMKKJ8CLcAoIBPQfJ6s=",
         "owner": "ipetkov",
         "repo": "crane",
-        "rev": "d02c1cdd7ec539699aa44e6ff912e15535969803",
+        "rev": "6fe74265bbb6d016d663b1091f015e2976c4a527",
         "type": "github"
       },
       "original": {
@@ -176,11 +154,11 @@
     },
     "crane_2": {
       "locked": {
-        "lastModified": 1737689766,
-        "narHash": "sha256-ivVXYaYlShxYoKfSo5+y5930qMKKJ8CLcAoIBPQfJ6s=",
+        "lastModified": 1744386647,
+        "narHash": "sha256-DXwQEJllxpYeVOiSlBhQuGjfvkoGHTtILLYO2FvcyzQ=",
         "owner": "ipetkov",
         "repo": "crane",
-        "rev": "6fe74265bbb6d016d663b1091f015e2976c4a527",
+        "rev": "d02c1cdd7ec539699aa44e6ff912e15535969803",
         "type": "github"
       },
       "original": {
@@ -251,7 +229,7 @@
     },
     "discord-inphima-bot": {
       "inputs": {
-        "flake-utils": "flake-utils_6",
+        "flake-utils": "flake-utils_5",
         "gradle2nix": "gradle2nix_2",
         "nixpkgs": [
           "nixpkgs"
@@ -274,8 +252,8 @@
     },
     "discord-intern-bot": {
       "inputs": {
-        "crane": "crane_2",
-        "flake-utils": "flake-utils_8",
+        "crane": "crane",
+        "flake-utils": "flake-utils_7",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -297,11 +275,11 @@
     "fenix": {
       "inputs": {
         "nixpkgs": [
-          "bahn",
+          "fscs-monitor-plus",
           "nixpkgs"
         ],
         "rust-analyzer-src": [
-          "bahn"
+          "fscs-monitor-plus"
         ]
       },
       "locked": {
@@ -543,15 +521,12 @@
       }
     },
     "flake-utils_4": {
-      "inputs": {
-        "systems": "systems_4"
-      },
       "locked": {
-        "lastModified": 1731533236,
-        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "lastModified": 1659877975,
+        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
         "type": "github"
       },
       "original": {
@@ -561,12 +536,15 @@
       }
     },
     "flake-utils_5": {
+      "inputs": {
+        "systems": "systems_4"
+      },
       "locked": {
-        "lastModified": 1659877975,
-        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
         "type": "github"
       },
       "original": {
@@ -647,6 +625,28 @@
         "type": "github"
       }
     },
+    "fscs-monitor-plus": {
+      "inputs": {
+        "advisory-db": "advisory-db",
+        "crane": "crane_2",
+        "fenix": "fenix",
+        "flake-utils": "flake-utils_8",
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1745878094,
+        "narHash": "sha256-03Xm4bL8Pni8JAxi/iyMCnuo6ZP+K5FC03I3lKcm2VM=",
+        "owner": "fscs",
+        "repo": "fscs-monitor-plus",
+        "rev": "78bd993435d83017eedb46118db1a26e75889478",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fscs",
+        "repo": "fscs-monitor-plus",
+        "type": "github"
+      }
+    },
     "fscshhude": {
       "inputs": {
         "flake-utils": "flake-utils_9",
@@ -672,7 +672,7 @@
     },
     "gradle2nix": {
       "inputs": {
-        "flake-utils": "flake-utils_4",
+        "flake-utils": "flake-utils_3",
         "nixpkgs": [
           "campus-guesser-server",
           "nixpkgs"
@@ -695,8 +695,8 @@
     },
     "gradle2nix_2": {
       "inputs": {
-        "flake-utils": "flake-utils_7",
-        "nixpkgs": "nixpkgs_3"
+        "flake-utils": "flake-utils_6",
+        "nixpkgs": "nixpkgs_2"
       },
       "locked": {
         "lastModified": 1737146267,
@@ -970,22 +970,6 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1744536153,
-        "narHash": "sha256-awS2zRgF4uTwrOKwwiJcByDzDOdo3Q1rPZbiHQg/N38=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "18dd725c29603f582cf1900e0d25f9f1063dbf11",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_3": {
-      "locked": {
         "lastModified": 1733940404,
         "narHash": "sha256-Pj39hSoUA86ZePPF/UXiYHHM7hMIkios8TYG29kQT4g=",
         "owner": "NixOS",
@@ -996,6 +980,22 @@
       "original": {
         "owner": "NixOS",
         "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1744536153,
+        "narHash": "sha256-awS2zRgF4uTwrOKwwiJcByDzDOdo3Q1rPZbiHQg/N38=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "18dd725c29603f582cf1900e0d25f9f1063dbf11",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -1066,12 +1066,12 @@
     "root": {
       "inputs": {
         "authentik-nix": "authentik-nix",
-        "bahn": "bahn",
         "campus-guesser-server": "campus-guesser-server",
         "colmena": "colmena",
         "discord-inphima-bot": "discord-inphima-bot",
         "discord-intern-bot": "discord-intern-bot",
         "flake-programs-sqlite": "flake-programs-sqlite",
+        "fscs-monitor-plus": "fscs-monitor-plus",
         "fscshhude": "fscshhude",
         "grafana2ntfy": "grafana2ntfy",
         "impermanence": "impermanence",
