@@ -171,4 +171,8 @@
     };
   };
 
+  teenix.services.bahn-monitor = {
+    enable = true;
+    hostname = "bahn.inphima.de";
+  };
 }
