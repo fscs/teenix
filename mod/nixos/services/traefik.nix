@@ -99,6 +99,17 @@ let
       default = { };
     };
   };
+
+  redirectType = lib.types.submodule {
+    options = {
+      from = lib.mkOption {
+        type = lib.types.str;
+      };
+      to = lib.mkOption {
+        type = lib.types.str;
+      };
+    };
+  };
 in
 {
   options.teenix.services.traefik = {
@@ -123,6 +134,11 @@ in
         description = "url to serve the dashboard on";
         type = t.nonEmptyString;
       };
+    };
+
+    redirects = lib.mkOption {
+      type = lib.types.attrsOf redirectType;
+      default = { };
     };
 
     middlewares = lib.mkOption {
@@ -168,7 +184,7 @@ in
 
   config = lib.mkIf cfg.enable {
     # TODO: check for non-existent entrypoints
-    # TODO: warn if services dont have entry points (tls is disabled and none specified)
+    # TODO: warn if services dont have entrypoints (tls is disabled and none specified)
 
     teenix.services.traefik.entryPoints = {
       web = {
@@ -238,6 +254,17 @@ in
             ]
           ) cfg.http)
 
+          # generate routers for our redirects
+          (lib.attrsets.mapAttrs (name: value: {
+            service = "blank";
+            priority = 10;
+            rule = "Host(`${builtins.replaceStrings [ "." ] [ "\." ] value.from}`)";
+            middlewares = name;
+            tls.certResolver = "letsencrypt";
+            entryPoints = [ "websecure" ];
+          }) cfg.redirects)
+          
+          # dashboard router
           (lib.mkIf cfg.dashboard.enable {
             dashboard = {
               rule = "Host(`${cfg.dashboard.url}`)";
@@ -250,6 +277,20 @@ in
               tls.certResolver = "letsencrypt";
             };
           })
+        ];
+
+        middlewares = lib.mkMerge [
+          # generate redirect middlewares
+          (lib.attrsets.mapAttrs (name: value: {
+            redirectRegex = {
+              regex = "(www\\.)?${builtins.replaceStrings [ "." ] [ "\." ] value.from}/?";
+              replacement = value.to;
+              permanent = true;
+            };
+          }) cfg.redirects)
+
+          # other middlewares
+          cfg.middlewares
         ];
 
         services = lib.mkMerge [
