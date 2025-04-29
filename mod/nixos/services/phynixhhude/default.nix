@@ -46,7 +46,7 @@
 
       # Containers
       virtualisation.oci-containers.containers.phynix-phynix-db = {
-        image = "mysql:5.7";
+        image = "mysql:9.3.0";
         environment = {
           "MYSQL_DATABASE" = "phynixdb";
           "MYSQL_RANDOM_ROOT_PASSWORD" = "1";
@@ -100,7 +100,7 @@
           "traefik.http.routers.phynixhhudewp1.priority" = "1";
           "traefik.http.routers.phynixhhudewp1.tls.certresolver" = "letsencrypt";
           "traefik.http.services.phynixhhudewp1.loadbalancer.server.port" = "80";
-          "traefik.http.services.phynixhhudewp1.loadbalancer.healthCheck.path" = "/";
+          # "traefik.http.services.phynixhhudewp1.loadbalancer.healthCheck.path" = "/";
           "traefik.http.routers.phynixhhudewp1.middlewares" = "hsts@file";
         };
         environmentFiles = [ config.sops.templates.phynixhhude.path ];
