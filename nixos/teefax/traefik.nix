@@ -43,6 +43,13 @@
   ];
 
   teenix.services.traefik.redirects = {
+    blub = {
+      from = "";
+      to = "";
+    };
+  };
+
+  teenix.services.traefik.redirects = {
     fscs_go = {
       from = "go.hhu-fscs.de";
       to = "fscs.github.io/go/";
