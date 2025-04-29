@@ -101,6 +101,7 @@
           "traefik.http.routers.phynixhhudewp1.tls.certresolver" = "letsencrypt";
           "traefik.http.services.phynixhhudewp1.loadbalancer.server.port" = "80";
           "traefik.http.services.phynixhhudewp1.loadbalancer.healthCheck.path" = "/";
+          "traefik.http.routers.phynixhhudewp1.middlewares" = "hsts@file";
         };
         environmentFiles = [ config.sops.templates.phynixhhude.path ];
         volumes = [

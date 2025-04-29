@@ -48,7 +48,7 @@
               "traefik.http.routers.metesecure.tls" = "true";
               "traefik.http.routers.metesecure.tls.certresolver" = "letsencrypt";
               "traefik.http.routers.metesecure.service" = "mete";
-              "traefik.http.routers.metesecure.middlewares" = "authentik@file";
+              "traefik.http.routers.metesecure.middlewares" = "authentik@file,hsts@file";
             };
             volumes = [
               "${config.teenix.persist.path}/mete/db:/app/var"
@@ -72,10 +72,9 @@
               "traefik.http.routers.gorden-summary.tls" = "true";
               "traefik.http.routers.gorden-summary.entrypoints" = "websecure";
               "traefik.http.routers.gorden-summary.tls.certresolver" = "letsencrypt";
-              "traefik.http.routers.gorden-summary.middlewares" = "authentik@file";
+              "traefik.http.routers.gorden-summary.middlewares" = "authentik@file,hsts";
               "traefik.http.routers.gorden-summary.rule" = "Host(`robert.hhu-fscs.de`)";
               "traefik.http.services.gorden-summary.loadbalancer.server.port" = "5000";
-
             };
           };
         };

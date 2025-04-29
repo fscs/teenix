@@ -227,7 +227,7 @@
                   {
                     rule = value.router.rule;
                     priority = value.router.priority;
-                    middlewares = value.router.middlewares;
+                    middlewares = value.router.middlewares ++ [ "hsts" ];
                     service = name;
                     entryPoints = value.router.entryPoints;
                   }
@@ -259,7 +259,7 @@
             middlewares =
               lib.attrsets.mapAttrs (name: value: {
                 redirectRegex = {
-                  regex = "(www\\.)?${builtins.replaceStrings [ "." ] [ "\." ] value.from}";
+                  regex = "(www\\.)?${builtins.replaceStrings [ "." ] [ "\." ] value.from}/?";
                   replacement = value.to;
                   permanent = true;
                 };
@@ -268,6 +268,11 @@
                 meteredirect.redirectregex = {
                   regex = "https://mete.hhu-fscs.de/(.*?)((/deposit)|(/retrieve)|(/transaction))(.*)";
                   replacement = "https://mete.hhu-fscs.de/$1";
+                };
+                hsts = {
+                  headers.STSSeconds = 31536000;
+                  headers.STSPreload = true;
+                  headers.STSIncludeSubdomains = true;
                 };
                 authentik.forwardAuth = {
                   address = "https://auth.inphima.de/outpost.goauthentik.io/auth/traefik";

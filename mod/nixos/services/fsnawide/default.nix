@@ -104,6 +104,7 @@
           "traefik.http.routers.nawi.tls" = "true";
           "traefik.http.routers.nawi.tls.certresolver" = "letsencrypt";
           "traefik.http.services.nawi.loadbalancer.server.port" = "80";
+          "traefik.http.routers.nawi.middlewares" = "hsts@file";
           # "traefik.http.services.nawi.loadbalancer.healthCheck.path" = "/";
         };
         environmentFiles = [ config.sops.secrets.nawi.path ];

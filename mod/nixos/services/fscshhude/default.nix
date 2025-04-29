@@ -23,13 +23,17 @@
         http.routers.fscshhude.tls.certResolver = lib.mkForce "uniintern";
       };
 
-      teenix.services.traefik.services."fscshhude" = {
-        router.rule = "Host(`fscs.hhu.de`) || Host(`fscs.uni-duesseldorf.de`) || Host(`hhu-fscs.de`)";
-        healthCheck = {
-          enable = true;
-          path = "/de/";
+      teenix.services.traefik.services = {
+        fscshhude = {
+          router.rule = "Host(`fscs.hhu.de`) || Host(`fscs.uni-duesseldorf.de`)";
+          healthCheck.enable = true;
+          servers = [ "http://${config.containers.fscshhude.localAddress}:8080" ];
         };
-        servers = [ "http://${config.containers.fscshhude.localAddress}:8080" ];
+        hhu-fscs = {
+          router.rule = "Host(`hhu-fscs.de`) || Host(`www.hhu-fscs.de`)";
+          healthCheck.enable = true;
+          servers = [ "http://${config.containers.fscshhude.localAddress}:8080" ];
+        };
       };
 
       teenix.containers.fscshhude = {
@@ -45,7 +49,7 @@
           sops.secrets = [ "fscshhude-env" ];
 
           data = {
-            enable = true;    
+            enable = true;
             name = "fscs-website-server";
           };
         };
