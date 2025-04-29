@@ -90,6 +90,12 @@
     mariaEnvFile = ../secrets/inphimade/maria_env;
   };
 
+  teenix.services.phynixhhude = {
+    enable = true;
+    hostname = "phynix-hhu.de";
+    secretsFile = ../secrets/phynixhhude.yml;
+  };
+
   teenix.services.nawi = {
     enable = true;
     hostname = "fsnawi.de";
