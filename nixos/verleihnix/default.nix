@@ -23,7 +23,7 @@
   ];
 
   networking = {
-    hostName = "testfax";
+    hostName = "verleihnix";
 
     nameservers = [ "134.99.128.2" ];
 
@@ -92,12 +92,12 @@
     hostname = "ntfy.dev.hhu-fscs.de";
   };
 
-  sops.secrets.testfax-root-passwd = {
+  sops.secrets.verleihnix-root-passwd = {
     sopsFile = ../secrets/passwords.yml;
     neededForUsers = true;
   };
 
-  users.users.root.hashedPasswordFile = config.sops.secrets.testfax-root-passwd.path;
+  users.users.root.hashedPasswordFile = config.sops.secrets.verleihnix-root-passwd.path;
 
   teenix.services.minecraft.enable = true;
 

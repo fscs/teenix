@@ -117,9 +117,9 @@
           imports = [ ./nixos/teefax ];
         };
 
-        testfax = {
+        verleihnix = {
           deployment.targetHost = "dev.hhu-fscs.de";
-          imports = [ ./nixos/testfax ];
+          imports = [ ./nixos/verleihnix ];
         };
       };
 
@@ -128,9 +128,9 @@
         modules = [ ./nixos/teefax ];
       };
 
-      nixosConfigurations.testfax = lib.nixosSystem {
+      nixosConfigurations.verleihnix = lib.nixosSystem {
         inherit specialArgs;
-        modules = [ ./nixos/testfax ];
+        modules = [ ./nixos/verleihnix ];
       };
 
       devShells = eachSystem (

@@ -3,7 +3,7 @@
 Zunächst die Basics. Wir haben 2 Server
 
 - Teefax, unser Hauptserver
-- Testfax, unser Testserver (wo wir leider zu wenig testen)
+- Verleihnix, unser Testserver (wo wir leider zu wenig testen)
 
 Auf beiden diesen Server läuft [NixOS](https://nixos.org/). Teenix ist die Konfiguration die diese NixOS Systeme beschreibt.
 
@@ -28,7 +28,7 @@ Keine vollständige Auflistung, dient nur der groben Übersicht
 │└─┬ keys       -
 │  ├ secrets    - sops secrets
 │  ├ teefax     - die konfiguration von teefax
-│  ├ testfax    - die konfiguration von testfax
+│  ├ verleihnix - die konfiguration von testfax
 │  └ share      - geteilte konfiguration, sollte in jedem host unbedingt importiert werden
 ├─ pkgs         - eigene packages
 ├─ flake.nix    - der "einstieg" in die konfiguration

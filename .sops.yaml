@@ -1,10 +1,10 @@
 keys:
   - &Felix-yubikey 499C66E9512BA96797CDAC410562840F5B0C9BD4
-  - &teefax cebeae9995e7e299c890ea0037889e2d9e9b58e1
   - &arthur-yubikey-5c FF6CE42B2F2B7B602E9694BAC09465A0C8B07B02
   - &arthur-yubikey-nano 5A8C4CBC21DC694E5EB6348B6DCC662BCBF8B50D
-  - &testfax 53442408c43a1ad985496b314a1e7a4bfdb0852b
   - &Robert AF4FA38CDA30CFF20BC2AE9890AE3884EC0EF08B
+  - &teefax cebeae9995e7e299c890ea0037889e2d9e9b58e1
+  - &verleihnix 53442408c43a1ad985496b314a1e7a4bfdb0852b
 creation_rules:
   - path_regex: nixos/secrets/.*
     key_groups:
@@ -13,4 +13,4 @@ creation_rules:
         - *arthur-yubikey-5c
         - *arthur-yubikey-nano
         - *teefax
-        - *testfax
+        - *verleihnix
