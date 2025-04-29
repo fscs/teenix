@@ -2,6 +2,7 @@
   lib,
   vaultwarden,
   git,
+  ...
 }:
 vaultwarden.webvault.overrideAttrs (
   final: prev: {

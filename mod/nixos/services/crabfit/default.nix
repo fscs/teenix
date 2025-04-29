@@ -1,6 +1,8 @@
 {
   lib,
+  pkgs,
   config,
+  outputs,
   ...
 }:
 {
@@ -40,7 +42,10 @@
         config = {
           services.crabfit = {
             enable = true;
-            frontend.host = config.teenix.services.crabfit.hostnames.frontend;
+            frontend = {
+              package = outputs.packages.${pkgs.stdenv.system}.crabrave-fit-frontend;
+              host = config.teenix.services.crabfit.hostnames.frontend;
+            };
             api = {
               host = config.teenix.services.crabfit.hostnames.backend;
               environment.API_LISTEN = "0.0.0.0:${toString crabfitCfg.api.port}";
