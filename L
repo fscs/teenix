@@ -1,0 +1,11 @@
+HTTP/2 200 
+content-type: text/html; charset=UTF-8
+date: Wed, 30 Apr 2025 19:10:16 GMT
+link: <https://inphima.de/wp-json/>; rel="https://api.w.org/"
+link: <https://inphima.de/wp-json/wp/v2/pages/872>; rel="alternate"; title="JSON"; type="application/json"
+link: <https://inphima.de/>; rel=shortlink
+server: Apache/2.4.62 (Debian)
+strict-transport-security: max-age=31536000; includeSubDomains; preload
+vary: Accept-Encoding
+x-powered-by: PHP/8.2.28
+

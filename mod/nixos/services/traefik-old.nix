@@ -56,7 +56,7 @@
       };
 
       staticConfigOptions = {
-        # unnessecary?
+        # unnessecary? maybe possily required for forward auth
         serversTransport.insecureSkipVerify = true;
 
         # move to prometheus
@@ -72,12 +72,12 @@
           addServicesLabels = true;
         };
 
-        # dysfuncitonal?
+        # dysfuncitonal? yes not nedded anymore
         ping = {
           entryPoint = "ping";
         };
 
-        # unnessecary?
+        # unnessecary? idk wie wir die logs in grafana bekommen wollen ich fände es nice to have
         accesslog = lib.mkIf config.teenix.services.traefik.logging.enable {
           filePath = config.teenix.services.traefik.logging.filePath;
         };
@@ -98,14 +98,14 @@
           };
         };
 
-        # turn server stuff?
+        # turn server stuff? jo das muss für alle 30001-300010
         # {
         #   udp_30001 = {
         #     address = ":30001/udp";
         #   };
         # };
 
-        # unnessecary?
+        # unnessecary? jo inzwischen unnessecary
         api = {
           debug = true;
         };
