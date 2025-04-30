@@ -3,6 +3,7 @@
   outputs,
   config,
   pkgs,
+  lib,
   ...
 }:
 {
@@ -48,6 +49,22 @@
             prefixLength = 27;
           }
         ];
+      };
+    };
+
+    interfaces.ens192 = {
+      ipv4 = {
+        addresses = [
+          {
+            address = "134.99.147.43";
+            prefixLength = 27;
+          }
+        ];
+        routes = lib.singleton {
+          address = "134.99.210.131";
+          prefixLength = 32;
+          via = "134.99.147.33";
+        };
       };
     };
 
