@@ -21,7 +21,7 @@
         ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64="${config.sops.placeholder.atticd-jwt}"
       '';
 
-      teenix.services.traefik.services.attic = {
+      teenix.services.traefik.httpServices.attic = {
         router.rule = "Host(`${cfg.hostname}`)";
         healthCheck.enable = true;
         servers = [ "http://${config.containers.atticd.localAddress}:8080" ];

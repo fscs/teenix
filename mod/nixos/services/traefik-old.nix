@@ -1,8 +1,5 @@
 {
   config,
-  pkgs,
-  pkgs-stable,
-  sops,
   lib,
   ...
 }:
@@ -17,98 +14,30 @@
     };
   };
 
-  config = lib.mkIf config.teenix.services.traefik.enable {
+  config = lib.mkIf false {
     sops.secrets.traefik_static = {
       sopsFile = config.teenix.services.traefik.staticConfigPath;
       format = "binary";
       mode = "444";
     };
 
-    teenix.persist.subvolumes.traefik = {
-      owner = "traefik";
-      group = "traefik";
-      mode = "700";
-    };
-
     services.traefik = {
-      dynamicConfigOptions = {
-        http = {
-          middlewares = {
-            authentik.forwardAuth = {
-              address = "https://auth.inphima.de/outpost.goauthentik.io/auth/traefik";
-              tls.insecureSkipVerify = true;
-              authResponseHeaders = [
-                "X-authentik-username"
-                "X-authentik-groups"
-                "X-authentik-email"
-                "X-authentik-name"
-                "X-authentik-uid"
-                "X-authentik-jwt"
-                "X-authentik-meta-jwks"
-                "X-authentik-meta-outpost"
-                "X-authentik-meta-provider"
-                "X-authentik-meta-app"
-                "X-authentik-meta-version"
-              ];
-            };
-          };
-        };
-      };
-
       staticConfigOptions = {
         # unnessecary? maybe possily required for forward auth
         serversTransport.insecureSkipVerify = true;
-
-        # move to prometheus
-        metrics.prometheus = {
-          entryPoint = "metrics";
-          buckets = [
-            0.1
-            0.3
-            1.2
-            5.0
-          ];
-          addEntryPointsLabels = true;
-          addServicesLabels = true;
-        };
-
-        # dysfuncitonal? yes not nedded anymore
-        ping = {
-          entryPoint = "ping";
-        };
 
         # unnessecary? idk wie wir die logs in grafana bekommen wollen ich fände es nice to have
         accesslog = lib.mkIf config.teenix.services.traefik.logging.enable {
           filePath = config.teenix.services.traefik.logging.filePath;
         };
 
-        certificatesResolvers = {
-          # move to fscshhude
-          uniintern = {
-            acme = {
-              email = config.teenix.services.traefik.letsencryptMail;
-              storage = "${config.services.traefik.dataDir}/hhucerts.json";
-              tlsChallenge = { };
-              caServer = ''$TRAEFIK_CERTIFICATESRESOLVERS_uniintern_ACME_CASERVER'';
-              eab = {
-                kid = ''$TRAEFIK_CERTIFICATESRESOLVERS_uniintern_ACME_EAB_KID'';
-                hmacEncoded = ''$TRAEFIK_CERTIFICATESRESOLVERS_uniintern_ACME_EAB_HMACENCODED'';
-              };
-            };
-          };
-        };
-
         # turn server stuff? jo das muss für alle 30001-300010
+        # können jetzt auch die normalen entrypoint options sein,
         # {
         #   udp_30001 = {
         #     address = ":30001/udp";
         #   };
         # };
-
-        # unnessecary? jo inzwischen unnessecary
-        api = {
-          debug = true;
-        };
       };
     };
   };

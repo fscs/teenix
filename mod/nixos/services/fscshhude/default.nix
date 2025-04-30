@@ -11,24 +11,50 @@
 
   config =
     let
-      opts = config.teenix.services.fscshhude;
+      cfg = config.teenix.services.fscshhude;
+
+      secrets = [
+        "fscshhude-oauth-client-id"
+        "fscshhude-oauth-client-secret"
+        "fscshhude-signing-key"
+        "fscshhude-acme-eab-kid"
+        "fscshhude-acme-eab-hmac-encoded"
+      ];
     in
-    lib.mkIf opts.enable {
-      sops.secrets.fscshhude-env = {
-        sopsFile = opts.secretsFile;
-        key = "env";
+    lib.mkIf cfg.enable {
+      sops.secrets = lib.genAttrs secrets (name: {
+        sopsFile = cfg.secretsFile;
+        key = lib.removePrefix "fscshhude-" name;
+        mode = "0444";
+      });
+
+      sops.templates.fscshhude.content = ''
+        CLIENT_ID=${config.sops.placeholders.fscshhude-oauth-client-id}
+        CLIENT_SECRET=${config.sops.placeholders.fscshhude-oauth-client-secret}
+        SIGNING_KEY=${config.sops.placeholders.fscshhude-signing-key}
+      '';
+
+      teenix.services.traefik.staticConfig.certificatesResolvers = {
+        hhu.acme = {
+          email = "fscs@hhu.de";
+          storage = "${config.services.traefik.dataDir}/hhucerts.json";
+          tlsChallenge = { };
+          caServer = "https://acme.sectigo.com/v2/OV";
+          eab = {
+            kid = config.sops.placeholders.fscshhude-acme-eab-kid;
+            hmacEncoded = config.sops.placeholders.fscshhude-acme-eab-hmac-encoded;
+          };
+        };
       };
 
-      services.traefik.dynamicConfigOptions = {
-        http.routers.fscshhude.tls.certResolver = lib.mkForce "uniintern";
-      };
-
-      teenix.services.traefik.services = {
+      teenix.services.traefik.httpServices = {
         fscshhude = {
           router.rule = "Host(`fscs.hhu.de`) || Host(`fscs.uni-duesseldorf.de`)";
           healthCheck.enable = true;
+          tls.certResolver = "hhu";
           servers = [ "http://${config.containers.fscshhude.localAddress}:8080" ];
         };
+
         hhu-fscs = {
           router.rule = "Host(`hhu-fscs.de`) || Host(`www.hhu-fscs.de`)";
           healthCheck.enable = true;
@@ -46,7 +72,7 @@
 
         mounts = {
           postgres.enable = true;
-          sops.secrets = [ "fscshhude-env" ];
+          sops.templates = [ "fscshhude" ];
 
           data = {
             enable = true;

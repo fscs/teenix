@@ -39,6 +39,8 @@
         "matrix-hookshot-hs-token"
       ];
 
+      # one of the secrets contains a #, so we need to redefine the yaml generator
+      # since it doesnt know about it because of templating, it also cannot escape it automatically
       yaml_generate =
         name: value:
         pkgs.runCommand name
@@ -79,7 +81,18 @@
       # piggy backs on the matrix subvolume
       teenix.services.sydent.enable = true;
 
-      teenix.services.traefik.services = {
+      # generate entry points for the turn server
+      teenix.services.traefik.entryPoints = lib.listToAttrs (
+        map (port: {
+          name = "turn_port_${toString port}";
+          value = {
+            inherit port;
+            protocol = "udp";
+          };
+        }) (lib.range 30000 30010)
+      );
+
+      teenix.services.traefik.httpServices = {
         matrix = {
           router = {
             rule = "Host(`${cfg.hostnames.matrix}`) || (Host(`${cfg.hostnames.homeserver}`) && (PathPrefix(`/_matrix`) || PathPrefix(`/_synapse`) || Path(`/.well-known/matrix/server`) || Path(`/.well-known/matrix/client`)))";
@@ -96,9 +109,7 @@
           router = {
             rule = "Host(`${cfg.hostnames.mas}`) || (( Host(`${cfg.hostnames.matrix}`) || Host(`${cfg.hostnames.homeserver}`)) && PathRegexp(`^/_matrix/client/.*/(login|logout|refresh)`) )";
           };
-          healthCheck = {
-            enable = true;
-          };
+          healthCheck.enable = true;
           servers = [ "http://${config.containers.matrix.localAddress}:8080" ];
         };
 
@@ -123,7 +134,7 @@
             udp = [
               3478
               5349
-            ] ++ (lib.range (30 * 1000) (30 * 1000 + 10));
+            ] ++ (lib.range (30 * 1000) (30 * 1000 + 10)); # 30000 - 30010
 
             tcp = [
               3478

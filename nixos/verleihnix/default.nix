@@ -66,18 +66,15 @@
   # Services
   teenix.persist.enable = true;
 
-  sops.secrets.traefik = {
-    format = "binary";
-    mode = "444";
-    sopsFile = ../secrets/traefik;
-  };
-
   teenix.services.traefik = {
     enable = true;
-    staticConfigPath = ../secrets/traefik_static;
-    dashboardUrl = "traefik.dev.hhu-fscs.de";
+
     letsencryptMail = "fscs@hhu.de";
-    logging.enable = true;
+
+    dashboard = {
+      enable = true;
+      url = "traefik.dev.hhu-fscs.de";
+    };
   };
 
   teenix.services.node_exporter.enable = true;

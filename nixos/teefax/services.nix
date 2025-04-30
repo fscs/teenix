@@ -68,8 +68,10 @@
 
   teenix.services.prometheus = {
     enable = true;
-    hostname = "prometheus.hhu-fscs.de";
-    grafanaHostname = "grafana.hhu-fscs.de";
+    hostnames = {
+      prometheus = "prometheus.hhu-fscs.de";
+      grafana = "grafana.hhu-fscs.de";
+    };
     secretsFile = ../secrets/prometheus.yml;
   };
 

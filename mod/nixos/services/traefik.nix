@@ -153,7 +153,7 @@ in
       default = { };
     };
 
-    http = lib.mkOption {
+    httpServices = lib.mkOption {
       description = "http based services, each using a single per-service router";
       type = t.attrsOf httpServiceType;
       default = { };
@@ -200,8 +200,6 @@ in
         port = 443;
       };
     };
-
-    # mete only hhudy?
 
     teenix.services.traefik.middlewares = {
       hsts.headers = {
@@ -252,7 +250,7 @@ in
               # merge extra overrides
               serviceCfg.extraConfig
             ]
-          ) cfg.http)
+          ) cfg.httpServices)
 
           # generate routers for our redirects
           (lib.attrsets.mapAttrs (name: value: {
@@ -263,7 +261,7 @@ in
             tls.certResolver = "letsencrypt";
             entryPoints = [ "websecure" ];
           }) cfg.redirects)
-          
+
           # dashboard router
           (lib.mkIf cfg.dashboard.enable {
             dashboard = {
@@ -308,7 +306,7 @@ in
               }
               serviceCfg.extraConfig
             ]
-          ) cfg.http)
+          ) cfg.httpServices)
 
           # the blank service is needed for redirects
           {
@@ -353,13 +351,13 @@ in
 
     # automatically open firewall ports for all entrypoints
     networking.firewall = {
-      allowedTCPPorts = lib.mapAttrsToList (_: v: v.port) lib.filterAttrs (
-        _: v: v.protocol == "tcp"
-      ) cfg.entryPoints;
+      allowedTCPPorts = lib.mapAttrsToList (_: v: v.port) (
+        lib.filterAttrs (_: v: v.protocol == "tcp") cfg.entryPoints
+      );
 
-      allowedUDPPorts = lib.mapAttrsToList (_: v: v.port) lib.filterAttrs (
-        _: v: v.protocol == "udp"
-      ) cfg.entryPoints;
+      allowedUDPPorts = lib.mapAttrsToList (_: v: v.port) (
+        lib.filterAttrs (_: v: v.protocol == "udp") cfg.entryPoints
+      );
     };
 
     # sops templates for static and dynamic config, so secrets can be used in the config
@@ -389,7 +387,7 @@ in
       package = pkgs-stable.traefik;
 
       dataDir = config.teenix.persist.subvolumes.traefik.path;
-      staticConfigFile = config.sops.templates.traefik-static-config;
+      staticConfigFile = config.sops.templates.traefik-static-config.path;
     };
   };
 }

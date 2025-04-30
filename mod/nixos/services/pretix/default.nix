@@ -17,7 +17,7 @@
       opts = config.teenix.services.pretix;
     in
     lib.mkIf opts.enable {
-      teenix.services.traefik.services.pretix = {
+      teenix.services.traefik.httpServices.pretix = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.pretix.localAddress}" ];
       };
