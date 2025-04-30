@@ -24,7 +24,7 @@
       SMTP_PORT = 465;
       SMTP_SECURITY = "force_tls";
       SMTP_FROM = "noreply-fscs@hhu.de";
-      SMTP_FROM_NAME = "INPhiMa Password Manager";
+      SMTP_FROM_NAME = "PhyNIx Password Manager";
       SMTP_USERNAME = "noreply-fscs";
     };
   };
