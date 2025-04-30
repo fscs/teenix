@@ -257,7 +257,7 @@
                 };
                 inphima_phynix = {
                   service = "blank";
-                  priority = 10;
+                  priority = 8;
                   rule = "HostRegexp(`.*\.inphima.de`)";
                   middlewares = "inphima_phynix";
                   tls.certResolver = "letsencrypt";

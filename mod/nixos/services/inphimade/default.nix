@@ -106,7 +106,7 @@
           "traefik.http.routers.inphimadewp1.rule" =
             "Host(`${opts.hostname}`) || Host(`www.${opts.hostname}`)";
           "traefik.http.routers.inphimadewp1.tls" = "true";
-          "traefik.http.routers.inphimadewp1.priority" = "1";
+          "traefik.http.routers.inphimadewp1.priority" = "9";
           "traefik.http.routers.inphimadewp1.tls.certresolver" = "letsencrypt";
           "traefik.http.routers.inphimadewp1.middlewares" = "hsts@file";
           "traefik.http.services.inphimadewp1.loadbalancer.server.port" = "80";
