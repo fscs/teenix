@@ -20,8 +20,8 @@
     environmentFile = host-config.sops.secrets.fscshhude-env.path;
 
     calendars = {
-      events = "https://nextcloud.inphima.de/remote.php/dav/public-calendars/CAx5MEp7cGrQ6cEe?export";
-      branchen = "https://nextcloud.inphima.de/remote.php/dav/public-calendars/CKpykNdtKHkA6Z9B?export";
+      events = "https://nextcloud.phynix-hhu.de/remote.php/dav/public-calendars/CAx5MEp7cGrQ6cEe?export";
+      branchen = "https://nextcloud.phynix-hhu.de/remote.php/dav/public-calendars/CKpykNdtKHkA6Z9B?export";
     };
 
     groups = {

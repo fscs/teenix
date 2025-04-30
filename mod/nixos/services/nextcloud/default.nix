@@ -41,16 +41,6 @@
         };
       };
 
-      teenix.services.traefik.redirects.cloud_inphima = {
-        from = "cloud.inphima.de";
-        to = "nextcloud.inphima.de";
-      };
-
-      teenix.services.traefik.redirects.klausur_inphima = {
-        from = "klausur.inphima.de";
-        to = "nextcloud.inphima.de/s/K6xSKSXmJRQAiia";
-      };
-
       teenix.containers.nextcloud = {
         config = ./container.nix;
 

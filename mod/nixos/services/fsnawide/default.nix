@@ -99,8 +99,7 @@
         labels = {
           "traefik.enable" = "true";
           "traefik.http.routers.nawi.entrypoints" = "websecure";
-          "traefik.http.routers.nawi.rule" =
-            "Host(`nawi.inphima.de`) || Host(`${opts.hostname}`) || Host(`www.${opts.hostname}`)";
+          "traefik.http.routers.nawi.rule" = "Host(`${opts.hostname}`) || Host(`www.${opts.hostname}`)";
           "traefik.http.routers.nawi.tls" = "true";
           "traefik.http.routers.nawi.tls.certresolver" = "letsencrypt";
           "traefik.http.services.nawi.loadbalancer.server.port" = "80";

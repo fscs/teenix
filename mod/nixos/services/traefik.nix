@@ -255,6 +255,14 @@
                   middlewares = [ "onlyhhudy" ];
                   tls.certResolver = "letsencrypt";
                 };
+                inphima_phynix = {
+                  service = "blank";
+                  priority = 10;
+                  rule = "HostRegexp(`.*\.inphima.de`)";
+                  middlewares = "inphima_phynix";
+                  tls.certResolver = "letsencrypt";
+                  entryPoints = [ "websecure" ];
+                };
               };
             middlewares =
               lib.attrsets.mapAttrs (name: value: {
@@ -265,6 +273,11 @@
                 };
               }) config.teenix.services.traefik.redirects
               // {
+                inphima_phynix.redirectregex = {
+                  regex = "inphima.de";
+                  replacement = "phynix-hhu.de";
+                  permanent = true;
+                };
                 meteredirect.redirectregex = {
                   regex = "https://mete.hhu-fscs.de/(.*?)((/deposit)|(/retrieve)|(/transaction))(.*)";
                   replacement = "https://mete.hhu-fscs.de/$1";
@@ -275,7 +288,7 @@
                   headers.STSIncludeSubdomains = true;
                 };
                 authentik.forwardAuth = {
-                  address = "https://auth.inphima.de/outpost.goauthentik.io/auth/traefik";
+                  address = "https://${config.teenix.services.authentik.hostname}/outpost.goauthentik.io/auth/traefik";
                   tls.insecureSkipVerify = true;
                   authResponseHeaders = [
                     "X-authentik-username"

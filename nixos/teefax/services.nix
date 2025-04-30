@@ -2,20 +2,20 @@
 {
   teenix.services.collabora = {
     enable = true;
-    hostname = "collabora.inphima.de";
+    hostname = "collabora.phynix-hhu.de";
     nextcloudHost = config.teenix.services.nextcloud.hostname;
   };
 
   teenix.services.helfendentool = {
     enable = true;
-    hostname = "helfendentool.inphima.de";
+    hostname = "helfendentool.phynix-hhu.de";
     secretsFile = ../secrets/helfendentool_yaml;
     rabbitmqSecret = ../secrets/helfendtool_rabbitmq;
   };
 
   teenix.services.nextcloud = {
     enable = true;
-    hostname = "nextcloud.inphima.de";
+    hostname = "nextcloud.phynix-hhu.de";
     secretsFile = ../secrets/nextcloud.yml;
     extraApps = [
       "calendar"
@@ -45,7 +45,7 @@
 
   teenix.services.pretix = {
     enable = true;
-    hostname = "pretix.inphima.de";
+    hostname = "pretix.phynix-hhu.de";
     email = "fscs@hhu.de";
   };
 
@@ -57,7 +57,7 @@
 
   teenix.services.authentik = {
     enable = true;
-    hostname = "auth.inphima.de";
+    hostname = "auth.phynix-hhu.de";
     secretsFile = ../secrets/authentik.yml;
   };
 
@@ -112,7 +112,7 @@
 
   teenix.services.campus-guesser-server = {
     enable = true;
-    hostname = "campusguesser.inphima.de";
+    hostname = "campusguesser.phynix-hhu.de";
     secretsFile = ../secrets/campus-guesser-server.yml;
   };
 
@@ -128,7 +128,7 @@
   teenix.services.vaultwarden = {
     enable = true;
     secretsFile = ../secrets/vaultwarden.yml;
-    hostname = "vaultwarden.inphima.de";
+    hostname = "vaultwarden.phynix-hhu.de";
   };
 
   teenix.services.ntfy = {
@@ -159,7 +159,7 @@
 
   teenix.services.rally = {
     enable = true;
-    hostname = "doodle.inphima.de";
+    hostname = "doodle.phynix-hhu.de";
     secretsFile = ../secrets/rally/env;
     postgresEnvFile = ../secrets/rally/mariaEnv;
   };
@@ -179,13 +179,13 @@
 
   teenix.services.bahn-monitor = {
     enable = true;
-    hostname = "bahn.inphima.de";
+    hostname = "bahn.phynix-hhu.de";
   };
 
   teenix.services.crabfit = {
     enable = true;
     hostnames = rec {
-      frontend = "crabfit.inphima.de";
+      frontend = "crabfit.phynix-hhu.de";
       backend = "api.${frontend}";
     };
   };

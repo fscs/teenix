@@ -28,21 +28,6 @@
       mode = "444";
     };
 
-    teenix.services.traefik.redirects.helfer_redirect = {
-      from = "helfer.inphima.de";
-      to = "helfendentool.inphima.de";
-    };
-
-    teenix.services.traefik.redirects.helfen_redirect = {
-      from = "helfen.inphima.de";
-      to = "helfendentool.inphima.de";
-    };
-
-    teenix.services.traefik.redirects.helfende_redirect = {
-      from = "helfende.inphima.de";
-      to = "helfendentool.inphima.de";
-    };
-
     teenix.persist.subvolumes.helfendentool.directories = {
       "data" = {
         mode = "0777";
@@ -78,7 +63,7 @@
         "traefik.enable" = "true";
         "traefik.http.routers.helfertool.entrypoints" = "websecure";
         "traefik.http.routers.helfertool.rule" =
-          "Host(`helfendentool.inphima.de`) || Host(`www.helfendentool.inphima.de`)";
+          "Host(`helfendentool.phynix-hhu.de`) || Host(`www.helfendentool.inphima.de`)";
         "traefik.http.routers.helfertool.tls" = "true";
         "traefik.http.routers.helfertool.tls.certresolver" = "letsencrypt";
         "traefik.http.services.helfertool.loadbalancer.server.port" = "8000";

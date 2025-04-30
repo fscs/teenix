@@ -9,7 +9,7 @@
   teenix.services.traefik = {
     enable = true;
     staticConfigPath = ../secrets/traefik_static;
-    dashboardUrl = "traefik.inphima.de";
+    dashboardUrl = "traefik.phynix-hhu.de";
     letsencryptMail = "fscs@hhu.de";
     logging.enable = true;
     withDocker = true;
@@ -48,18 +48,48 @@
       to = "fscs.github.io/go/";
     };
 
-    nextcloud_phynix = {
-      from = "nextcloud.phynix-hhu.de";
-      to = "nextcloud.inphima.de";
+    nawi_phynix = {
+      from = "nawi.phynix-hhu.de";
+      to = "fsnawi.de";
+    };
+
+    discord_inphimade = {
+      from = "discord.phynix-hhu.de";
+      to = "discord.gg/K3ddgjh";
+    };
+
+    cloud_inphima = {
+      from = "cloud.phynix-hhu.de";
+      to = "nextcloud.phynix-hhu.de";
+    };
+
+    klausur_inphima = {
+      from = "klausur.phynix-hhu.de";
+      to = "nextcloud.phynix-hhu.de/s/K6xSKSXmJRQAiia";
+    };
+
+    helfer_redirect = {
+      from = "helfer.phynix-hhu.de";
+      to = "helfendentool.phynix-hhu.de";
+    };
+
+    helfen_redirect = {
+      from = "helfen.phynix-hhu.de";
+      to = "helfendentool.phynix-hhu.de";
+    };
+
+    helfende_redirect = {
+      from = "helfende.phynix-hhu.de";
+      to = "helfendentool.phynix-hhu.de";
     };
 
     essen_inphima = {
-      from = "essen.inphima.de";
+      from = "essen.phynix-hhu.de";
       to = "www.stw-d.de/gastronomie/speiseplaene/essenausgabe-sued-duesseldorf";
     };
 
     wiki_inphima_de = {
-      from = "wiki.inphima.de";
+      from = "wiki.phynix-hhu.de";
       to = "wiki.hhu.de/display/INPHIMA/INPhiMa+Startseite";
     };
 
@@ -69,42 +99,42 @@
     };
 
     physik_inphima = {
-      from = "physik.inphima.de";
+      from = "physik.phynix-hhu.de";
       to = "fsphy.de";
     };
 
     status_inphima = {
-      from = "status.inphima.de";
+      from = "status.phynix-hhu.de";
       to = "uptime.dev.hhu-fscs.de/status/inphima";
     };
 
     voltwarden = {
-      from = "voltwarden.inphima.de";
+      from = "voltwarden.phynix-hhu.de";
       to = config.teenix.services.vaultwarden.hostname;
     };
 
     matewarden = {
-      from = "matewarden.inphima.de";
+      from = "matewarden.phynix-hhu.de";
       to = config.teenix.services.vaultwarden.hostname;
     };
 
     inphima_shop = {
-      from = "shop.inphima.de";
+      from = "shop.phynix-hhu.de";
       to = "inphima.myspreadshop.de/";
     };
 
     inphima_awareness = {
-      from = "awareness.inphima.de";
-      to = "nextcloud.inphima.de/s/jTay3AMBRt8dQwD";
+      from = "awareness.phynix-hhu.de";
+      to = "nextcloud.phynix-hhu.de/s/jTay3AMBRt8dQwD";
     };
 
     slinky = {
-      from = "slinky.inphima.de";
+      from = "slinky.phynix-hhu.de";
       to = "www.legami.com/de_de/magic-spring-VSL0001.html";
     };
 
     wanntripper = {
-      from = "wanntripper.inphima.de";
+      from = "wanntripper.phynix-hhu.de";
       to = config.teenix.services.crabfit.hostnames.frontend;
     };
   };

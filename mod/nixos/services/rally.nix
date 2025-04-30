@@ -54,7 +54,7 @@
           "NEXT_PUBLIC_BASE_URL" = "https://${config.teenix.services.rally.hostname}";
           "OIDC_NAME" = "INPhiMa Login";
           "OIDC_DISCOVERY_URL" =
-            "https://auth.inphima.de/application/o/rally/.well-known/openid-configuration";
+            "https://auth.phynix-hhu.de/application/o/rally/.well-known/openid-configuration";
           "OIDC_CLIENT_ID" = "zKgUfGCFFCcdjUKzd0cmQ5omTi0U9LQhJzDrSLQm";
         };
         environmentFiles = [ config.sops.secrets.rally.path ];

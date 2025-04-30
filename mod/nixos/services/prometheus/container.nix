@@ -37,7 +37,7 @@
         metrics_path = "/_synapse/metrics";
         static_configs = lib.singleton {
           targets = [
-            "matrix.inphima.de"
+            "matrix.phynix-hhu.de"
           ];
         };
       }
@@ -110,9 +110,9 @@
         email_attribute_path = "email";
         login_attribute_path = "preferred_username";
         name_attribute_path = "given_name";
-        auth_url = "https://auth.inphima.de/application/o/authorize/";
-        token_url = "https://auth.inphima.de/application/o/token/";
-        api_url = "https://auth.inphima.de/application/o/userinfo/";
+        auth_url = "https://auth.phynix-hhu.de/application/o/authorize/";
+        token_url = "https://auth.phynix-hhu.de/application/o/token/";
+        api_url = "https://auth.phynix-hhu.de/application/o/userinfo/";
         role_attribute_path = "contains(groups[*], 'admin') && 'Admin' || 'Editor'";
       };
 
