@@ -137,5 +137,10 @@
       from = "wanntripper.phynix-hhu.de";
       to = config.teenix.services.crabfit.hostnames.frontend;
     };
+
+    doodle = {
+      from = "doodle.phynix-hhu.de";
+      to = config.teenix.services.crabfit.hostnames.frontend;
+    };
   };
 }

@@ -157,13 +157,6 @@
     hostname = "docnix.hhu-fscs.de";
   };
 
-  teenix.services.rally = {
-    enable = true;
-    hostname = "doodle.phynix-hhu.de";
-    secretsFile = ../secrets/rally/env;
-    postgresEnvFile = ../secrets/rally/mariaEnv;
-  };
-
   teenix.services.matrix = {
     enable = true;
     secretsFile = ../secrets/matrix.yml;
