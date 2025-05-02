@@ -10,7 +10,7 @@
       cfg = config.teenix.services.hockeypuck;
     in
     lib.mkIf cfg.enable {
-      teenix.services.traefik.services.hockeypuck = {
+      teenix.services.traefik.httpServices.hockeypuck = {
         router.rule = "Host(`${cfg.hostname}`)";
         healthCheck.enable = true;
         servers = [ "http://${config.containers.hockeypuck.localAddress}:11371" ];

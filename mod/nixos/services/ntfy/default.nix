@@ -14,7 +14,7 @@
       opts = config.teenix.services.ntfy;
     in
     lib.mkIf opts.enable {
-      teenix.services.traefik.services.ntfy = {
+      teenix.services.traefik.httpServices.ntfy = {
         router.rule = "Host(`${opts.hostname}`)";
         healthCheck.enable = true;
         servers = [ "http://${config.containers.ntfy.localAddress}:8080" ];

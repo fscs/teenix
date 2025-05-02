@@ -14,7 +14,6 @@
       opts = config.teenix.services.node_exporter;
     in
     lib.mkIf opts.enable {
-
       users.users.node_exporter = {
         uid = 1033;
         home = "/home/node_exporter";

@@ -17,7 +17,7 @@
     enable = true;
     package = inputs.fscshhude.inputs.server.packages.${pkgs.stdenv.system}.default;
 
-    environmentFile = host-config.sops.secrets.fscshhude-env.path;
+    environmentFile = host-config.sops.templates.fscshhude.path;
 
     calendars = {
       events = "https://nextcloud.phynix-hhu.de/remote.php/dav/public-calendars/CAx5MEp7cGrQ6cEe?export";

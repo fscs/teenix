@@ -33,7 +33,7 @@
             "traefik.http.routers.sydent.tls" = "true";
             "traefik.http.routers.sydent.tls.certresolver" = "letsencrypt";
             "traefik.http.services.sydent.loadbalancer.server.port" = "8090";
-            "traefik.http.routers.sydent.middlewares" = "hsts";
+            "traefik.http.routers.sydent.middlewares" = "hsts@file";
           };
           volumes = [
             "${config.teenix.persist.subvolumes.matrix.path}/sydent-data:/data"

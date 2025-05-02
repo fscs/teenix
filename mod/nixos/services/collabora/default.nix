@@ -18,7 +18,7 @@
       cfg = config.teenix.services.collabora;
     in
     lib.mkIf cfg.enable {
-      teenix.services.traefik.services.collabora = {
+      teenix.services.traefik.httpServices.collabora = {
         router.rule = "Host(`${cfg.hostname}`)";
         healthCheck.enable = true;
 

@@ -8,39 +8,35 @@
 
   teenix.services.traefik = {
     enable = true;
-    staticConfigPath = ../secrets/traefik_static;
-    dashboardUrl = "traefik.phynix-hhu.de";
     letsencryptMail = "fscs@hhu.de";
-    logging.enable = true;
-    withDocker = true;
+    dashboard = {
+      enable = true;
+      url = "traefik.phynix-hhu.de";
+    };
   };
 
   services.traefik.staticConfigOptions.entryPoints = {
     websecure.proxyProtocol.insecure = true;
   };
 
-  teenix.services.traefik.entrypoints = lib.mkMerge [
-    {
-      web = {
-        port = 80;
-        http.redirections.entryPoint = {
-          to = "websecure";
-          scheme = "https";
-        };
-      };
-      websecure = {
-        port = 443;
-      };
-      ping.port = 8082;
-      metrics.port = 120;
-    }
-    (lib.listToAttrs (
-      map (i: {
-        name = "turn_port_udp_${toString i}";
-        value.port = i;
-      }) (lib.range 30000 30010)
-    ))
-  ];
+  teenix.services.traefik.dynamicConfig = {
+    http.routers.inphima_to_phynix = {
+      service = "blank";
+      priority = 8;
+      rule = "Host(`*.inphima.de`)";
+      middlewares = "inphima_to_phynix";
+      tls.certResolver = "letsencrypt";
+      entryPoints = [ "websecure" ];
+    };
+  };
+
+  teenix.services.traefik.middlewares.inphima_to_phynix = {
+    redirectRegex = {
+      regex = "inphima.de";
+      replacement = "phynix-hhu.de";
+      permanent = true;
+    };
+  };
 
   teenix.services.traefik.redirects = {
     fscs_go = {

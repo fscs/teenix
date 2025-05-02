@@ -31,7 +31,7 @@
         '';
       };
 
-      teenix.services.traefik.services.vaultwarden = {
+      teenix.services.traefik.httpServices.vaultwarden = {
         router.rule = "Host(`${opts.hostname}`)";
         healthCheck.enable = true;
         servers = [ "http://${config.containers.vaultwarden.localAddress}:8222" ];

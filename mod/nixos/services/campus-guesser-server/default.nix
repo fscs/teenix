@@ -24,7 +24,7 @@
         OAUTH_SECRET=${config.sops.placeholder.campus-guesser-server-oauth-secret}
       '';
 
-      teenix.services.traefik.services.campus-guessser-server = {
+      teenix.services.traefik.httpServices.campus-guessser-server = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.campus-guesser-server.localAddress}:8080" ];
         healthCheck.enable = true;

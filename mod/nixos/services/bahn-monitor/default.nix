@@ -12,7 +12,7 @@
   };
 
   config = lib.mkIf config.teenix.services.bahn-monitor.enable {
-    teenix.services.traefik.services.bahn-monitor = {
+    teenix.services.traefik.httpServices.bahn-monitor = {
       router.rule = "Host(`${config.teenix.services.bahn-monitor.hostname}`)";
       servers = [ "http://${config.containers.bahn-monitor.localAddress}:8080" ];
     };

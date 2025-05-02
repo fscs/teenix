@@ -21,7 +21,7 @@
       crabfitCfg = config.containers.crabfit.config.services.crabfit;
     in
     lib.mkIf cfg.enable {
-      teenix.services.traefik.services = {
+      teenix.services.traefik.httpServices = {
         crabfit-api = {
           router.rule = "Host(`${cfg.hostnames.backend}`)";
           healthCheck.enable = true;

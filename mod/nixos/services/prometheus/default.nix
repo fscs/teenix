@@ -6,34 +6,55 @@
 {
   options.teenix.services.prometheus = {
     enable = lib.mkEnableOption "setup prometheus";
-    hostname = lib.teenix.mkHostnameOption;
-    grafanaHostname = lib.teenix.mkHostnameOption;
+    hostnames = {
+      prometheus = lib.teenix.mkHostnameOption;
+      grafana = lib.teenix.mkHostnameOption;
+    };
     secretsFile = lib.teenix.mkSecretsFileOption "prometheus";
   };
 
   config =
     let
-      opts = config.teenix.services.prometheus;
+      cfg = config.teenix.services.prometheus;
     in
-    lib.mkIf opts.enable {
+    lib.mkIf cfg.enable {
       sops.secrets.grafana2ntfy = {
-        sopsFile = opts.secretsFile;
+        sopsFile = cfg.secretsFile;
         key = "grafana-2-ntfy-env";
         mode = "444";
       };
 
-      teenix.services.traefik.services.prometheus = {
-        router.rule = "Host(`${opts.hostname}`)";
-        servers = [ "http://${config.containers.prometheus.localAddress}:9090" ];
-        healthCheck.enable = true;
+      # enable traefiks metrics, so prometheus can read them
+      teenix.services.traefik.staticConfig.metrics.prometheus = {
+        entryPoint = "metrics";
+        buckets = [
+          0.1
+          0.3
+          1.2
+          5.0
+        ];
+        addEntryPointsLabels = true;
+        addServicesLabels = true;
       };
 
-      teenix.services.traefik.services.grafana = {
-        router.rule = "Host(`${opts.grafanaHostname}`)";
-        servers = [ "http://${config.containers.prometheus.localAddress}:80" ];
-        healthCheck = {
-          enable = true;
-          path = "/login";
+      teenix.services.traefik.entryPoints.metrics = {
+        port = 120;
+      };
+
+      teenix.services.traefik.httpServices = {
+        prometheus = {
+          router.rule = "Host(`${cfg.hostnames.prometheus}`)";
+          servers = [ "http://${config.containers.prometheus.localAddress}:9090" ];
+          healthCheck.enable = true;
+        };
+
+        grafana = {
+          router.rule = "Host(`${cfg.hostnames.prometheus}`)";
+          servers = [ "http://${config.containers.prometheus.localAddress}:80" ];
+          healthCheck = {
+            enable = true;
+            path = "/login";
+          };
         };
       };
 

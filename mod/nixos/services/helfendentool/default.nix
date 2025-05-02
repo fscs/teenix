@@ -63,7 +63,7 @@
         "traefik.enable" = "true";
         "traefik.http.routers.helfertool.entrypoints" = "websecure";
         "traefik.http.routers.helfertool.rule" =
-          "Host(`helfendentool.phynix-hhu.de`) || Host(`www.helfendentool.phynix-hhu.de`)";
+          "Host(`${config.teenix.services.helfendentool.hostname}`) || Host(`www.${config.teenix.services.helfendentool.hostname}`)";
         "traefik.http.routers.helfertool.tls" = "true";
         "traefik.http.routers.helfertool.tls.certresolver" = "letsencrypt";
         "traefik.http.services.helfertool.loadbalancer.server.port" = "8000";

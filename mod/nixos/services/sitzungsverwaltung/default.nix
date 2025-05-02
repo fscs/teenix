@@ -28,7 +28,7 @@
       };
     in
     lib.mkIf cfg.enable {
-      teenix.services.traefik.services.sitzungsverwaltung = {
+      teenix.services.traefik.httpServices.sitzungsverwaltung = {
         router.rule = "Host(`${cfg.hostname}`)";
         servers = [ "http://${config.containers.sitzungsverwaltung.localAddress}:8080" ];
       };

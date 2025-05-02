@@ -16,7 +16,7 @@
       cfg = config.teenix.services.docnix;
     in
     lib.mkIf cfg.enable {
-      teenix.services.traefik.services.docnix = {
+      teenix.services.traefik.httpServices.docnix = {
         router.rule = "Host(`${cfg.hostname}`)";
         servers = [ "http://${config.containers.docnix.localAddress}:8000" ];
         healthCheck.enable = true;

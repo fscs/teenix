@@ -14,7 +14,8 @@
       opts = config.teenix.services.uptime-kuma;
     in
     lib.mkIf opts.enable {
-      teenix.services.traefik.services.uptime-kuma = {
+
+      teenix.services.traefik.httpServices.uptime-kuma = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.uptime-kuma.localAddress}:3001" ];
       };

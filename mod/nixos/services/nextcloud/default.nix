@@ -32,7 +32,7 @@
         mode = "0777";
       };
 
-      teenix.services.traefik.services.nextcloud = {
+      teenix.services.traefik.httpServices.nextcloud = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.nextcloud.localAddress}" ];
         healthCheck = {
