@@ -35,7 +35,7 @@
       '';
 
       teenix.services.traefik.staticConfig.certificatesResolvers = {
-        hhu.acme = {
+        uniintern.acme = {
           email = "fscs@hhu.de";
           storage = "${config.services.traefik.dataDir}/hhucerts.json";
           tlsChallenge = { };
@@ -50,7 +50,7 @@
       teenix.services.traefik.httpServices = {
         fscshhude = {
           router.rule = "Host(`fscs.hhu.de`)";
-          router.tls.certResolver = "hhu";
+          router.tls.certResolver = "uniintern";
           healthCheck.enable = true;
           servers = [ "http://${config.containers.fscshhude.localAddress}:8080" ];
         };
