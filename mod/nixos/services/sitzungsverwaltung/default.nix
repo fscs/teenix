@@ -14,6 +14,16 @@
   config =
     let
       cfg = config.teenix.services.sitzungsverwaltung;
+
+      sitzungsverwaltung = inputs.sitzungsverwaltung.packages."${pkgs.stdenv.system}".default.override {
+        OAUTH_CLIENT_ID = "cZgfgWqx4h1Mn0jhLgUem6vS6m3zFvPwtIcOSyDg";
+        OAUTH_AUTH_URL = "https://${config.teenix.services.authentik.hostname}/application/o/authorize/";
+        OAUTH_TOKEN_URL = "https://${config.teenix.services.authentik.hostname}/application/o/token/";
+        OAUTH_USERINFO_URL = "https://${config.teenix.services.authentik.hostname}/application/o/userinfo/";
+        OAUTH_ISSUER_URL = "https://${config.teenix.services.authentik.hostname}/application/o/sitzungsverwaltung/";
+        OAUTH_JWKS_URL = "https://${config.teenix.services.authentik.hostname}/application/o/sitzungsverwaltung/jwks/";
+        API_BASE_URL = "https://fscs.hhu.de/";
+      };
     in
     lib.mkIf cfg.enable {
       teenix.services.traefik.services.sitzungsverwaltung = {
@@ -30,9 +40,7 @@
             serviceConfig = {
               Type = "exec";
               DynamicUser = true;
-              ExecStart = "${lib.getExe pkgs.caddy} file-server -r ${
-                inputs.sitzungsverwaltung.packages."${pkgs.stdenv.system}".default
-              } --listen :8080";
+              ExecStart = "${lib.getExe pkgs.caddy} file-server -r ${sitzungsverwaltung} --listen :8080";
               Restart = "always";
               RestartSec = 5;
             };
