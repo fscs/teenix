@@ -6,44 +6,34 @@
 }:
 {
   imports = [ ./meta.nix ];
-
-  options.teenix.services.inphimade =
-    let
-      t = lib.types;
-    in
-    {
-      enable = lib.mkEnableOption "inphimade";
-      hostname = lib.teenix.mkHostnameOption "inphimade";
-      secretsFile = lib.teenix.mkSecretsFileOption "inphimade";
-      mariaEnvFile = lib.mkOption {
-        description = "delete me";
-        type = t.path;
-      };
-    };
+  
+  options.teenix.services.inphimade = {
+    enable = lib.mkEnableOption "setup inphimade";
+    hostname = lib.teenix.mkHostnameOption "inphimade";
+    secretsFile = lib.teenix.mkSecretsFileOption "inphimade";
+  };
 
   config =
     let
-      opts = config.teenix.services.inphimade;
+      cfg = config.teenix.services.inphimade;
     in
-    lib.mkIf opts.enable {
-      sops.secrets.inphimade = {
-        sopsFile = opts.secretsFile;
-        format = "binary";
-        mode = "444";
+    lib.mkIf cfg.enable {
+      sops.secrets.inphimade-mysql-password = {
+        sopsFile = cfg.secretsFile;
+        key = "mysql-password";
       };
 
-      sops.secrets.inphimade_mariadb = {
-        sopsFile = opts.mariaEnvFile;
-        format = "binary";
-        mode = "444";
-      };
+      sops.templates.inphimade.content = ''
+        MYSQL_PASSWORD=${config.sops.placeholder.inphimade-mysql-password}
+        WORDPRESS_DB_PASSWORD=${config.sops.placeholder.inphimade-mysql-password}
+      '';
 
       teenix.persist.subvolumes.inphimade.directories = {
-        "/mysql" = {
+        mysql = {
           owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
-        "/wp" = {
+        wp = {
           owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
@@ -64,7 +54,7 @@
           "MYSQL_RANDOM_ROOT_PASSWORD" = "1";
           "MYSQL_USER" = "inphima";
         };
-        environmentFiles = [ config.sops.secrets.inphimade_mariadb.path ];
+        environmentFiles = [ config.sops.templates.inphimade.path ];
         volumes = [
           "${config.teenix.persist.path}/inphimade/mysql:/var/lib/mysql"
         ];
@@ -106,8 +96,7 @@
         labels = {
           "traefik.enable" = "true";
           "traefik.http.routers.inphimadewp1.entrypoints" = "websecure";
-          "traefik.http.routers.inphimadewp1.rule" =
-            "Host(`${opts.hostname}`) || Host(`www.${opts.hostname}`)";
+          "traefik.http.routers.inphimadewp1.rule" = "Host(`${cfg.hostname}`) || Host(`www.${cfg.hostname}`)";
           "traefik.http.routers.inphimadewp1.tls" = "true";
           "traefik.http.routers.inphimadewp1.priority" = "9";
           "traefik.http.routers.inphimadewp1.tls.certresolver" = "letsencrypt";
@@ -115,7 +104,7 @@
           "traefik.http.services.inphimadewp1.loadbalancer.server.port" = "80";
           "traefik.http.services.inphimadewp1.loadbalancer.healthCheck.path" = "/";
         };
-        environmentFiles = [ config.sops.secrets.inphimade.path ];
+        environmentFiles = [ config.sops.templates.inphimade.path ];
         volumes = [
           "${config.teenix.persist.path}/inphimade/wp:/var/www/html"
         ];
