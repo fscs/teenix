@@ -38,16 +38,18 @@
       (lib.filterAttrs (_: v: lib.elem config.networking.hostName v.hosts))
       (lib.mapAttrs (
         name: value:
-        {
-          isNormalUser = true;
-          extraGroups = [
-            "wheel"
-            (lib.mkIf config.virtualisation.docker.enable "docker")
-          ];
-          shell = value.shell;
-          openssh.authorizedKeys.keys = value.sshKeys;
-        }
-        // value.extraOptions
+        lib.mkMerge [
+          {
+            isNormalUser = true;
+            extraGroups = [
+              "wheel"
+              (lib.mkIf config.virtualisation.docker.enable "docker")
+            ];
+            shell = value.shell;
+            openssh.authorizedKeys.keys = value.sshKeys;
+          }
+          value.extraOptions
+        ]
       ))
     ];
 

@@ -13,6 +13,7 @@
     let
       subdomains = [
         # services
+        "auth"
         "bahn"
         "campusguesser"
         "collabora"

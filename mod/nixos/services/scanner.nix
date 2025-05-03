@@ -31,6 +31,7 @@
 
       users.users.scanner = {
         isNormalUser = true;
+        createHome = false;
         hashedPasswordFile = config.sops.secrets.scanner-pwd.path;
       };
 
