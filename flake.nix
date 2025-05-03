@@ -93,7 +93,9 @@
           doc = pkgs.callPackage ./doc {
             inherit lib;
             teenix-module = self.nixosModules.teenix;
-            teenix-specialArgs = specialArgs;
+            teenix-specialArgs = specialArgs // {
+              inherit pkgs;
+            };
           };
         }
       );

@@ -4,8 +4,10 @@
   ...
 }:
 {
+  imports = [ ./meta.nix ];
+  
   options.teenix.services.fscshhude = {
-    enable = lib.mkEnableOption "setup fscshhude";
+    enable = lib.mkEnableOption "fscshhude";
     secretsFile = lib.teenix.mkSecretsFileOption "fscshhude";
   };
 

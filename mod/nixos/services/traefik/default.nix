@@ -46,6 +46,7 @@ let
             default = true;
           };
           certResolver = lib.mkOption {
+            description  = "certificate resolver for this router";
             type = t.nonEmptyStr;
             default = "letsencrypt";
           };
@@ -105,9 +106,11 @@ let
   redirectType = lib.types.submodule {
     options = {
       from = lib.mkOption {
+        description = "url to redirect from";
         type = lib.types.str;
       };
       to = lib.mkOption {
+        description = "url to redirect to";
         type = lib.types.str;
       };
     };
@@ -119,6 +122,8 @@ in
   disabledModules = [
     "services/web-servers/traefik.nix"
   ];
+
+  imports = [ ./meta.nix ];
 
   options.teenix.services.traefik = {
     enable = lib.mkEnableOption "traefik";
@@ -146,6 +151,13 @@ in
 
     redirects = lib.mkOption {
       type = lib.types.attrsOf redirectType;
+      description = "Permanently redirect one URL to another";
+      example = {
+        fscs_phynix = {
+          from = "fscs.phynix-hhu.de";
+          to = "fscs.hhu.de";
+        };
+      };
       default = { };
     };
 

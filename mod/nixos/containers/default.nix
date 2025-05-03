@@ -368,6 +368,15 @@
         }
       ];
 
+      teenix.docs.modules.containers = {
+        title = "Containers";
+        mdFile = ./doc.md;
+        optionNamespace = [
+          "teenix"
+          "containers"
+        ];
+      };
+
       # make sure the container restarts if its secrets change
       sops =
         let

@@ -21,5 +21,3 @@ Auf Bedarf kann auch:
 - Die "data dir" des containers dorthin gemounted werden (`/var/lib/<container-name>`)
 - TCP/UDP Ports in der Firewall des Containers geöffnet werden
 - Sops Secrets/Templates an den Container weitergereicht werden (damit der Container die Schlüssel nicht kennt)
-
-## Options

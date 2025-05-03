@@ -9,7 +9,6 @@
   caddy,
   teenix-module,
   teenix-specialArgs,
-  nixosOptionsDoc,
 }:
 let
   eval = lib.evalModules {
@@ -18,10 +17,6 @@ let
       teenix-module
     ];
     specialArgs = teenix-specialArgs;
-  };
-
-  containerOptionsDoc = nixosOptionsDoc {
-    options = eval.options.teenix.containers;
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -39,9 +34,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patchPhase = ''
-    cat ${containerOptionsDoc.optionsCommonMark} | \
-      sed -e 's/^##/###/g' -e '/\*Declared by:\*/,+2d' \
-      >> src/modules/containers.md
+    mkdir src/modules
+
+    echo "- [Modules & Options]()" >> src/SUMMARY.md
+
+    ${
+      lib.concatMapStringsSep "\n" (attr: ''
+        cp ${attr.value.finalMarkdown} src/modules/${attr.name}.md
+        echo "    - [${attr.value.title}](./modules/${attr.name}.md)" >> src/SUMMARY.md
+      '') (lib.attrsToList eval.config.teenix.docs.modules)
+    }  
   '';
 
   buildPhase = ''
