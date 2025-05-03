@@ -11,9 +11,12 @@
   teenix-specialArgs,
 }:
 let
-  eval = lib.evalModules {
+  eval = lib.nixosSystem {
     modules = [
-      { _module.check = false; }
+      {
+        _module.check = false;
+        nixpkgs.hostPlatform = stdenv.hostPlatform;
+      }
       teenix-module
     ];
     specialArgs = teenix-specialArgs;

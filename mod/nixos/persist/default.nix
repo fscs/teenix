@@ -21,17 +21,22 @@ let
   };
 in
 {
-  imports = [ inputs.impermanence.nixosModules.impermanence ];
+  imports = [
+    inputs.impermanence.nixosModules.impermanence
+    ./meta.nix
+  ];
 
   options.teenix.persist = {
-    enable = lib.mkEnableOption ''
-      A wrapper arround impermanence and btrbk. Expects a btrfs filesystem with the following layout:
-      - /root <- The actual root mounted at /
-      - /nix <- The root for all things nix. Mounted at /nix
-      - /persist <- The root of all other persistent storage, mounted at /persist
+    enable = lib.mkEnableOption null // {
+      description = ''
+        A wrapper arround impermanence and btrbk. Expects a btrfs filesystem with the following layout:
+        - /root <- The actual root mounted at /
+        - /nix <- The root for all things nix. Mounted at /nix
+        - /persist <- The root of all other persistent storage, mounted at /persist
 
-      *Note*: For systems that use more than one (logical) drive, simply mount more
-    '';
+        *Note*: For systems that use more than one (logical) drive, simply mount more
+      '';
+    };
     path = lib.mkOption {
       type = t.nonEmptyStr;
       default = "/persist";
@@ -162,18 +167,25 @@ in
       ) cfg.subvolumes
     );
 
-    environment.persistence = lib.mapAttrs' (subvolumeName: subvolumeCfg: {
-      name = subvolumeCfg.path;
-      value = {
-        hideMounts = true;
-        directories = lib.mapAttrsToList (dirName: dirCfg: {
-          directory = dirName;
-          user = defaultToString "root" dirCfg.owner;
-          group = lib.defaultTo "root" dirCfg.group;
-          mode = lib.defaultTo "0755" dirCfg.mode;
-        }) subvolumeCfg.directories;
-      };
-    }) (lib.attrsets.filterAttrs (subvolumeName: subvolumeCfg: subvolumeCfg.bindMountDirectories) cfg.subvolumes);
+    environment.persistence =
+      lib.mapAttrs'
+        (subvolumeName: subvolumeCfg: {
+          name = subvolumeCfg.path;
+          value = {
+            hideMounts = true;
+            directories = lib.mapAttrsToList (dirName: dirCfg: {
+              directory = dirName;
+              user = defaultToString "root" dirCfg.owner;
+              group = lib.defaultTo "root" dirCfg.group;
+              mode = lib.defaultTo "0755" dirCfg.mode;
+            }) subvolumeCfg.directories;
+          };
+        })
+        (
+          lib.attrsets.filterAttrs (
+            subvolumeName: subvolumeCfg: subvolumeCfg.bindMountDirectories
+          ) cfg.subvolumes
+        );
 
     # Automatically snapshots the Persistent Subvolumes
     services.btrbk.instances = lib.mkMerge [

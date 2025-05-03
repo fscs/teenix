@@ -46,7 +46,7 @@ let
             default = true;
           };
           certResolver = lib.mkOption {
-            description  = "certificate resolver for this router";
+            description = "certificate resolver for this router";
             type = t.nonEmptyStr;
             default = "letsencrypt";
           };

@@ -61,7 +61,7 @@ let
               cat << EOF >> $out
 
               ## Options
-              
+
               EOF
 
               # option doc
@@ -78,6 +78,7 @@ in
   options.teenix.docs = {
     modules = lib.mkOption {
       type = t.attrsOf moduleType;
+      default = { };
     };
   };
 }

@@ -5,6 +5,8 @@
   ...
 }@host:
 {
+  imports = [ ./meta.nix ];
+
   options.teenix.containers =
     let
       t = lib.types;
@@ -367,15 +369,6 @@
           message = "a manually specified container ip address overlaps with the reserved range for automatic address allocation. please remove it from the '${defaultContainerNetworkId}' range";
         }
       ];
-
-      teenix.docs.modules.containers = {
-        title = "Containers";
-        mdFile = ./doc.md;
-        optionNamespace = [
-          "teenix"
-          "containers"
-        ];
-      };
 
       # make sure the container restarts if its secrets change
       sops =

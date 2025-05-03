@@ -1,5 +1,5 @@
 {
-  teenix.docs.modules.meta = {
+  teenix.docs.modules.traefik = {
     title = "Traefik";
     description = "Unser Reverse Proxy";
     optionNamespace = [

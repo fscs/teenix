@@ -25,14 +25,14 @@
       rate_limited = false;
 
       namespaces = {
-        rooms = []; 
+        rooms = [ ];
         users = lib.singleton {
           regex = "@_webhooks_.*:inphima.de";
           exclusive = true;
         };
       };
     };
-    
+
     services.matrix-hookshot = {
       enable = true;
       registrationFile = host-config.sops.templates.matrix-hookshot-registration-file.path;
