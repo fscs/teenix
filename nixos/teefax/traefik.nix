@@ -1,11 +1,5 @@
 { lib, config, ... }:
 {
-  sops.secrets.traefik = {
-    format = "binary";
-    mode = "444";
-    sopsFile = ../secrets/traefik;
-  };
-
   teenix.services.traefik = {
     enable = true;
     letsencryptMail = "fscs@hhu.de";
@@ -15,22 +9,52 @@
     };
   };
 
-  services.traefik.staticConfigOptions.entryPoints = {
-    websecure.proxyProtocol.insecure = true;
-  };
+  teenix.services.traefik.dynamicConfig.http.routers.inphima-to-phynix =
+    let
+      subdomains = [
+        # services
+        "bahn"
+        "campusguesser"
+        "collabora"
+        "crabfit"
+        "helfendentool"
+        "nextcloud"
+        "pretix"
+        "traefi"
+        "vaultwarden"
 
-  teenix.services.traefik.dynamicConfig = {
-    http.routers.inphima_to_phynix = {
+        # redirects (that always have been redirects)
+        "awareness"
+        "cloud"
+        "discord"
+        "doodle"
+        "essen"
+        "helfen"
+        "helfende"
+        "helfer"
+        "klausur"
+        "matewarden"
+        "nawi"
+        "nextcloud"
+        "physik"
+        "shop"
+        "slinky"
+        "status"
+        "voltwarden"
+        "wanntripper"
+        "wiki"
+      ];
+    in
+    {
+      rule = lib.concatMapStringsSep " || " (subdomain: "Host(`${subdomain}.inphima.de`)") subdomains;
       service = "blank";
-      priority = 8;
-      rule = "Host(`*.inphima.de`)";
-      middlewares = "inphima_to_phynix";
+      priority = 10;
+      middlewares = "inphima-to-phynix";
       tls.certResolver = "letsencrypt";
       entryPoints = [ "websecure" ];
     };
-  };
 
-  teenix.services.traefik.middlewares.inphima_to_phynix = {
+  teenix.services.traefik.middlewares.inphima-to-phynix = {
     redirectRegex = {
       regex = "inphima.de";
       replacement = "phynix-hhu.de";
@@ -49,17 +73,17 @@
       to = "fsnawi.de";
     };
 
-    discord_inphimade = {
+    discord_phynix = {
       from = "discord.phynix-hhu.de";
       to = "discord.gg/K3ddgjh";
     };
 
-    cloud_inphima = {
+    cloud_phynix = {
       from = "cloud.phynix-hhu.de";
       to = "nextcloud.phynix-hhu.de";
     };
 
-    klausur_inphima = {
+    klausur_phynix = {
       from = "klausur.phynix-hhu.de";
       to = "nextcloud.phynix-hhu.de/s/K6xSKSXmJRQAiia";
     };
@@ -79,12 +103,12 @@
       to = "helfendentool.phynix-hhu.de";
     };
 
-    essen_inphima = {
+    essen_phynix = {
       from = "essen.phynix-hhu.de";
       to = "www.stw-d.de/gastronomie/speiseplaene/essenausgabe-sued-duesseldorf";
     };
 
-    wiki_inphima_de = {
+    wiki_phynix_de = {
       from = "wiki.phynix-hhu.de";
       to = "wiki.hhu.de/display/INPHIMA/INPhiMa+Startseite";
     };
@@ -94,12 +118,12 @@
       to = "wiki.hhu.de/display/NAWI/FS+Naturwissenschaften+Startseite";
     };
 
-    physik_inphima = {
+    physik_phynix = {
       from = "physik.phynix-hhu.de";
       to = "fsphy.de";
     };
 
-    status_inphima = {
+    status_phynix = {
       from = "status.phynix-hhu.de";
       to = "uptime.dev.hhu-fscs.de/status/inphima";
     };
@@ -119,7 +143,7 @@
       to = "inphima.myspreadshop.de/";
     };
 
-    inphima_awareness = {
+    phynix_awareness = {
       from = "awareness.phynix-hhu.de";
       to = "nextcloud.phynix-hhu.de/s/jTay3AMBRt8dQwD";
     };

@@ -114,6 +114,12 @@ let
   };
 in
 {
+  # we pretty much reimplement the entires traefik module.
+  # using it is so absolutely definitely a bug, that we completely disable the nixpkgs one.
+  disabledModules = [
+    "services/web-servers/traefik.nix" 
+  ];
+  
   options.teenix.services.traefik = {
     enable = lib.mkEnableOption "traefik";
     secretsFile = lib.teenix.mkSecretsFileOption "traefik";
@@ -333,7 +339,7 @@ in
       certificatesResolvers.letsencrypt = {
         acme = {
           email = cfg.letsencryptMail;
-          storage = "${config.services.traefik.dataDir}/letsencrypt.json";
+          storage = "${config.teenix.persist.subvolumes.traefik.path}/letsencrypt.json";
           tlsChallenge = { };
         };
       };
@@ -386,12 +392,42 @@ in
       mode = "700";
     };
 
-    services.traefik = {
-      enable = true;
-      package = pkgs-stable.traefik;
+    # we pretty much inline the whole non-option part of the nixos traefik module here
+    # because it sets up a systemd tmpfile rule to create its data dir. 
+    # this interferes with out tmpfile rule, because we want to create it as 
+    # a subvolume
+    systemd.services.traefik = {
+      description = "Traefik reverse proxy";
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+      startLimitIntervalSec = 86400;
+      startLimitBurst = 5;
+      serviceConfig = {
+        ExecStart = "${pkgs-stable.traefik}/bin/traefik --configfile=${config.sops.templates.traefik-static-config.path}";
+        Type = "simple";
+        User = "traefik";
+        Group = "traefik";
+        Restart = "on-failure";
+        AmbientCapabilities = "cap_net_bind_service";
+        CapabilityBoundingSet = "cap_net_bind_service";
+        NoNewPrivileges = true;
+        LimitNPROC = 64;
+        LimitNOFILE = 1048576;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectHome = true;
+        ProtectSystem = "full";
+        ReadWritePaths = [ config.teenix.persist.subvolumes.traefik.path ];
+        RuntimeDirectory = "traefik";
+      };
+    };
 
-      dataDir = config.teenix.persist.subvolumes.traefik.path;
-      staticConfigFile = config.sops.templates.traefik-static-config.path;
+    users.groups.traefik = { };
+    users.users.traefik = {
+      group = "traefik";
+      home = config.teenix.persist.subvolumes.traefik.path;
+      isSystemUser = true;
     };
   };
 }

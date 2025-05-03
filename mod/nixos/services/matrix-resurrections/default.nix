@@ -96,7 +96,7 @@
         matrix = {
           router = {
             rule = "Host(`${cfg.hostnames.matrix}`) || (Host(`${cfg.hostnames.homeserver}`) && (PathPrefix(`/_matrix`) || PathPrefix(`/_synapse`) || Path(`/.well-known/matrix/server`) || Path(`/.well-known/matrix/client`)))";
-            extraConfig.priority = 10;
+            extraConfig.priority = 10000;
           };
           healthCheck = {
             enable = true;

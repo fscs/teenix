@@ -37,7 +37,7 @@
       teenix.services.traefik.staticConfig.certificatesResolvers = {
         uniintern.acme = {
           email = "fscs@hhu.de";
-          storage = "${config.services.traefik.dataDir}/hhucerts.json";
+          storage = "${config.teenix.persist.subvolumes.traefik.path}/hhucerts.json";
           tlsChallenge = { };
           caServer = "https://acme.sectigo.com/v2/OV";
           eab = {
