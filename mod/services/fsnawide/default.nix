@@ -11,35 +11,29 @@
     enable = lib.mkEnableOption "fsnawide";
     hostname = lib.teenix.mkHostnameOption "fsnawide";
     secretsFile = lib.teenix.mkSecretsFileOption "fsnawide";
-    mariaEnvFile = lib.mkOption {
-      description = "delete me";
-      type = lib.types.path;
-    };
   };
 
   config =
     let
-      opts = config.teenix.services.fsnawide;
+      cfg = config.teenix.services.fsnawide;
     in
-    lib.mkIf opts.enable {
-      sops.secrets.nawi_mariadb = {
-        sopsFile = opts.mariaEnvFile;
-        format = "binary";
-        mode = "444";
+    lib.mkIf cfg.enable {
+      sops.secrets.fsnawide-mysql-password = {
+        sopsFile = cfg.secretsFile;
+        key = "mysql-password";
       };
 
-      sops.secrets.nawi = {
-        sopsFile = opts.secretsFile;
-        format = "binary";
-        mode = "444";
-      };
+      sops.templates.fsnawide.content = ''
+        MYSQL_PASSWORD=${config.sops.placeholder.fsnawide-mysql-password}
+        WORDPRESS_DB_PASSWORD=${config.sops.placeholder.fsnawide-mysql-password}
+      '';
 
       teenix.persist.subvolumes.nawi.directories = {
-        "/mysql" = {
+        mysql = {
           owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
-        "/wp" = {
+        wp = {
           owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
@@ -60,7 +54,7 @@
           "MYSQL_RANDOM_ROOT_PASSWORD" = "1";
           "MYSQL_USER" = "nawi";
         };
-        environmentFiles = [ config.sops.secrets.nawi_mariadb.path ];
+        environmentFiles = [ config.sops.templates.fsnawide.path ];
         volumes = [
           "${config.teenix.persist.path}/nawi/mysql:/var/lib/mysql"
         ];
@@ -102,14 +96,14 @@
         labels = {
           "traefik.enable" = "true";
           "traefik.http.routers.nawi.entrypoints" = "websecure";
-          "traefik.http.routers.nawi.rule" = "Host(`${opts.hostname}`) || Host(`www.${opts.hostname}`)";
+          "traefik.http.routers.nawi.rule" = "Host(`${cfg.hostname}`) || Host(`www.${cfg.hostname}`)";
           "traefik.http.routers.nawi.tls" = "true";
           "traefik.http.routers.nawi.tls.certresolver" = "letsencrypt";
           "traefik.http.services.nawi.loadbalancer.server.port" = "80";
           "traefik.http.routers.nawi.middlewares" = "hsts@file";
           # "traefik.http.services.nawi.loadbalancer.healthCheck.path" = "/";
         };
-        environmentFiles = [ config.sops.secrets.nawi.path ];
+        environmentFiles = [ config.sops.templates.fsnawide.path ];
         volumes = [
           "${config.teenix.persist.path}/nawi/wp:/var/www/html"
         ];

@@ -11,8 +11,7 @@
   teenix.services.helfendentool = {
     enable = true;
     hostname = "helfendentool.phynix-hhu.de";
-    secretsFile = ../secrets/helfendentool_yaml;
-    rabbitmqSecret = ../secrets/helfendtool_rabbitmq;
+    secretsFile = ../secrets/helfendentool.yml;
   };
 
   teenix.services.nextcloud = {
@@ -65,8 +64,7 @@
   teenix.services.inphimade = {
     enable = true;
     hostname = "inphima.de";
-    secretsFile = ../secrets/inphimade/env;
-    mariaEnvFile = ../secrets/inphimade/maria_env;
+    secretsFile = ../secrets/inphimade.yml;
   };
 
   teenix.services.phynixhhude = {
@@ -78,15 +76,13 @@
   teenix.services.fsnawide = {
     enable = true;
     hostname = "fsnawi.de";
-    secretsFile = ../secrets/nawi/env;
-    mariaEnvFile = ../secrets/nawi/maria_env;
+    secretsFile = ../secrets/fsnawide.yml;
   };
 
   teenix.services.freescout = {
     enable = false;
     hostname = "tickets.hhu-fscs.de";
-    secretsFile = ../secrets/freescout/env;
-    mariaEnvFile = ../secrets/freescout/maria_env;
+    secretsFile = ../secrets/freescout.yml;
   };
 
   teenix.services.campus-guesser-server = {
@@ -117,7 +113,7 @@
 
   teenix.services.matrix-intern-bot = {
     enable = false;
-    secretsFile = ../secrets/matrixinternbot;
+    secretsFile = ../secrets/matrixinternbot.yml;
   };
 
   teenix.services.scanner = {
