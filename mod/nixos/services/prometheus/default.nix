@@ -49,7 +49,7 @@
         };
 
         grafana = {
-          router.rule = "Host(`${cfg.hostnames.prometheus}`)";
+          router.rule = "Host(`${cfg.hostnames.grafana}`)";
           servers = [ "http://${config.containers.prometheus.localAddress}:80" ];
           healthCheck = {
             enable = true;
