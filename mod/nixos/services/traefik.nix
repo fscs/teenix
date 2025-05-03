@@ -117,9 +117,9 @@ in
   # we pretty much reimplement the entires traefik module.
   # using it is so absolutely definitely a bug, that we completely disable the nixpkgs one.
   disabledModules = [
-    "services/web-servers/traefik.nix" 
+    "services/web-servers/traefik.nix"
   ];
-  
+
   options.teenix.services.traefik = {
     enable = lib.mkEnableOption "traefik";
     secretsFile = lib.teenix.mkSecretsFileOption "traefik";
@@ -329,7 +329,10 @@ in
     # generate traefiks static config
     teenix.services.traefik.staticConfig = {
       providers = {
-        file.filename = config.sops.templates.traefik-dynamic-config.path;
+        file = {
+          filename = config.sops.templates.traefik-dynamic-config.path;
+          watch = false;
+        };
         docker = lib.mkIf config.virtualisation.docker.enable {
           exposedByDefault = false;
           watch = true;
@@ -371,10 +374,10 @@ in
     # sops templates for static and dynamic config, so secrets can be used in the config
     sops.templates = {
       traefik-dynamic-config = {
+        name = "traefik-dynamic-config.yml";
         owner = config.users.users.traefik.name;
         file = yaml.generate "traefik-dynamic-config.yml" cfg.dynamicConfig;
-        path = "/run/traefik-dynamic-config.yml";
-        # do NOT restart traefik on change, traefik will reload it by itself
+        reloadUnits = [ "traefik.service" ];
       };
 
       traefik-static-config = {
@@ -393,9 +396,11 @@ in
     };
 
     # we pretty much inline the whole non-option part of the nixos traefik module here
-    # because it sets up a systemd tmpfile rule to create its data dir. 
-    # this interferes with out tmpfile rule, because we want to create it as 
+    # because it sets up a systemd tmpfile rule to create its data dir.
+    # this interferes with out tmpfile rule, because we want to create it as
     # a subvolume
+    #
+    # we also implement service reloading
     systemd.services.traefik = {
       description = "Traefik reverse proxy";
       wants = [ "network-online.target" ];
@@ -404,8 +409,10 @@ in
       startLimitIntervalSec = 86400;
       startLimitBurst = 5;
       serviceConfig = {
-        ExecStart = "${pkgs-stable.traefik}/bin/traefik --configfile=${config.sops.templates.traefik-static-config.path}";
-        Type = "simple";
+        ExecStart = "${lib.getExe pkgs-stable.traefik} --configfile=${config.sops.templates.traefik-static-config.path}";
+        ExecReload = "${lib.getExe' pkgs.util-linux "kill"} -HUP $MAINPID";
+        Type = "notify";
+        WatchdogSec = "10s";
         User = "traefik";
         Group = "traefik";
         Restart = "on-failure";
@@ -419,7 +426,6 @@ in
         ProtectHome = true;
         ProtectSystem = "full";
         ReadWritePaths = [ config.teenix.persist.subvolumes.traefik.path ];
-        RuntimeDirectory = "traefik";
       };
     };
 
