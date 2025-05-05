@@ -268,7 +268,7 @@ in
               })
 
               # merge extra overrides
-              serviceCfg.extraConfig
+              serviceCfg.router.extraConfig
             ]
           ) cfg.httpServices)
 

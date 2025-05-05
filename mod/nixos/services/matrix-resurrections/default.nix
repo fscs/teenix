@@ -109,6 +109,7 @@
         mas = {
           router = {
             rule = "Host(`${cfg.hostnames.mas}`) || (( Host(`${cfg.hostnames.matrix}`) || Host(`${cfg.hostnames.homeserver}`)) && PathRegexp(`^/_matrix/client/.*/(login|logout|refresh)`) )";
+            extraConfig.priority = 10001;
           };
           healthCheck.enable = true;
           servers = [ "http://${config.containers.matrix.localAddress}:8080" ];
