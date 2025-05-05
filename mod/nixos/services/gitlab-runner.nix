@@ -119,8 +119,6 @@
 
           settings = {
             concurrent = 3;
-
-            runners.docker.cpus = 4;
           };
 
           services = {
