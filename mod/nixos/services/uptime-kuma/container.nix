@@ -25,7 +25,7 @@
       Restart = "always";
       User = "uptime-kuma";
       WorkingDirectory = "/var/lib/uptime-kuma";
-      StateDirectroy = "uptime-kuma";
+      StateDirectory = "uptime-kuma";
       RestartSec = 5;
     };
   };

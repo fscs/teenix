@@ -4,7 +4,7 @@
   ...
 }:
 {
-  imports = [./meta.nix];
+  imports = [ ./meta.nix ];
 
   options.teenix.services.ntfy = {
     enable = lib.mkEnableOption "ntfy";

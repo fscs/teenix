@@ -10,6 +10,7 @@
     ./hardware-configuration.nix
     ./traefik.nix
     ./services.nix
+    ./gatus.nix
 
     outputs.nixosModules.teenix
   ];
