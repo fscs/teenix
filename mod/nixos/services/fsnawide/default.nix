@@ -19,7 +19,7 @@
 
   config =
     let
-      opts = config.teenix.services.nawi;
+      opts = config.teenix.services.fsnawide;
     in
     lib.mkIf opts.enable {
       sops.secrets.nawi_mariadb = {
