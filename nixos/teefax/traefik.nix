@@ -74,6 +74,11 @@
       to = "fsnawi.de";
     };
 
+    informatik_phynix = {
+      from = "informatik.phynix-hhu.de";
+      to = "fscs.hhu.de";
+    };
+
     discord_phynix = {
       from = "discord.phynix-hhu.de";
       to = "discord.gg/K3ddgjh";
@@ -111,12 +116,12 @@
 
     wiki_phynix_de = {
       from = "wiki.phynix-hhu.de";
-      to = "wiki.hhu.de/display/INPHIMA/INPhiMa+Startseite";
+      to = "wiki.hhu.de/display/INPHIMA";
     };
 
     wiki_fsnawi = {
       from = "wiki.fsnawi.de";
-      to = "wiki.hhu.de/display/NAWI/FS+Naturwissenschaften+Startseite";
+      to = "wiki.hhu.de/display/NAWI";
     };
 
     physik_phynix = {
