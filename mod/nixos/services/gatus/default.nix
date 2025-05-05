@@ -32,6 +32,7 @@ let
         default = cfg.interval;
       };
       extraConfig = lib.mkOption {
+        description = "extra config options for this endpoint";
         type = yaml.type;
         default = { };
       };
@@ -48,7 +49,6 @@ let
         description = "endpoints of this group";
         type = t.attrsOf endpointType;
       };
-
     };
   };
 in
