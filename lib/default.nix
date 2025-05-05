@@ -5,6 +5,7 @@
     lib.mkOption {
       type = lib.types.path;
       description = "path to the secrets file for ${name}";
+      example = lib.literalExpression "./secrets/myservice.yml";
     };
 
   mkHostnameOption =
@@ -12,6 +13,7 @@
     lib.mkOption {
       type = lib.types.nonEmptyStr;
       description = "hostname for ${name}";
+      example = "nextcloud.phynix-hhu.de";
     };
 
   importAllChildren =

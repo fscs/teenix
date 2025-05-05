@@ -53,6 +53,7 @@
                   ]
                 )
               );
+              example = true;
               default = false;
             };
 
@@ -63,8 +64,9 @@
                 This is required if the container wants to do dns lookups.
               '';
               id = lib.mkOption {
-                description = "Network id this container should be placed in, e.g. 192.168.1";
+                description = "Network id this container should be placed in. If null, one is picked automatically";
                 type = t.nullOr t.nonEmptyStr;
+                example = "192.168.1";
                 default = null;
               };
               ports = {
@@ -72,11 +74,13 @@
                   description = "TCP Ports to open in the containers firewall";
                   type = t.listOf t.port;
                   default = [ ];
+                  example = [ 8080 ];
                 };
                 udp = lib.mkOption {
                   type = t.listOf t.port;
                   description = "UDP Ports to open in the containers firewall";
                   default = [ ];
+                  example = [ 25565 ];
                 };
               };
             };
@@ -103,12 +107,14 @@
 
                 ownerUid = lib.mkOption {
                   description = "Owner of the data dir";
+                  example = lib.literalExpression "config.users.users.traefik.uid";
                   type = t.nullOr t.int;
                   default = null;
                 };
                 name = lib.mkOption {
                   description = "Change the folder name under /var/lib";
                   type = t.nonEmptyStr;
+                  example = "myservice";
                   default = name;
                 };
               };
@@ -144,11 +150,13 @@
                     options = {
                       mountPoint = lib.mkOption {
                         description = "Path inside the container to mount to";
+                        example = "/var/lib/nextcloud/data";
                         type = t.nonEmptyStr;
                       };
                       hostPath = lib.mkOption {
                         description = "Path on the host to mount from";
                         type = t.nullOr t.nonEmptyStr;
+                        example = "/mnt/netapp/Nextcloud";
                         default = null;
                       };
                       isReadOnly = lib.mkOption {
@@ -159,11 +167,13 @@
                       ownerUid = lib.mkOption {
                         description = "Owner's UID of the Mounted Directory";
                         type = t.nullOr t.int;
+                        example = lib.literalExpression "config.users.users.nextcloud.uid";
                         default = null;
                       };
                       mode = lib.mkOption {
                         description = "Mode of the Mounted Directory";
                         type = t.nonEmptyStr;
+                        example = "0755";
                         default = "0700";
                       };
                     };
@@ -176,6 +186,9 @@
               description = "extra options/overrides to pass to the container";
               type = t.attrs;
               default = { };
+              example = {
+                timeoutStartSec = "15min";
+              };
             };
           };
         }
@@ -185,6 +198,15 @@
       type = t.attrsOf containerType;
       description = "";
       default = { };
+      example = {
+        config = {
+          services.postgresql.enable = true;
+
+          system.stateVersion = "24.11";
+        };
+
+        networking.ports.tcp = [ 8000 ];
+      };
     };
 
   config =
