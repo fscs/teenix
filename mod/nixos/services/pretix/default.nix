@@ -4,10 +4,13 @@
   ...
 }:
 {
+  imports = [ ./meta.nix ];
+
   options.teenix.services.pretix = {
     enable = lib.mkEnableOption "pretix";
     hostname = lib.teenix.mkHostnameOption "pretix";
     email = lib.mkOption {
+      description = "from email address";
       type = lib.types.str;
     };
   };

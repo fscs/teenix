@@ -5,6 +5,8 @@
   ...
 }:
 {
+  imports = [ ./meta.nix ];
+
   options.teenix.services.phynixhhude = {
     enable = lib.mkEnableOption "phynixhhude";
     hostname = lib.teenix.mkHostnameOption "phynixhhude";

@@ -1,5 +1,7 @@
 { lib, config, ... }:
 {
+  imports = [ ./meta.nix ];
+
   options.teenix.services.hockeypuck = {
     enable = lib.mkEnableOption "hockeypuck openpgp key server";
     hostname = lib.teenix.mkHostnameOption "pgp keyserver";

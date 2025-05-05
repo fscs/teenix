@@ -4,6 +4,8 @@
   ...
 }:
 {
+  imports = [ ./meta.nix ];
+
   options.teenix.services.prometheus = {
     enable = lib.mkEnableOption "prometheus";
     hostnames = {

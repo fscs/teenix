@@ -5,12 +5,11 @@
   ...
 }:
 {
+  imports = [ ./meta.nix ];
+  
   options.teenix.services.matrix-intern-bot = {
     enable = lib.mkEnableOption "setup matrix-intern-bot";
     secretsFile = lib.teenix.mkSecretsFileOption "matrix-intern-bot";
-    dbHostPath = lib.mkOption {
-      type = lib.types.str;
-    };
   };
 
   config =

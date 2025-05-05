@@ -4,6 +4,8 @@
   ...
 }:
 {
+  imports = [ ./meta.nix];
+
   options.teenix.services.nextcloud = {
     enable = lib.mkEnableOption "nextcloud";
     hostname = lib.teenix.mkHostnameOption "nextcloud";

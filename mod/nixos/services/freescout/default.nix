@@ -6,6 +6,8 @@
   ...
 }:
 {
+  imports = [ ./meta.nix ];
+
   options.teenix.services.freescout = {
     enable = lib.mkEnableOption "freescout";
     secretsFile = lib.teenix.mkSecretsFileOption "freescout";

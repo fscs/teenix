@@ -93,7 +93,7 @@
     secretsFile = ../secrets/phynixhhude.yml;
   };
 
-  teenix.services.nawi = {
+  teenix.services.fsnawide = {
     enable = true;
     hostname = "fsnawi.de";
     secretsFile = ../secrets/nawi/env;

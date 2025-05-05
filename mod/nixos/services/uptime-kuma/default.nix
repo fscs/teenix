@@ -4,6 +4,8 @@
   ...
 }:
 {
+  imports = [ ./meta.nix ];
+
   options.teenix.services.uptime-kuma = {
     enable = lib.mkEnableOption "uptime-kuma";
     hostname = lib.teenix.mkHostnameOption "uptime-kuma";

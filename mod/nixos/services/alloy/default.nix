@@ -4,6 +4,8 @@
   ...
 }:
 {
+  imports = [ ./meta.nix ];
+
   options.teenix.services.alloy =
     let
       t = lib.types;
@@ -16,11 +18,13 @@
           type = t.nonEmptyStr;
         };
         exporterName = lib.mkOption {
+          description = "name of the loki exporter";
           type = t.nonEmptyStr;
           default = "loki_write";
         };
       };
       extraConfig = lib.mkOption {
+        description = "extra config for alloy";
         type = t.lines;
       };
     };

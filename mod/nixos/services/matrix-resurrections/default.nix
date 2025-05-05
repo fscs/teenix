@@ -20,6 +20,7 @@
 
   imports = [
     ./sydent.nix
+    ./meta.nix
   ];
 
   config =

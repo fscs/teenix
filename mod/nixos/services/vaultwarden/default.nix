@@ -4,6 +4,8 @@
   ...
 }:
 {
+  imports = [ ./meta.nix ];
+
   options.teenix.services.vaultwarden = {
     enable = lib.mkEnableOption "vaultwarden";
     secretsFile = lib.teenix.mkSecretsFileOption "vaultwarden";

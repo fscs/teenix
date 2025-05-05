@@ -5,6 +5,8 @@
   ...
 }:
 {
+  imports = [ ./meta.nix ];
+
   options.teenix.services.inphimade =
     let
       t = lib.types;
@@ -14,6 +16,7 @@
       hostname = lib.teenix.mkHostnameOption "inphimade";
       secretsFile = lib.teenix.mkSecretsFileOption "inphimade";
       mariaEnvFile = lib.mkOption {
+        description = "delete me";
         type = t.path;
       };
     };

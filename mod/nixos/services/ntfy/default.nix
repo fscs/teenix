@@ -4,6 +4,8 @@
   ...
 }:
 {
+  imports = [./meta.nix];
+
   options.teenix.services.ntfy = {
     enable = lib.mkEnableOption "ntfy";
     hostname = lib.teenix.mkHostnameOption "ntfy";

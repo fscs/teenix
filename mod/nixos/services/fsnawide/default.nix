@@ -5,11 +5,14 @@
   ...
 }:
 {
-  options.teenix.services.nawi = {
+  imports = [ ./meta.nix ];
+
+  options.teenix.services.fsnawide = {
     enable = lib.mkEnableOption "fsnawide";
     hostname = lib.teenix.mkHostnameOption "fsnawide";
     secretsFile = lib.teenix.mkSecretsFileOption "fsnawide";
     mariaEnvFile = lib.mkOption {
+      description = "delete me";
       type = lib.types.path;
     };
   };
