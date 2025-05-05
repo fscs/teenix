@@ -77,4 +77,4 @@ Der Service muss nun auch noch durch unsere Reverse Proxy [Traefik](https://doc.
 Hierzu haben wir natürlich auch ein Modul Geschrieben. Dies
 erlaubt uns, unsere Services einfach in Traefik einzubinden.
 Der einfachste Fall ist ein Service ohne Middleware o.ä.  
-[Doku zum Moul](./modules/Traefik.md)
+[Doku zum Moul](./modules/traefik.md)
