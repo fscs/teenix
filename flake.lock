@@ -602,11 +602,11 @@
         "theme": "theme"
       },
       "locked": {
-        "lastModified": 1746458185,
-        "narHash": "sha256-Esx750izD3Y51fEMPySKernYubx4hDCUcGxycgRPrqc=",
+        "lastModified": 1746463887,
+        "narHash": "sha256-zgE5qkKWF4ber20FsmO1kqZkOo49VgfYutKBvBz3864=",
         "ref": "refs/heads/main",
-        "rev": "4c79564b2504c113149d76aa77596e8ea3a5632c",
-        "revCount": 637,
+        "rev": "b4cd671c0363523be26f0d12485fe9e731a0ed51",
+        "revCount": 638,
         "type": "git",
         "url": "ssh://git@git.hhu.de/fscs/website.git"
       },
