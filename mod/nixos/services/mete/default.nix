@@ -5,8 +5,8 @@
 }:
 {
   options.teenix.services.mete = {
-    enable = lib.mkEnableOption "setup inphimade";
-    hostname = lib.teenix.mkHostnameOption;
+    enable = lib.mkEnableOption "mete";
+    hostname = lib.teenix.mkHostnameOption "määääähte";
     hostname-summary = lib.mkOption {
       type = lib.types.str;
     };

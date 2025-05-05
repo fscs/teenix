@@ -5,10 +5,10 @@
 }:
 {
   options.teenix.services.prometheus = {
-    enable = lib.mkEnableOption "setup prometheus";
+    enable = lib.mkEnableOption "prometheus";
     hostnames = {
-      prometheus = lib.teenix.mkHostnameOption;
-      grafana = lib.teenix.mkHostnameOption;
+      prometheus = lib.teenix.mkHostnameOption "prometheus";
+      grafana = lib.teenix.mkHostnameOption "prometheus";
     };
     secretsFile = lib.teenix.mkSecretsFileOption "prometheus";
   };

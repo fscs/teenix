@@ -1,7 +1,7 @@
 { lib, config, ... }:
 {
   options.teenix.services.scanner = {
-    enable = lib.mkEnableOption "enable vsftpd";
+    enable = lib.mkEnableOption "vsftpd";
     secretsFile = lib.teenix.mkSecretsFileOption "vsftpd";
   };
 

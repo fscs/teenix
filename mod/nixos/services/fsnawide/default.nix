@@ -6,8 +6,8 @@
 }:
 {
   options.teenix.services.nawi = {
-    enable = lib.mkEnableOption "setup nawi";
-    hostname = lib.teenix.mkHostnameOption;
+    enable = lib.mkEnableOption "fsnawide";
+    hostname = lib.teenix.mkHostnameOption "fsnawide";
     secretsFile = lib.teenix.mkSecretsFileOption "fsnawide";
     mariaEnvFile = lib.mkOption {
       type = lib.types.path;

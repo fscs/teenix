@@ -4,9 +4,11 @@
   ...
 }:
 {
+  imports = [ ./meta.nix ];
+
   options.teenix.services.campus-guesser-server = {
-    enable = lib.mkEnableOption "setup campus-guesser-server";
-    hostname = lib.teenix.mkHostnameOption;
+    enable = lib.mkEnableOption "campus-guesser-server";
+    hostname = lib.teenix.mkHostnameOption "campus-guesser-server";
     secretsFile = lib.teenix.mkSecretsFileOption "campus-guesser-server";
   };
 

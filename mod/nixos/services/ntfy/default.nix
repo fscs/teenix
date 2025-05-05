@@ -5,8 +5,8 @@
 }:
 {
   options.teenix.services.ntfy = {
-    enable = lib.mkEnableOption "setup ntfy";
-    hostname = lib.teenix.mkHostnameOption;
+    enable = lib.mkEnableOption "ntfy";
+    hostname = lib.teenix.mkHostnameOption "ntfy";
   };
 
   config =

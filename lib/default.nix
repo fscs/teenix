@@ -7,9 +7,12 @@
       description = "path to the secrets file for ${name}";
     };
 
-  mkHostnameOption = lib.mkOption {
-    type = lib.types.nonEmptyStr;
-  };
+  mkHostnameOption =
+    name:
+    lib.mkOption {
+      type = lib.types.nonEmptyStr;
+      description = "hostname for ${name}";
+    };
 
   importAllChildren =
     path:

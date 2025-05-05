@@ -7,7 +7,7 @@
 {
   options.teenix.services.phynixhhude = {
     enable = lib.mkEnableOption "phynixhhude";
-    hostname = lib.teenix.mkHostnameOption;
+    hostname = lib.teenix.mkHostnameOption "phynixhhude";
     secretsFile = lib.teenix.mkSecretsFileOption "phynixhhude";
   };
 

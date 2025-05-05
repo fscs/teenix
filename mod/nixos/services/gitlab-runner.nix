@@ -6,7 +6,7 @@
 }:
 {
   options.teenix.services.gitlab-runner = {
-    enable = lib.mkEnableOption "setup the gitlab runner";
+    enable = lib.mkEnableOption "gitlab runner";
     secretsFile = lib.teenix.mkSecretsFileOption "gitlab-runner";
   };
 

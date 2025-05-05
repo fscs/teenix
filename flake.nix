@@ -16,7 +16,6 @@
     impermanence.url = "github:nix-community/impermanence";
     authentik-nix.url = "github:nix-community/authentik-nix";
 
-    discord-intern-bot.url = "git+ssh://git@git.hhu.de/fscs/discord-intern-bot.git";
     discord-inphima-bot.url = "git+ssh://git@git.hhu.de/inphima/inphima-discord-bot.git";
     matrix-intern-bot.url = "git+ssh://git@git.hhu.de/fscs/matrix-bot.git";
     fscshhude.url = "git+ssh://git@git.hhu.de/fscs/website.git";
@@ -33,7 +32,6 @@
     campus-guesser-server.inputs.nixpkgs.follows = "nixpkgs";
     colmena.inputs.nixpkgs.follows = "nixpkgs";
     discord-inphima-bot.inputs.nixpkgs.follows = "nixpkgs";
-    discord-intern-bot.inputs.nixpkgs.follows = "nixpkgs";
     fscshhude.inputs.nixpkgs.follows = "nixpkgs";
     grafana2ntfy.inputs.nixpkgs.follows = "nixpkgs";
     matrix-intern-bot.inputs.nixpkgs.follows = "nixpkgs";

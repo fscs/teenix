@@ -6,7 +6,7 @@
 }:
 {
   options.teenix.services.node_exporter = {
-    enable = lib.mkEnableOption "setup node_exporter";
+    enable = lib.mkEnableOption "node_exporter";
   };
 
   config =

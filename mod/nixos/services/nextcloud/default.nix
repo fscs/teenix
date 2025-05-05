@@ -5,8 +5,8 @@
 }:
 {
   options.teenix.services.nextcloud = {
-    enable = lib.mkEnableOption "setup nextcloud";
-    hostname = lib.teenix.mkHostnameOption;
+    enable = lib.mkEnableOption "nextcloud";
+    hostname = lib.teenix.mkHostnameOption "nextcloud";
     secretsFile = lib.teenix.mkSecretsFileOption "nextcloud";
     extraApps = lib.mkOption {
       description = "nextcloud apps to install";

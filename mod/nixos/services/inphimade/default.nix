@@ -10,8 +10,8 @@
       t = lib.types;
     in
     {
-      enable = lib.mkEnableOption "setup inphimade";
-      hostname = lib.teenix.mkHostnameOption;
+      enable = lib.mkEnableOption "inphimade";
+      hostname = lib.teenix.mkHostnameOption "inphimade";
       secretsFile = lib.teenix.mkSecretsFileOption "inphimade";
       mariaEnvFile = lib.mkOption {
         type = t.path;

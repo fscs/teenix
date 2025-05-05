@@ -6,9 +6,11 @@
   ...
 }:
 {
+  imports = [ ./meta.nix ];
+
   options.teenix.services.docnix = {
     enable = lib.mkEnableOption "serve the documentation";
-    hostname = lib.teenix.mkHostnameOption;
+    hostname = lib.teenix.mkHostnameOption "documentation";
   };
 
   config =

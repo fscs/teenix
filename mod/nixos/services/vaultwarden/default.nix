@@ -5,9 +5,9 @@
 }:
 {
   options.teenix.services.vaultwarden = {
-    enable = lib.mkEnableOption "setup vaultwarden";
+    enable = lib.mkEnableOption "vaultwarden";
     secretsFile = lib.teenix.mkSecretsFileOption "vaultwarden";
-    hostname = lib.teenix.mkHostnameOption;
+    hostname = lib.teenix.mkHostnameOption "vaultwarden";
   };
 
   config =

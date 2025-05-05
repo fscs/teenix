@@ -6,9 +6,11 @@
   ...
 }:
 {
+  imports = [ ./meta.nix ];
+
   options.teenix.services.bahn-monitor = {
     enable = lib.mkEnableOption "fscs-monitor-plus, a train monitoring service";
-    hostname = lib.teenix.mkHostnameOption;
+    hostname = lib.teenix.mkHostnameOption "fscs-monitor-plus";
   };
 
   config = lib.mkIf config.teenix.services.bahn-monitor.enable {

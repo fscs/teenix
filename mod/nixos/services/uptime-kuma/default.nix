@@ -5,8 +5,8 @@
 }:
 {
   options.teenix.services.uptime-kuma = {
-    enable = lib.mkEnableOption "setup uptime-kuma";
-    hostname = lib.teenix.mkHostnameOption;
+    enable = lib.mkEnableOption "uptime-kuma";
+    hostname = lib.teenix.mkHostnameOption "uptime-kuma";
   };
 
   config =

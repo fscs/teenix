@@ -7,8 +7,8 @@
 }:
 {
   options.teenix.services.sitzungsverwaltung = {
-    enable = lib.mkEnableOption "setup sitzungsverwaltung";
-    hostname = lib.teenix.mkHostnameOption;
+    enable = lib.mkEnableOption "sitzungsverwaltung";
+    hostname = lib.teenix.mkHostnameOption "sitzungsverwaltung";
   };
 
   config =

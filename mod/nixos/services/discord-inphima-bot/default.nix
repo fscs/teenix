@@ -4,8 +4,10 @@
   ...
 }:
 {
+  imports = [ ./meta.nix ];
+
   options.teenix.services.discord-inphima-bot = {
-    enable = lib.mkEnableOption "setup discord-inphima-bot";
+    enable = lib.mkEnableOption "discord-inphima-bot";
     secretsFile = lib.teenix.mkSecretsFileOption "discord-inphima-bot";
   };
 

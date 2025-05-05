@@ -75,11 +75,6 @@
     secretsFile = ../secrets/prometheus.yml;
   };
 
-  teenix.services.discord-intern-bot = {
-    enable = true;
-    secretsFile = ../secrets/discord-intern-bot.yml;
-  };
-
   teenix.services.discord-inphima-bot = {
     enable = true;
     secretsFile = ../secrets/discord-inphima-bot.yml;

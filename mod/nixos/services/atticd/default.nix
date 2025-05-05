@@ -1,8 +1,10 @@
 { lib, config, ... }:
 {
+  imports = [ ./meta.nix ];
+
   options.teenix.services.atticd = {
-    enable = lib.mkEnableOption "enable the attic binary cache";
-    hostname = lib.teenix.mkHostnameOption;
+    enable = lib.mkEnableOption "the attic binary cache";
+    hostname = lib.teenix.mkHostnameOption "attic";
     secretsFile = lib.teenix.mkSecretsFileOption "attic";
   };
 

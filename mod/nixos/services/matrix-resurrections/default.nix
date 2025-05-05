@@ -9,12 +9,12 @@
     enable = lib.mkEnableOption "matrix";
     secretsFile = lib.teenix.mkSecretsFileOption "matrix";
     hostnames = {
-      homeserver = lib.teenix.mkHostnameOption;
-      matrix = lib.teenix.mkHostnameOption;
-      mas = lib.teenix.mkHostnameOption;
-      hookshot = lib.teenix.mkHostnameOption;
-      sydent = lib.teenix.mkHostnameOption;
-      element-web = lib.teenix.mkHostnameOption;
+      homeserver = lib.teenix.mkHostnameOption "homeserver name";
+      matrix = lib.teenix.mkHostnameOption "matrix";
+      mas = lib.teenix.mkHostnameOption "matrix authentication service";
+      hookshot = lib.teenix.mkHostnameOption "hookshot";
+      sydent = lib.teenix.mkHostnameOption "sydent";
+      element-web = lib.teenix.mkHostnameOption "element-web";
     };
   };
 

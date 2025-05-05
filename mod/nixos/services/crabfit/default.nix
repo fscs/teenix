@@ -4,11 +4,13 @@
   ...
 }:
 {
+  imports = [ ./meta.nix ];
+
   options.teenix.services.crabfit = {
-    enable = lib.mkEnableOption "setup crab.fit, a meeting scheduler";
+    enable = lib.mkEnableOption "crab.fit, a meeting scheduler";
     hostnames = {
-      frontend = lib.teenix.mkHostnameOption;
-      backend = lib.teenix.mkHostnameOption;
+      frontend = lib.teenix.mkHostnameOption "frontend for crabfit";
+      backend = lib.teenix.mkHostnameOption "backend for crabfit";
     };
   };
 

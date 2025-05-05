@@ -4,10 +4,11 @@
   ...
 }:
 {
+  imports = [ ./meta.nix ];
   options.teenix.services.authentik = {
-    enable = lib.mkEnableOption "setup authentik";
+    enable = lib.mkEnableOption "authentik";
+    hostname = lib.teenix.mkHostnameOption "authentik";
     secretsFile = lib.teenix.mkSecretsFileOption "authentik";
-    hostname = lib.teenix.mkHostnameOption;
   };
 
   config =

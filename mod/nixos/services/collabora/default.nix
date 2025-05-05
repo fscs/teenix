@@ -5,11 +5,14 @@
   ...
 }:
 {
+  imports = [ ./meta.nix ];
+
   options.teenix.services.collabora = {
-    enable = lib.mkEnableOption "Enable collabora";
-    hostname = lib.teenix.mkHostnameOption;
+    enable = lib.mkEnableOption "collabora";
+    hostname = lib.teenix.mkHostnameOption "collabora";
     nextcloudHost = lib.mkOption {
       type = lib.types.str;
+      description = "Url of the connected NextCloud Instance";
     };
   };
 

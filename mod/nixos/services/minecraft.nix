@@ -5,7 +5,7 @@
   ...
 }:
 {
-  options.teenix.services.minecraft.enable = lib.mkEnableOption "setup a minecraft server";
+  options.teenix.services.minecraft.enable = lib.mkEnableOption "minecraft server";
 
   config = lib.mkIf config.teenix.services.minecraft.enable {
     teenix.persist.subvolumes.minecraft = {

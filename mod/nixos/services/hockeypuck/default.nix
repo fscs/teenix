@@ -1,8 +1,8 @@
 { lib, config, ... }:
 {
   options.teenix.services.hockeypuck = {
-    enable = lib.mkEnableOption "enable the hockeypuck openpgp key server";
-    hostname = lib.teenix.mkHostnameOption;
+    enable = lib.mkEnableOption "hockeypuck openpgp key server";
+    hostname = lib.teenix.mkHostnameOption "pgp keyserver";
   };
 
   config =
