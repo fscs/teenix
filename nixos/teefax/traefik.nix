@@ -27,7 +27,6 @@
         # redirects (that always have been redirects)
         "awareness"
         "cloud"
-        "discord"
         "doodle"
         "essen"
         "helfen"
@@ -77,11 +76,6 @@
     informatik_phynix = {
       from = "informatik.phynix-hhu.de";
       to = "fscs.hhu.de";
-    };
-
-    discord_phynix = {
-      from = "discord.phynix-hhu.de";
-      to = "discord.gg/K3ddgjh";
     };
 
     cloud_phynix = {
