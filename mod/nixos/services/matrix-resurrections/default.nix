@@ -83,15 +83,23 @@
       teenix.services.sydent.enable = true;
 
       # generate entry points for the turn server
-      teenix.services.traefik.entryPoints = lib.listToAttrs (
-        map (port: {
-          name = "turn_port_${toString port}";
-          value = {
-            inherit port;
-            protocol = "udp";
+      teenix.services.traefik.entryPoints = lib.mkMerge [
+        (lib.listToAttrs (
+          map (port: {
+            name = "turn_port_${toString port}";
+            value = {
+              inherit port;
+              protocol = "udp";
+            };
+          }) (lib.range 30001 30010)
+        ))
+        {
+          turn_port_tcp = {
+            port = 30000;
+            protocol = "tcp";
           };
-        }) (lib.range 30000 30010)
-      );
+        }
+      ];
 
       teenix.services.traefik.httpServices = {
         matrix = {
@@ -125,6 +133,22 @@
           servers = [ "http://${config.containers.matrix.localAddress}:8000" ];
           healthCheck.enable = true;
         };
+      };
+
+      teenix.services.traefik.dynamicConfig = {
+        tcp.routers.turn = {
+          rule = "HostSNI(`*`)";
+          service = "turn";
+          priority = 10000;
+        };
+        tcp.services.turn = {
+          loadBalancer.servers = [
+            {
+              address = "${config.containers.matrix.localAddress}:3478";
+            }
+          ];
+        };
+
       };
 
       teenix.containers.matrix = {

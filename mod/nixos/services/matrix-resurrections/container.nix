@@ -45,7 +45,7 @@
     enable = true;
     no-cli = true;
     no-tcp-relay = true;
-    min-port = 30001;
+    min-port = 30000;
     max-port = 30010;
     use-auth-secret = true;
     static-auth-secret-file = host-config.sops.secrets.matrix-turn-secret.path;
