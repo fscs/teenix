@@ -291,7 +291,7 @@ in
                 "web"
                 "websecure"
               ];
-              middlewares = [ "onlyphynix" ];
+              middlewares = [ "authentik" ];
               tls.certResolver = "letsencrypt";
             };
           })

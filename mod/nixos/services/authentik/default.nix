@@ -35,11 +35,12 @@
       };
 
       teenix.services.traefik.middlewares.authentik.forwardAuth = {
-        address = "https://${cfg.hostname}/outpost.goauthentik.io/auth/traefik";
+        address = "http://${config.containers.authentik.localAddress}/outpost.goauthentik.io/auth/traefik";
         tls.insecureSkipVerify = true;
         authResponseHeaders = [
           "X-authentik-username"
           "X-authentik-groups"
+          "X-authentik-entitlements"
           "X-authentik-email"
           "X-authentik-name"
           "X-authentik-uid"
