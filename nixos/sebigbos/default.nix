@@ -10,7 +10,9 @@
   imports = [
     ../share
     ./hardware-configuration.nix
+    ./disko.nix
 
+    inputs.disko.nixosModules.disko
     outputs.nixosModules.teenix
   ];
 
@@ -55,8 +57,6 @@
   };
 
   virtualisation.vmware.guest.enable = true;
-
-  teenix.bootconfig.enable = true;
 
   teenix.services.openssh.enable = true;
 

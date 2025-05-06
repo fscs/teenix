@@ -19,6 +19,14 @@
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
+  boot.loader.grub = {
+    enable = true;
+    device = "nodev";
+    efiSupport = true;
+  };
+
+  fileSystems."/persist".neededForBoot = true;
+
   # boot.initrd.postDeviceCommands = lib.mkAfter ''
   #   mkdir /btrfs_tmp
   #   mount /dev/disk/by-uuid/f312acc1-a543-4513-a487-ca7d8f302a8b /btrfs_tmp
