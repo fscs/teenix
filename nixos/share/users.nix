@@ -52,6 +52,7 @@
       allHosts = [
         "teefax"
         "verleihnix"
+        "sebigbos"
       ];
     in
     {

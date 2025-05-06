@@ -76,17 +76,17 @@
 
   teenix.services.node_exporter.enable = true;
 
-  # teenix.services.ntfy = {
-  #   enable = true;
-  #   hostname = "ntfy.dev.hhu-fscs.de";
-  # };
-  #
-  # sops.secrets.verleihnix-root-passwd = {
-  #   sopsFile = ../secrets/passwords.yml;
-  #   neededForUsers = true;
-  # };
-  #
-  # users.users.root.hashedPasswordFile = config.sops.secrets.verleihnix-root-passwd.path;
+  teenix.services.ntfy = {
+    enable = true;
+    hostname = "ntfy.sebigbos.hhu-fscs.de";
+  };
+
+  sops.secrets.sebigbos-root-passwd = {
+    sopsFile = ../secrets/passwords.yml;
+    neededForUsers = true;
+  };
+
+  users.users.root.hashedPasswordFile = config.sops.secrets.sebigbos-root-passwd.path;
 
   system.stateVersion = "23.11";
 }
