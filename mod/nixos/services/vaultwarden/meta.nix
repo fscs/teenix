@@ -9,5 +9,8 @@
     ];
   };
 
-  teenix.meta.services.vaultwarden.enable = true;
+  teenix.meta.services.vaultwarden = {
+    hostname = "vaultwarden.phynix-hhu.de";
+    name = "Vaultwarden";
+  };
 }

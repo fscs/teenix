@@ -15,11 +15,20 @@
     retentionTime = "30d";
     scrapeConfigs = [
       {
+        job_name = "traefik_sebigbos";
+        metrics_path = "/metrics";
+        static_configs = lib.singleton {
+          targets = [
+            "134.99.147.41:120"
+          ];
+        };
+      }
+      {
         job_name = "traefik";
         metrics_path = "/metrics";
         static_configs = lib.singleton {
           targets = [
-            "${host-config.containers.prometheus.hostAddress}:120"
+            "134.99.147.42:120"
           ];
         };
       }

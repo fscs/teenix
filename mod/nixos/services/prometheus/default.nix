@@ -26,40 +26,6 @@
         mode = "444";
       };
 
-      # enable traefiks metrics, so prometheus can read them
-      teenix.services.traefik.staticConfig.metrics.prometheus = {
-        entryPoint = "metrics";
-        buckets = [
-          0.1
-          0.3
-          1.2
-          5.0
-        ];
-        addEntryPointsLabels = true;
-        addServicesLabels = true;
-      };
-
-      teenix.services.traefik.entryPoints.metrics = {
-        port = 120;
-      };
-
-      teenix.services.traefik.httpServices = {
-        prometheus = {
-          router.rule = "Host(`${cfg.hostnames.prometheus}`)";
-          servers = [ "http://${config.containers.prometheus.localAddress}:9090" ];
-          healthCheck.enable = true;
-        };
-
-        grafana = {
-          router.rule = "Host(`${cfg.hostnames.grafana}`)";
-          servers = [ "http://${config.containers.prometheus.localAddress}:80" ];
-          healthCheck = {
-            enable = true;
-            path = "/login";
-          };
-        };
-      };
-
       teenix.containers.prometheus = {
         config = ./container.nix;
 

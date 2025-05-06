@@ -46,6 +46,11 @@
                 { url = "http://192.18.${toString (ipPoolOf name)}.11:${toString value.port}"; }
                 { url = "http://192.168.${toString (ipPoolOf name)}.11:${toString value.port}"; }
               ];
+              loadBalancer.healthCheck = {
+                path = "/";
+                interval = "10s";
+                timeout = "3s";
+              };
             };
           }) config.teenix.ha;
         };

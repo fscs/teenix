@@ -9,5 +9,9 @@
     ];
   };
 
-  teenix.meta.services.prometheus.enable = true;
+  teenix.meta.services.prometheus = {
+    hostname = "prometheus.hhu-fscs.de";
+    name = "Prometheus";
+  };
+
 }

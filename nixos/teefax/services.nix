@@ -2,6 +2,25 @@
 {
   teenix.config.defaultContainerNetworkId = "192.18";
 
+  teenix.services.traefik.entryPoints = {
+    metrics = {
+      port = 120;
+    };
+  };
+
+  # enable traefiks metrics, so prometheus can read them
+  teenix.services.traefik.staticConfig.metrics.prometheus = {
+    entryPoint = "metrics";
+    buckets = [
+      0.1
+      0.3
+      1.2
+      5.0
+    ];
+    addEntryPointsLabels = true;
+    addServicesLabels = true;
+  };
+
   teenix.services.collabora = {
     enable = true;
     hostname = "collabora.phynix-hhu.de";
@@ -132,7 +151,7 @@
 
   teenix.services.ntfy = {
     enable = true;
-    hostname = "ntfy.hhu-fscs.de";
+    hostname = config.teenix.meta.services.ntfy.hostname;
   };
 
   teenix.services.matrix-intern-bot = {

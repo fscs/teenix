@@ -9,5 +9,8 @@
     ];
   };
 
-  teenix.meta.services.attic.enable = true;
+  teenix.meta.services.atticd = {
+    hostname = "attic.hhu-fscs.de";
+    name = "Attic";
+  };
 }

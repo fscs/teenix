@@ -9,5 +9,8 @@
     ];
   };
 
-  teenix.meta.services.pretix.enable = true;
+  teenix.meta.services.pretix = {
+    hostname = "pretix.phynix-hhu.de";
+    name = "Ticketsystem";
+  };
 }

@@ -9,5 +9,8 @@
     ];
   };
 
-  teenix.meta.services.ntfy.enable = true;
+  teenix.meta.services.ntfy = {
+    hostname = "ntfy.hhu-fscs.de";
+    name = "Ntfy";
+  };
 }

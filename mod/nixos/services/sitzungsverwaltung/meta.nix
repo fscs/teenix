@@ -9,5 +9,8 @@
     ];
   };
 
-  teenix.meta.services.sitzungsverwaltung.enable = true;
+  teenix.meta.services.sitzungsverwaltung = {
+    hostname = "sitzungen.hhu-fscs.de";
+    name = "Sitzungsverwaltung";
+  };
 }

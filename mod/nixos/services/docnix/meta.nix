@@ -9,5 +9,8 @@
     ];
   };
 
-  teenix.meta.services.docnix.enable = true;
+  teenix.meta.services.docnix = {
+    hostname = "docnix.hhu-fscs.de";
+    name = "Dokumentation";
+  };
 }

@@ -8,4 +8,8 @@
       "discord-inphima-bot"
     ];
   };
+
+  teenix.meta.services.discord-inphima-bot = {
+    name = "INPhiMa(PhyNIx) Discord Bot";
+  };
 }

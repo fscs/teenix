@@ -140,6 +140,7 @@
           rule = "HostSNI(`*`)";
           service = "turn";
           priority = 10000;
+          entryPoints = [ "turn_port_tcp" ];
         };
         tcp.services.turn = {
           loadBalancer.servers = [

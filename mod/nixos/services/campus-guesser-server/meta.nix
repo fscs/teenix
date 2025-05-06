@@ -9,5 +9,8 @@
     ];
   };
 
-  teenix.meta.services.campus-guesser-server.enable = true;
+  teenix.meta.services.campus-guesser-server = {
+    hostname = "campusguesser.phynix-hhu.de";
+    name = "Campus Guesser";
+  };
 }

@@ -100,7 +100,7 @@
 
   teenix.services.ntfy = {
     enable = true;
-    hostname = "ntfy.dev.hhu-fscs.de";
+    hostname = config.teenix.meta.services.ntfy.hostname;
   };
 
   sops.secrets.verleihnix-root-passwd = {

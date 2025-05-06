@@ -9,5 +9,8 @@
     ];
   };
 
-  teenix.meta.services.traefik.enable = true;
+  teenix.meta.services.traefik = {
+    hostname = "traefik.phynix-hhu.de";
+    name = "Traefik";
+  };
 }

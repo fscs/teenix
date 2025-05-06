@@ -9,5 +9,9 @@
     ];
   };
 
-  teenix.meta.services.bahn-monitor.enable = true;
+  teenix.meta.services.bahn-monitor = {
+    hostname = "bahn.phynix-hhu.de";
+    name = "Bahn Monitor";
+  };
+
 }

@@ -9,5 +9,8 @@
     ];
   };
 
-  teenix.meta.services.authentik.enable = true;
+  teenix.meta.services.authentik = {
+    hostname = "auth.phynix.de";
+    name = "Authentik";
+  };
 }

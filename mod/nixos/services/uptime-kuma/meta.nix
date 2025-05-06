@@ -9,5 +9,8 @@
     ];
   };
 
-  teenix.meta.services.uptime-kuma.enable = true;
+  teenix.meta.services.uptime-kuma = {
+    hostname = "uptime.phynix-hhu.de";
+    name = "Uptime Kuma";
+  };
 }
