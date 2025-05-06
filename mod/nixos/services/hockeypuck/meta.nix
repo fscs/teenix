@@ -8,4 +8,6 @@
       "hockeypuck"
     ];
   };
+
+  teenix.meta.services.hockeypuck.enable = true;
 }

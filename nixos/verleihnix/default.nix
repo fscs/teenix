@@ -80,6 +80,8 @@
 
   teenix.services.openssh.enable = true;
 
+  teenix.config.defaultContainerNetworkId = "192.168";
+
   # Services
   teenix.persist.enable = true;
 
@@ -115,6 +117,11 @@
   users.users.root.hashedPasswordFile = config.sops.secrets.verleihnix-root-passwd.path;
 
   teenix.services.minecraft.enable = true;
+
+  teenix.services.fscshhude = {
+    enable = true;
+    secretsFile = ../secrets/fscshhude.yml;
+  };
 
   teenix.services.gatus = {
     enable = true;

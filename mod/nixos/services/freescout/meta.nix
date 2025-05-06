@@ -8,4 +8,6 @@
       "freescout"
     ];
   };
+
+  teenix.meta.services.freescout.enable = true;
 }

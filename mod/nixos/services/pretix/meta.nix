@@ -8,4 +8,6 @@
       "pretix"
     ];
   };
+
+  teenix.meta.services.pretix.enable = true;
 }

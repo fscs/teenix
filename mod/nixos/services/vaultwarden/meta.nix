@@ -8,4 +8,6 @@
       "vaultwarden"
     ];
   };
+
+  teenix.meta.services.vaultwarden.enable = true;
 }

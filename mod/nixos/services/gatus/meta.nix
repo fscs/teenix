@@ -8,4 +8,6 @@
       "gatus"
     ];
   };
+
+  teenix.meta.services.gatus.enable = true;
 }

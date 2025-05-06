@@ -8,4 +8,6 @@
       "prometheus"
     ];
   };
+
+  teenix.meta.services.prometheus.enable = true;
 }

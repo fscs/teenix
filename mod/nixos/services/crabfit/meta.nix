@@ -8,4 +8,6 @@
       "crabfit"
     ];
   };
+
+  teenix.meta.services.crabfit.enable = true;
 }

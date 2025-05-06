@@ -8,4 +8,6 @@
       "matrix"
     ];
   };
+
+  teenix.meta.services.matrix.enable = true;
 }

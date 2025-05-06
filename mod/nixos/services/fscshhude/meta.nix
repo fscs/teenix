@@ -8,4 +8,6 @@
       "fscshhude"
     ];
   };
+
+  teenix.meta.services.fscshhude.enable = true;
 }

@@ -8,4 +8,6 @@
       "ntfy"
     ];
   };
+
+  teenix.meta.services.ntfy.enable = true;
 }

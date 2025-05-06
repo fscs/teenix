@@ -8,4 +8,6 @@
       "uptime-kuma"
     ];
   };
+
+  teenix.meta.services.uptime-kuma.enable = true;
 }

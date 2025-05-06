@@ -8,4 +8,6 @@
       "bahn-monitor"
     ];
   };
+
+  teenix.meta.services.bahn-monitor.enable = true;
 }

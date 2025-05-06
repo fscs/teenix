@@ -8,4 +8,6 @@
       "nextcloud"
     ];
   };
+
+  teenix.meta.services.nextcloud.enable = true;
 }

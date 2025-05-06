@@ -8,4 +8,6 @@
       "atticd"
     ];
   };
+
+  teenix.meta.services.attic.enable = true;
 }

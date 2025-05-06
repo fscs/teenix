@@ -8,4 +8,6 @@
       "docnix"
     ];
   };
+
+  teenix.meta.services.docnix.enable = true;
 }

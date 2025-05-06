@@ -8,4 +8,6 @@
       "traefik"
     ];
   };
+
+  teenix.meta.services.traefik.enable = true;
 }

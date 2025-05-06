@@ -7,6 +7,13 @@
 {
   imports = [ ./meta.nix ];
 
+  options.teenix.config = {
+    defaultContainerNetworkId = lib.mkOption {
+      description = "The default network id for containers. This is used to generate the container ip address";
+      type = lib.types.nonEmptyStr;
+      example = "192.18";
+    };
+  };
   options.teenix.containers =
     let
       t = lib.types;
@@ -211,12 +218,14 @@
 
   config =
     let
-      defaultContainerNetworkId = "192.18";
-
       # ugly hack to generate a unique ip for the container
       ipPoolOf =
         name:
-        lib.lists.findFirstIndex (x: x == name) (throw "unreachable") (lib.attrNames config.containers);
+        lib.lists.findFirstIndex (x: x == name) (throw "unreachable") (
+          lib.attrNames config.teenix.meta.services
+        );
+
+      defaultContainerNetworkId = config.teenix.config.defaultContainerNetworkId;
 
       containerModuleOf =
         name: cfg:

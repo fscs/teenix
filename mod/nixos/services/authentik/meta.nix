@@ -8,4 +8,6 @@
       "authentik"
     ];
   };
+
+  teenix.meta.services.authentik.enable = true;
 }

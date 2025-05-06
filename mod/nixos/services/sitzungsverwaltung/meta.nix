@@ -8,4 +8,6 @@
       "sitzungsverwaltung"
     ];
   };
+
+  teenix.meta.services.sitzungsverwaltung.enable = true;
 }

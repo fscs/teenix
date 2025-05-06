@@ -8,4 +8,6 @@
       "campus-guesser-server"
     ];
   };
+
+  teenix.meta.services.campus-guesser-server.enable = true;
 }

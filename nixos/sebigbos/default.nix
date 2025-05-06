@@ -2,8 +2,6 @@
   inputs,
   outputs,
   config,
-  pkgs,
-  lib,
   ...
 }:
 {
@@ -11,6 +9,7 @@
     ../share
     ./hardware-configuration.nix
     ./disko.nix
+    ./services.nix
 
     inputs.disko.nixosModules.disko
     outputs.nixosModules.teenix
@@ -42,11 +41,23 @@
             prefixLength = 27;
           }
         ];
-        routes = lib.singleton {
-          address = "134.99.210.131";
-          prefixLength = 32;
-          via = "134.99.147.33";
-        };
+        routes = [
+          {
+            address = "134.99.210.131";
+            prefixLength = 32;
+            via = "134.99.147.33";
+          }
+          {
+            address = "192.18.0.0";
+            prefixLength = 16;
+            via = "134.99.147.42";
+          }
+          {
+            address = "192.168.0.0";
+            prefixLength = 16;
+            via = "134.99.147.43";
+          }
+        ];
       };
     };
 
@@ -60,25 +71,10 @@
 
   teenix.services.openssh.enable = true;
 
-  # Services
-  teenix.persist.enable = true;
-
-  teenix.services.traefik = {
-    enable = true;
-
-    letsencryptMail = "fscs@hhu.de";
-
-    dashboard = {
-      enable = true;
-      url = "traefik.sebigbos.hhu-fscs.de";
-    };
-  };
-
-  teenix.services.node_exporter.enable = true;
-
-  teenix.services.ntfy = {
-    enable = true;
-    hostname = "ntfy.sebigbos.hhu-fscs.de";
+  # if this doesnt exist, traefik stops working (because sops templating refuses to work)
+  sops.secrets.blub = {
+    sopsFile = ../secrets/passwords.yml;
+    key = "verleihnix-root-passwd";
   };
 
   sops.secrets.sebigbos-root-passwd = {

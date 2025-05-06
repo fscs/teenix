@@ -41,12 +41,12 @@
       content-dir = config.services.fscs-website-setup.dataDir;
 
       oauth-source-name = "authentik";
-      auth-url = "https://${host-config.teenix.services.authentik.hostname}/application/o/authorize/";
-      token-url = "https://${host-config.teenix.services.authentik.hostname}/application/o/token/";
-      user-info = "https://${host-config.teenix.services.authentik.hostname}/application/o/userinfo/";
+      auth-url = "https://auth.phynix-hhu.de/application/o/authorize/";
+      token-url = "https://auth.phynix-hhu.de/application/o/token/";
+      user-info = "https://auth.phynix-hhu.de/application/o/userinfo/";
 
       cors-allowed-origin = [
-        "https://${host-config.teenix.services.sitzungsverwaltung.hostname}"
+        "https://sitzungen.hhu-fscs.de"
       ];
     };
 

@@ -8,4 +8,6 @@
       "collabora"
     ];
   };
+
+  teenix.meta.services.collabora.enable = true;
 }

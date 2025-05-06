@@ -1,5 +1,7 @@
 { config, ... }:
 {
+  teenix.config.defaultContainerNetworkId = "192.18";
+
   teenix.services.collabora = {
     enable = true;
     hostname = "collabora.phynix-hhu.de";
