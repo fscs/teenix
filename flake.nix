@@ -119,6 +119,16 @@
           deployment.targetHost = "dev.hhu-fscs.de";
           imports = [ ./nixos/verleihnix ];
         };
+
+        sebigbos = {
+          deployment.targetHost = "sebigbos.hhu-fscs.de";
+          imports = [ ./nixos/sebigbos ];
+        };
+      };
+
+      nixosConfigurations.sebigbos = lib.nixosSystem {
+        inherit specialArgs;
+        modules = [ ./nixos/sebigbos ];
       };
 
       nixosConfigurations.teefax = lib.nixosSystem {
