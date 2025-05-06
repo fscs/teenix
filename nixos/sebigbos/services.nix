@@ -4,6 +4,14 @@
 
   teenix.persist.enable = true;
 
+  networking.firewall = {
+    checkReversePath = false;
+    logRefusedConnections = true;
+    allowedTCPPorts = [
+      2121
+    ];
+  };
+
   teenix.services.traefik.entryPoints = {
     metrics = {
       port = 120;

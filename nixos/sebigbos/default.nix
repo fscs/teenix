@@ -71,6 +71,13 @@
 
   teenix.services.openssh.enable = true;
 
+  virtualisation.docker = {
+    enable = true;
+    autoPrune.enable = true;
+    liveRestore = false;
+  };
+  virtualisation.oci-containers.backend = "docker";
+
   # if this doesnt exist, traefik stops working (because sops templating refuses to work)
   sops.secrets.blub = {
     sopsFile = ../secrets/passwords.yml;

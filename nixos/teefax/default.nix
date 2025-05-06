@@ -69,7 +69,10 @@
     firewall = {
       checkReversePath = false;
       logRefusedConnections = true;
-      allowedTCPPorts = [ 2121 ];
+      allowedTCPPorts = [
+        2121
+        2377
+      ];
       allowedUDPPortRanges = [
         {
           from = 30000;
@@ -88,6 +91,11 @@
   sops.secrets.teefax-root-passwd = {
     sopsFile = ../secrets/passwords.yml;
     neededForUsers = true;
+  };
+
+  virtualisation.docker = {
+    enable = true;
+    liveRestore = false;
   };
 
   users.users.root.hashedPasswordFile = config.sops.secrets.teefax-root-passwd.path;
