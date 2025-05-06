@@ -8,8 +8,16 @@
     checkReversePath = false;
     logRefusedConnections = true;
     allowedTCPPorts = [
-      2121
+      2377
     ];
+  };
+
+  teenix.services.traefik.staticConfig = {
+    providers = {
+      swarm = {
+        endpoint = "unix:///var/run/docker.sock";
+      };
+    };
   };
 
   teenix.services.traefik.entryPoints = {
