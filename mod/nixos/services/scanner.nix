@@ -35,6 +35,14 @@
         hashedPasswordFile = config.sops.secrets.scanner-pwd.path;
       };
 
+      networking.firewall = {
+        allowedTCPPorts = [ 2121 ];
+        allowedTCPPortRanges = lib.singleton {
+          from = 3000;
+          to = 3100;
+        };
+      };
+
       services.vsftpd = {
         enable = true;
         localUsers = true;

@@ -35,19 +35,18 @@
     hostName = "teefax";
 
     nameservers = [
-      "134.99.154.201"
-      "134.99.154.228"
+      "134.99.128.2"
     ];
 
     defaultGateway = {
-      address = "134.99.154.1";
-      interface = "ens32";
+      address = "134.99.147.33";
+      interface = "ens34";
     };
 
     nat = {
       enable = true;
       internalInterfaces = [ "ve-+" ];
-      externalInterface = "ens32";
+      externalInterface = "ens34";
       # Lazy IPv6 connectivity for the container
       enableIPv6 = true;
     };
@@ -69,22 +68,7 @@
     firewall = {
       checkReversePath = false;
       logRefusedConnections = true;
-      allowedTCPPorts = [
-        2121
-        2377
-      ];
-      allowedUDPPortRanges = [
-        {
-          from = 30000;
-          to = 30010;
-        }
-      ];
-      allowedTCPPortRanges = [
-        {
-          from = 3000;
-          to = 3100;
-        }
-      ];
+      allowedTCPPorts = [ 2377 ];
     };
   };
 
