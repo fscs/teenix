@@ -4,41 +4,6 @@
 
   teenix.persist.enable = true;
 
-  networking.firewall = {
-    checkReversePath = false;
-    logRefusedConnections = true;
-    allowedTCPPorts = [
-      2377
-    ];
-  };
-
-  teenix.services.traefik.staticConfig = {
-    providers = {
-      swarm = {
-        endpoint = "unix:///var/run/docker.sock";
-      };
-    };
-  };
-
-  teenix.services.traefik.entryPoints = {
-    metrics = {
-      port = 120;
-    };
-  };
-
-  # enable traefiks metrics, so prometheus can read them
-  teenix.services.traefik.staticConfig.metrics.prometheus = {
-    entryPoint = "metrics";
-    buckets = [
-      0.1
-      0.3
-      1.2
-      5.0
-    ];
-    addEntryPointsLabels = true;
-    addServicesLabels = true;
-  };
-
   teenix.services.traefik = {
     enable = true;
 

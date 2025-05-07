@@ -219,6 +219,9 @@ in
       websecure = {
         port = 443;
       };
+      metrics = {
+        port = 120;
+      };
     };
 
     teenix.services.traefik.middlewares = {
@@ -340,6 +343,19 @@ in
 
     # generate traefiks static config
     teenix.services.traefik.staticConfig = {
+      # enable traefiks metrics, so prometheus can read them
+      metrics.prometheus = {
+        entryPoint = "metrics";
+        buckets = [
+          0.1
+          0.3
+          1.2
+          5.0
+        ];
+        addEntryPointsLabels = true;
+        addServicesLabels = true;
+      };
+
       providers = {
         file = {
           filename = config.sops.templates.traefik-dynamic-config.path;
