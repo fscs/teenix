@@ -454,6 +454,10 @@ in
         ProtectHome = true;
         ProtectSystem = "full";
         ReadWritePaths = [ config.teenix.persist.subvolumes.traefik.path ];
+        AssertPathExists = [
+          config.sops.templates.traefik-static-config.path
+          config.sops.templates.traefik-dynamic-config.path
+        ];
       };
     };
 
