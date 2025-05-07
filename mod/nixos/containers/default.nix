@@ -37,7 +37,12 @@
             };
 
             machineId = lib.mkOption {
-              description = "The containers machine-id. Used for mounting journals";
+              description = ''
+                The containers machine-id, uniquely identifiying this container.
+                You shouldn't ever have to set this yourself.
+
+                Used for mounting the systemd journals back to the host.
+              '';
               type = t.strMatching "^[a-f0-9]{32}\n$";
               default = lib.substring 0 32 (builtins.hashString "sha256" name) + "\n";
               defaultText = lib.literalExpression ''lib.substring 0 32 (builtins.hashString "sha256" name) + "\n"'';
@@ -66,9 +71,9 @@
 
             networking = {
               useResolvConf = lib.mkEnableOption ''
-                Mount the hosts resolv.conf into the container.
+                Make a resolv.conf file available in the container.
 
-                This is required if the container wants to do dns lookups.
+                This is required if the container wants to do DNS lookups.
               '';
               id = lib.mkOption {
                 description = "Network id this container should be placed in. If null, one is picked automatically";
@@ -95,41 +100,76 @@
             backup = lib.mkEnableOption null // {
               default = true;
               example = false;
-              description = "Automatically snapshot this containers persisted subvolume";
+              description = ''
+                Automatically snapshot this containers persisted subvolume.
+
+                In addition to time-based snapshotting, a snapshot is also taken every time
+                the container restarts
+              '';
             };
 
             mounts = {
               mysql.enable = lib.mkEnableOption null // {
-                description = "Mount the container's mysql data dir into persisted storage";
+                description = ''
+                  Mount the container's mysql data dir into persisted storage (at /persist/container/mysql).
+
+                  If a mysql database is used within the container, you'll always want this enabled.
+                '';
               };
 
               postgres.enable = lib.mkEnableOption null // {
-                description = "Mount the container's postgesql data dir into persisted storage";
+                description = ''
+                  Mount the container's postgresql data dir into persisted storage (at /persist/container/postgres)
+
+                  If a postgresql database is used within the container, you'll always want this enabled.
+                '';
               };
 
               data = {
                 enable = lib.mkEnableOption null // {
-                  description = "Mount /var/lib/<containerName> into persisted storage";
-                };
+                  description = ''
+                    Mount (from the containers perspective) /var/lib/<containerName> into persisted storage (at /persist/container/data)
 
+                    This is a really common pattern. A service named "example" will propably have
+                    a container called "example" and place its data within a folder under /var/lib.
+
+                    Nonetheless, verify if this is actually the case. This option is just a really stupid shortcut.
+                  '';
+                };
                 ownerUid = lib.mkOption {
-                  description = "Owner of the data dir";
-                  example = lib.literalExpression "config.users.users.traefik.uid";
+                  description = ''
+                    Owner of the data dir. Since the desired user may not exist on the host, this option
+                    takes an id instead of a name.
+
+                    Be ware, that if set this is enforced and set to this value on a regular basis.
+
+                    If set to null, the folder will at first be owned by root and its left up to the service
+                    to set the correct owner.
+
+                    The privateUsers option may interfere with this.
+                  '';
+                  example = lib.literalExpression "config.containers.myservice.config.users.users.myservice.uid";
                   type = t.nullOr t.int;
                   default = null;
                 };
                 name = lib.mkOption {
-                  description = "Change the folder name under /var/lib";
+                  description = ''
+                    Change the folder name under /var/lib
+
+                    This makes this option at least a bit more versatile, and should be used
+                    to achieve consistency (data dir at /persist/container/data)
+                  '';
                   type = t.nonEmptyStr;
                   example = "myservice";
                   default = name;
+                  defaultText = "container name";
                 };
               };
 
               sops = {
                 secrets = lib.mkOption {
                   description = ''
-                    Names of sops-nix secrets to mount into the container
+                    Names of sops-nix secrets to mount into the container.
 
                     Use `host-config.sops.secrets.my-secret.path` to access the path within the container
                   '';
@@ -167,18 +207,34 @@
                         default = null;
                       };
                       isReadOnly = lib.mkOption {
-                        description = "Mount read-only";
+                        description = ''
+                          Make the mount read-only, prohibiting any modifications (from anything) from within the container
+                        '';
                         type = t.bool;
                         default = true;
                       };
                       ownerUid = lib.mkOption {
-                        description = "Owner's UID of the Mounted Directory";
+                        description = ''
+                          Be ware, that if set this is enforced and set to this value on a regular basis.
+
+                          If set to null, the folder will at first be owned by root and its left up to the service
+                          to set the correct owner.
+
+                          The privateUsers option may interfere with this.
+                        '';
                         type = t.nullOr t.int;
                         example = lib.literalExpression "config.users.users.nextcloud.uid";
                         default = null;
                       };
                       mode = lib.mkOption {
-                        description = "Mode of the Mounted Directory";
+                        description = ''
+                          Be ware, that if set this is enforced and set to this value on a regular basis.
+
+                          If set to null, the folder will at first be owned by root and its left up to the service
+                          to set the correct owner.
+
+                          The privateUsers option may interfere with this.
+                        '';
                         type = t.nonEmptyStr;
                         example = "0755";
                         default = "0700";
@@ -190,7 +246,9 @@
             };
 
             extraConfig = lib.mkOption {
-              description = "extra options/overrides to pass to the container";
+              description = ''
+                Extra Options/Overrides to pass to the underlying container option
+              '';
               type = t.attrs;
               default = { };
               example = {
