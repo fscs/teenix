@@ -39,7 +39,6 @@
         "physik"
         "shop"
         "slinky"
-        "status"
         "voltwarden"
         "wanntripper"
         "wiki"
@@ -121,11 +120,6 @@
     physik_phynix = {
       from = "physik.phynix-hhu.de";
       to = "fsphy.de";
-    };
-
-    status_phynix = {
-      from = "status.phynix-hhu.de";
-      to = "uptime.dev.hhu-fscs.de/status/inphima";
     };
 
     voltwarden = {
