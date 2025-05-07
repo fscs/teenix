@@ -38,7 +38,7 @@
     virtualHosts."localhost".locations."/outpost.goauthentik.io" = {
       recommendedProxySettings = false;
       extraConfig = ''
-        proxy_pass http://${host-config.containers.authentik.localAddress}/outpost.goauthentik.io;
+        proxy_pass http://${host-config.containers.authentik.localAddress}:80/outpost.goauthentik.io;
         proxy_set_header        Host $host;
         proxy_set_header        X-Real-IP $remote_addr;
         proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
