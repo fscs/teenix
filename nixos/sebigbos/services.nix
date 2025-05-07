@@ -15,6 +15,33 @@
     };
   };
 
+  teenix.services.traefik.middlewares.authentik.forwardAuth =
+    let
+      ipPoolOf =
+        name:
+        lib.lists.findFirstIndex (x: x == name) (throw "unreachable") (
+          lib.attrNames config.teenix.meta.services
+        );
+    in
+    {
+      address = "http://192.18.${toString (ipPoolOf "authentik")}.11:9000/outpost.goauthentik.io/auth/traefik";
+      tls.insecureSkipVerify = true;
+      authResponseHeaders = [
+        "X-authentik-username"
+        "X-authentik-groups"
+        "X-authentik-entitlements"
+        "X-authentik-email"
+        "X-authentik-name"
+        "X-authentik-uid"
+        "X-authentik-jwt"
+        "X-authentik-meta-jwks"
+        "X-authentik-meta-outpost"
+        "X-authentik-meta-provider"
+        "X-authentik-meta-app"
+        "X-authentik-meta-version"
+      ];
+    };
+
   teenix.meta.ha.enable = true;
 
   teenix.ha.fscshhude = {
@@ -54,6 +81,12 @@
             entryPoints = [ "websecure" ];
             tls.certResolver = "letsencrypt";
           };
+          hhufscsde = {
+            rule = "Host(`hhu-fscs.de`)";
+            service = "hhufscsde";
+            entryPoints = [ "websecure" ];
+            tls.certResolver = "letsencrypt";
+          };
         };
         services = {
           grafana = {
@@ -61,6 +94,15 @@
               servers = [
                 {
                   url = "http://192.18.${toString (ipPoolOf "prometheus")}.11:80";
+                }
+              ];
+            };
+          };
+          hhufscsde = {
+            loadBalancer = {
+              servers = [
+                {
+                  url = "http://192.18.${toString (ipPoolOf "fscshhude")}.11:80";
                 }
               ];
             };

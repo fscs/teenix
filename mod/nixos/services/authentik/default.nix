@@ -36,7 +36,7 @@
       };
 
       teenix.services.traefik.middlewares.authentik.forwardAuth = {
-        address = "https://auth.phynix-hhu.de/outpost.goauthentik.io/auth/traefik";
+        address = "http://${config.containers.authentik.localAddress}:9000/outpost.goauthentik.io/auth/traefik";
         tls.insecureSkipVerify = true;
         authResponseHeaders = [
           "X-authentik-username"
@@ -59,11 +59,6 @@
           router.rule = "Host(`${cfg.hostname}`)";
           servers = [ "http://${config.containers.authentik.localAddress}" ];
           healthCheck.enable = true;
-        };
-
-        authentik_auth = {
-          router.rule = "Host(`${cfg.hostname}`) && PathPrefix(`/outpost.goauthentik.io/`)";
-          servers = [ "http://${config.containers.authentik.localAddress}:80/outpost.goauthentik.io" ];
         };
       };
 
