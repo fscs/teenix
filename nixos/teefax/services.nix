@@ -176,6 +176,7 @@
 
   teenix.services.crabfit = {
     enable = true;
+    secretsFile = ../secrets/crabfit.yml;
     hostnames = rec {
       frontend = "crabfit.phynix-hhu.de";
       backend = "api.${frontend}";

@@ -8,6 +8,7 @@
 
   options.teenix.services.crabfit = {
     enable = lib.mkEnableOption "crab.fit, a meeting scheduler";
+    secretsFile = lib.teenix.mkSecretsFileOption "crab.fit";
     hostnames = {
       frontend = lib.teenix.mkHostnameOption "frontend for crabfit";
       backend = lib.teenix.mkHostnameOption "backend for crabfit";
@@ -21,6 +22,22 @@
       crabfitCfg = config.containers.crabfit.config.services.crabfit;
     in
     lib.mkIf cfg.enable {
+      sops.secrets = {
+        crabfit-google-client-id = {
+          sopsFile = cfg.secretsFile;
+          key = "google-client-id";
+        };
+        crabfit-google-client-secret = {
+          sopsFile = cfg.secretsFile;
+          key = "google-client-secret";
+        };
+      };
+
+      sops.templates.crabfit.content = ''
+        NEXT_PUBLIC_GOOGLE_CLIENT_ID=${config.sops.placeholder.crabfit-google-client-id}
+        NEXT_PUBLIC_GOOGLE_API_KEY=${config.sops.placeholder.crabfit-google-client-secret}
+      '';
+
       teenix.services.traefik.httpServices = {
         crabfit-api = {
           router.rule = "Host(`${cfg.hostnames.backend}`)";
@@ -40,6 +57,8 @@
 
       teenix.containers.crabfit = {
         config = {
+          systemd.services.crabfit-frontend.serviceConfig.EnvironmentFile = config.sops.templates.crabfit.path;
+
           services.crabfit = {
             enable = true;
             frontend.host = config.teenix.services.crabfit.hostnames.frontend;
@@ -60,7 +79,10 @@
           ];
         };
 
-        mounts.postgres.enable = true;
+        mounts = {
+          postgres.enable = true;
+          sops.templates = [ "crabfit" ];
+        };
       };
     };
 }
