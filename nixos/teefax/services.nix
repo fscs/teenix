@@ -181,4 +181,10 @@
       backend = "api.${frontend}";
     };
   };
+
+  teenix.services.engelsystem = {
+    enable = true;
+    hostname = config.teenix.meta.services.engelsystem.hostname;
+    secretsFile = ../secrets/engelsystem.yml;
+  };
 }
