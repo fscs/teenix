@@ -63,10 +63,6 @@
                 username = "preferred_username";
                 enable_full_name = true;
                 email = "email";
-                groups = "groups";
-                teams = {
-                  "FS_Rat_PhyNIx" = 2;
-                };
               };
               default_locale = "de_DE.UTF-8";
               timezone = "Europe/Berlin";
