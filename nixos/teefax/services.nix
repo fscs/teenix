@@ -103,7 +103,7 @@
   };
 
   teenix.services.freescout = {
-    enable = false;
+    enable = true;
     hostname = "tickets.hhu-fscs.de";
     secretsFile = ../secrets/freescout/env;
     mariaEnvFile = ../secrets/freescout/maria_env;

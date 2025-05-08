@@ -69,6 +69,7 @@
         extraOptions = [
           "--network-alias=freescout-db"
           "--network=freescout_default"
+          "--ip=192.88.99.3"
         ];
       };
       systemd.services.docker-freescout-freescout-db = {
@@ -104,16 +105,6 @@
           DISPLAY_ERRORS = "false";
           TIMEZONE = "Europe/Berlin";
         };
-        labels = {
-          "traefik.enable" = "true";
-          "traefik.http.routers.freescout.entrypoints" = "websecure";
-          "traefik.http.routers.freescout.rule" = "Host(`${opts.hostname}`)";
-          "traefik.http.routers.freescout.tls" = "true";
-          "traefik.http.routers.freescout.tls.certresolver" = "letsencrypt";
-          "traefik.http.services.freescout.loadbalancer.server.port" = "80";
-          "traefik.http.services.freescout.loadbalancer.healthCheck.path" = "/";
-          "traefik.http.routers.freescout.middlewares" = "hsts@file";
-        };
         environmentFiles = [ config.sops.secrets.freescout.path ];
         volumes = [
           "${config.teenix.persist.path}/freescout/data:/data"
@@ -122,6 +113,7 @@
         extraOptions = [
           "--network-alias=freescout-website"
           "--network=freescout_default"
+          "--ip=192.88.99.2"
         ];
       };
       systemd.services.docker-freescout-freescout-website = {
@@ -156,7 +148,7 @@
           ExecStop = "docker network rm -f freescout_default";
         };
         script = ''
-          docker network inspect freescout_default || docker network create freescout_default
+          docker network inspect freescout_default || docker network create --subnet=192.88.99.0/24 freescout_default
         '';
         partOf = [ "docker-compose-freescout-root.target" ];
         wantedBy = [ "docker-compose-freescout-root.target" ];

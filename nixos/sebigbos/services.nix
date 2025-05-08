@@ -87,6 +87,12 @@
             entryPoints = [ "websecure" ];
             tls.certResolver = "letsencrypt";
           };
+          freescout = {
+            rule = "Host(`tickets.hhu-fscs.de`)";
+            service = "freescout";
+            entryPoints = [ "websecure" ];
+            tls.certResolver = "letsencrypt";
+          };
         };
         services = {
           grafana = {
@@ -103,6 +109,15 @@
               servers = [
                 {
                   url = "http://192.18.${toString (ipPoolOf "fscshhude")}.11:80";
+                }
+              ];
+            };
+          };
+          freescout = {
+            loadBalancer = {
+              servers = [
+                {
+                  url = "http://192.88.99.2:80";
                 }
               ];
             };
