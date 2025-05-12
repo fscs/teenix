@@ -42,6 +42,15 @@
         };
       }
       {
+        job_name = "authentik";
+        metrics_path = "/metrics";
+        static_configs = lib.singleton {
+          targets = [
+            "${config.containers.authentik.localAddress}:9300"
+          ];
+        };
+      }
+      {
         job_name = "matrix";
         metrics_path = "/_synapse/metrics";
         static_configs = lib.singleton {

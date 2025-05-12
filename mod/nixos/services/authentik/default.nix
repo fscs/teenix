@@ -59,6 +59,7 @@
           router.rule = "Host(`${cfg.hostname}`)";
           servers = [ "http://${config.containers.authentik.localAddress}" ];
           healthCheck.enable = true;
+          healthCheck.path = "/-/health/ready/";
         };
       };
 
@@ -70,6 +71,7 @@
             80
             9000
             9443
+            9300
           ];
         };
 
