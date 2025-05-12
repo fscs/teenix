@@ -51,12 +51,6 @@
     email = "fscs@hhu.de";
   };
 
-  teenix.services.mete = {
-    enable = true;
-    hostname = "mete.hhu-fscs.de";
-    hostname-summary = "gorden-summary.hhu-fscs.de";
-  };
-
   teenix.services.authentik = {
     enable = true;
     hostname = "auth.phynix-hhu.de";

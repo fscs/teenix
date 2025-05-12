@@ -770,23 +770,6 @@
         "url": "ssh://git@git.hhu.de/fscs/matrix-bot.git"
       }
     },
-    "mete": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1725743383,
-        "narHash": "sha256-h+mKu1mpA1klwdm92IHG7oIKCk6BfG33+WYuscSL7mw=",
-        "owner": "fscs",
-        "repo": "mete",
-        "rev": "c5e75d2989846e788872becf85e94ba69ba839bd",
-        "type": "github"
-      },
-      "original": {
-        "owner": "fscs",
-        "ref": "wip/fscs",
-        "repo": "mete",
-        "type": "github"
-      }
-    },
     "napalm": {
       "inputs": {
         "flake-utils": [
@@ -1055,7 +1038,6 @@
         "grafana2ntfy": "grafana2ntfy",
         "impermanence": "impermanence",
         "matrix-intern-bot": "matrix-intern-bot",
-        "mete": "mete",
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-master": "nixpkgs-master",
         "nixpkgs-stable": "nixpkgs-stable",
