@@ -486,6 +486,8 @@
         d /var/log/containers/${containerName} 0755 root systemd-journal -
       '') (lib.attrNames config.teenix.containers);
 
+      systemd.extraConfig = "DefaultLimitNOFile=8192";
+
       # create the /persist subvolume
       teenix.persist.subvolumes = lib.mapAttrs (
         containerName: value:
