@@ -46,7 +46,7 @@
         metrics_path = "/metrics";
         static_configs = lib.singleton {
           targets = [
-            "${config.containers.authentik.localAddress}:9300"
+            "${host-config.containers.authentik.localAddress}:9300"
           ];
         };
       }
