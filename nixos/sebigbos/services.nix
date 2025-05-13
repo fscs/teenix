@@ -135,4 +135,9 @@
     hostname = config.teenix.meta.services.docnix.hostname;
     port = 8000;
   };
+
+  teenix.ha.static-files = {
+    hostname = config.teenix.meta.services.static-files.hostname;
+    port = 8080;
+  };
 }

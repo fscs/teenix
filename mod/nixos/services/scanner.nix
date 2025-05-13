@@ -43,6 +43,12 @@
         };
       };
 
+      services.openssh.extraConfig = ''
+        Match User scanner
+        PasswordAuthentication yes
+        Match all
+      '';
+
       services.vsftpd = {
         enable = true;
         localUsers = true;
