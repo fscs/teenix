@@ -55,7 +55,7 @@
         metrics_path = "/_synapse/metrics";
         static_configs = lib.singleton {
           targets = [
-            "matrix.phynix-hhu.de"
+            "matrix.inphima.de"
           ];
         };
       }
