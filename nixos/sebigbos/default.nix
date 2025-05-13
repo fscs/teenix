@@ -10,6 +10,7 @@
     ./hardware-configuration.nix
     ./disko.nix
     ./services.nix
+    ./nfs.nix
 
     inputs.disko.nixosModules.disko
     outputs.nixosModules.teenix
