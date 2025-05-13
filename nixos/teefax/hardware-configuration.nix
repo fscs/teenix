@@ -64,7 +64,9 @@
     ];
   };
 
-  swapDevices = [ ];
+  swapDevices = lib.singleton {
+    device = "/dev/sdb4";
+  };
 
   boot.initrd.postDeviceCommands = lib.mkAfter ''
     mkdir /btrfs_tmp
