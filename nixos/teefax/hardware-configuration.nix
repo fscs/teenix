@@ -64,6 +64,22 @@
     ];
   };
 
+  fileSystems."/mnt/clusterfax" = {
+    device = "134.99.147.41:/mnt/share";
+    fsType = "nfs";
+    options = [
+      "rw"
+      "hard"
+      "intr"
+      "noatime"
+      "nodiratime"
+      "nodev"
+      "nosuid"
+      "noexec"
+      "sync"
+    ];
+  };
+
   swapDevices = lib.singleton {
     device = "/dev/sdb4";
   };
