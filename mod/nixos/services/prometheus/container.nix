@@ -52,6 +52,7 @@
       }
       {
         job_name = "matrix";
+        scheme = "https";
         metrics_path = "/_synapse/metrics";
         static_configs = lib.singleton {
           targets = [
