@@ -44,7 +44,6 @@ deploy:
   script: |
     # dont auto deploy testfax, its for testing after all
     nix develop -c colmena apply \
-      --experimental-flake-eval \
       --on teefax
 
 commit-lockfile:
