@@ -29,9 +29,9 @@
         };
       };
 
+      # if this user has no home, the printer dies a very violent death
       users.users.scanner = {
         isNormalUser = true;
-        createHome = false;
         hashedPasswordFile = config.sops.secrets.scanner-pwd.path;
       };
 
@@ -42,12 +42,6 @@
           to = 3100;
         };
       };
-
-      services.openssh.extraConfig = ''
-        Match User scanner
-        PasswordAuthentication yes
-        Match all
-      '';
 
       services.vsftpd = {
         enable = true;
