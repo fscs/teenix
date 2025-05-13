@@ -43,8 +43,7 @@ deploy:
     - main
   script: |
     # dont auto deploy testfax, its for testing after all
-    nix develop -c colmena apply \
-      --on teefax
+    nix develop -c colmena apply 
 
 commit-lockfile:
   stage: .post
