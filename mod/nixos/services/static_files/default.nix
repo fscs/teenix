@@ -20,16 +20,23 @@
     lib.mkIf cfg.enable {
       teenix.containers.static-files = {
         config = {
+          users.groups.static-files = { };
+          users.users.static-files = {
+            isSystemUser = true;
+            group = "static-files";
+          };
+
           systemd.services.static-files = {
             description = "Serve static-files";
             after = [ "network.target" ];
             path = [ pkgs.bash ];
             serviceConfig = {
               Type = "exec";
-              DynamicUser = true;
               ExecStart = "${lib.getExe pkgs.caddy} file-server -r /var/lib/static-files --listen :8080";
               Restart = "always";
               RestartSec = 5;
+              StateDirectory = "static-files";
+              User = "static-files";
             };
             wantedBy = [ "multi-user.target" ];
           };
