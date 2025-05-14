@@ -98,11 +98,6 @@
     hostname = "uptime.dev.hhu-fscs.de";
   };
 
-  teenix.services.ntfy = {
-    enable = true;
-    hostname = config.teenix.meta.services.ntfy.hostname;
-  };
-
   sops.secrets.verleihnix-root-passwd = {
     sopsFile = ../secrets/passwords.yml;
     neededForUsers = true;
