@@ -70,10 +70,6 @@
             name = "Authentik";
             url = "https://auth.phynix-hhu.de";
           };
-          campus-guesser = {
-            name = "Campus Guesser";
-            url = "https://campusguesser.phynix-hhu.de/randomFact";
-          };
           vaultwarden = {
             name = "Vaultwarden";
             url = "https://vaultwarden.phynix-hhu.de";
