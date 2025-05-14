@@ -103,12 +103,6 @@
     mariaEnvFile = ../secrets/freescout/maria_env;
   };
 
-  teenix.services.campus-guesser-server = {
-    enable = true;
-    hostname = "campusguesser.phynix-hhu.de";
-    secretsFile = ../secrets/campus-guesser-server.yml;
-  };
-
   teenix.services.node_exporter = {
     enable = true;
   };
@@ -185,5 +179,11 @@
   teenix.services.static-files = {
     enable = true;
     hostname = config.teenix.meta.services.static-files.hostname;
+  };
+
+  teenix.services.headscale = {
+    enable = true;
+    hostname = "vpn.phynix-hhu.de";
+    secretsFile = ../secrets/headscale.yml;
   };
 }
