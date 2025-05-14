@@ -327,6 +327,12 @@
               function fish_greeting
                 echo Entering container (set_color green)${name}
               end
+
+              # highlight commands
+              set -u fish_color_command blue
+
+              # dont try to speak fance keyboard protocols
+              set -Ua fish_features no-keyboard-protocols
             '';
           };
 
