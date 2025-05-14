@@ -81,7 +81,7 @@
   };
 
   swapDevices = lib.singleton {
-    device = "/dev/sdb4";
+    device = "/dev/disk/by-uuid/936c3489-16ac-45e7-9ef6-df5522a1c2ce";
   };
 
   boot.initrd.postDeviceCommands = lib.mkAfter ''
