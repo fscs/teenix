@@ -47,7 +47,7 @@ in
         from = "noreply-fscs@hhu.de";
       };
       disable_startup_analytics = true;
-      avatars = "gravatar";
+      avatars = "initials";
     };
 
     nginx = {
