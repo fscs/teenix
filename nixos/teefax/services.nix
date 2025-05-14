@@ -104,7 +104,7 @@
   };
 
   teenix.services.campus-guesser-server = {
-    enable = true;
+    enable = false;
     hostname = "campusguesser.phynix-hhu.de";
     secretsFile = ../secrets/campus-guesser-server.yml;
   };
