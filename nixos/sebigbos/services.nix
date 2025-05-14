@@ -1,5 +1,51 @@
 { config, lib, ... }:
 {
+  sops.secrets.fscshhude-acme-eab-kid = {
+    sopsFile = ../secrets/fscshhude.yml;
+    key = "acme-eab-kid";
+    mode = "0444";
+  };
+  sops.secrets.fscshhude-acme-eab-hmac-encoded = {
+    sopsFile = ../secrets/fscshhude.yml;
+    key = "acme-eab-hmac-encoded";
+    mode = "0444";
+  };
+
+  teenix.services.traefik.staticConfig.certificatesResolvers = {
+    uniintern.acme = {
+      email = "fscs@hhu.de";
+      storage = "${config.teenix.persist.subvolumes.traefik.path}/hhucerts.json";
+      tlsChallenge = { };
+      caServer = "https://acme.sectigo.com/v2/OV";
+      eab = {
+        kid = config.sops.placeholder.fscshhude-acme-eab-kid;
+        hmacEncoded = config.sops.placeholder.fscshhude-acme-eab-hmac-encoded;
+      };
+    };
+  };
+
+  teenix.services.traefik.httpServices =
+    let
+      ipPoolOf =
+        name:
+        lib.lists.findFirstIndex (x: x == name) (throw "unreachable") (
+          lib.attrNames config.teenix.meta.services
+        );
+    in
+    {
+      fscshhude = {
+        router.rule = "Host(`fscs.hhu.de`)";
+        router.tls.certResolver = "uniintern";
+        healthCheck.enable = true;
+        servers = [ "http://192.18.${toString (ipPoolOf "fscshhude")}.11:8080" ];
+      };
+
+      hhu-fscs = {
+        router.rule = "Host(`hhu-fscs.de`) || Host(`www.hhu-fscs.de`)";
+        healthCheck.enable = true;
+        servers = [ "http://192.18.${toString (ipPoolOf "fscshhude")}.11:8080" ];
+      };
+    };
   teenix.config.defaultContainerNetworkId = "10.0";
 
   teenix.persist.enable = true;
@@ -43,11 +89,6 @@
     };
 
   teenix.meta.ha.enable = true;
-
-  teenix.ha.fscshhude = {
-    hostname = "fscs.sebigbos.hhu-fscs.de";
-    port = 8080;
-  };
 
   teenix.ha.ntfy = {
     hostname = config.teenix.meta.services.ntfy.hostname;

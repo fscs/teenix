@@ -108,7 +108,7 @@
         };
 
         teefax = {
-          deployment.targetHost = "fscs.hhu.de";
+          deployment.targetHost = "teefax.hhu-fscs.de";
           imports = [ ./nixos/teefax ];
         };
 
