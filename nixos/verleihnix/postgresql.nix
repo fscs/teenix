@@ -1,6 +1,44 @@
 { config, pkgs, ... }:
 {
+  sops.secrets.patroni-postgres-password = {
+    sopsFile = ../secrets/patroni.yml;
+    key = "postgres-password";
+    owner = "patroni";
+  };
+
+  sops.secrets.patroni-replicator-password = {
+    sopsFile = ../secrets/patroni.yml;
+    key = "replicator-password";
+    owner = "patroni";
+  };
+
+  sops.secrets.patroni-rewind-password = {
+    sopsFile = ../secrets/patroni.yml;
+    key = "rewind-password";
+    owner = "patroni";
+  };
+
+  systemd.tmpfiles.rules = [
+    "d /run/postgresql 0755 patroni pg-cluster -"
+  ];
+
+  teenix.persist.subvolumes.postgresql.directories = {
+    etcd = {
+      owner = "etcd";
+      mode = "0700";
+    };
+    db = {
+      owner = "patroni";
+      mode = "0700";
+    };
+    patroni = {
+      owner = "patroni";
+      mode = "0700";
+    };
+  };
+
   users.groups.pg-cluster = { };
+
   services.etcd = {
     enable = true;
     name = "etcd-node-node2";
@@ -14,11 +52,13 @@
     listenPeerUrls = [ "http://134.99.147.43:2380" ];
     initialAdvertisePeerUrls = [ "http://134.99.147.43:2380" ];
     initialClusterToken = "etcd-cluster-1";
-    initialClusterState = "existing"; # ACHTUNG: Nur beim ersten Bootstrap auf allen drei Nodes "new" setzen
+    initialClusterState = "new";
+    dataDir = "/persist/postgresql/etcd";
   };
 
   services.patroni = {
     enable = true;
+    dataDir = "/persist/postgresql/patroni";
     name = "node2";
     nodeIp = "134.99.147.43";
     group = "pg-cluster";
@@ -26,15 +66,20 @@
     restApiPort = 8008;
     postgresqlPort = 5432;
     postgresqlPackage = pkgs.postgresql_16;
-    postgresqlDataDir = "/var/lib/postgresql/16/data";
+    postgresqlDataDir = "/persist/postgresql/db";
     otherNodesIps = [ "134.99.147.42" ];
     softwareWatchdog = false;
-
+    environmentFiles = {
+      PATRONI_REPLICATION_PASSWORD = config.sops.secrets.patroni-replicator-password.path;
+      PATRONI_SUPERUSER_PASSWORD = config.sops.secrets.patroni-postgres-password.path;
+    };
     settings = {
       etcd3 = {
         hosts = "134.99.147.42:2379,134.99.147.43:2379";
       };
       postgresql = {
+        data_dir = "/persist/postgresql/db";
+        config_dir = "/persist/postgresql/db";
         parameters = {
           wal_level = "replica";
           max_wal_senders = 10;
@@ -42,16 +87,6 @@
           max_replication_slots = 10;
           hot_standby = "on";
           archive_mode = "off";
-        };
-        authentication = {
-          replication = {
-            username = "replicator";
-            password = "ReplicationPassword123";
-          };
-          superuser = {
-            username = "postgres";
-            password = "SuperSecretPassword123"; # Hier Passwort anpassen
-          };
         };
       };
     };

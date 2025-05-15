@@ -113,7 +113,7 @@
         };
 
         verleihnix = {
-          deployment.targetHost = "dev.hhu-fscs.de";
+          deployment.targetHost = "verleihnix.hhu-fscs.de";
           imports = [ ./nixos/verleihnix ];
         };
 

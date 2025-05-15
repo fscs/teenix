@@ -1,6 +1,13 @@
 { config, pkgs, ... }:
 
 {
+  teenix.persist.subvolumes.postgresql.directories = {
+    etcd = {
+      owner = "etcd";
+      mode = "0700";
+    };
+  };
+
   services.etcd = {
     enable = true;
     name = "etcd-node-node3";
@@ -14,37 +21,40 @@
     listenPeerUrls = [ "http://134.99.147.41:2380" ];
     initialAdvertisePeerUrls = [ "http://134.99.147.41:2380" ];
     initialClusterToken = "etcd-cluster-1";
-    initialClusterState = "existing"; # ACHTUNG: Nur beim ersten Bootstrap auf allen drei Nodes "new" setzen
-    dataDir = "/var/lib/etcd";
+    initialClusterState = "new";
+    dataDir = "/persist/postgresql/etcd";
   };
 
   services.haproxy.enable = true;
 
   services.haproxy.config = ''
     global
-      log stdout format raw local0
-      maxconn 2000
-      tune.ssl.default-dh-param 2048
+       log /dev/log local0
+       log /dev/log local1 notice
+       stats timeout 30s
+       user haproxy
+       group haproxy
+       daemon
 
-    defaults
-      log     global
-      mode    tcp
-      option  tcplog
-      timeout connect 10s
-      timeout client  1m
-      timeout server  1m
+     defaults
+       log     global
+       mode    tcp
+       option  tcplog
+       option  dontlognull
+       timeout connect 5s
+       timeout client  30s
+       timeout server  30s
 
-    frontend pgsql_frontend
-      bind *:5432
-      default_backend pgsql_back
+     frontend pgsql_frontend
+       bind *:5432
+       default_backend pgsql_write_pool
 
-    backend pgsql_back
-      option tcp-check
-      tcp-check connect
-      tcp-check send "GET / HTTP/1.0\r\n\r\n"
-      http-check expect string "\"role\": \"primary\""
-      server node1 134.99.147.42:5432 check port 8008 inter 2000 rise 2 fall 3
-      server node2 134.99.147.43:5432 check port 8008 inter 2000 rise 2 fall 3 backup
+     backend pgsql_write_pool
+       option httpchk GET /leader
+       http-check expect status 200
+       # Node1 is active by default
+       server node1 134.99.147.42:5432 check port 8008 inter 2s fall 2 rise 1
+       server node2 134.99.147.43:5432 check port 8008 inter 2s fall 2 rise 1 backup
   '';
   networking.firewall = {
     enable = true;

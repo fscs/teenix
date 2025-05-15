@@ -5,19 +5,63 @@
   ...
 }:
 {
+  sops.secrets.patroni-postgres-password = {
+    sopsFile = ../secrets/patroni.yml;
+    key = "postgres-password";
+    owner = "patroni";
+  };
+
+  sops.secrets.patroni-replicator-password = {
+    sopsFile = ../secrets/patroni.yml;
+    key = "replicator-password";
+    owner = "patroni";
+  };
+
+  sops.secrets.patroni-rewind-password = {
+    sopsFile = ../secrets/patroni.yml;
+    key = "rewind-password";
+    owner = "patroni";
+  };
+
+  systemd.tmpfiles.rules = [
+    "d /run/postgresql 0755 patroni pg-cluster -"
+  ];
+
+  teenix.persist.subvolumes.postgresql.directories = {
+    etcd = {
+      owner = "etcd";
+      mode = "0700";
+    };
+    db = {
+      owner = "patroni";
+      mode = "0700";
+    };
+    patroni = {
+      owner = "patroni";
+      mode = "0700";
+    };
+  };
+
   users.groups.pg-cluster = { };
+
   services.patroni = {
     enable = true;
+    dataDir = "/persist/postgresql/patroni";
     name = "node1";
     nodeIp = "134.99.147.42";
     group = "pg-cluster";
     scope = "pg-cluster";
     postgresqlPort = 5432;
-    postgresqlDataDir = "/var/lib/postgresql/16/data";
+    postgresqlDataDir = "/persist/postgresql/db";
     postgresqlPackage = pkgs.postgresql_16;
     restApiPort = 8008;
     otherNodesIps = [ "134.99.147.43" ];
     softwareWatchdog = false;
+    environmentFiles = {
+      PATRONI_REPLICATION_PASSWORD = config.sops.secrets.patroni-replicator-password.path;
+      PATRONI_SUPERUSER_PASSWORD = config.sops.secrets.patroni-postgres-password.path;
+      PATRONI_REWIND_PASSWORD = config.sops.secrets.patroni-rewind-password.path;
+    };
     settings = {
       etcd3 = {
         hosts = "134.99.147.42:2379,134.99.147.43:2379";
@@ -39,30 +83,15 @@
         };
         pg_hba = [
           "local all all trust"
-          "host replication replicator 127.0.0.1/32 md5"
-          "host replication replicator 134.99.147.0/24 md5"
+          "host replication patroni 127.0.0.1/32 md5"
+          "host replication patroni 134.99.147.0/24 md5"
           "host all all 0.0.0.0/0 md5"
         ];
       };
 
       postgresql = {
-        data_dir = "/var/lib/postgresql/16/data";
-        config_dir = "/var/lib/postgresql/16/data";
-
-        authentication = {
-          superuser = {
-            username = "postgres";
-            password = "SuperSecretPassword123"; # Hier Passwort anpassen
-          };
-          replication = {
-            username = "replicator";
-            password = "ReplicationPassword123"; # Hier Passwort anpassen
-          };
-          rewind = {
-            username = "rewinduser";
-            password = "RewindPassword123";
-          };
-        };
+        data_dir = "/persist/postgresql/db";
+        config_dir = "/persist/postgresql/db";
       };
     };
   };
@@ -80,7 +109,8 @@
     listenPeerUrls = [ "http://134.99.147.42:2380" ];
     initialAdvertisePeerUrls = [ "http://134.99.147.42:2380" ];
     initialClusterToken = "etcd-cluster-1";
-    initialClusterState = "existing"; # ACHTUNG: Nur beim ersten Bootstrap auf allen drei Nodes "new" setzen
+    initialClusterState = "new";
+    dataDir = "/persist/postgresql/etcd";
   };
 
   networking.firewall = {
