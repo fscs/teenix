@@ -11,6 +11,7 @@
     ./traefik.nix
     ./services.nix
     ./gatus.nix
+    ./postgresql.nix
 
     outputs.nixosModules.teenix
   ];

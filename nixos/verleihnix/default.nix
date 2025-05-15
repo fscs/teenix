@@ -10,6 +10,7 @@
   imports = [
     ../share
     ./hardware-configuration.nix
+    ./postgresql.nix
 
     outputs.nixosModules.teenix
   ];

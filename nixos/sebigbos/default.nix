@@ -11,6 +11,7 @@
     ./disko.nix
     ./services.nix
     ./nfs.nix
+    ./haproxy.nix
 
     inputs.disko.nixosModules.disko
     outputs.nixosModules.teenix
