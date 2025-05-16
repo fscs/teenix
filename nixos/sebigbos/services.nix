@@ -34,7 +34,7 @@ in
   teenix.services.traefik.httpServices = {
     fscshhude = {
       router.rule = "Host(`fscs.hhu.de`)";
-      router.tls.certResolver = "uniintern";
+      router.tls.certResolver = lib.mkForce "uniintern";
       healthCheck.enable = true;
       servers = [ "http://192.18.${toString (ipPoolOf "fscshhude")}.11:8080" ];
     };
@@ -88,6 +88,7 @@ in
 
   # HA
   teenix.meta.ha.enable = true;
+  teenix.meta.ha.sopsFile = ../secrets/patroni.yml;
 
   teenix.ha.ntfy = {
     hostname = config.teenix.meta.services.ntfy.hostname;
@@ -107,6 +108,15 @@ in
   teenix.ha.docnix = {
     hostname = config.teenix.meta.services.docnix.hostname;
     port = 8000;
+  };
+
+  teenix.ha.fscshhude = {
+    hostname = config.teenix.meta.services.fscshhude.hostname;
+    port = 8080;
+    database = {
+      name = "fscshhude";
+      username = "fscshhude";
+    };
   };
 
   teenix.ha.static-files = {

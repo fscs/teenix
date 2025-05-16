@@ -17,6 +17,7 @@
     );
     description = "High-availability configuration for Teenix.";
   };
+
   options.teenix.meta.ha.enable = lib.mkOption {
     type = lib.types.bool;
     default = false;
@@ -24,6 +25,11 @@
     description = ''
       Enable HA Loadbalencing
     '';
+  };
+
+  options.teenix.meta.ha.sopsFile = lib.mkOption {
+    type = lib.types.path;
+    default = null;
   };
 
 }
