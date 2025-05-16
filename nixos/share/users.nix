@@ -6,6 +6,12 @@
     enable = true;
     shellInit = ''
       set fish_greeting 
+
+      # highlight commands
+      set -u fish_color_command blue
+
+      # dont try to speak fance keyboard protocols
+      set -Ua fish_features no-keyboard-protocols
     '';
   };
 
