@@ -57,20 +57,6 @@
     secretsFile = ../secrets/authentik.yml;
   };
 
-  teenix.services.alloy = {
-    enable = true;
-    loki.exporterUrl = "${config.containers.prometheus.localAddress}:3100";
-  };
-
-  teenix.services.prometheus = {
-    enable = true;
-    hostnames = {
-      prometheus = "prometheus.hhu-fscs.de";
-      grafana = "grafana.hhu-fscs.de";
-    };
-    secretsFile = ../secrets/prometheus.yml;
-  };
-
   teenix.services.discord-inphima-bot = {
     enable = true;
     secretsFile = ../secrets/discord-inphima-bot.yml;
