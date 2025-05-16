@@ -20,6 +20,23 @@
       cfg = config.teenix.services.prometheus;
     in
     lib.mkIf cfg.enable {
+      teenix.services.traefik.httpServices = {
+        prometheus = {
+          router.rule = "Host(`${cfg.hostnames.prometheus}`)";
+          servers = [ "http://${config.containers.prometheus.localAddress}:9090" ];
+          healthCheck.enable = true;
+        };
+
+        grafana = {
+          router.rule = "Host(`${cfg.hostnames.grafana}`)";
+          servers = [ "http://${config.containers.prometheus.localAddress}:80" ];
+          healthCheck = {
+            enable = true;
+            path = "/login";
+          };
+        };
+      };
+
       sops.secrets.grafana2ntfy = {
         sopsFile = cfg.secretsFile;
         key = "grafana-2-ntfy-env";

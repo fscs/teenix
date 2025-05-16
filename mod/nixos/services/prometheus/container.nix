@@ -15,20 +15,12 @@
     retentionTime = "30d";
     scrapeConfigs = [
       {
-        job_name = "traefik_sebigbos";
-        metrics_path = "/metrics";
-        static_configs = lib.singleton {
-          targets = [
-            "134.99.147.41:120"
-          ];
-        };
-      }
-      {
         job_name = "traefik";
         metrics_path = "/metrics";
         static_configs = lib.singleton {
           targets = [
             "134.99.147.42:120"
+            "134.99.147.41:120"
           ];
         };
       }
@@ -37,7 +29,8 @@
         metrics_path = "/metrics";
         static_configs = lib.singleton {
           targets = [
-            "teefax:9100"
+            "134.99.147.42:9100"
+            "134.99.147.43:9100"
           ];
         };
       }
@@ -46,7 +39,7 @@
         metrics_path = "/metrics";
         static_configs = lib.singleton {
           targets = [
-            "${host-config.containers.authentik.localAddress}:9300"
+            "192.18.1.11:9300"
           ];
         };
       }

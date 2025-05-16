@@ -1,4 +1,11 @@
 { config, lib, ... }:
+let
+  ipPoolOf =
+    name:
+    lib.lists.findFirstIndex (x: x == name) (throw "unreachable") (
+      lib.attrNames config.teenix.meta.services
+    );
+in
 {
   sops.secrets.fscshhude-acme-eab-kid = {
     sopsFile = ../secrets/fscshhude.yml;
@@ -24,28 +31,21 @@
     };
   };
 
-  teenix.services.traefik.httpServices =
-    let
-      ipPoolOf =
-        name:
-        lib.lists.findFirstIndex (x: x == name) (throw "unreachable") (
-          lib.attrNames config.teenix.meta.services
-        );
-    in
-    {
-      fscshhude = {
-        router.rule = "Host(`fscs.hhu.de`)";
-        router.tls.certResolver = "uniintern";
-        healthCheck.enable = true;
-        servers = [ "http://192.18.${toString (ipPoolOf "fscshhude")}.11:8080" ];
-      };
-
-      hhu-fscs = {
-        router.rule = "Host(`hhu-fscs.de`) || Host(`www.hhu-fscs.de`)";
-        healthCheck.enable = true;
-        servers = [ "http://192.18.${toString (ipPoolOf "fscshhude")}.11:8080" ];
-      };
+  teenix.services.traefik.httpServices = {
+    fscshhude = {
+      router.rule = "Host(`fscs.hhu.de`)";
+      router.tls.certResolver = "uniintern";
+      healthCheck.enable = true;
+      servers = [ "http://192.18.${toString (ipPoolOf "fscshhude")}.11:8080" ];
     };
+
+    hhu-fscs = {
+      router.rule = "Host(`hhu-fscs.de`) || Host(`www.hhu-fscs.de`)";
+      healthCheck.enable = true;
+      servers = [ "http://192.18.${toString (ipPoolOf "fscshhude")}.11:8080" ];
+    };
+  };
+
   teenix.config.defaultContainerNetworkId = "10.0";
 
   teenix.persist.enable = true;
@@ -61,32 +61,26 @@
     };
   };
 
-  teenix.services.traefik.middlewares.authentik.forwardAuth =
-    let
-      ipPoolOf =
-        name:
-        lib.lists.findFirstIndex (x: x == name) (throw "unreachable") (
-          lib.attrNames config.teenix.meta.services
-        );
-    in
-    {
-      address = "http://192.18.${toString (ipPoolOf "authentik")}.11:9000/outpost.goauthentik.io/auth/traefik";
-      tls.insecureSkipVerify = true;
-      authResponseHeaders = [
-        "X-authentik-username"
-        "X-authentik-groups"
-        "X-authentik-entitlements"
-        "X-authentik-email"
-        "X-authentik-name"
-        "X-authentik-uid"
-        "X-authentik-jwt"
-        "X-authentik-meta-jwks"
-        "X-authentik-meta-outpost"
-        "X-authentik-meta-provider"
-        "X-authentik-meta-app"
-        "X-authentik-meta-version"
-      ];
-    };
+  teenix.services.traefik.middlewares.authentik.forwardAuth = {
+    address = "http://192.18.${toString (ipPoolOf "authentik")}.11:9000/outpost.goauthentik.io/auth/traefik";
+    tls.insecureSkipVerify = true;
+    authResponseHeaders = [
+      "X-authentik-username"
+      "X-authentik-groups"
+      "X-authentik-entitlements"
+      "X-authentik-email"
+      "X-authentik-name"
+      "X-authentik-uid"
+      "X-authentik-jwt"
+      "X-authentik-meta-jwks"
+      "X-authentik-meta-outpost"
+      "X-authentik-meta-provider"
+      "X-authentik-meta-app"
+      "X-authentik-meta-version"
+    ];
+  };
+
+  # HA
 
   teenix.meta.ha.enable = true;
 
@@ -99,73 +93,6 @@
     hostname = config.teenix.meta.services.sitzungsverwaltung.hostname;
     port = 8080;
   };
-
-  teenix.ha.prometheus = {
-    hostname = config.teenix.meta.services.prometheus.hostname;
-    port = 9090;
-  };
-
-  teenix.services.traefik.dynamicConfig =
-    let
-      ipPoolOf =
-        name:
-        lib.lists.findFirstIndex (x: x == name) (throw "unreachable") (
-          lib.attrNames config.teenix.meta.services
-        );
-    in
-    {
-      http = {
-        routers = {
-          grafana = {
-            rule = "Host(`grafana.hhu-fscs.de`)";
-            service = "grafana";
-            entryPoints = [ "websecure" ];
-            tls.certResolver = "letsencrypt";
-          };
-          hhufscsde = {
-            rule = "Host(`hhu-fscs.de`)";
-            service = "hhufscsde";
-            entryPoints = [ "websecure" ];
-            tls.certResolver = "letsencrypt";
-          };
-          freescout = {
-            rule = "Host(`tickets.hhu-fscs.de`)";
-            service = "freescout";
-            entryPoints = [ "websecure" ];
-            tls.certResolver = "letsencrypt";
-          };
-        };
-        services = {
-          grafana = {
-            loadBalancer = {
-              servers = [
-                {
-                  url = "http://192.18.${toString (ipPoolOf "prometheus")}.11:80";
-                }
-              ];
-            };
-          };
-          hhufscsde = {
-            loadBalancer = {
-              servers = [
-                {
-                  url = "http://192.18.${toString (ipPoolOf "fscshhude")}.11:80";
-                }
-              ];
-            };
-          };
-          freescout = {
-            loadBalancer = {
-              servers = [
-                {
-                  url = "http://192.88.99.2:80";
-                }
-              ];
-            };
-          };
-        };
-      };
-    };
 
   teenix.ha.atticd = {
     hostname = config.teenix.meta.services.atticd.hostname;
@@ -180,5 +107,14 @@
   teenix.ha.static-files = {
     hostname = config.teenix.meta.services.static-files.hostname;
     port = 8080;
+  };
+
+  teenix.services.prometheus = {
+    enable = true;
+    hostnames = {
+      prometheus = config.teenix.meta.services.prometheus.hostname;
+      grafana = "grafana.hhu-fscs.de";
+    };
+    secretsFile = ../secrets/prometheus.yml;
   };
 }
