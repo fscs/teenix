@@ -1,10 +1,31 @@
 { config, pkgs, ... }:
-
 {
   teenix.persist.subvolumes.postgresql.directories = {
     etcd = {
       owner = "etcd";
       mode = "0700";
+    };
+    pgbouncer = {
+      owner = "pgbouncer";
+      mode = "0700";
+    };
+  };
+
+  services.pgbouncer = {
+    enable = true;
+    homeDir = "/persist/postgresql/pgbouncer";
+    settings = {
+      pgbouncer = {
+        listen_port = 6432;
+        listen_addr = "localhost";
+        auth_type = "md5";
+        auth_file = "/persist/postgresql/pgbouncer/userlist.txt";
+        pool_mode = "transaction";
+      };
+      databases = {
+        postgres = "host=127.0.0.1 port=5432";
+        test = "host=127.0.0.1 port=5432";
+      };
     };
   };
 
