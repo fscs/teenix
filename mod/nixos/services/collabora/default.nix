@@ -40,14 +40,13 @@
               host = "https://${config.teenix.services.collabora.nextcloudHost}:443";
             };
             settings = {
-              net.post_allow.host = "::ffff:${
-                lib.replaceStrings [ "." ] [ "\\." ] config.containers.collabora.localAddress
-              }";
+              net.post_allow.host = "192\.[0-9]+\.[0-9]+\.[0-9]+";
               net.proto = "IPv4";
               ssl.enable = false;
               ssl.termination = true;
               ssl_verification = false;
               remote_font_config.url = "https://${cfg.nextcloudHost}/apps/richdocuments/settings/fonts.json";
+              security.capabilities = false;
             };
           };
 
