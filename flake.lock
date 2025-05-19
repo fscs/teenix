@@ -616,7 +616,7 @@
       "inputs": {
         "flake-utils": "flake-utils_8",
         "nixpkgs": [
-          "nixpkgs"
+          "nixpkgs-stable"
         ],
         "server": "server",
         "theme": "theme"

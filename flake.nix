@@ -4,7 +4,8 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; # NOTE: change channel in gitlab runner when updating this
     nixpkgs-master.url = "github:nixos/nixpkgs";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11"; # when updating, check that fscshhude still builds
+                                                             # correctly (check custom code blocks)
 
     colmena.url = "github:zhaofengli/colmena";
     flake-programs-sqlite = {
@@ -29,7 +30,7 @@
     campus-guesser-server.inputs.nixpkgs.follows = "nixpkgs";
     colmena.inputs.nixpkgs.follows = "nixpkgs";
     discord-inphima-bot.inputs.nixpkgs.follows = "nixpkgs";
-    fscshhude.inputs.nixpkgs.follows = "nixpkgs";
+    fscshhude.inputs.nixpkgs.follows = "nixpkgs-stable"; # hugo on unstable is broken
     grafana2ntfy.inputs.nixpkgs.follows = "nixpkgs";
     matrix-intern-bot.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
