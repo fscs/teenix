@@ -115,7 +115,7 @@
   teenix.services.minecraft.enable = true;
 
   teenix.services.fscshhude = {
-    enable = true;
+    enable = false;
     secretsFile = ../secrets/fscshhude.yml;
   };
 
