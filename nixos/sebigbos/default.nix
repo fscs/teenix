@@ -76,6 +76,8 @@
 
   virtualisation.vmware.guest.enable = true;
 
+  teenix.services.node_exporter.enable = true;
+
   teenix.services.openssh.enable = true;
 
   virtualisation.docker = {

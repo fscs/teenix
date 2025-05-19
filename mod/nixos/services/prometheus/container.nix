@@ -29,6 +29,7 @@
         metrics_path = "/metrics";
         static_configs = lib.singleton {
           targets = [
+            "134.99.147.41:9100"
             "134.99.147.42:9100"
             "134.99.147.43:9100"
           ];
