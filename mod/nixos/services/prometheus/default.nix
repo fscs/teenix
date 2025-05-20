@@ -23,6 +23,7 @@
       teenix.services.traefik.httpServices = {
         prometheus = {
           router.rule = "Host(`${cfg.hostnames.prometheus}`)";
+          router.middlewares = [ "authentik" ];
           servers = [ "http://${config.containers.prometheus.localAddress}:9090" ];
           healthCheck.enable = true;
         };
