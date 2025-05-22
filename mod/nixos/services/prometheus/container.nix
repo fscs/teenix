@@ -37,6 +37,7 @@
       }
       {
         job_name = "authentik";
+        scrape_interval = "1m";
         metrics_path = "/metrics";
         static_configs = lib.singleton {
           targets = [
