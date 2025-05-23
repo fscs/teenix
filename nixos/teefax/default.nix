@@ -20,18 +20,6 @@
     "olm-3.2.16"
   ];
 
-  teenix.persist.subvolumes.system.directories = {
-    "/var/lib/fail2ban" = {
-      mode = "0750";
-    };
-  };
-
-  services.fail2ban = {
-    enable = true;
-    ignoreIP = [ "134.99.0.0/16" ];
-    bantime-increment.enable = true;
-  };
-
   networking = {
     hostName = "teefax";
 
