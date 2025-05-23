@@ -21,8 +21,8 @@
         filter = "traefik-general-forceful-browsing";
         logpath = config.teenix.services.traefik.staticConfig.accessLog.filePath;
         backend = "polling";
-        maxretry = 5;
-        findtime = 3600;
+        maxretry = 15;
+        findtime = 30;
         bantime = 86400;
         action = "iptables[name=Traefik, port=https, protocol=tcp]";
       };
