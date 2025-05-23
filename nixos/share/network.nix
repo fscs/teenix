@@ -17,7 +17,7 @@
     ignoreIP = [ "134.99.147.0/24" ];
     bantime-increment.enable = true;
     jails = {
-      traefik.settings = {
+      traefik-400.settings = {
         filter = "traefik-general-forceful-browsing";
         logpath = config.teenix.services.traefik.staticConfig.accessLog.filePath;
         backend = "polling";
@@ -26,6 +26,16 @@
         bantime = 86400;
         action = "iptables[name=Traefik, port=https, protocol=tcp]";
       };
+      traefik-200.settings = {
+        filter = "traefik-general";
+        logpath = config.teenix.services.traefik.staticConfig.accessLog.filePath;
+        backend = "polling";
+        maxretry = 200;
+        findtime = 10;
+        bantime = 600;
+        action = "iptables[name=Traefik, port=https, protocol=tcp]";
+      };
+
     };
   };
 
@@ -43,7 +53,13 @@
     [Definition]
 
     # fail regex based on traefik JSON access logs with enabled user agent logging
-    failregex = .*"ClientHost":"<HOST>".*"OriginStatus":(401|402|403|404|405)
+    failregex = .*"ClientHost":"<HOST>".*"OriginStatus":4[0-9]{2}
   '';
 
+  environment.etc."fail2ban/filter.d/traefik-general.conf".text = ''
+    [Definition]
+
+    # fail regex based on traefik JSON access logs with enabled user agent logging
+    failregex = .*"ClientHost":"<HOST>".*"OriginStatus":2[0-9]{2}
+  '';
 }
