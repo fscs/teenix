@@ -20,10 +20,11 @@
       traefik.settings = {
         filter = "traefik-general-forceful-browsing";
         logpath = config.teenix.services.traefik.staticConfig.accessLog.filePath;
+        backend = "polling";
         maxretry = 5;
         findtime = 3600;
         bantime = 86400;
-        action = "iptables[name=Traefik, port=http, protocol=tcp]";
+        action = "iptables[name=Traefik, port=https, protocol=tcp]";
       };
     };
   };
@@ -39,14 +40,10 @@
   };
 
   environment.etc."fail2ban/filter.d/traefik-general-forceful-browsing.conf".text = ''
-    [INCLUDES]
-
     [Definition]
 
     # fail regex based on traefik JSON access logs with enabled user agent logging
-    failregex = ^{"ClientAddr":"<F-CLIENTADDR>.*</F-CLIENTADDR>","ClientHost":"<HOST>","ClientPort":"<F-CLIENTPORT>.*</F-CLIENTPORT>","ClientUsername":"<F-CLIENTUSERNAME>.*</F-CLIENTUSERNAME>","DownstreamContentSize":<F-DOWNSTREAMCONTENTSIZE>.*</F-DOWNSTREAMCONTENTSIZE>,"DownstreamStatus":<F-DOWNSTREAMSTATUS>.*</F-DOWNSTREAMSTATUS>,"Duration":<F-DURATION>.*</F-DURATION>,"OriginContentSize":<F-ORIGINCONTENTSIZE>.*</F-ORIGINCONTENTSIZE>,"OriginDuration":<F-ORIGINDURATION>.*</F-ORIGINDURATION>,"OriginStatus":(405|404|403|402|401),"Overhead":<F-OVERHEAD>.*</F-OVERHEAD>,"RequestAddr":"<F-REQUESTADDR>.*</F-REQUESTADDR>","RequestContentSize":<F-REQUESTCONTENTSIZE>.*</F-REQUESTCONTENTSIZE>,"RequestCount":<F-REQUESTCOUNT>.*</F-REQUESTCOUNT>,"RequestHost":"<F-CONTAINER>.*</F-CONTAINER>","RequestMethod":"<F-REQUESTMETHOD>.*</F-REQUESTMETHOD>","RequestPath":"<F-REQUESTPATH>.*</F-REQUESTPATH>","RequestPort":"<F-REQUESTPORT>.*</F-REQUESTPORT>","RequestProtocol":"<F-REQUESTPROTOCOL>.*</F-REQUESTPROTOCOL>","RequestScheme":"<F-REQUESTSCHEME>.*</F-REQUESTSCHEME>","RetryAttempts":<F-RETRYATTEMPTS>.*</F-RETRYATTEMPTS>,.*"StartLocal":"<F-STARTLOCAL>.*</F-STARTLOCAL>","StartUTC":"<F-STARTUTC>.*</F-STARTUTC>","TLSCipher":"<F-TLSCIPHER>.*</F-TLSCIPHER>","TLSVersion":"<F-TLSVERSION>.*</F-TLSVERSION>","entryPointName":"<F-ENTRYPOINTNAME>.*</F-ENTRYPOINTNAME>","level":"<F-LEVEL>.*</F-LEVEL>","msg":"<F-MSG>.*</F-MSG>",("request_User-Agent":"<F-USERAGENT>.*</F-USERAGENT>",){0,1}?"time":"<F-TIME>.*</F-TIME>"}$
-
-    datepattern = "StartLocal"\s*:\s*"%%Y-%%m-%%d[T]%%H:%%M:%%S\.%%f\d*(%%z)?",
+    failregex = .*"ClientHost":"<HOST>".*"OriginStatus":(401|402|403|404|405)
   '';
 
 }
