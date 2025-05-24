@@ -31,7 +31,7 @@
         logpath = config.teenix.services.traefik.staticConfig.accessLog.filePath;
         backend = "polling";
         maxretry = 200;
-        findtime = 10;
+        findtime = 1;
         bantime = 600;
         action = "iptables[name=Traefik, port=https, protocol=tcp]";
       };
