@@ -22,7 +22,7 @@
         logpath = config.teenix.services.traefik.staticConfig.accessLog.filePath;
         backend = "polling";
         maxretry = 15;
-        findtime = 30;
+        findtime = 1;
         bantime = 86400;
         action = "iptables[name=Traefik, port=https, protocol=tcp]";
       };
@@ -51,15 +51,17 @@
 
   environment.etc."fail2ban/filter.d/traefik-general-forceful-browsing.conf".text = ''
     [Definition]
+    # failregex: Match all 4xx errors
+    failregex = .*"ClientHost":"<HOST>".*"OriginStatus":4[0-9]{2}.*
 
-    # fail regex based on traefik JSON access logs with enabled user agent logging
-    failregex = .*"ClientHost":"<HOST>".*"OriginStatus":4[0-9]{2}
+    # ignoreregex: Exclude 404 errors
+    ignoreregex = .*"ClientHost":"<HOST>".*"OriginStatus":404.*
   '';
 
   environment.etc."fail2ban/filter.d/traefik-general.conf".text = ''
     [Definition]
 
     # fail regex based on traefik JSON access logs with enabled user agent logging
-    failregex = .*"ClientHost":"<HOST>".*"OriginStatus":2[0-9]{2}
+    .*"ClientHost":"<HOST>".*"OriginStatus":(2[0-9]{2}|404).*
   '';
 }
