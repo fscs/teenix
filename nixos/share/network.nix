@@ -26,7 +26,7 @@
         bantime = 86400;
         action = "iptables[name=Traefik, port=https, protocol=tcp]";
       };
-      traefik-200.settings = {
+      traefik.settings = {
         filter = "traefik-general";
         logpath = config.teenix.services.traefik.staticConfig.accessLog.filePath;
         backend = "polling";
@@ -35,7 +35,15 @@
         bantime = 600;
         action = "iptables[name=Traefik, port=https, protocol=tcp]";
       };
-
+      traefik-longtime.settings = {
+        filter = "traefik-general";
+        logpath = config.teenix.services.traefik.staticConfig.accessLog.filePath;
+        backend = "polling";
+        maxretry = 180000;
+        findtime = 1800;
+        bantime = 3600;
+        action = "iptables[name=Traefik, port=https, protocol=tcp]";
+      };
     };
   };
 
