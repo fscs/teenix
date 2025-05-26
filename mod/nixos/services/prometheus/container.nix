@@ -36,6 +36,15 @@
         };
       }
       {
+        job_name = "nextcloud";
+        metrics_path = "/metrics";
+        static_configs = lib.singleton {
+          targets = [
+            "192.168.255.11:9205"
+          ];
+        };
+      }
+      {
         job_name = "authentik";
         scrape_interval = "1m";
         metrics_path = "/metrics";

@@ -81,7 +81,7 @@
 
   teenix.services.openssh.enable = true;
 
-  teenix.config.defaultContainerNetworkId = "192.168";
+  teenix.config.defaultContainerNetworkId = "10.3";
 
   # Services
   teenix.persist.enable = true;

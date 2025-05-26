@@ -28,6 +28,12 @@
         mode = "444";
       };
 
+      sops.secrets.nextcloud-serverinfo-token = {
+        sopsFile = opts.secretsFile;
+        key = "serverinfo-token";
+        mode = "444";
+      };
+
       teenix.persist.subvolumes.scanner = {
         backup = false;
         owner = toString config.containers.nextcloud.config.users.users.nextcloud.uid;
@@ -49,7 +55,10 @@
         networking = {
           id = "192.168.255";
           useResolvConf = true;
-          ports.tcp = [ 80 ];
+          ports.tcp = [
+            80
+            9205
+          ];
         };
 
         # dont EVER lower this value. on startup, nextcloud might migrate its database and if that
@@ -78,7 +87,10 @@
             };
           };
 
-          sops.secrets = [ "nextcloud-admin-pass" ];
+          sops.secrets = [
+            "nextcloud-admin-pass"
+            "nextcloud-serverinfo-token"
+          ];
         };
       };
     };

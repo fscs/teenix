@@ -27,6 +27,12 @@ in
     };
   };
 
+  services.prometheus.exporters.nextcloud = {
+    enable = true;
+    url = "https://${cfg.hostname}";
+    tokenFile = host-config.sops.secrets.nextcloud-serverinfo-token.path;
+  };
+
   services.nextcloud = {
     enable = true;
     package = pkgs.nextcloud31;

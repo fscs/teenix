@@ -62,6 +62,11 @@
           {
             address = "192.168.0.0";
             prefixLength = 16;
+            via = "134.99.147.42";
+          }
+          {
+            address = "10.3.0.0";
+            prefixLength = 16;
             via = "134.99.147.43";
           }
         ];
