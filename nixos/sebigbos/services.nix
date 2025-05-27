@@ -44,12 +44,6 @@ in
       healthCheck.enable = true;
       servers = [ "http://192.18.${toString (ipPoolOf "fscshhude")}.11:8080" ];
     };
-
-    freescout = {
-      router.rule = "Host(`tickets.hhu-fscs.de`)";
-      healthCheck.enable = true;
-      servers = [ "http://192.88.99.2:80" ];
-    };
   };
 
   teenix.config.defaultContainerNetworkId = "10.0";

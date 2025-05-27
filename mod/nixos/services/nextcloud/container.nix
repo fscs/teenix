@@ -40,11 +40,6 @@ in
     https = true;
     hostName = cfg.hostname;
 
-    notify_push = {
-      enable = true;
-      nextcloudUrl = "https://${cfg.hostname}";
-    };
-
     phpExtraExtensions =
       all: with all; [
         pdlib

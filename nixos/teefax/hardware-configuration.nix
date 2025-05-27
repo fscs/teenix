@@ -61,6 +61,7 @@
       "noatime"
       "nodev"
       "async"
+      "acl"
     ];
   };
 
