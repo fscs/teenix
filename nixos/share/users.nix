@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 {
   security.pam.sshAgentAuth.enable = true;
 
@@ -16,16 +16,23 @@
   };
 
   services.openssh.settings.PrintMotd = true;
-  users.motd = ''
-     __         __
-    /  \.-"""-./  \
-    \    -   -    /
-     |   o   o   |
-     \  .-'''-.  /
-      '-\__Y__/-'
-         `---`
 
-  '';
+  users.motdFile =
+    let
+      knut = builtins.toFile "knut" ''
+         __         __
+        /  \.-"""-./  \
+        \    -   -    /
+         |   o   o   |
+         \  .-'''-.  /
+          '-\__Y__/-'
+             `---`
+
+      '';
+    in
+    pkgs.runCommandLocal "motd" { } ''
+      paste ${knut} <(${lib.getExe pkgs.figlet} "${config.networking.hostName}") > $out
+    '';
 
   environment = {
     enableAllTerminfo = true;
