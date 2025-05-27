@@ -70,6 +70,6 @@
     [Definition]
 
     # fail regex based on traefik JSON access logs with enabled user agent logging
-    .*"ClientHost":"<HOST>".*"OriginStatus":(2[0-9]{2}|404).*
+    failregex = .*"ClientHost":"<HOST>".*"OriginStatus":(2[0-9]{2}|404).*
   '';
 }
