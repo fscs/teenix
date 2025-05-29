@@ -30,8 +30,8 @@
         filter = "traefik-general";
         logpath = config.teenix.services.traefik.staticConfig.accessLog.filePath;
         backend = "polling";
-        maxretry = 200;
-        findtime = 1;
+        maxretry = 6000;
+        findtime = 20;
         bantime = 600;
         action = "iptables[name=Traefik, port=https, protocol=tcp]";
       };
