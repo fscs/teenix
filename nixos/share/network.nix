@@ -41,7 +41,7 @@
         backend = "polling";
         maxretry = 180000;
         findtime = 1800;
-        bantime = 3600;
+        bantime = 86400;
         action = "iptables[name=Traefik, port=https, protocol=tcp]";
       };
     };
