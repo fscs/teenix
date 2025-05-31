@@ -118,6 +118,11 @@ in
     port = 8080;
   };
 
+  teenix.ha.tuer-sensor = {
+    hostname = config.teenix.meta.services.tuer-sensor.hostname;
+    port = 8080;
+  };
+
   teenix.services.prometheus = {
     enable = true;
     hostnames = {

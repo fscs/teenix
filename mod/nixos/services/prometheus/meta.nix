@@ -13,5 +13,4 @@
     hostname = "prometheus.hhu-fscs.de";
     name = "Prometheus";
   };
-
 }

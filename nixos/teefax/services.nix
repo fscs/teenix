@@ -172,4 +172,6 @@
     enable = true;
     hostname = config.teenix.meta.services.static-files.hostname;
   };
+
+  teenix.services.tuer-sensor.enable = true;
 }

@@ -25,6 +25,7 @@
     sitzungsverwaltung.url = "git+ssh://git@git.hhu.de/fscs/sitzungsverwaltung";
     grafana2ntfy.url = "github:fscs/grafana-to-ntfy";
     fscs-monitor-plus.url = "github:fscs/fscs-monitor-plus";
+    was-letzte-tuer.url = "github:fscs/was-letzte-tuer";
 
     # follows
     campus-guesser-server.inputs.nixpkgs.follows = "nixpkgs";
@@ -34,6 +35,7 @@
     grafana2ntfy.inputs.nixpkgs.follows = "nixpkgs";
     matrix-intern-bot.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+    was-letzte-tuer.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
