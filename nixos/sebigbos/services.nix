@@ -118,6 +118,17 @@ in
     port = 8080;
   };
 
+  # hacky mchack
+  teenix.services.traefik.httpServices.tuer-sensor-private = {
+    router = {
+      rule = "Host(`${config.teenix.meta.services.tuer-sensor.hostname}`) && PathPrefix(`/update`)";
+      middlewares = ["onlyhhudy"];
+      # extraConfig.priority = 1000;
+    };
+
+    inherit (config.teenix.services.traefik.httpServices.tuer-sensor) servers;
+  };
+
   teenix.ha.tuer-sensor = {
     hostname = config.teenix.meta.services.tuer-sensor.hostname;
     port = 8080;
