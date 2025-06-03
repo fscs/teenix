@@ -22,6 +22,18 @@ in
       ];
     };
 
+<<<<<<< Updated upstream
+=======
+    sops.secrets.immich-oauth-secret = {
+      sopsFile = cfg.secretsFile;
+      key = "oauth-secret";
+    };
+
+    sops.templates.immich-env-file.content = ''
+      =${config.sops.placeholder.immich-oauth-secret}"
+    '';
+
+>>>>>>> Stashed changes
     teenix.containers.immich = {
       config = ./container.nix;
 
