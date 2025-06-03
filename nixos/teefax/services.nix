@@ -173,5 +173,10 @@
     hostname = config.teenix.meta.services.static-files.hostname;
   };
 
+  teenix.services.immich = {
+    enable = true;
+    hostname = config.teenix.meta.services.immich.hostname;
+  };
+
   teenix.services.tuer-sensor.enable = true;
 }
