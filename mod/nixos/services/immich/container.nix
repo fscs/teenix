@@ -10,17 +10,19 @@
     enable = true;
     host = "0.0.0.0";
     openFirewall = true;
+    environment = {
+      IMMICH_IGNORE_MOUNT_CHECK_ERRORS = "true"; # The checks don't work preventing the server from start.
+      IMMICH_CONFIG_FILE = lib.mkForce host-config.sops.templates.immich.path;
+    };
     settings = {
       server.externalDomain = "https://${host-config.teenix.services.immich.hostname}";
-<<<<<<< Updated upstream
-    };
-    environment.IMMICH_IGNORE_MOUNT_CHECK_ERRORS = true; # The checks don't work preventing the server from start.
-=======
+      newVersionCheck.enabled = false;
       oauth = {
         autoLaunch = false;
         autoRegister = true;
         buttonText = "Login with PhyNIx";
         clientId = "jWLpBVcaG5A50lKMvkD3SMwHjuj2dci0k0S1ciqm";
+        clientSecret = host-config.sops.placeholder.immich-oauth-secret;
         defaultStorageQuota = 0;
         enabled = true;
         issuerUrl = "https://auth.phynix-hhu.de/application/o/immich/";
@@ -30,8 +32,6 @@
         storageLabelClaim = "preferred_username";
       };
     };
-    environment.IMMICH_IGNORE_MOUNT_CHECK_ERRORS = "true"; # The checks don't work preventing the server from start.
->>>>>>> Stashed changes
   };
 
   #Tries to chown in netapp, this is forbidden

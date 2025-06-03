@@ -12,6 +12,7 @@ in
   options.teenix.services.immich = {
     enable = lib.mkEnableOption "immich, a photo server";
     hostname = lib.teenix.mkHostnameOption "immich";
+    secretsFile = lib.teenix.mkSecretsFileOption "immich";
   };
 
   config = lib.mkIf cfg.enable {
@@ -22,18 +23,16 @@ in
       ];
     };
 
-<<<<<<< Updated upstream
-=======
     sops.secrets.immich-oauth-secret = {
       sopsFile = cfg.secretsFile;
       key = "oauth-secret";
     };
 
-    sops.templates.immich-env-file.content = ''
-      =${config.sops.placeholder.immich-oauth-secret}"
-    '';
+    sops.templates.immich = {
+      content = builtins.toJSON config.containers.immich.config.services.immich.settings;
+      mode = "0444";
+    };
 
->>>>>>> Stashed changes
     teenix.containers.immich = {
       config = ./container.nix;
 
@@ -43,6 +42,7 @@ in
       };
 
       mounts = {
+        sops.templates = [ "immich" ];
         postgres.enable = true;
         extra = {
           netapp = {
