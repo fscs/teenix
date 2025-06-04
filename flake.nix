@@ -4,8 +4,9 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; # NOTE: change channel in gitlab runner when updating this
     nixpkgs-master.url = "github:nixos/nixpkgs";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11"; # when updating, check that fscshhude still builds
-                                                             # correctly (check custom code blocks)
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
+    # when updating, check that fscshhude still builds
+    # correctly (check custom code blocks)
 
     colmena.url = "github:zhaofengli/colmena";
     flake-programs-sqlite = {
@@ -26,6 +27,7 @@
     grafana2ntfy.url = "github:fscs/grafana-to-ntfy";
     fscs-monitor-plus.url = "github:fscs/fscs-monitor-plus";
     was-letzte-tuer.url = "github:fscs/was-letzte-tuer";
+    nix-minecraft.url = "github:Infinidoge/nix-minecraft";
 
     # follows
     campus-guesser-server.inputs.nixpkgs.follows = "nixpkgs";
