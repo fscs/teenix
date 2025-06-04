@@ -50,6 +50,7 @@ in
     database.createLocally = true;
 
     settings = {
+      maintenance_window_start = 4; # run background jobs from 4 AM to 8 AM
       trusted_domains = [
         "134.99.154.48"
         host-config.containers.nextcloud.localAddress
