@@ -492,7 +492,10 @@
         d /var/log/containers/${containerName} 0755 root systemd-journal -
       '') (lib.attrNames config.teenix.containers);
 
-      systemd.extraConfig = "DefaultLimitNOFile=8192";
+      boot.kernel.sysctl = {
+        # see https://forum.proxmox.com/threads/failed-to-allocate-directory-watch-too-many-open-files.28700/
+        "fs.inotify.max_user_instances" = 1024;
+      };
 
       # create the /persist subvolume
       teenix.persist.subvolumes = lib.mapAttrs (
