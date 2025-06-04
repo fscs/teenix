@@ -179,5 +179,8 @@
     secretsFile = ../secrets/immich.yml;
   };
 
-  teenix.services.tuer-sensor.enable = true;
+  teenix.services.tuer-sensor = {
+    enable = true;
+    hostname = config.teenix.meta.services.tuer-sensor.hostname;
+  };
 }

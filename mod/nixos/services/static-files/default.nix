@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  inputs,
   config,
   ...
 }:
@@ -9,8 +8,8 @@
   imports = [ ./meta.nix ];
 
   options.teenix.services.static-files = {
-    enable = lib.mkEnableOption "static-files Datenschutz und So";
-    hostname = lib.teenix.mkHostnameOption "static-files Datenschutz und So";
+    enable = lib.mkEnableOption "static-files. simple, stupid http file serving";
+    hostname = lib.teenix.mkHostnameOption "static-files";
   };
 
   config =
@@ -18,6 +17,11 @@
       cfg = config.teenix.services.static-files;
     in
     lib.mkIf cfg.enable {
+      teenix.services.traefik.httpServices.static-files = {
+        router.rule = "Host(`${cfg.hostname}`)";
+        servers = [ "http://${config.containers.static-files.localAddress}:8080" ];
+      };
+
       teenix.containers.static-files = {
         config = {
           users.groups.static-files = { };
@@ -46,10 +50,7 @@
 
         mounts.data.enable = true;
 
-        networking = {
-          useResolvConf = true;
-          ports.tcp = [ 8080 ];
-        };
+        networking.ports.tcp = [ 8080 ];
       };
     };
 }

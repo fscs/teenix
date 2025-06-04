@@ -14,6 +14,7 @@
   config =
     let
       cfg = config.teenix.services.fscshhude;
+      containerConfig = config.containers.fscshhude.config;
 
       secrets = [
         "fscshhude-oauth-client-id"
@@ -34,12 +35,31 @@
         SIGNING_KEY=${config.sops.placeholder.fscshhude-signing-key}
       '';
 
+      teenix.services.traefik.httpServices = {
+        fscshhude = {
+          router.rule = "Host(`fscs.hhu.de`)";
+          router.tls.certResolver = "uniintern";
+          healthCheck.enable = true;
+          servers = [
+            "http://${config.containers.fscshhude.localAddress}:${toString containerConfig.services.fscs-website-server.settings.port}"
+          ];
+        };
+
+        hhu-fscs = {
+          router.rule = "Host(`hhu-fscs.de`) || Host(`www.hhu-fscs.de`)";
+          healthCheck.enable = true;
+          inherit (config.teenix.services.traefik.httpServices.fscshhude) servers;
+        };
+      };
+
       teenix.containers.fscshhude = {
         config = ./container.nix;
 
         networking = {
           useResolvConf = true;
-          ports.tcp = [ 8080 ];
+          ports.tcp = [
+            containerConfig.services.fscs-website-server.settings.port
+          ];
         };
 
         mounts = {
