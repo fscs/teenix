@@ -494,7 +494,7 @@
 
       boot.kernel.sysctl = {
         # see https://forum.proxmox.com/threads/failed-to-allocate-directory-watch-too-many-open-files.28700/
-        "fs.inotify.max_user_instances" = 1024;
+        "fs.inotify.max_user_instances" = (lib.length (lib.attrsToList config.teenix.containers)) * 64;
       };
 
       # create the /persist subvolume
