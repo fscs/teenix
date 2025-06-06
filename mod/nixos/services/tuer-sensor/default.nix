@@ -16,7 +16,9 @@
     teenix.services.traefik.httpServices = {
       tuer-sensor = {
         router.rule = "Host(`${config.teenix.services.tuer-sensor.hostname}`)";
-        servers = [ "http://${config.containers.docnix.localAddress}:${toString config.containers.tuer-sensor.config.services.was-letzte-tuer.port}" ];
+        servers = [
+          "http://${config.containers.docnix.localAddress}:${toString config.containers.tuer-sensor.config.services.was-letzte-tuer.port}"
+        ];
       };
 
       tuer-sensor-private = {
