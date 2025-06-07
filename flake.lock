@@ -1613,11 +1613,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1749215477,
-        "narHash": "sha256-Eut5JGhfJ8TdXp51IW9/Ji5Nx1RBhv6KaJ9Xk2nDtE0=",
+        "lastModified": 1749310506,
+        "narHash": "sha256-69Nlt0dlYqs+iygCEj5vV0Oe59NoRj34QRKIT+0jcOk=",
         "owner": "fscs",
         "repo": "was-letzte-tuer",
-        "rev": "039f9600a082e165cefd949e29080fb3d04c23b8",
+        "rev": "84ed75290ad953d715b2c84311d0794914d99778",
         "type": "github"
       },
       "original": {
