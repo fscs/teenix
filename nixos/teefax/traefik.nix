@@ -156,5 +156,10 @@
       from = "doodle.phynix-hhu.de";
       to = config.teenix.services.crabfit.hostnames.frontend;
     };
+
+    ich-bin-reich = {
+      from = "ich-bin-reich-und-du-nicht.de";
+      to = "www.stw-d.de/gastronomie/speiseplaene/restaurant-bar-campus-vita-duesseldorf/";
+    };
   };
 }
