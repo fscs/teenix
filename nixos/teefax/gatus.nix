@@ -44,10 +44,6 @@
             name = "FSCS Sitzungsverwaltung";
             url = "https://sitzungen.hhu-fscs.de";
           };
-          freescout = {
-            name = "Freescout";
-            url = "https://tickets.hhu-fscs.de";
-          };
           attic = {
             name = "Attic";
             url = "https://attic.hhu-fscs.de";
