@@ -183,4 +183,9 @@
     enable = true;
     hostname = config.teenix.meta.services.tuer-sensor.hostname;
   };
+
+  teenix.services.cryptpad = {
+    enable = true;
+    hostname = config.teenix.meta.services.cryptpad.hostname;
+  };
 }
