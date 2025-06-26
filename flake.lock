@@ -711,11 +711,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1747043530,
-        "narHash": "sha256-UtfKLOIDz95D7HZmYw7pCiSb3bNr7UGGTDOEiEa9BxQ=",
+        "lastModified": 1750959319,
+        "narHash": "sha256-giWaSXiZ9CoWt3PdK59agTMHchkm+ICoRZowa3WUHFg=",
         "owner": "fscs",
         "repo": "fscs-monitor-plus",
-        "rev": "4003b1a57029358f25077c19d9cc30d733e8731b",
+        "rev": "130a5a008f4f5cc5fb47b451c6ea9c783aa17296",
         "type": "github"
       },
       "original": {
