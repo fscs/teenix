@@ -7,7 +7,7 @@
   services.cryptpad = {
     enable = true;
     settings = {
-      httpUnsafeOrigin = "http://localhost:3000";
+      httpUnsafeOrigin = "https://${host-config.teenix.services.cryptpad.hostname}";
       httpSafeOrigin = "https://${host-config.teenix.services.cryptpad.hostname}";
       httpAddress = "0.0.0.0";
     };
