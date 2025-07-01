@@ -122,7 +122,7 @@ in
   teenix.services.traefik.httpServices.tuer-sensor-private = {
     router = {
       rule = "Host(`${config.teenix.meta.services.tuer-sensor.hostname}`) && PathPrefix(`/update`)";
-      middlewares = ["onlyhhudy"];
+      middlewares = [ "onlyhhudy" ];
       # extraConfig.priority = 1000;
     };
 
@@ -141,5 +141,13 @@ in
       grafana = "grafana.hhu-fscs.de";
     };
     secretsFile = ../secrets/prometheus.yml;
+  };
+
+  teenix.services.traefik.httpServices.homeassistant = {
+    router = {
+      rule = "Host(`ha.hhu-fscs.de`)";
+    };
+    healthCheck.enable = true;
+    servers = [ "http://134.99.147.40:8123" ];
   };
 }
