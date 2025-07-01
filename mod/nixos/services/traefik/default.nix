@@ -151,7 +151,7 @@ in
 
     redirects = lib.mkOption {
       type = lib.types.attrsOf redirectType;
-      description = "Permanently redirect one URL to another";
+      description = "Redirect one URL to another";
       example = {
         fscs_phynix = {
           from = "fscs.phynix-hhu.de";
@@ -306,7 +306,8 @@ in
             redirectRegex = {
               regex = "(www\\.)?${builtins.replaceStrings [ "." ] [ "\." ] value.from}/?";
               replacement = value.to;
-              permanent = true;
+              # dont do permanent redirects. if they ever change its a disaster and 
+              # the performance overhead is neglible
             };
           }) cfg.redirects)
 
