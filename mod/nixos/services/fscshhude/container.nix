@@ -35,6 +35,9 @@
         "CreateAntrag"
         "ViewHidden"
       ];
+      FS_Dunstkreis_Informatik = [
+        "CreateAntrag"
+      ];
     };
 
     settings = {
