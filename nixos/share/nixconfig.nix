@@ -11,6 +11,29 @@
     inputs.flake-programs-sqlite.nixosModules.programs-sqlite
   ];
 
+  programs.command-not-found.enable = true;
+
+  systemd.extraConfig = ''
+    DefaultLimitNOFILE = 16384:524288
+  '';
+
+  systemd.services.nix-daemon.serviceConfig.LimitNOFILE = lib.mkForce 1048576;
+
+  security.pam.loginLimits = [
+    {
+      domain = "*";
+      type = "soft";
+      item = "nofile";
+      value = "65536";
+    }
+    {
+      domain = "*";
+      type = "hard";
+      item = "nofile";
+      value = "1048576";
+    }
+  ];
+
   nixpkgs = {
     overlays = builtins.attrValues outputs.overlays;
 
