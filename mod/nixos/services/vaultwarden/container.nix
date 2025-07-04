@@ -1,15 +1,12 @@
 {
   pkgs,
-  pkgs-master,
   host-config,
-  outputs,
   ...
 }:
 {
   services.vaultwarden = {
     enable = true;
-    package = pkgs-master.vaultwarden;
-    webVaultPackage = outputs.packages.${pkgs.stdenv.system}.voltwarden-webvault;
+    package = pkgs.vaultwarden;
     environmentFile = host-config.sops.templates.vaultwarden.path;
     config = {
       DOMAIN = "https://${host-config.teenix.services.vaultwarden.hostname}";
