@@ -58,7 +58,6 @@
           healthCheck.enable = true;
           servers = [
             "http://192.18.${toString (ipPoolOf name)}.11:${toString v.port}"
-            "http://192.168.${toString (ipPoolOf name)}.11:${toString v.port}"
           ];
         };
       }) config.teenix.ha;
