@@ -1,0 +1,82 @@
+diff --git a/src/app/page.tsx b/src/app/page.tsx
+index ced131b..a2c3ecf 100644
+--- a/src/app/page.tsx
++++ b/src/app/page.tsx
+@@ -30,22 +30,8 @@ const Page = async () => {
+ 
+     <Section id="about">
+       <Content>
+-        <h2>{t('about.name')}</h2>
+-
+-        <Suspense>
+-          <Stats />
+-        </Suspense>
+-
+-        <P><Trans i18nKey="about.content.p1" t={t} i18n={i18n}>_<br /><Link href="/how-to" rel="help">_</Link>_</Trans></P>
+-
+-        <Video />
+-
+-        <DownloadButtons />
+-
+         <P><Trans i18nKey="about.content.p3" t={t} i18n={i18n}>_<a href="https://bengrant.dev" target="_blank" rel="noreferrer noopener author">_</a>_</Trans></P>
+-        <P><Trans i18nKey="about.content.p4" t={t} i18n={i18n}>_<a href="https://github.com/GRA0007/crab.fit" target="_blank" rel="noreferrer noopener">_</a>_<Link href="/privacy" rel="license">_</Link>_</Trans></P>
+-        <P>{t('about.content.p6')}</P>
+-        <P>{t('about.content.p5')}</P>
++        <P><Trans i18nKey="about.content.p4" t={t} i18n={i18n}>_<a href="https://github.com/GRA0007/crab.fit" target="_blank" rel="noreferrer noopener">_</a></Trans></P>
+       </Content>
+     </Section>
+ 
+diff --git a/src/components/Footer/Footer.tsx b/src/components/Footer/Footer.tsx
+index 6ceb727..87cf8d0 100644
+--- a/src/components/Footer/Footer.tsx
++++ b/src/components/Footer/Footer.tsx
+@@ -1,35 +1,22 @@
+-import { headers } from 'next/headers'
++import { headers } from "next/headers"
+ 
+-import Button from '/src/components/Button/Button'
+-import { useTranslation } from '/src/i18n/server'
+-import { makeClass } from '/src/utils'
++import Button from "/src/components/Button/Button"
++import { useTranslation } from "/src/i18n/server"
++import { makeClass } from "/src/utils"
+ 
+-import styles from './Footer.module.scss'
++import styles from "./Footer.module.scss"
+ 
+ interface FooterProps {
+-  isSmall?: boolean
++  isSmall?: boolean;
+ }
+ 
+-const Footer = async ({ isSmall }: FooterProps) => {
+-  const { t } = await useTranslation('common')
+-  const isRunningInApp = headers().get('referer')?.includes('android-app://fit.crab')
+-
+-  return isRunningInApp
+-    ? null // Cannot show external donation link in an Android app
+-    : <footer
+-      id="donate" // Required to allow scrolling directly to the footer
+-      className={makeClass(styles.footer, isSmall && styles.small)}
+-    >
+-      <span>{t('donate.info')}</span>
+-      <Button
+-        isSmall
+-        title={t('donate.title')}
+-        href="https://ko-fi.com/A06841WZ"
+-        target="_blank"
+-        rel="noreferrer noopener payment"
+-        style={{ whiteSpace: 'nowrap' }}
+-      >{t('donate.button')}</Button>
+-    </footer>
+-}
++const Footer = async ({ isSmall }: FooterProps) => (
++  <footer
++    id="donate"
++    className={makeClass(styles.footer, isSmall && styles.small)}
++  >
++    <a href="https://static.hhu-fscs.de/datenschutz-crabfit">Privacy Policy</a>
++  </footer>
++)
+ 
+ export default Footer

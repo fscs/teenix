@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 {
@@ -42,7 +43,12 @@
         config = {
           services.crabfit = {
             enable = true;
-            frontend.host = config.teenix.services.crabfit.hostnames.frontend;
+            frontend = {
+              host = config.teenix.services.crabfit.hostnames.frontend;
+              package = pkgs.crabfit-frontend.overrideAttrs (prev: {
+                patches = prev.patches ++ [ ./privacy-policy.patch ];
+              });
+            };
             api = {
               host = config.teenix.services.crabfit.hostnames.backend;
               environment.API_LISTEN = "0.0.0.0:${toString crabfitCfg.api.port}";
