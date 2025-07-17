@@ -162,12 +162,6 @@
     };
   };
 
-  teenix.services.engelsystem = {
-    enable = true;
-    hostname = config.teenix.meta.services.engelsystem.hostname;
-    secretsFile = ../secrets/engelsystem.yml;
-  };
-
   teenix.services.static-files = {
     enable = true;
     hostname = config.teenix.meta.services.static-files.hostname;
