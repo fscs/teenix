@@ -1,0 +1,13 @@
+diff --git a/src/app/layout.tsx b/src/app/layout.tsx
+index d4c1466..18cf665 100644
+--- a/src/app/layout.tsx
++++ b/src/app/layout.tsx
+@@ -43,8 +42,6 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+       <TranslateDialog />
+ 
+       {children}
+-
+-      <Analytics />
+     </body>
+   </html>
+ }

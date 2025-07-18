@@ -46,7 +46,10 @@
             frontend = {
               host = config.teenix.services.crabfit.hostnames.frontend;
               package = pkgs.crabfit-frontend.overrideAttrs (prev: {
-                patches = prev.patches ++ [ ./privacy-policy.patch ];
+                patches = prev.patches ++ [
+                  ./privacy-policy.patch
+                  ./remove-vercel-analytics.patch
+                ];
               });
             };
             api = {
