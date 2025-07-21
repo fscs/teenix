@@ -1,7 +1,7 @@
-diff --git a/src/app/page.tsx b/src/app/page.tsx
+diff --git a/frontend/src/app/page.tsx b/frontend/src/app/page.tsx
 index ced131b..a2c3ecf 100644
---- a/src/app/page.tsx
-+++ b/src/app/page.tsx
+--- a/frontend/src/app/page.tsx
++++ b/frontend/src/app/page.tsx
 @@ -30,22 +30,8 @@ const Page = async () => {
  
      <Section id="about">
@@ -26,27 +26,12 @@ index ced131b..a2c3ecf 100644
        </Content>
      </Section>
  
-diff --git a/src/components/Footer/Footer.tsx b/src/components/Footer/Footer.tsx
-index 6ceb727..87cf8d0 100644
---- a/src/components/Footer/Footer.tsx
-+++ b/src/components/Footer/Footer.tsx
-@@ -1,35 +1,22 @@
--import { headers } from 'next/headers'
-+import { headers } from "next/headers"
- 
--import Button from '/src/components/Button/Button'
--import { useTranslation } from '/src/i18n/server'
--import { makeClass } from '/src/utils'
-+import Button from "/src/components/Button/Button"
-+import { useTranslation } from "/src/i18n/server"
-+import { makeClass } from "/src/utils"
- 
--import styles from './Footer.module.scss'
-+import styles from "./Footer.module.scss"
- 
- interface FooterProps {
--  isSmall?: boolean
-+  isSmall?: boolean;
+diff --git a/frontend/src/components/Footer/Footer.tsx b/frontend/src/components/Footer/Footer.tsx
+index 6ceb727..12e9884 100644
+--- a/frontend/src/components/Footer/Footer.tsx
++++ b/frontend/src/components/Footer/Footer.tsx
+@@ -10,26 +10,13 @@ interface FooterProps {
+   isSmall?: boolean
  }
  
 -const Footer = async ({ isSmall }: FooterProps) => {
@@ -75,7 +60,7 @@ index 6ceb727..87cf8d0 100644
 +    id="donate"
 +    className={makeClass(styles.footer, isSmall && styles.small)}
 +  >
-+    <a href="https://static.hhu-fscs.de/datenschutz-crabfit">Privacy Policy</a>
++    <a href="https://static.hhu-fscs.de/datenschutz-crabfit">Privacy Notice</a>
 +  </footer>
 +)
  
