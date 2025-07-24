@@ -22,8 +22,7 @@ Keine vollständige Auflistung, dient nur der groben Übersicht
 ├─ lib          - erweiterung der nixpkgs lib, verfügbar unter lib.teenix
 ├┬ mod          - das herz von teenix, hier liegen module die zwischen den verschiedenen hosts
 ││                unterschiedlich konfiguriert werden können.
-│└─┬ nixos
-│  └── services - die module für all unsere services
+│└── services   - die module für all unsere services
 ├┬ nixos        - konfigurationen der einzelnen hosts
 │└─┬ keys       -
 │  ├ secrets    - sops secrets

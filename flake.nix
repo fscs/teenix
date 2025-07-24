@@ -98,7 +98,7 @@
         }
       );
 
-      nixosModules.teenix = import ./mod/nixos;
+      nixosModules.teenix = import ./mod;
 
       colmenaHive = colmena.lib.makeHive self.outputs.colmena;
       colmena = {
