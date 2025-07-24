@@ -7,6 +7,9 @@
 {
   security.pam.sshAgentAuth.enable = true;
 
+  programs.zsh.enable = true;
+  system.userActivationScripts.zshrc = "touch .zshrc";
+
   programs.fish = {
     enable = true;
     shellInit = ''
@@ -47,7 +50,6 @@
       ll = ls + "-l ";
       la = ll + "-a ";
       l = ll;
-      gls = ll + "--git-ignore ";
     };
 
     systemPackages = with pkgs; [
@@ -57,6 +59,7 @@
       file
       git
       jq
+      neovim
       psmisc
       ripgrep
       xcp
@@ -82,21 +85,6 @@
         ];
       };
 
-      jonas = {
-        hosts = allHosts;
-        sshKeys = [
-          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCtxP7ouSpUZNPHJJOCRp8cpk1Ruf7BZQnNNwMNb+y2fNkg/2TDcuMAGr+joYGm5ayiZnlOCbgPSEhfR5JGDsa2Oz+AsKFtGUX03pZ0J3TgZfiz+yPrxFMsS4mNn/Yud12qDUC2VqEZ1DCu3XIYleXb2K9ZKjpsdgCHoFE90p+G98wJC2ifoDg94P955aYtU4JfMLJBbZV2zfYOToqAQPKHgLlQ6rfg4UdMYnt5N13BGZ/Jx0PXxbgWvFBwvvW1WKqYa2TpSfE2h9awpDX7JeptrGJji/JLfNnNJD7ASsSbzMsQcv3zDig7s6yPugfrq/3d6OsTmSkeH75cIeOibDS7qtC2TGziOLIMIgNOzf8eZ3Fy6XAzyug3zH7MjZjhQdQs4NodCbJOUqMpYXL1BY807GpNdcYPUVTyx9Docb2PcSycQikHa11MU4MxsnPU1APqhrd+zaDZE/dpCfD/C385v1IlGKqWX1n7AE2idFIGhR+mN+SOWui/2a0hdBeVNSE= yim04bib@hhu.de"
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIy6TRX2d9jlPjw6bGPPeo6V1vaUnH+k8x9L9lcsJqFN yim04bib@hhu.de"
-        ];
-      };
-
-      robert = {
-        hosts = allHosts;
-        sshKeys = [
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKQWRxKckzxJINHlvYuv6GG7yihSd5nxdzrljY+MAH+l huq88dev@hhu.de"
-        ];
-      };
-
       arthur = {
         hosts = allHosts;
         sshKeys = [
@@ -105,14 +93,11 @@
         ];
       };
 
-      ellis = {
+      zehka = {
         hosts = allHosts;
+        shell = pkgs.zsh;
         sshKeys = [
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOu4dM46wy3HZy3k1uapZTzedggZMk6q4Sa4VsktnFFe"
-          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC1qM2jGe+qmBnCcrEuwtQKhGfRKqVurlk3xxXWPooqGeCiiicTidqJssH0IIsX0BHeYR7Rznw4/rJoYGF7SQXEKzJzB4eh9nlLQIxjED/IcLvcj1o5qOFZ/xHxmfmYV+Om0QO4/G1JjPBAFLkQfYqZ34BGFWxATpIPMIauOPh/eVpQ2g8cKaAkAEsRnXlW/968Nv1VuYZmpX+Er1mY6MtqrEBi5lMiIppEBZ9DlRrAR7Kj9tyX/nD1rfqkrOwDf/KHiQ4xUQzCnWVGSmjpl390sG7hh/cFmGhAX6R4Mz4YfJe4ZvTbWADh1YADUUhMMMkxSLgzmAMaHY1eVhLxCiZikV3WYEzy4JItqMWy9ome4BN2VBxCVYK/aJBAd6t96Z8Fu760XcUrg7QZdRl3bFLmy4pqxBPGmn6GZDt3/CdvP1O+tPK87KPcev0Km7wVypJYHbgINrEDE8dQezRgioEIK77HFTdH68XxGhVLmK8d/pDyhhb/TpZlJo629kFUIyc="
-          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCvslw6o6JlqOqFVi7PoFLPnJrUD5atfye+n4hf0VsNLnjjcgMjiv21w7TekY+/uc9er8jA9DzsjwBHOUQ7uW3xCmIET7nJetIs5QFroIQ3vRkVJJ8mFWHp0gAYePIHZH0VDjd4yewEt7YWeN0JFX53w+S0HS0tv873C8gh6tV17bQzo5m7c9PtCQa8NFKWyxzeoIYVLL9+mnQ0M2ipbSZVsRB2BV5pi3+vYFntKQQFFm0F33W4y3Bo9b8pPFnQEUFiCc7G6hMy4/tCcnWUGc63yfo1YEwqlujg9jAvlRsKBqLqbtLIC1AZVUz2/fAeDrk/u60QTLcn5cBlrKDraVS4nW8ORf6xxC+hnxhQ+PQChu0IBWoqJEBeAly4kKyZqGvTTDeL6V3KtCcdSEAj4UKom5Q28/tzxye1n1MCvJlU9PUrQenPyJHyIKgNKetVS70bgXOvSMGbEOTU0Cv7t1YBpD5mY8gjHd6h0GJ7xEunh5ZoQZwOBX4tc9squTHD3Wk="
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIwO8jDibJOoRYpzTs3NxM1woOb5/FDGdp5lQn0dcCuz"
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIgjTkZiqX4gBHFIFC4oJ6v3xh2SdiwVzMHEgIJeccJm"
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICYYlgzQt7eL3eP4XTmRTtFfTw9Udy5BE2/NDt3TG0Al zehka@nk3a"
         ];
       };
 
