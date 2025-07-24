@@ -78,12 +78,7 @@
       };
     in
     {
-      formatter = eachSystem (
-        system: pkgs:
-        pkgs.writers.writeBashBin "fmt" ''
-          find . -type f -name \*.nix -exec ${lib.getExe pkgs.nixfmt-rfc-style} {} \;
-        ''
-      );
+      formatter = eachSystem (_: pkgs: pkgs.nixfmt-tree);
 
       overlays = import ./overlays.nix { inherit inputs; };
       packages = eachSystem (

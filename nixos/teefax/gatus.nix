@@ -1,7 +1,7 @@
 { ... }:
 {
   # irgendwie müssen wir das nicht hardcoden
-  
+
   teenix.services.gatus = {
     enable = true;
     hostname = "status.phynix-hhu.de";

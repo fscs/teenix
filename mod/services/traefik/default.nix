@@ -306,7 +306,7 @@ in
             redirectRegex = {
               regex = "(www\\.)?${builtins.replaceStrings [ "." ] [ "\." ] value.from}/?";
               replacement = value.to;
-              # dont do permanent redirects. if they ever change its a disaster and 
+              # dont do permanent redirects. if they ever change its a disaster and
               # the performance overhead is neglible
             };
           }) cfg.redirects)
