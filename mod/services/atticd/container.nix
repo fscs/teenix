@@ -12,6 +12,7 @@
     environmentFile = host-config.sops.templates.atticd.path;
     settings = {
       api-endpoint = "https://${host-config.teenix.services.atticd.hostname}";
+      garbage_collection.default_retention_period = "6 months";
     };
   };
 

@@ -1,7 +1,7 @@
 {
   teenix.docs.modules.attic = {
     title = "Attic";
-    description = "nix binary cache";
+    mdFile = ./doc.md;
     optionNamespace = [
       "teenix"
       "services"
