@@ -160,4 +160,5 @@ bash -c 'pw="$(nix run nixpkgs#pwgen 64 1)"; echo Passwort: $pw; echo "Hash: " ;
 
 #### Nutzer und Berechtigungen
 
-In der Admin Console sollten Menschen die keine Rechte mehr haben entfernt werden. Bei allen anderen muss überprüft werden ob sie noch Zugang zu ihren Collections haben sollten.
+In der Admin Console sollten Menschen die keine Rechte mehr haben entfernt werden. Bei allen anderen muss überprüft werden ob sie noch Zugang zu ihren Collections haben sollten. 
+Unter `/admin` können User auch gelöscht werden, das sollte aber nur passieren wenn ihre "Entries" 0 sind, sie also keine privaten Passwörter haben. In dem Fall sollte Rücksprache mit der jeweiligen Person gehalten werden
