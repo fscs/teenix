@@ -734,11 +734,11 @@
         "theme": "theme"
       },
       "locked": {
-        "lastModified": 1753659718,
-        "narHash": "sha256-lP5o6unOTQkKT/IRm0Clx1y2zSpXeUf/39xGmR2+Xvs=",
+        "lastModified": 1754497026,
+        "narHash": "sha256-75zxBxCyTnt5Zd/YF5dYNFfZJvjb0k6crI/uVC09kuA=",
         "ref": "refs/heads/main",
-        "rev": "731849ec78bcf25c1538002994771574aad06b64",
-        "revCount": 693,
+        "rev": "08fac853df321bf392b8169395096541b58d53cf",
+        "revCount": 694,
         "type": "git",
         "url": "ssh://git@git.hhu.de/fscs/website.git"
       },
