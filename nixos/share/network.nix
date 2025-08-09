@@ -7,9 +7,6 @@
     "/var/log/traefik" = {
       mode = "0777";
     };
-    "/var/lib/traefik" = {
-      mode = "0777";
-    };
   };
 
   services.fail2ban = {
@@ -21,12 +18,12 @@
         filter = "traefik-general-forceful-browsing";
         logpath = config.teenix.services.traefik.staticConfig.accessLog.filePath;
         backend = "polling";
-        maxretry = 50;
-        findtime = 1;
+        maxretry = 500;
+        findtime = 10;
         bantime = 86400;
         action = "iptables[name=Traefik, port=https, protocol=tcp]";
       };
-      traefik.settings = {
+      traefik-burst.settings = {
         filter = "traefik-general";
         logpath = config.teenix.services.traefik.staticConfig.accessLog.filePath;
         backend = "polling";
