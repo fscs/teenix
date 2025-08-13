@@ -2,11 +2,11 @@
   description = "Teefax NixOS config";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; # NOTE: change channel in gitlab runner when updating this
+    # NOTE: change the referenced channel in gitlab runner when changing this channel
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; 
     nixpkgs-master.url = "github:nixos/nixpkgs";
+    # NOTE: when changing this channel, check that fscshhude still builds correctly (check custom code blocks)
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
-    # when updating, check that fscshhude still builds
-    # correctly (check custom code blocks)
 
     colmena.url = "github:zhaofengli/colmena";
     flake-programs-sqlite = {

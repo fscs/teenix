@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 {
@@ -18,7 +17,6 @@
   config =
     let
       cfg = config.teenix.services.crabfit;
-
       crabfitCfg = config.containers.crabfit.config.services.crabfit;
     in
     lib.mkIf cfg.enable {
@@ -40,26 +38,7 @@
       };
 
       teenix.containers.crabfit = {
-        config = {
-          services.crabfit = {
-            enable = true;
-            frontend = {
-              host = config.teenix.services.crabfit.hostnames.frontend;
-              package = pkgs.crabfit-frontend.overrideAttrs (prev: {
-                patches = prev.patches ++ [
-                  ./privacy-policy.patch
-                  ./remove-vercel-analytics.patch
-                ];
-              });
-            };
-            api = {
-              host = config.teenix.services.crabfit.hostnames.backend;
-              environment.API_LISTEN = "0.0.0.0:${toString crabfitCfg.api.port}";
-            };
-          };
-
-          system.stateVersion = "24.11";
-        };
+        config = ./container.nix;
 
         networking = {
           useResolvConf = true;
