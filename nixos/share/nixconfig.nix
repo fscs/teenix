@@ -13,9 +13,9 @@
 
   programs.command-not-found.enable = true;
 
-  systemd.extraConfig = ''
-    DefaultLimitNOFILE = 16384:524288
-  '';
+  systemd.settings.Manager = {
+    DefaultLimitNOFILE = "16384:524288";
+  };
 
   systemd.services.nix-daemon.serviceConfig.LimitNOFILE = lib.mkForce 1048576;
 
