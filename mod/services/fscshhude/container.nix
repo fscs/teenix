@@ -50,6 +50,7 @@
 
       cors-allowed-origin = [
         "https://sitzungen.hhu-fscs.de"
+        "http://localhost:4200"
       ];
     };
 
