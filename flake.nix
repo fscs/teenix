@@ -3,7 +3,7 @@
 
   inputs = {
     # NOTE: change the referenced channel in gitlab runner when changing this channel
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; 
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-master.url = "github:nixos/nixpkgs";
     # NOTE: when changing this channel, check that fscshhude still builds correctly (check custom code blocks)
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";

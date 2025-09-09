@@ -201,7 +201,8 @@ in
                 snapshot_dir = ".snapshots";
               };
             }) backupSubvolumes;
-          } // sharedBtrbkSettings;
+          }
+          // sharedBtrbkSettings;
         };
       }
 
@@ -213,7 +214,8 @@ in
             subvolume = subvolumeCfg.path;
             snapshot_dir = ".snapshots";
           };
-        } // sharedBtrbkSettings;
+        }
+        // sharedBtrbkSettings;
       }) backupSubvolumes)
     ];
 

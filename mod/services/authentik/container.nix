@@ -15,11 +15,9 @@ let
       final: prev: {
         authentikComponents = prev.authentikComponents // {
           frontend = prev.authentikComponents.frontend.overrideAttrs (oA: {
-            installPhase =
-              oA.installPhase
-              + ''
-                cp ${background} $out/dist/assets/images/flow_background.jpg
-              '';
+            installPhase = oA.installPhase + ''
+              cp ${background} $out/dist/assets/images/flow_background.jpg
+            '';
           });
         };
       }

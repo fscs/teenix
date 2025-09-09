@@ -91,12 +91,16 @@
               inherit port;
               protocol = "udp";
             };
-          }) (lib.range 30001 30010)
+          }) (with config.containers.matrix.config.services.coturn; (lib.range min-port max-port))
         ))
         {
           turn_port_tcp = {
-            port = 30000;
+            port = config.containers.matrix.config.services.coturn.listening-port;
             protocol = "tcp";
+          };
+          turn_port_udp = {
+            port = config.containers.matrix.config.services.coturn.listening-port;
+            protocol = "udp";
           };
         }
       ];
@@ -140,16 +144,40 @@
           rule = "HostSNI(`*`)";
           service = "turn";
           priority = 10000;
-          entryPoints = [ "turn_port_tcp" ];
-        };
-        tcp.services.turn = {
-          loadBalancer.servers = [
-            {
-              address = "${config.containers.matrix.localAddress}:3478";
-            }
+          entryPoints = [
+            "turn_port_tcp"
+            "turn_port_udp"
           ];
         };
 
+        tcp.services.turn = {
+          loadBalancer.servers = lib.singleton {
+            address = "${config.containers.matrix.localAddress}:${toString config.containers.matrix.config.services.coturn.listening-port}";
+          };
+        };
+
+        udp.routers = (
+          lib.listToAttrs (
+            map (port: {
+              name = "turn_${toString port}";
+              value = {
+                service = "turn_${toString port}";
+                entryPoints = [ "turn_port_${toString port}" ];
+              };
+            }) (with config.containers.matrix.config.services.coturn; (lib.range min-port max-port))
+          )
+        );
+
+        udp.services = lib.listToAttrs (
+          map (port: {
+            name = "turn_${toString port}";
+            value = {
+              loadBalancer.servers = lib.singleton {
+                address = "${config.containers.matrix.localAddress}:${toString port}";
+              };
+            };
+          }) (with config.containers.matrix.config.services.coturn; (lib.range min-port max-port))
+        );
       };
 
       teenix.containers.matrix = {
@@ -159,19 +187,17 @@
           useResolvConf = true;
           ports = {
             udp = [
-              3478
-              5349
-            ] ++ (lib.range (30 * 1000) (30 * 1000 + 10)); # 30000 - 30010
+              config.containers.matrix.config.services.coturn.listening-port
+            ] ++ (lib.range 30000 30010);
 
             tcp = [
-              3478
-              443
-              5349
               80
-              8000
-              8008
-              8080
-              9000
+              443
+              config.containers.matrix.config.services.coturn.listening-port
+              8000 # element web
+              8008 # synapse listener
+              8080 # mas
+              9000 # hookshot listener
             ];
           };
         };

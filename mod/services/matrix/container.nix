@@ -40,18 +40,23 @@
     wantedBy = [ "multi-user.target" ];
   };
 
-  # enable coturn
   services.coturn = {
     enable = true;
+
     no-cli = true;
+
     no-tcp-relay = true;
-    min-port = 30000;
+    listening-port = 30000;
+    min-port = 30001;
     max-port = 30010;
+
     use-auth-secret = true;
     static-auth-secret-file = host-config.sops.secrets.matrix-turn-secret.path;
+
     realm = host-config.teenix.services.matrix.hostnames.matrix;
+
     extraConfig = ''
-      turn_allow_guests: true
+      verbose
     '';
   };
 

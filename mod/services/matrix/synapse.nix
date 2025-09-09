@@ -34,7 +34,6 @@
         registration_shared_secret = host-config.sops.placeholder.matrix-registration-secret;
         macaroon_secret_key = host-config.sops.placeholder.matrix-macaroon-secret;
         form_secret = host-config.sops.placeholder.matrix-form-secret;
-        turn_shared_secret = host-config.sops.placeholder.matrix-turn-secret;
 
         experimental_features.msc3861 = {
           enabled = true;
@@ -92,12 +91,13 @@
           };
         };
 
+        turn_shared_secret = host-config.sops.placeholder.matrix-turn-secret;
+        turn_user_lifetime = 86400000;
+        turn_allow_guests = true;
         turn_uris = [
           "turn:${config.services.coturn.realm}:30000?transport=udp"
           "turn:${config.services.coturn.realm}:30000?transport=tcp"
         ];
-
-        turn_user_lifetime = "1h";
 
         server_name = host-config.teenix.services.matrix.hostnames.homeserver;
 
