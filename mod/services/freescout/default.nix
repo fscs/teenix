@@ -12,35 +12,36 @@
     enable = lib.mkEnableOption "freescout";
     secretsFile = lib.teenix.mkSecretsFileOption "freescout";
     hostname = lib.teenix.mkHostnameOption "freescout";
-    mariaEnvFile = lib.mkOption {
-      type = lib.types.path;
-      description = "path to the sops secret file for the freescout website Server";
-    };
   };
 
   config =
     let
-      opts = config.teenix.services.freescout;
+      cfg = config.teenix.services.freescout;
     in
-    lib.mkIf opts.enable {
-      sops.secrets.freescout = {
-        sopsFile = opts.secretsFile;
-        format = "binary";
-        mode = "444";
+    lib.mkIf cfg.enable {
+      sops.secrets = {
+        freescout-mysql-password = {
+          sopsFile = cfg.secretsFile;
+          key = "mysql-password";
+        };
+        freescout-admin-password = {
+          sopsFile = cfg.secretsFile;
+          key = "admin-password";
+        };
       };
 
-      sops.secrets.freescout_mariadb = {
-        sopsFile = opts.mariaEnvFile;
-        format = "binary";
-        mode = "444";
-      };
+      sops.templates.freescout.content = ''
+        DB_PASS=${config.sops.placeholder.freescout-mysql-password}
+        ROOT_PASS=${config.sops.placeholder.freescout-mysql-password}
+        ADMIN_PASS=${config.sops.placeholder.freescout-admin-password}
+      '';
 
       teenix.persist.subvolumes.freescout.directories = {
-        "/mysql" = {
+        mysql = {
           owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
-        "/data" = {
+        data = {
           owner = "1000"; # TODO: Set the correct owner and mode
           mode = "0777";
         };
@@ -62,7 +63,7 @@
           "CONTAINER_NAME" = "freescout-db";
         };
         log-driver = "journald";
-        environmentFiles = [ config.sops.secrets.freescout_mariadb.path ];
+        environmentFiles = [ config.sops.templates.freescout.path ];
         volumes = [
           "${config.teenix.persist.path}/freescout/mysql:/var/lib/mysql"
         ];
@@ -99,13 +100,23 @@
         environment = {
           DB_HOST = "freescout-db";
           DB_NAME = "freescout";
-          SITE_URL = "https://${opts.hostname}";
+          SITE_URL = "https://${cfg.hostname}";
           ADMIN_EMAIL = "fscs@hhu.de";
           ENABLE_SSL_PROXY = "false";
           DISPLAY_ERRORS = "false";
           TIMEZONE = "Europe/Berlin";
         };
-        environmentFiles = [ config.sops.secrets.freescout.path ];
+        labels = {
+          "traefik.enable" = "true";
+          "traefik.http.routers.freescout.entrypoints" = "websecure";
+          "traefik.http.routers.freescout.rule" = "Host(`${cfg.hostname}`)";
+          "traefik.http.routers.freescout.tls" = "true";
+          "traefik.http.routers.freescout.tls.certresolver" = "letsencrypt";
+          "traefik.http.services.freescout.loadbalancer.server.port" = "80";
+          "traefik.http.services.freescout.loadbalancer.healthCheck.path" = "/";
+          "traefik.http.routers.freescout.middlewares" = "hsts@file";
+        };
+        environmentFiles = [ config.sops.templates.freescout.path ];
         volumes = [
           "${config.teenix.persist.path}/freescout/data:/data"
         ];
