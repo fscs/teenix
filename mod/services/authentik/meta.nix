@@ -9,11 +9,6 @@
     ];
   };
 
-  teenix.meta.services.authentik = {
-    hostname = "auth.phynix.de";
-    name = "Authentik";
-  };
-
   # setup the authentik binary cache
   nix.settings = {
     substituters = [

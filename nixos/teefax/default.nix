@@ -11,7 +11,6 @@
     ./traefik.nix
     ./services.nix
     ./gatus.nix
-    ./postgresql.nix
 
     outputs.nixosModules.teenix
   ];
@@ -40,15 +39,6 @@
       enableIPv6 = true;
     };
 
-    interfaces.ens32 = {
-      ipv4 = {
-        addresses = lib.singleton {
-          address = "134.99.154.84";
-          prefixLength = 24;
-        };
-      };
-    };
-
     interfaces.ens34 = {
       ipv4 = {
         addresses = lib.singleton {
@@ -63,11 +53,7 @@
       };
     };
 
-    firewall = {
-      checkReversePath = false;
-      logRefusedConnections = true;
-      allowedTCPPorts = [ 2377 ];
-    };
+    firewall.logRefusedConnections = true;
   };
 
   sops.secrets.teefax-root-passwd = {

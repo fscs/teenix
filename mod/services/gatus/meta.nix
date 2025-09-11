@@ -8,9 +8,4 @@
       "gatus"
     ];
   };
-
-  teenix.meta.services.gatus = {
-    hostname = "status.phynix-hhu.de";
-    name = "Unser Status Seite";
-  };
 }

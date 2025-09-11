@@ -8,9 +8,4 @@
       "fscshhude"
     ];
   };
-
-  teenix.meta.services.fscshhude = {
-    hostname = "fscs.hhu.de";
-    name = "Fachschafts Website";
-  };
 }

@@ -8,9 +8,4 @@
       "campus-guesser-server"
     ];
   };
-
-  teenix.meta.services.campus-guesser-server = {
-    hostname = "campusguesser.phynix-hhu.de";
-    name = "Campus Guesser";
-  };
 }

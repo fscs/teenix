@@ -53,7 +53,7 @@
       entryPoints = [ "websecure" ];
     };
 
-  teenix.services.traefik.middlewares.inphima-to-phynix = {
+  teenix.services.traefik.httpMiddlewares.inphima-to-phynix = {
     redirectRegex = {
       regex = "inphima.de";
       replacement = "phynix-hhu.de";
@@ -161,5 +161,13 @@
       from = "ich-bin-reich-und-du-nicht.de";
       to = "www.stw-d.de/gastronomie/speiseplaene/restaurant-bar-campus-vita-duesseldorf/";
     };
+  };
+
+  teenix.services.traefik.httpServices.homeassistant = {
+    router = {
+      rule = "Host(`ha.hhu-fscs.de`)";
+    };
+    healthCheck.enable = true;
+    servers = [ "http://134.99.147.40:8123" ];
   };
 }

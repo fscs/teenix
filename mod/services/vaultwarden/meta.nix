@@ -8,9 +8,4 @@
       "vaultwarden"
     ];
   };
-
-  teenix.meta.services.vaultwarden = {
-    hostname = "vaultwarden.phynix-hhu.de";
-    name = "Vaultwarden";
-  };
 }

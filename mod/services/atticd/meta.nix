@@ -8,9 +8,4 @@
       "atticd"
     ];
   };
-
-  teenix.meta.services.atticd = {
-    hostname = "attic.hhu-fscs.de";
-    name = "Attic";
-  };
 }

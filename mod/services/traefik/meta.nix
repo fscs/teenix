@@ -8,9 +8,4 @@
       "traefik"
     ];
   };
-
-  teenix.meta.services.traefik = {
-    hostname = "traefik.phynix-hhu.de";
-    name = "Traefik";
-  };
 }

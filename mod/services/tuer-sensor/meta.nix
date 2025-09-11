@@ -8,9 +8,4 @@
       "tuer-sensor"
     ];
   };
-
-  teenix.meta.services.tuer-sensor = {
-    hostname = "tuer.hhu-fscs.de";
-    name = "Tür Sensor";
-  };
 }

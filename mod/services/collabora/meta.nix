@@ -8,9 +8,4 @@
       "collabora"
     ];
   };
-
-  teenix.meta.services.collabora = {
-    hostname = "collabora.phynix-hhu.de";
-    name = "collabora";
-  };
 }

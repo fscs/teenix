@@ -8,9 +8,4 @@
       "docnix"
     ];
   };
-
-  teenix.meta.services.docnix = {
-    hostname = "docnix.hhu-fscs.de";
-    name = "Dokumentation";
-  };
 }

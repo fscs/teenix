@@ -26,6 +26,7 @@
       "files_retention"
       "forms"
       "groupfolders"
+      "mail"
       "notify_push"
       "polls"
       "richdocuments"
@@ -108,7 +109,7 @@
 
   teenix.services.ntfy = {
     enable = true;
-    hostname = config.teenix.meta.services.ntfy.hostname;
+    hostname = "ntfy.hhu-fscs.de";
   };
 
   teenix.services.matrix-intern-bot = {
@@ -160,22 +161,31 @@
 
   teenix.services.static-files = {
     enable = true;
-    hostname = config.teenix.meta.services.static-files.hostname;
+    hostname = "static.hhu-fscs.de";
   };
 
   teenix.services.immich = {
     enable = true;
-    hostname = config.teenix.meta.services.immich.hostname;
+    hostname = "photos.phynix-hhu.de";
     secretsFile = ../secrets/immich.yml;
   };
 
   teenix.services.tuer-sensor = {
     enable = true;
-    hostname = config.teenix.meta.services.tuer-sensor.hostname;
+    hostname = "tuer.hhu-fscs.de";
   };
 
   teenix.services.cryptpad = {
     enable = true;
-    hostname = config.teenix.meta.services.cryptpad.hostname;
+    hostname = "awarenesstool.phynix-hhu.de";
+  };
+
+  teenix.services.prometheus = {
+    enable = true;
+    secretsFile = ../secrets/prometheus.yml;
+    hostnames = {
+      prometheus = "prometheus.hhu-fscs.de";
+      grafana = "grafana.hhu-fscs.de";
+    };
   };
 }

@@ -8,9 +8,4 @@
       "cryptpad"
     ];
   };
-
-  teenix.meta.services.cryptpad = {
-    hostname = "awarenesstool.phynix-hhu.de";
-    name = "Awareness Tool";
-  };
 }

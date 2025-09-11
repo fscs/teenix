@@ -8,9 +8,4 @@
       "matrix"
     ];
   };
-
-  teenix.meta.services.matrix = {
-    hostname = "matrix.inphima.de";
-    name = "Matrix";
-  };
 }

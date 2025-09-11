@@ -8,9 +8,4 @@
       "crabfit"
     ];
   };
-
-  teenix.meta.services.crabfit = {
-    hostname = "crabfit.phynix-hhu.de";
-    name = "Crab.Fit";
-  };
 }

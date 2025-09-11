@@ -115,6 +115,21 @@ let
       };
     };
   };
+
+  phynixIpAllowList = [
+    "134.99.147.40/27" # phynix subnet
+    "192.18.0.0/16" # auto generated nixos containers
+    "192.168.0.0/16" # manual container ips
+  ];
+
+  hhudyIpAllowList = [
+    "134.99.147.40" # hhudy
+    "134.99.147.41" # verleihnix
+    "134.99.147.42" # teefax
+    "134.99.147.43" # sebigbos
+    "192.18.0.0/16" # auto generated nixos containers
+    "192.168.0.0/16" # manual container ips
+  ];
 in
 {
   # we pretty much reimplement the entires traefik module.
@@ -161,21 +176,28 @@ in
       default = { };
     };
 
-    middlewares = lib.mkOption {
-      description = "Traefik's middlewares, as defined in the dynamic config";
-      type = yaml.type;
-      default = { };
-    };
 
     entryPoints = lib.mkOption {
       description = "Traefik's entrypoints, as defined in the static config";
       type = t.attrsOf entryPointType;
       default = { };
     };
+    
+    httpMiddlewares = lib.mkOption {
+      description = "Traefik's middlewares, as defined in the dynamic config";
+      type = yaml.type;
+      default = { };
+    };
 
     httpServices = lib.mkOption {
       description = "http based services, each using a single per-service router";
       type = t.attrsOf httpServiceType;
+      default = { };
+    };
+
+    tcpMiddlewares = lib.mkOption {
+      description = "Traefik's middlewares, as defined in the dynamic config";
+      type = yaml.type;
       default = { };
     };
 
@@ -224,25 +246,19 @@ in
       };
     };
 
-    teenix.services.traefik.middlewares = {
+    teenix.services.traefik.httpMiddlewares = {
       hsts.headers = {
         STSSeconds = 31536000;
         STSPreload = true;
         STSIncludeSubdomains = true;
       };
-      onlyphynix.ipAllowList.sourceRange = [
-        "134.99.147.40/27" # phynix subnet
-        "192.18.0.0/16" # auto generated nixos containers
-        "192.168.0.0/16" # manual container ips
-      ];
-      onlyhhudy.ipAllowList.sourceRange = [
-        "134.99.147.40" # hhudy
-        "134.99.147.41" # verleihnix
-        "134.99.147.42" # teefax
-        "134.99.147.43" # sebigbos
-        "192.18.0.0/16" # auto generated nixos containers
-        "192.168.0.0/16" # manual container ips
-      ];
+      onlyphynix.ipAllowList.sourceRange = phynixIpAllowList;
+      onlyhhudy.ipAllowList.sourceRange = hhudyIpAllowList;
+    };
+
+    teenix.services.traefik.tcpMiddlewares = {
+      onlyphynix.ipAllowList.sourceRange = phynixIpAllowList;
+      onlyhhudy.ipAllowList.sourceRange = hhudyIpAllowList;
     };
 
     # generate traefiks dynamic config
@@ -312,7 +328,7 @@ in
           }) cfg.redirects)
 
           # other middlewares
-          cfg.middlewares
+          cfg.httpMiddlewares
         ];
 
         services = lib.mkMerge [
@@ -339,6 +355,10 @@ in
             };
           }
         ];
+      };
+
+      tcp = {
+        middlewares = cfg.tcpMiddlewares;
       };
     };
 
@@ -455,11 +475,12 @@ in
         ProtectHome = true;
         ProtectSystem = "full";
         ReadWritePaths = [ config.teenix.persist.subvolumes.traefik.path ];
-        AssertPathExists = [
-          config.sops.templates.traefik-static-config.path
-          config.sops.templates.traefik-dynamic-config.path
-        ];
       };
+      
+      unitConfig.AssertPathExists = [
+        config.sops.templates.traefik-static-config.path
+        config.sops.templates.traefik-dynamic-config.path
+      ];
     };
 
     users.groups.traefik = { };

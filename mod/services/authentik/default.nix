@@ -27,7 +27,7 @@
         '';
       };
 
-      teenix.services.traefik.middlewares.authentik.forwardAuth = {
+      teenix.services.traefik.httpMiddlewares.authentik.forwardAuth = {
         address = "http://${config.containers.authentik.localAddress}:9000/outpost.goauthentik.io/auth/traefik";
         tls.insecureSkipVerify = true;
         authResponseHeaders = [

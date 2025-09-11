@@ -8,9 +8,4 @@
       "hockeypuck"
     ];
   };
-
-  teenix.meta.services.hockeypuck = {
-    hostname = "gpg.hhu-fscs.de";
-    name = "PGP Keyserver";
-  };
 }

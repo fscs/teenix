@@ -8,9 +8,4 @@
       "nextcloud"
     ];
   };
-
-  teenix.meta.services.nextcloud = {
-    hostname = "nextcloud.phynix-hhu.de";
-    name = "NextCloud";
-  };
 }

@@ -8,9 +8,4 @@
       "prometheus"
     ];
   };
-
-  teenix.meta.services.prometheus = {
-    hostname = "prometheus.hhu-fscs.de";
-    name = "Prometheus";
-  };
 }

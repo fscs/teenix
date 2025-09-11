@@ -1,4 +1,5 @@
 {
+  lib,
   inputs,
   outputs,
   config,
@@ -9,9 +10,6 @@
     ../share
     ./hardware-configuration.nix
     ./disko.nix
-    ./services.nix
-    ./nfs.nix
-    ./haproxy.nix
 
     inputs.disko.nixosModules.disko
     outputs.nixosModules.teenix
@@ -36,66 +34,26 @@
     };
 
     interfaces.ens33 = {
-      ipv4 = {
-        addresses = [
-          {
-            address = "134.99.147.41";
-            prefixLength = 27;
-          }
-        ];
-        routes = [
-          {
-            address = "134.99.210.131";
-            prefixLength = 32;
-            via = "134.99.147.33";
-          }
-          {
-            address = "192.18.0.0";
-            prefixLength = 16;
-            via = "134.99.147.42";
-          }
-          {
-            address = "192.88.99.0";
-            prefixLength = 24;
-            via = "134.99.147.42";
-          }
-          {
-            address = "192.168.0.0";
-            prefixLength = 16;
-            via = "134.99.147.42";
-          }
-          {
-            address = "10.3.0.0";
-            prefixLength = 16;
-            via = "134.99.147.43";
-          }
-        ];
+      ipv4.addresses = lib.singleton {
+        address = "134.99.147.41";
+        prefixLength = 27;
       };
-    };
-
-    firewall = {
-      checkReversePath = false;
-      logRefusedConnections = true;
     };
   };
 
   virtualisation.vmware.guest.enable = true;
 
+  teenix.persist.enable = true;
+
   teenix.services.node_exporter.enable = true;
 
   teenix.services.openssh.enable = true;
 
+  virtualisation.oci-containers.backend = "docker";
   virtualisation.docker = {
     enable = true;
     autoPrune.enable = true;
     liveRestore = false;
-  };
-  virtualisation.oci-containers.backend = "docker";
-
-  # if this doesnt exist, traefik stops working (because sops templating refuses to work)
-  sops.secrets.blub = {
-    sopsFile = ../secrets/passwords.yml;
-    key = "verleihnix-root-passwd";
   };
 
   sops.secrets.sebigbos-root-passwd = {

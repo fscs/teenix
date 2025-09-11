@@ -65,22 +65,6 @@
     ];
   };
 
-  fileSystems."/mnt/clusterfax" = {
-    device = "134.99.147.41:/mnt/share";
-    fsType = "nfs";
-    options = [
-      "rw"
-      "hard"
-      "intr"
-      "noatime"
-      "nodiratime"
-      "nodev"
-      "nosuid"
-      "noexec"
-      "sync"
-    ];
-  };
-
   swapDevices = lib.singleton {
     device = "/dev/disk/by-uuid/936c3489-16ac-45e7-9ef6-df5522a1c2ce";
   };

@@ -51,22 +51,6 @@
     neededForBoot = true;
   };
 
-  fileSystems."/mnt/clusterfax" = {
-    device = "134.99.147.41:/mnt/share";
-    fsType = "nfs";
-    options = [
-      "rw"
-      "hard"
-      "intr"
-      "noatime"
-      "nodiratime"
-      "nodev"
-      "nosuid"
-      "noexec"
-      "sync"
-    ];
-  };
-
   boot.initrd.postDeviceCommands = lib.mkAfter ''
     mkdir /btrfs_tmp
     mount /dev/disk/by-uuid/4a9e396c-8298-4e54-93dc-8602c584a03f /btrfs_tmp

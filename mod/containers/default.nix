@@ -280,7 +280,7 @@
       ipPoolOf =
         name:
         lib.lists.findFirstIndex (x: x == name) (throw "unreachable") (
-          lib.attrNames config.teenix.meta.services
+          lib.attrNames config.teenix.containers
         );
 
       defaultContainerNetworkId = config.teenix.config.defaultContainerNetworkId;

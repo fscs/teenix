@@ -8,9 +8,4 @@
       "freescout"
     ];
   };
-
-  teenix.meta.services.freescout = {
-    hostname = "tickets.hhu-fscs.de";
-    name = "Ticketsystem";
-  };
 }

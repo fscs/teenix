@@ -8,9 +8,4 @@
       "ntfy"
     ];
   };
-
-  teenix.meta.services.ntfy = {
-    hostname = "ntfy.hhu-fscs.de";
-    name = "Ntfy";
-  };
 }

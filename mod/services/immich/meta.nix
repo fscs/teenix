@@ -8,9 +8,4 @@
       "immich"
     ];
   };
-
-  teenix.meta.services.immich = {
-    hostname = "photos.phynix-hhu.de";
-    name = "Immich";
-  };
 }
