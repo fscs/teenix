@@ -94,11 +94,11 @@
           }) (with config.containers.matrix.config.services.coturn; (lib.range min-port max-port))
         ))
         {
-          turn_port_tcp = {
+          turn_mgmt_tcp = {
             port = config.containers.matrix.config.services.coturn.listening-port;
             protocol = "tcp";
           };
-          turn_port_udp = {
+          turn_mgmt_udp = {
             port = config.containers.matrix.config.services.coturn.listening-port;
             protocol = "udp";
           };
@@ -139,46 +139,26 @@
         };
       };
 
-      teenix.services.traefik.dynamicConfig = {
-        tcp.routers.turn = {
-          rule = "HostSNI(`*`)";
-          service = "turn";
-          priority = 10000;
-          entryPoints = [
-            "turn_port_tcp"
-            "turn_port_udp"
-          ];
-        };
-
-        tcp.services.turn = {
-          loadBalancer.servers = lib.singleton {
-            address = "${config.containers.matrix.localAddress}:${toString config.containers.matrix.config.services.coturn.listening-port}";
-          };
-        };
-
-        udp.routers = (
-          lib.listToAttrs (
-            map (port: {
-              name = "turn_${toString port}";
-              value = {
-                service = "turn_${toString port}";
-                entryPoints = [ "turn_port_${toString port}" ];
-              };
-            }) (with config.containers.matrix.config.services.coturn; (lib.range min-port max-port))
-          )
-        );
-
-        udp.services = lib.listToAttrs (
-          map (port: {
-            name = "turn_${toString port}";
-            value = {
-              loadBalancer.servers = lib.singleton {
-                address = "${config.containers.matrix.localAddress}:${toString port}";
-              };
-            };
-          }) (with config.containers.matrix.config.services.coturn; (lib.range min-port max-port))
-        );
+      teenix.services.traefik.tcpServices.coturn = {
+        router.rule = "HostSNI(`*`)";
+        router.entryPoints = [
+          "turn_mgmt_tcp"
+          "turn_mgmt_udp"
+        ];
+        servers = [
+          "${config.containers.matrix.localAddress}:${toString config.containers.matrix.config.services.coturn.listening-port}"
+        ];
       };
+
+      teenix.services.traefik.udpServices = lib.listToAttrs (
+        map (port: {
+          name = "turn_${toString port}";
+          value = {
+            router.entryPoints = [ "turn_port_${toString port}" ];
+            servers = [ "${config.containers.matrix.localAddress}:${toString port}" ];
+          };
+        }) (with config.containers.matrix.config.services.coturn; (lib.range min-port max-port))
+      );
 
       teenix.containers.matrix = {
         config = ./container.nix;
@@ -188,7 +168,8 @@
           ports = {
             udp = [
               config.containers.matrix.config.services.coturn.listening-port
-            ] ++ (lib.range 30000 30010);
+            ]
+            ++ (with config.containers.matrix.config.services.coturn; (lib.range min-port max-port));
 
             tcp = [
               80
