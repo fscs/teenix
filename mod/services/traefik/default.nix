@@ -39,17 +39,6 @@ let
       type = t.nonEmptyStr;
     };
 
-    tls = {
-      enable = lib.mkEnableOption "tls for this router" // {
-        default = true;
-      };
-      certResolver = lib.mkOption {
-        description = "Certificate resolver to use for this router";
-        type = t.nonEmptyStr;
-        default = "letsencrypt";
-      };
-    };
-
     entryPoints = lib.mkOption {
       description = ''
         Entry Points for this router
@@ -75,7 +64,19 @@ let
 
   httpServiceType = t.submodule {
     options = {
-      router = routerType;
+      router = routerType // {
+        tls = {
+          enable = lib.mkEnableOption "tls for this router" // {
+            default = true;
+          };
+          
+          certResolver = lib.mkOption {
+            description = "Certificate resolver to use for this router";
+            type = t.nonEmptyStr;
+            default = "letsencrypt";
+          };
+        };
+      };
 
       servers = lib.mkOption {
         description = "Hosts for this service";
@@ -452,11 +453,6 @@ in
                 middlewares
                 ;
             }
-
-            # if tls is desired, set some defaults
-            (lib.mkIf serviceCfg.router.tls.enable {
-              tls.certResolver = serviceCfg.router.tls.certResolver;
-            })
 
             # merge extra overrides
             serviceCfg.router.extraConfig
