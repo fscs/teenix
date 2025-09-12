@@ -33,50 +33,52 @@ let
     };
   };
 
-  routerType = {
-    rule = lib.mkOption {
-      description = "Rule for this router, see https://doc.traefik.io/traefik/routing/routers/#configuring-http-routers";
-      type = t.nonEmptyStr;
-    };
+  mkRouterType =
+    { tlsByDefault }:
+    {
+      rule = lib.mkOption {
+        description = "Rule for this router, see https://doc.traefik.io/traefik/routing/routers/#configuring-http-routers";
+        type = t.nonEmptyStr;
+      };
 
-    entryPoints = lib.mkOption {
-      description = ''
-        Entry Points for this router
+      tls = {
+        enable = lib.mkEnableOption "tls for this router" // {
+          default = tlsByDefault;
+        };
 
-        Http Services uses websecure as default
-      '';
-      default = [ ];
-      type = t.listOf (t.nonEmptyStr);
-    };
+        certResolver = lib.mkOption {
+          description = "Certificate resolver to use for this router";
+          type = t.nonEmptyStr;
+          default = "letsencrypt";
+        };
+      };
 
-    middlewares = lib.mkOption {
-      description = "List of middlewares for this router";
-      type = t.listOf t.nonEmptyStr;
-      default = [ ];
-    };
+      entryPoints = lib.mkOption {
+        description = ''
+          Entry Points for this router
 
-    extraConfig = lib.mkOption {
-      description = "Extra config options for this router";
-      type = yaml.type;
-      default = { };
+          Http Services uses websecure as default
+        '';
+        default = [ ];
+        type = t.listOf (t.nonEmptyStr);
+      };
+
+      middlewares = lib.mkOption {
+        description = "List of middlewares for this router";
+        type = t.listOf t.nonEmptyStr;
+        default = [ ];
+      };
+
+      extraConfig = lib.mkOption {
+        description = "Extra config options for this router";
+        type = yaml.type;
+        default = { };
+      };
     };
-  };
 
   httpServiceType = t.submodule {
     options = {
-      router = routerType // {
-        tls = {
-          enable = lib.mkEnableOption "tls for this router" // {
-            default = true;
-          };
-          
-          certResolver = lib.mkOption {
-            description = "Certificate resolver to use for this router";
-            type = t.nonEmptyStr;
-            default = "letsencrypt";
-          };
-        };
-      };
+      router = mkRouterType { tlsByDefault = true; };
 
       servers = lib.mkOption {
         description = "Hosts for this service";
@@ -110,7 +112,7 @@ let
 
   tcpServiceType = t.submodule {
     options = {
-      router = routerType;
+      router = mkRouterType { tlsByDefault = false; };
 
       servers = lib.mkOption {
         description = "Hosts for this service";
@@ -128,7 +130,11 @@ let
 
   udpServiceType = t.submodule {
     options = {
-      router.entryPoints = routerType.entryPoints;
+      router.entryPoints = lib.mkOption {
+        description = "Entry Points for this router";
+        default = [ ];
+        type = t.listOf (t.nonEmptyStr);
+      };
 
       servers = lib.mkOption {
         description = "Hosts for this service";
@@ -206,7 +212,7 @@ in
     };
 
     redirects = lib.mkOption {
-      type = lib.types.attrsOf redirectType;
+      type = t.nullOr (t.attrsOf redirectType);
       description = "Redirect one URL to another";
       example = {
         fscs_phynix = {
@@ -214,43 +220,43 @@ in
           to = "fscs.hhu.de";
         };
       };
-      default = { };
+      default = null;
     };
 
     entryPoints = lib.mkOption {
       description = "Traefik's entrypoints, as defined in the static config";
-      type = t.attrsOf entryPointType;
-      default = { };
+      type = t.nullOr (t.attrsOf entryPointType);
+      default = null;
     };
 
     httpMiddlewares = lib.mkOption {
       description = "Traefik's middlewares, as defined in the dynamic config";
-      type = yaml.type;
-      default = { };
+      type = t.nullOr yaml.type;
+      default = null;
     };
 
     httpServices = lib.mkOption {
       description = "http based services, each using a single per-service router";
-      type = t.attrsOf httpServiceType;
-      default = { };
+      type = t.nullOr (t.attrsOf httpServiceType);
+      default = null;
     };
 
     tcpMiddlewares = lib.mkOption {
       description = "Traefik's middlewares, as defined in the dynamic config";
-      type = yaml.type;
-      default = { };
+      type = t.nullOr yaml.type;
+      default = null;
     };
 
     tcpServices = lib.mkOption {
       description = "tcp based services, each using a single per-service router";
-      type = t.attrsOf tcpServiceType;
-      default = { };
+      type = t.nullOr (t.attrsOf tcpServiceType);
+      default = null;
     };
 
     udpServices = lib.mkOption {
       description = "udp based services, each using a single per-service router";
-      type = t.attrsOf udpServiceType;
-      default = { };
+      type = t.nullOr (t.attrsOf udpServiceType);
+      default = null;
     };
 
     dynamicConfig = lib.mkOption {
@@ -277,39 +283,45 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = lib.concatLists [
+    assertions = lib.flatten [
       # http service assertions
-      (lib.mapAttrsToList (name: value: {
-        assertion = (lib.length value.router.entryPoints) != 0 || value.router.tls.enable;
-        message = "The traefik http service '${name}' has no entrypoints defined (because tls is disabled and none are specified). This will make it listen to every defined entrypoint, which is a bad idea and propably a bug.";
-      }) cfg.httpServices)
+      (lib.optionals (cfg.httpServices != null) [
+        (lib.mapAttrsToList (name: value: {
+          assertion = (lib.length value.router.entryPoints) != 0 || value.router.tls.enable;
+          message = "The traefik http service '${name}' has no entrypoints defined (because tls is disabled and none are specified). This will make it listen to every defined entrypoint, which is a bad idea and propably a bug.";
+        }) cfg.httpServices)
 
-      (lib.mapAttrsToList (name: value: {
-        assertion = (lib.all (ep: lib.hasAttr ep cfg.entryPoints) value.router.entryPoints);
-        message = "The traefik http service '${name}' has an undefined entrypoint specified";
-      }) cfg.httpServices)
+        (lib.mapAttrsToList (name: value: {
+          assertion = (lib.all (ep: lib.hasAttr ep cfg.entryPoints) value.router.entryPoints);
+          message = "The traefik http service '${name}' has an undefined entrypoint specified";
+        }) cfg.httpServices)
+      ])
 
       # tcp service assertions
-      (lib.mapAttrsToList (name: value: {
-        assertion = (lib.length value.router.entryPoints) != 0;
-        message = "The traefik tcp service '${name}' has no entrypoints defined. This will make it listen to every defined entrypoint, which is a bad idea and propably a bug.";
-      }) cfg.tcpServices)
+      (lib.optionals (cfg.tcpServices != null) [
+        (lib.mapAttrsToList (name: value: {
+          assertion = (lib.length value.router.entryPoints) != 0;
+          message = "The traefik tcp service '${name}' has no entrypoints defined. This will make it listen to every defined entrypoint, which is a bad idea and propably a bug.";
+        }) cfg.tcpServices)
 
-      (lib.mapAttrsToList (name: value: {
-        assertion = (lib.all (ep: lib.hasAttr ep cfg.entryPoints) value.router.entryPoints);
-        message = "The traefik tcp service '${name}' has an undefined entrypoint specified";
-      }) cfg.tcpServices)
+        (lib.mapAttrsToList (name: value: {
+          assertion = (lib.all (ep: lib.hasAttr ep cfg.entryPoints) value.router.entryPoints);
+          message = "The traefik tcp service '${name}' has an undefined entrypoint specified";
+        }) cfg.tcpServices)
+      ])
 
       # udp service assertions
-      (lib.mapAttrsToList (name: value: {
-        assertion = (lib.length value.router.entryPoints) != 0;
-        message = "The traefik udp service '${name}' has no entrypoints defined. This will make it listen to every defined entrypoint, which is a bad idea and propably a bug.";
-      }) cfg.udpServices)
+      (lib.optionals (cfg.udpServices != null) [
+        (lib.mapAttrsToList (name: value: {
+          assertion = (lib.length value.router.entryPoints) != 0;
+          message = "The traefik udp service '${name}' has no entrypoints defined. This will make it listen to every defined entrypoint, which is a bad idea and propably a bug.";
+        }) cfg.udpServices)
 
-      (lib.mapAttrsToList (name: value: {
-        assertion = (lib.all (ep: lib.hasAttr ep cfg.entryPoints) value.router.entryPoints);
-        message = "The traefik udp service '${name}' has an undefined entrypoint specified";
-      }) cfg.udpServices)
+        (lib.mapAttrsToList (name: value: {
+          assertion = (lib.all (ep: lib.hasAttr ep cfg.entryPoints) value.router.entryPoints);
+          message = "The traefik udp service '${name}' has an undefined entrypoint specified";
+        }) cfg.udpServices)
+      ])
     ];
 
     teenix.services.traefik.entryPoints = {
@@ -347,43 +359,47 @@ in
 
     # generate traefiks dynamic config
     teenix.services.traefik.dynamicConfig = {
-      http = {
+      http = lib.mkIf (cfg.httpServices != null || cfg.httpMiddlewares != null || cfg.redirects != null) {
         routers = lib.mkMerge [
           # generate routers for http services
-          (lib.mapAttrs (
-            service: serviceCfg:
-            lib.mkMerge [
-              # inherit options that we can unconditionally pass through
-              {
-                inherit service;
-                inherit (serviceCfg.router)
-                  rule
-                  entryPoints
-                  middlewares
-                  ;
-              }
+          (lib.mkIf (cfg.httpServices != null) (
+            lib.mapAttrs (
+              service: serviceCfg:
+              lib.mkMerge [
+                # inherit options that we can unconditionally pass through
+                {
+                  inherit service;
+                  inherit (serviceCfg.router)
+                    rule
+                    entryPoints
+                    middlewares
+                    ;
+                }
 
-              # if tls is desired, set some defaults
-              (lib.mkIf serviceCfg.router.tls.enable {
-                tls.certResolver = serviceCfg.router.tls.certResolver;
-                entryPoints = [ "websecure" ];
-                middlewares = [ "hsts" ];
-              })
+                # if tls is desired, set some defaults
+                (lib.mkIf serviceCfg.router.tls.enable {
+                  tls.certResolver = serviceCfg.router.tls.certResolver;
+                  entryPoints = [ "websecure" ];
+                  middlewares = [ "hsts" ];
+                })
 
-              # merge extra overrides
-              serviceCfg.router.extraConfig
-            ]
-          ) cfg.httpServices)
+                # merge extra overrides
+                serviceCfg.router.extraConfig
+              ]
+            ) cfg.httpServices
+          ))
 
           # generate routers for our redirects
-          (lib.attrsets.mapAttrs (name: value: {
-            service = "blank";
-            priority = 10;
-            rule = "Host(`${builtins.replaceStrings [ "." ] [ "\." ] value.from}`)";
-            middlewares = name;
-            tls.certResolver = "letsencrypt";
-            entryPoints = [ "websecure" ];
-          }) cfg.redirects)
+          (lib.mkIf (cfg.redirects != null) (
+            lib.attrsets.mapAttrs (name: value: {
+              service = "blank";
+              priority = 10;
+              rule = "Host(`${builtins.replaceStrings [ "." ] [ "\." ] value.from}`)";
+              middlewares = name;
+              tls.certResolver = "letsencrypt";
+              entryPoints = [ "websecure" ];
+            }) cfg.redirects
+          ))
 
           # dashboard router
           (lib.mkIf cfg.dashboard.enable {
@@ -401,20 +417,22 @@ in
         ];
 
         services = lib.mkMerge [
-          (lib.attrsets.mapAttrs (
-            _: serviceCfg:
-            lib.mkMerge [
-              {
-                loadBalancer = {
-                  servers = map (value: { url = value; }) serviceCfg.servers;
-                  healthCheck = lib.mkIf serviceCfg.healthCheck.enable {
-                    inherit (serviceCfg.healthCheck) path interval;
+          (lib.mkIf (cfg.httpServices != null) (
+            lib.attrsets.mapAttrs (
+              _: serviceCfg:
+              lib.mkMerge [
+                {
+                  loadBalancer = {
+                    servers = map (value: { url = value; }) serviceCfg.servers;
+                    healthCheck = lib.mkIf serviceCfg.healthCheck.enable {
+                      inherit (serviceCfg.healthCheck) path interval;
+                    };
                   };
-                };
-              }
-              serviceCfg.extraConfig
-            ]
-          ) cfg.httpServices)
+                }
+                serviceCfg.extraConfig
+              ]
+            ) cfg.httpServices
+          ))
 
           # the blank service is needed for redirects
           {
@@ -426,67 +444,81 @@ in
 
         middlewares = lib.mkMerge [
           # generate redirect middlewares
-          (lib.attrsets.mapAttrs (name: value: {
-            redirectRegex = {
-              regex = "(www\\.)?${builtins.replaceStrings [ "." ] [ "\." ] value.from}/?";
-              replacement = value.to;
-              # dont do permanent redirects. if they ever change its a disaster and
-              # the performance overhead is neglible
-            };
-          }) cfg.redirects)
+          (lib.mkIf (cfg.redirects != null) (
+            lib.attrsets.mapAttrs (name: value: {
+              redirectRegex = {
+                regex = "(www\\.)?${builtins.replaceStrings [ "." ] [ "\." ] value.from}/?";
+                replacement = value.to;
+                # dont do permanent redirects. if they ever change its a disaster and
+                # the performance overhead is neglible
+              };
+            }) cfg.redirects
+          ))
 
           # other middlewares
-          cfg.httpMiddlewares
+          (lib.mkIf (cfg.httpMiddlewares != null) cfg.httpMiddlewares)
         ];
       };
 
-      tcp = {
-        routers = lib.mapAttrs (
-          service: serviceCfg:
-          lib.mkMerge [
-            # inherit options that we can unconditionally pass through
-            {
-              inherit service;
-              inherit (serviceCfg.router)
-                rule
-                entryPoints
-                middlewares
-                ;
-            }
+      tcp = lib.mkIf (cfg.tcpServices != null || cfg.tcpMiddlewares != null) {
+        routers = lib.mkIf (cfg.tcpServices != null) (
+          lib.mapAttrs (
+            service: serviceCfg:
+            lib.mkMerge [
+              # inherit options that we can unconditionally pass through
+              {
+                inherit service;
+                inherit (serviceCfg.router)
+                  rule
+                  entryPoints
+                  middlewares
+                  ;
+              }
 
-            # merge extra overrides
-            serviceCfg.router.extraConfig
-          ]
-        ) cfg.tcpServices;
+              (lib.mkIf serviceCfg.router.tls.enable {
+                tls.certResolver = serviceCfg.router.tls.certResolver;
+              })
 
-        services = lib.attrsets.mapAttrs (
-          _: serviceCfg:
-          lib.mkMerge [
-            {
-              loadBalancer.servers = map (value: { address = value; }) serviceCfg.servers;
-            }
-            serviceCfg.extraConfig
-          ]
-        ) cfg.tcpServices;
+              # merge extra overrides
+              serviceCfg.router.extraConfig
+            ]
+          ) cfg.tcpServices
+        );
 
-        middlewares = cfg.tcpMiddlewares;
+        services = lib.mkIf (cfg.tcpServices != null) (
+          lib.attrsets.mapAttrs (
+            _: serviceCfg:
+            lib.mkMerge [
+              {
+                loadBalancer.servers = map (value: { address = value; }) serviceCfg.servers;
+              }
+              serviceCfg.extraConfig
+            ]
+          ) cfg.tcpServices
+        );
+
+        middlewares = lib.mkIf (cfg.tcpMiddlewares != null) cfg.tcpMiddlewares;
       };
 
-      udp = {
-        routers = lib.mapAttrs (service: serviceCfg: {
-          inherit service;
-          inherit (serviceCfg.router) entryPoints;
-        }) cfg.udpServices;
+      udp = lib.mkIf (cfg.udpServices != null) {
+        routers = lib.mkIf (cfg.udpServices != null) (
+          lib.mapAttrs (service: serviceCfg: {
+            inherit service;
+            inherit (serviceCfg.router) entryPoints;
+          }) cfg.udpServices
+        );
 
-        services = lib.attrsets.mapAttrs (
-          _: serviceCfg:
-          lib.mkMerge [
-            {
-              loadBalancer.servers = map (value: { address = value; }) serviceCfg.servers;
-            }
-            serviceCfg.extraConfig
-          ]
-        ) cfg.udpServices;
+        services = lib.mkIf (cfg.udpServices != null) (
+          lib.attrsets.mapAttrs (
+            _: serviceCfg:
+            lib.mkMerge [
+              {
+                loadBalancer.servers = map (value: { address = value; }) serviceCfg.servers;
+              }
+              serviceCfg.extraConfig
+            ]
+          ) cfg.udpServices
+        );
       };
     };
 
@@ -524,13 +556,15 @@ in
         };
       };
 
-      entryPoints = lib.mapAttrs (
-        n: v:
-        lib.mkMerge [
-          { address = ":${toString v.port}/${v.protocol}"; }
-          v.extraConfig
-        ]
-      ) cfg.entryPoints;
+      entryPoints = lib.mkIf (cfg.entryPoints != null) (
+        lib.mapAttrs (
+          n: v:
+          lib.mkMerge [
+            { address = ":${toString v.port}/${v.protocol}"; }
+            v.extraConfig
+          ]
+        ) cfg.entryPoints
+      );
 
       api.dashboard = cfg.dashboard.enable;
     };
