@@ -3,6 +3,7 @@
   inputs,
   outputs,
   config,
+  host-config,
   ...
 }:
 {
@@ -10,6 +11,7 @@
     ../share
     ./hardware-configuration.nix
     ./disko.nix
+    ./services.nix
 
     inputs.disko.nixosModules.disko
     outputs.nixosModules.teenix
@@ -39,6 +41,8 @@
         prefixLength = 27;
       };
     };
+
+    firewall.checkReversePath = false;
   };
 
   virtualisation.vmware.guest.enable = true;

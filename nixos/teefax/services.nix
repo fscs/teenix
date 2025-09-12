@@ -188,4 +188,12 @@
       grafana = "grafana.hhu-fscs.de";
     };
   };
+
+  teenix.services.mediamtx = {
+    enable = true;
+    hostnames = {
+      api = "api.mediamtx.hhu-fscs.de";
+      rtsp = "rtsp.mediamtx.hhu-fscs.de";
+    };
+  };
 }
