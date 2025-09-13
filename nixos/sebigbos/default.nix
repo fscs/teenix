@@ -45,6 +45,8 @@
     firewall.checkReversePath = false;
   };
 
+  services.tailscale.enable = true;
+
   virtualisation.vmware.guest.enable = true;
 
   teenix.persist.enable = true;
