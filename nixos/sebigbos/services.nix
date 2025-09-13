@@ -18,4 +18,10 @@
     hostname = "mqtt.hhu-fscs.de";
     secretsFile = ../secrets/mosquitto.yml;
   };
+
+  teenix.services.headscale = {
+    enable = true;
+    hostname = "vpn.hhu-fscs.de";
+    secretsFile = ../secrets/headscale.yml;
+  };
 }
