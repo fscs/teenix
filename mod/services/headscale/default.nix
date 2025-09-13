@@ -17,6 +17,7 @@
 
     teenix.services.traefik.httpServices.headscale = {
       router.rule = "Host(`${config.teenix.services.headscale.hostname}`)";
+      healthCheck.enable = false;
       servers = [
         "http://${config.containers.headscale.localAddress}:${toString config.containers.headscale.config.services.headscale.port}"
       ];
@@ -26,6 +27,7 @@
       config = ./container.nix;
 
       mounts.sops.secrets = [ "headscale-oauth-client-secret" ];
+      mounts.data.enable = true;
 
       networking.ports.tcp = [ 8080 ];
     };

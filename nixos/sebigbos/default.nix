@@ -20,7 +20,7 @@
   networking = {
     hostName = "sebigbos";
 
-    nameservers = [ "134.99.128.2" ];
+    nameservers = [ "9.9.9.9" ];
 
     defaultGateway = {
       address = "134.99.147.33";
@@ -39,6 +39,11 @@
       ipv4.addresses = lib.singleton {
         address = "134.99.147.41";
         prefixLength = 27;
+      };
+      ipv4.routes = lib.singleton {
+        address = "192.168.10.0";
+        prefixLength = 24;
+        via = "134.99.147.40";
       };
     };
 

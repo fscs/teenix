@@ -61,6 +61,8 @@ in
     teenix.containers.home-assistant = {
       config = ./container.nix;
 
+      extraConfig.interfaces = [ "tailscale0" ];
+
       networking = {
         useResolvConf = true;
         ports.tcp = [

@@ -13,7 +13,7 @@
       dns = {
         magic_dns = true;
         base_domain = "phynix-hhu";
-        nameservers.global = [ "134.99.128.2" ];
+        nameservers.global = [ "9.9.9.9" ];
       };
       oidc = {
         issuer = "https://auth.phynix-hhu.de/application/o/vpn/";

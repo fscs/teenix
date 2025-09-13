@@ -9,7 +9,7 @@
 
   teenix.services.home-assistant = {
     enable = true;
-    hostname = "hatest.hhu-fscs.de";
+    hostname = "ha.hhu-fscs.de";
     secretsFile = ../secrets/home-assistant.yml;
   };
 
@@ -21,7 +21,7 @@
 
   teenix.services.headscale = {
     enable = true;
-    hostname = "vpn.hhu-fscs.de";
+    hostname = "vpn.phynix-hhu.de";
     secretsFile = ../secrets/headscale.yml;
   };
 }
