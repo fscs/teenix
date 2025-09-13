@@ -20,7 +20,7 @@
     lib.mkIf cfg.enable {
       teenix.services.traefik.httpServices.docnix = {
         router.rule = "Host(`${cfg.hostname}`)";
-        servers = [ "http://${config.containers.docnix.localAddress}:8080" ];
+        servers = [ "http://${config.containers.docnix.localAddress}:8000" ];
       };
 
       teenix.containers.docnix = {

@@ -13,9 +13,14 @@
 
   config =
     let
-      opts = config.teenix.services.ntfy;
+      cfg = config.teenix.services.ntfy;
     in
-    lib.mkIf opts.enable {
+    lib.mkIf cfg.enable {
+      teenix.services.traefik.httpServices.ntfy = {
+        router.rule = "Host(`${cfg.hostname}`)";
+        servers = [ "http://${config.containers.ntfy.localAddress}:8000" ];
+      };
+
       teenix.containers.ntfy = {
         config = {
           systemd.services.ntfy-sh.serviceConfig.DynamicUser = lib.mkForce false;
@@ -31,10 +36,7 @@
           system.stateVersion = "23.11";
         };
 
-        networking = {
-          useResolvConf = true;
-          ports.tcp = [ 8080 ];
-        };
+        networking.ports.tcp = [ 8080 ];
 
         mounts.data = {
           enable = true;
