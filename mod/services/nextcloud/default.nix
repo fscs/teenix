@@ -34,12 +34,6 @@
         mode = "444";
       };
 
-      teenix.persist.subvolumes.scanner = {
-        backup = false;
-        owner = toString config.containers.nextcloud.config.users.users.nextcloud.uid;
-        mode = "0777";
-      };
-
       teenix.services.traefik.httpServices.nextcloud = {
         router.rule = "Host(`${opts.hostname}`)";
         servers = [ "http://${config.containers.nextcloud.localAddress}" ];
@@ -47,6 +41,10 @@
           enable = true;
           path = "/login";
         };
+      };
+
+      teenix.persist.subvolumes.scanner.directories.nextcloud = {
+        owner = config.containers.nextcloud.config.users.users.nextcloud.uid;
       };
 
       teenix.containers.nextcloud = {
@@ -75,7 +73,7 @@
 
           extra = {
             scanner = {
-              hostPath = config.teenix.persist.subvolumes.scanner.path;
+              hostPath = "${config.teenix.persist.subvolumes.scanner.path}/nextcloud";
               mountPoint = "/var/lib/scanner";
               isReadOnly = false;
             };

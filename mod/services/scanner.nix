@@ -43,6 +43,11 @@
         };
       };
 
+      teenix.persist.subvolumes.scanner = {
+        backup = false;
+        mode = "0777";
+      };
+
       services.vsftpd = {
         enable = true;
         localUsers = true;

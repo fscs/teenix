@@ -58,6 +58,23 @@ in
       ];
     };
 
+    teenix.services.traefik.dynamicConfig.http.routers.home-assistant-redirect = {
+      service = "blank";
+      priority = 20;
+      rule = "Host(`ha.hhu-fscs.de`) && Path(`/login`)";
+      middlewares = "home-assistant-redirect";
+      tls.certResolver = "letsencrypt";
+      entryPoints = [ "websecure" ];
+    };
+
+    teenix.services.traefik.httpMiddlewares.home-assistant-redirect = {
+      redirectRegex = {
+        regex = "^https?://ha\\.hhu-fscs\\.de/login";
+        replacement = "https://${cfg.hostname}/auth/oidc/welcome";
+        permanent = true;
+      };
+    };
+
     teenix.containers.home-assistant = {
       config = ./container.nix;
 
