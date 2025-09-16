@@ -64,15 +64,15 @@
       };
 
       shell_command = {
-        tuer_auf = "curl -X POST https://tuer.hhu-fscs.de/update?status=open";
-        tuer_zu = "curl -X POST https://tuer.hhu-fscs.de/update?status=closed";
+        tuer_auf = "${lib.getExe pkgs.curl} -X POST https://tuer.hhu-fscs.de/update?status=open";
+        tuer_zu = "${lib.getExe pkgs.curl} -X POST https://tuer.hhu-fscs.de/update?status=closed";
         record = ''
-          curl -X PATCH http://api.mediamtx.hhu-fscs.de/v3/config/paths/patch/sofas -d {"record":true}
-          curl -X PATCH http://api.mediamtx.hhu-fscs.de/v3/config/paths/patch/schreibtische -d {"record":true}
+          ${lib.getExe pkgs.curl} -X PATCH http://api.mediamtx.hhu-fscs.de/v3/config/paths/patch/sofas -d {"record":true}
+          ${lib.getExe pkgs.curl} -X PATCH http://api.mediamtx.hhu-fscs.de/v3/config/paths/patch/schreibtische -d {"record":true}
         '';
         recordoff = ''
-          curl -X PATCH http://api.mediamtx.hhu-fscs.de/v3/config/paths/patch/sofas -d {"record":false}
-          curl -X PATCH http://api.mediamtx.hhu-fscs.de/v3/config/paths/patch/schreibtische -d {"record":false}
+          ${lib.getExe pkgs.curl} -X PATCH http://api.mediamtx.hhu-fscs.de/v3/config/paths/patch/sofas -d {"record":false}
+          ${lib.getExe pkgs.curl} -X PATCH http://api.mediamtx.hhu-fscs.de/v3/config/paths/patch/schreibtische -d {"record":false}
         '';
       };
 
