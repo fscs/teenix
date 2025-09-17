@@ -47,7 +47,7 @@ in
         extra = {
           netapp = {
             hostPath = "/mnt/netapp/immich";
-            mountPoint = config.services.immich.mediaLocation;
+            mountPoint = config.containers.immich.config.services.immich.mediaLocation;
             isReadOnly = false;
           };
         };

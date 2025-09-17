@@ -196,4 +196,15 @@
       rtsp = "rtsp.mediamtx.hhu-fscs.de";
     };
   };
+
+  teenix.services.paperless = {
+    enable = true;
+    hostname = "paperless.phynix-hhu.de";
+    secretsFile = ../secrets/paperless.yml;
+  };
+
+  teenix.services.n8n = {
+    enable = true;
+    hostname = "n8n.phynix-hhu.de";
+  };
 }
