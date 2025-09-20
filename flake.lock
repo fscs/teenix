@@ -176,11 +176,11 @@
     },
     "crane_2": {
       "locked": {
-        "lastModified": 1734808813,
-        "narHash": "sha256-3aH/0Y6ajIlfy7j52FGZ+s4icVX0oHhqBzRdlOeztqg=",
+        "lastModified": 1755537552,
+        "narHash": "sha256-Tg+P8kFIneqnQLT8E0QqlCrldtdLo1n1y619/mxRD44=",
         "owner": "ipetkov",
         "repo": "crane",
-        "rev": "72e2d02dbac80c8c86bf6bf3e785536acf8ee926",
+        "rev": "3c40c97e1881fff381e4615e82557b333edf65c4",
         "type": "github"
       },
       "original": {
@@ -728,7 +728,7 @@
       "inputs": {
         "flake-utils": "flake-utils_8",
         "nixpkgs": [
-          "nixpkgs-stable"
+          "nixpkgs"
         ],
         "server": "server",
         "theme": "theme"
@@ -1248,11 +1248,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1750767836,
-        "narHash": "sha256-aTVP/0C0WDpm0gjI5pYtrSurfRo3ETyXEE7Jn1XhSyI=",
+        "lastModified": 1758378749,
+        "narHash": "sha256-v2nnmHbvM45uyEyGAjS5eFn0ihsbpDfbfdojNqPIwKk=",
         "owner": "fscs",
         "repo": "website-server",
-        "rev": "1880afbf59ada6a71247abce9a821e02961d246d",
+        "rev": "dae2cddcaa7bf5e75bb14936c64a3bd03bafcddb",
         "type": "github"
       },
       "original": {
@@ -1551,11 +1551,11 @@
         "server": "server_2"
       },
       "locked": {
-        "lastModified": 1752097592,
-        "narHash": "sha256-UBcG7bFjk7dYa9s6dW4ZPwR015WpSAtmB0OjF36kvr4=",
+        "lastModified": 1758380187,
+        "narHash": "sha256-WxH7WHhof2miFXv2CPxh65yCFu+0EOAQ5kt0jlrdaVQ=",
         "owner": "fscs",
         "repo": "website-theme",
-        "rev": "13f48e0997dfd2ab39c7baa01627c485d6b56503",
+        "rev": "85c32ead292db272a5e9b044f86a4001e80f6627",
         "type": "github"
       },
       "original": {

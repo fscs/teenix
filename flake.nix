@@ -5,7 +5,6 @@
     # NOTE: change the referenced channel in gitlab runner when changing this channel
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-master.url = "github:nixos/nixpkgs";
-    # NOTE: when changing this channel, check that fscshhude still builds correctly (check custom code blocks)
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
 
     colmena.url = "github:zhaofengli/colmena";
@@ -33,7 +32,7 @@
     campus-guesser-server.inputs.nixpkgs.follows = "nixpkgs";
     colmena.inputs.nixpkgs.follows = "nixpkgs";
     discord-inphima-bot.inputs.nixpkgs.follows = "nixpkgs";
-    fscshhude.inputs.nixpkgs.follows = "nixpkgs-stable"; # hugo on unstable is broken
+    fscshhude.inputs.nixpkgs.follows = "nixpkgs"; # hugo on unstable is broken
     grafana2ntfy.inputs.nixpkgs.follows = "nixpkgs";
     matrix-intern-bot.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
