@@ -156,7 +156,7 @@ in
         contact_address = "fscs@hhu.de";
 
         urls = {
-          imprint = "https://hhu-fscs.de/kontakt/impressum/";
+          imprint = "https://phynix-hhu.de/datenschutzerklaerung/";
           privacy = "https://static.hhu-fscs.de/datenschutz-helfertool/";
           docs = "https://docs.helfertool.org";
         };
