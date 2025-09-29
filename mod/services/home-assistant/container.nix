@@ -27,6 +27,8 @@
 
       homeassistant.name = "Fachschaftsraum Informatik";
 
+      api = {};
+
       recorder.exclude.entities = [
         "binary_sensor.10_bewegungsmelder_couch_occupancy"
         "binary_sensor.11_bewegungsmelder_schreibtische_occupancy"
