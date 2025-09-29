@@ -20,10 +20,6 @@
       "isal"
     ];
 
-    customComponents = with pkgs.home-assistant-custom-components; [
-      auth_oidc
-    ];
-
     config = {
       default_config = { };
 
