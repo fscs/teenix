@@ -17,6 +17,11 @@ let
         description = "Port of this entrypoint";
         type = t.port;
       };
+      host = lib.mkOption {
+        description = "Host address to bind this entrypoint on. Leave empty (default) for all host addresses";
+        type = t.str;
+        default = "";
+      };
       protocol = lib.mkOption {
         description = "Protocol of this entrypoint";
         default = "tcp";
@@ -560,7 +565,7 @@ in
         lib.mapAttrs (
           n: v:
           lib.mkMerge [
-            { address = ":${toString v.port}/${v.protocol}"; }
+            { address = "${v.host}:${toString v.port}/${v.protocol}"; }
             v.extraConfig
           ]
         ) cfg.entryPoints
